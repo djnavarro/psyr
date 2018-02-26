@@ -1,0 +1,52 @@
+---
+title: "psyR: Using R in Psychological Science"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+    highlight: textmate
+    css: mystyle.css
+---
+
+```{r,echo=FALSE}
+rm(list=objects()) # start with a clean workspace
+source("knitr_tweaks.R")
+```
+
+> Thou shalt not answer questionnaires <br> 
+> Or quizzes upon World Affairs, <br>
+> &nbsp;&nbsp;&nbsp;&nbsp;Nor with compliance<br>
+> Take any test. Thou shalt not sit<br>
+> With statisticians nor commit<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;A social science<br>
+> <br>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- W.H. Auden, [Under Which Lyre: A Reactionary Tract for the Times](http://harvardmagazine.com/2007/11/a-poets-warning.html), 1946
+
+
+## Part 1: Fundamentals
+
+- Chapter 1: [Getting started](./starting.html)
+- Chapter 2: [Core concepts](./concepts.html)
+- Chapter 3: [R data types](./data.html)
+
+## Part 2: Applications
+
+- Chapter 4: [Drawing plots](./graphs.html)
+- Chapter 5: [Introductory stats](./introstats.html)
+- Chapter 6: [Shiny apps](./shiny.html)
+- Chapter 7: [Miscellaneous](./misc.html)
+
+## Topics to be added
+
+- Data manipulation
+- Graphics with [ggplot](https://www.tidyverse.org/)
+- Fancier statistics
+- Bayesian data analysis
+- Cognitive modelling
+
+## Other things
+
+- Data sets are ion [this zip file](./data.zip)
+- Source code for this site: https://github.com/djnavarro/psyr
+- Exercises to aid learning are TBA

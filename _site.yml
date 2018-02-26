@@ -1,0 +1,28 @@
+name: intern
+navbar:
+  title: psyR
+  left:
+  - text: Fundamentals
+    menu:
+    - text: Getting started
+      href: starting.html
+    - text: Core concepts
+      href: concepts.html
+    - text: R data types
+      href: data.html
+  - text: Applications
+    menu:
+    - text: Drawing graphs
+      href: graphs.html
+    - text: Intro stats
+      href: introstats.html
+    - text: Shiny apps
+      href: shiny.html
+    - text: Miscellaneous
+      href: misc.html
+output_dir: _site
+output:
+  html_document:
+    lib_dir: site_libs
+    self_contained: no
+
