@@ -1,5 +1,5 @@
 ---
-title: "Chapter 4. Drawing Graphs"
+title: "Chapter 5. Drawing Graphs"
 output:
   html_document:
     toc: true
@@ -9,7 +9,7 @@ output:
     css: mystyle.css
     number_sections: true
     pandoc_args: [
-      "--number-offset", 4
+      "--number-offset", 5
     ]
 ---
 

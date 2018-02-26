@@ -1,6 +1,6 @@
 name: intern
 navbar:
-  title: psyR
+  title: psyr
   left:
   - text: Fundamentals
     menu:
@@ -10,6 +10,8 @@ navbar:
       href: concepts.html
     - text: R data types
       href: data.html
+    - text: Probability distributions
+      href: distributions.html
   - text: Applications
     menu:
     - text: Drawing graphs

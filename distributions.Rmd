@@ -1,0 +1,23 @@
+---
+title: "Chapter 4. Probability distributions in R"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+    highlight: textmate
+    css: mystyle.css
+    number_sections: true
+    pandoc_args: [
+      "--number-offset", 4
+    ]
+---
+
+```{r,echo=FALSE}
+rm(list=objects()) # start with a clean workspace
+source("knitr_tweaks.R")
+library(lsr,quietly = TRUE)
+```
+
+
+## Things!

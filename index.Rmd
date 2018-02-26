@@ -1,5 +1,5 @@
 ---
-title: "psyR: Using R in Psychological Science"
+title: "psyr: Using R in Psychological Science"
 output:
   html_document:
     toc: true
@@ -23,24 +23,25 @@ source("knitr_tweaks.R")
 > <br>
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- W.H. Auden, [Under Which Lyre: A Reactionary Tract for the Times](http://harvardmagazine.com/2007/11/a-poets-warning.html), 1946
 
-Hi! Welcome to the **psyR** homepage!
+Hi! Welcome to the **psyr** homepage!
 
 I've set this up as an introductory resource for psychology students taking my "Programming with R" class at UNSW. The intention behind this resource is to provide a fairly detailed introduction to R programming that doesn't assume any previous experience (in Part 1), and then to sketch out a variety of things that you can do with R once you start to feel comfortable with it (in Part 2). This is the first time I've taught this class, so the resources are being put together as I go, and there might be errors - please don't hesitate to contact me at d.navarro@unsw.edu.au if you spot an error or find something confusing. 
 
-A lot of the content borrows heavily from the introdutory statistics lecture notes I wrote ([Learning Statistics with R](https://learningstatisticswithr.com)), but they're not quite equivalent. I wrote the **lsr** notes to satisfy an immediate teaching need some years back, but I've never really been very pleased with them. The **psyR** resource is my first attempt at revisiting **lsr** in a more satisfying way. Hopefully it is useful! 
+A lot of the content borrows heavily from the introdutory statistics lecture notes I wrote ([Learning Statistics with R](https://learningstatisticswithr.com)), but they're not quite equivalent. I wrote the **lsr** notes to satisfy an immediate teaching need some years back, but I've never really been very pleased with them. The **psyr** resource is my first attempt at revisiting **lsr** in a more satisfying way. Hopefully it is useful! 
 
 ## Part 1: Fundamentals
 
 - Chapter 1: [Getting started](./starting.html)
 - Chapter 2: [Core concepts](./concepts.html)
 - Chapter 3: [R data types](./data.html)
+- Chapter 4: [Probability distributions](./distributions.html)
 
 ## Part 2: Applications
 
-- Chapter 4: [Drawing plots](./graphs.html)
-- Chapter 5: [Introductory stats](./introstats.html)
-- Chapter 6: [Shiny apps](./shiny.html)
-- Chapter 7: [Miscellaneous](./misc.html)
+- Chapter 5: [Drawing plots](./graphs.html)
+- Chapter 6: [Introductory stats](./introstats.html)
+- Chapter 7: [Shiny apps](./shiny.html)
+- Chapter 8: [Miscellaneous](./misc.html)
 
 ## Topics I want to add
 
