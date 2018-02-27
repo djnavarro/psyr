@@ -18,6 +18,10 @@ rm(list=objects()) # start with a clean workspace
 source("knitr_tweaks.R")
 ```
 
+
+>The garden of life never seems to confine itself to the plots philosophers have laid out for its convenience. Maybe a few more tractors would do the trick.<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;– Roger Zelazny, *Home is the Hangman*, 1975
+
 ## Coding text based tasks
 
 Sometimes it's just too much effort to set up a whole Shiny app. Maybe all you want to do is have some simple text based interaction, and you'd be perfectly happy for the user to respond at in the R console. Here's a simple example:
@@ -298,7 +302,7 @@ par(op) # reset plot parameters
 
 ## Running R in the cloud
 
-- Service like [Google cloud platform](https://cloud.google.com/sdk/) allow you to spin up vitual machines hat you can access over the web, and they can run things like RStudio server.
+- Service like [Google cloud platform](https://cloud.google.com/sdk/) allow you to spin up vitual machines that you can access over the web, and they can run things like RStudio server.
 - You can use the `googleComputeEngineR` package to set something like that up
 - Example:
 

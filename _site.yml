@@ -10,12 +10,12 @@ navbar:
       href: concepts.html
     - text: R data types
       href: data.html
-    - text: Probability distributions
-      href: distributions.html
   - text: Applications
     menu:
     - text: Drawing graphs
       href: graphs.html
+    - text: Probability distributions
+      href: distributions.html      
     - text: Intro stats
       href: introstats.html
     - text: Shiny apps

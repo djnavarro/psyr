@@ -18,8 +18,12 @@ rm(list=objects()) # start with a clean workspace
 source("knitr_tweaks.R")
 ```
 
-> Robots are nice to work with. <br>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--Roger Zelazny, *Dismal Light*, 1968
+
+> Fry: "Who cares what you're programmed for? If someone programmed you to jump off a bridge, would you do it?" <br>
+> Bender: "I'll have to check my program." <br>
+> Bender: "Yep!" <br>
+> <br>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--Futurama, *Space Pilot 3000*, 1999
 
 
 In this chapter I’ll discuss how to get started in R. I’ll briefly talk about how to download and install R, but most of the chapter will be focused on getting you started typing R commands. Our goal in this chapter is not to learn any statistical concepts: we’re just trying to learn the basics of how R works and get comfortable interacting with the system. To do this, we’ll spend a bit of time using R as a simple calculator, since that’s the easiest thing to do with R. In doing so, you’ll get a bit of a feel for what it’s like to work in R. From there I’ll introduce some very basic programming ideas: in particular, I’ll talk about the idea of defining *variables* to store information, and a few things that you can do with these variables.

@@ -30,6 +30,75 @@ h3{
 }
 ```
 
+
+> Out of every hundred people,
+> those who always know better:
+> fifty-two.
+> <br>
+> Unsure of every step:
+> almost all the rest.
+> <br>
+> Ready to help,
+> if it doesn't take long:
+> forty-nine.
+> <br>
+> Always good,
+> because they cannot be otherwise:
+> four -- well, maybe five.
+> <br>
+> Able to admire without envy:
+> eighteen.
+> <br>
+> Led to error
+> by youth (which passes):
+> sixty, plus or minus.
+> <br>
+> Those not to be messed with:
+> four-and-forty.
+> <br>
+> Living in constant fear
+> of someone or something:
+> seventy-seven.
+> <br>
+> Capable of happiness:
+> twenty-some-odd at most.
+> <br>
+> Harmless alone,
+> turning savage in crowds:
+> more than half, for sure.
+> <br>
+> Cruel
+> when forced by circumstances:
+> it's better not to know,
+> not even approximately.
+> <br>
+> Wise in hindsight:
+> not many more
+> than wise in foresight.
+> <br>
+> Getting nothing out of life except things:
+> thirty
+> (though I would like to be wrong).
+> <br>
+> Balled up in pain
+> and without a flashlight in the dark:
+> eighty-three, sooner or later.
+> <br>
+> Those who are just:
+> quite a few, thirty-five.
+> <br>
+> But if it takes effort to understand:
+> three.
+> <br>
+> Worthy of empathy:
+> ninety-nine.
+> <br>
+> Mortal:
+> one hundred out of one hundred -- 
+> a figure that has never varied yet.<br>
+> <br>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Wislawa Szymborska, [A Word on Statistics](https://www.theatlantic.com/past/docs/unbound/poetry/antholog/szymbors/stats.htm) (translated from the Polish by Joanna Trzeciak)
+
 In this chapter I'm going to provide a quick overview of how to perform common data analysis jobs using R. It's essentially a brief coverage of descriptive statistics and a few standard inferential statistics ($t$-tests, etc). I won't explain the logic of *how* the statistical tests work: there are lots of great stats textbooks out there for that. If you're really desperate you can check out the [Learning Statistics with R](http://www.compcogscisydney.com/learning-statistics-with-r.html) book that I wrote for teaching my intro stats class. 
 
 When writing my first ever set of statistics lectures back in 2011, I scraped a set of data from the web that contained some basic information about every Australian Football League (AFL) game played during the years 1987 to 2010. The data is stored in the `afl` data frame and saved in the `afl24.Rdata` file. We'll use that data set throughout this chapter, so here it is:
