@@ -21,10 +21,12 @@ source("knitr_tweaks.R")
 
 >The garden of life never seems to confine itself to the plots philosophers have laid out for its convenience. Maybe a few more tractors would do the trick.<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;– Roger Zelazny, *Home is the Hangman*, 1975
+ 
+It's a big world out there, and there are a lot of people doing really interesting thing with R (and other tools too of course). You can get a sense of what the possibilities are by looking online (e.g., awesome-r.com has a list of very neat packages). This chapter briefly discusses a few possibilities, most of which I chose on a whim!
 
 ## Coding text based tasks
 
-Sometimes it's just too much effort to set up a whole Shiny app. Maybe all you want to do is have some simple text based interaction, and you'd be perfectly happy for the user to respond at in the R console. Here's a simple example:
+Sometimes it's just too much effort to set up a whole Shiny app. Maybe all you want to do is have some simple text based interaction, and you'd be perfectly happy to go old school and have the user respond in the R console. Here's a simple example:
 
 ```{r, eval=FALSE}
 # An interactive game at the console
@@ -298,6 +300,53 @@ par(op) # reset plot parameters
 <video width="480"  controls>
 <source src="misc_dotsanimate/figure-html/unnamed-chunk-11.webm" />
 </video>
+
+## Using `rgl` for OpenGL and WebGL
+
+The `rgl` package provides a method for constructing interactive 3D plots, using the OpenGL graphics engine. Conveniently it also allows you make use of the WebGL engine, which means that you can insert your fancy 3D graphics into a web page. On a Mac, you'll need to make sure you have [XQuartz](https://www.xquartz.org/) installed and running on your machine. Here's a simple example, shamelessly lifted straight from the `rgl` documentation... 
+
+```{r}
+library(rgl)
+with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  type="s", col=as.numeric(Species)))
+rglwidget(elementId = "plot3drgl")
+```
+
+If you click and drag on the image you can rotate it as much as you like. Better yet, because OpenGL and WebGL are genuine 3D graphics engines, you can manipulate the scene and control things like lighting, material and so on. I confess this isn't an area I know at all well, but I suspect it would be handy for some research projects. 
+
+Another example, slightly adapted from the package documentation:
+
+```{r}
+data(volcano) # load the volcano data set
+
+zval <- 5 * volcano        # increase the height
+xval <- 15 * (1:nrow(zval))   # spacing (S to N)
+yval <- 15 * (1:ncol(zval))   # spacing (E to W)
+
+zlim <- range(yval)
+zlen <- zlim[2] - zlim[1] + 1
+colorlut <- terrain.colors(zlen)   # height color lookup table
+col <- colorlut[ zval - zlim[1] + 1 ] # assign colors to heights for each point
+
+# create a new rgl device, but don't display it
+open3d(useNULL = TRUE)
+
+# draw the surface
+surface3d(
+  x = xval,
+  y = yval,
+  z = zval,
+  color = col,
+  ambient = "grey10",
+  shininess = 75,
+  back = "lines"
+)
+
+# write scene to widget
+s <- scene3d()
+rglwidget(s)
+```
+
 
 
 ## Running R in the cloud
