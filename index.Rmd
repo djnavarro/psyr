@@ -58,4 +58,4 @@ A lot of the content borrows heavily from the introdutory statistics lecture not
 
 - Data sets are in [this zip file](./data.zip)
 - Source code for this site: https://github.com/djnavarro/psyr
-- Exercises to aid learning are TBA
+- Exercises: programming with turtles ([part1](./turtle1.html), [part2](./turtle2.html))
