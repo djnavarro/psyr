@@ -50,12 +50,15 @@ A lot of the content borrows heavily from the introdutory statistics lecture not
 - Basic text processing & regular expressions
 - Graphics with [ggplot](https://www.tidyverse.org/)
 - Fancier statistics
-- Bayesian data analysis
-- RMarkdown, knitr & pandoc
+- Bayesian data analysis (rstanarm, shinystan, bayesfactor)
+- RMarkdown, knitr & pandoc (& jupyter notebooks)
 - Prettiness with [htmlwidgets](http://www.htmlwidgets.org/index.html)
+- Archiving code with github, osf (& codeocean)
 
 ## Other things
 
 - Data sets are in [this zip file](./data.zip)
 - Source code for this site: https://github.com/djnavarro/psyr
 - Exercises: programming with turtles ([part1](./turtle1.html), [part2](./turtle2.html))
+- Week 1 slides are posted [here](./overview.pdf)
+- Week 2 notebook is posted [here](./lesson2.nb.html) with output version [here](./lesson2.html) 
