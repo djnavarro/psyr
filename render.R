@@ -1,9 +1,9 @@
+library(rmarkdown)
+library(here)
 
 rm(list=objects())
-library(rmarkdown)
-setwd("~/Dropbox/Teaching/2018_interns/lessons/")
+setwd(here())
 render_site()
   
 
-  
 

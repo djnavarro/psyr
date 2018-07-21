@@ -1,10 +1,10 @@
 ---
-title: "psyr: Using R in Psychological Science"
+title: '<div class="jumbotron"><h1 class="title toc-ignore display-3">R for Psychological Science</h1><p class="lead">An introductory resource</p></div>'
 output:
   html_document:
     toc: true
     toc_float: true
-    theme: cosmo
+    theme: flatly
     highlight: textmate
     css: mystyle.css
 ---
@@ -14,51 +14,72 @@ rm(list=objects()) # start with a clean workspace
 source("knitr_tweaks.R")
 ```
 
-> Thou shalt not answer questionnaires <br> 
-> Or quizzes upon World Affairs, <br>
-> &nbsp;&nbsp;&nbsp;&nbsp;Nor with compliance<br>
-> Take any test. Thou shalt not sit<br>
-> With statisticians nor commit<br>
-> &nbsp;&nbsp;&nbsp;&nbsp;A social science<br>
-> <br>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- W.H. Auden, [Under Which Lyre: A Reactionary Tract for the Times](http://harvardmagazine.com/2007/11/a-poets-warning.html), 1946
+Hi there!
 
-Hi! Welcome to the **psyr** homepage!
+I've set this up as an introductory resource for psychology students taking my *Programming with R* class at UNSW. The intention -- behind this resource is -- eventually -- to provide a fairly detailed introduction to R programming that doesn't assume any previous experience, and then to sketch out a variety of things that you can do with R once you start to feel comfortable with it. Please don't hesitate to contact me if you spot an error or find something confusing.
 
-I've set this up as an introductory resource for psychology students taking my "Programming with R" class at UNSW. The intention behind this resource is to provide a fairly detailed introduction to R programming that doesn't assume any previous experience (in Part 1), and then to sketch out a variety of things that you can do with R once you start to feel comfortable with it (in Part 2). This is the first time I've taught this class, so the resources are being put together as I go, and there might be errors - please don't hesitate to contact me at d.navarro@unsw.edu.au if you spot an error or find something confusing. 
+The content borrows heavily from my introductory statistics lecture notes ([Learning Statistics with R](https://compcogscisydney.org/learning-statistics-with-r/)), but they're not quite equivalent, and over time the two are likely to part ways. I wrote *Learning Statistics with R* to accompany an introductory statistics class that I taught from 2011 to 2015, and the intended audience for that book is a psych student taking their first research methods class. This resource is a little different -- it's aimed at someone who has already taken an introductory research methods class of some kind, but would like to learn how to use the R programming language for their data analysis, or for any of a number of other possible tasks. 
 
-A lot of the content borrows heavily from the introdutory statistics lecture notes I wrote ([Learning Statistics with R](http://www.compcogscisydney.com/learning-statistics-with-r.html)), but they're not quite equivalent. I wrote the **lsr** notes to satisfy an immediate teaching need some years back, but I've never really been very pleased with them. The **psyr** resource is my first attempt at revisiting **lsr** in a more satisfying way. Hopefully it is useful! 
+It is of course a work in progress, but hopefully it is useful!
 
-## Part 1: Fundamentals
+-[Danielle](d.navarro@unsw.edu.au)
 
-- Chapter 1: [Getting started](./starting.html)
-- Chapter 2: [Core concepts](./concepts.html)
-- Chapter 3: [R data types](./data.html)
+## Part 1: Core toolkit
 
-## Part 2: Applications
+- [Getting started](./getting-started.html)
+- [Variables](./variables.html)
+- [Scripts](./scripts.html)
+- [Packages](./packages.html)
+- [Workspaces](./workspaces.html)
+- [Vectors](./vectors.html)
+- [Loops](./loops.html) 
+- [Branches](./branches.html)
+- [Functions](./functions.html)
+- [Programming](./programming.html)
+- [File system](./file-system.html)
 
-- Chapter 4: [Drawing plots](./graphs.html)
-- Chapter 5: [Probability distributions](./distributions.html)
-- Chapter 6: [Introductory stats](./introstats.html)
-- Chapter 7: [Shiny apps](./shiny.html)
-- Chapter 8: [Miscellaneous](./misc.html)
+## Part 2: Working with data
 
+- [Data types](./xx-data-types.html) <span style="color:#cccccc">(to be updated)</span>
+- <span style="color:#cccccc">The tidyverse (to be added)</span>
+- [Visualising data](./xx-visualising-data.html)  <span style="color:#cccccc">(to be updated)</span><!-- add ggplot -->
+- [Summarising data](./xx-summarising-data.html) <span style="color:#cccccc">(to be updated)</span><!-- skimr, group_by, summarise -->
+- <span style="color:#cccccc">Data manipulation (to be added)</span> <!-- gather/spread, etc -->
+- <span style="color:#cccccc">Working with text (to be added)</span>  <!-- stringr -->
+- <span style="color:#cccccc">Additional tricks (to be added)</span>  <!-- dates -->
+
+## Part 3: Statistical inference
+
+- [Probability distributions](./xx-distributions.html) <span style="color:#cccccc">(to be updated)</span>
+- [Introductory statistics](./xx-introductory-statistics.html) <span style="color:#cccccc">(to be updated)</span><!-- add Bayes factor -->
+- <span style="color:#cccccc">Intermediate statistics (to be added)</span> 
+- <span style="color:#cccccc">Advanced statistics (to be added)</span> 
+
+## Part 4: More applications
+
+- [Shiny web applications](./xx-shiny.html) <span style="color:#cccccc">(to be updated)</span>
+- [Miscellaneous](./xx-miscellaneous.html) <span style="color:#cccccc">(to be updated)</span>
+- <span style="color:#cccccc">Authoring documents in R (to be added)</span> <!-- markdown, blogdown, papaja -->
+- <span style="color:#cccccc">Computational modelling (to be added)</span> <!-- Rescorla-Wagner, GCM -->
+
+<!--
 ## Topics I want to add
 
 - Cognitive modelling
-- Data manipulation
 - Basic text processing & regular expressions
-- Graphics with [ggplot](https://www.tidyverse.org/)
 - Fancier statistics
 - Bayesian data analysis (rstanarm, shinystan, bayesfactor)
 - RMarkdown, knitr & pandoc (& jupyter notebooks)
 - Prettiness with [htmlwidgets](http://www.htmlwidgets.org/index.html)
 - Archiving code with github, osf (& codeocean)
+- Source code for this site: https://github.com/djnavarro/psyr
+
+
+-->
 
 ## Other things
 
-- Data sets are in [this zip file](./data.zip)
-- Source code for this site: https://github.com/djnavarro/psyr
-- Exercises: programming with turtles ([part1](./turtle1.html), [part2](./turtle2.html))
-- Week 1 slides are posted [here](./overview.pdf)
-- Week 2 notebook is posted [here](./lesson2.nb.html) with output version [here](./lesson2.html) 
+- Data sets are in [this zip file](./docs/data.zip)
+- Exercises: programming with turtles ([part1](./docs/turtle1.html), [part2](./docs/turtle2.html))
+- Week 1 slides are posted [here](./docs/overview.pdf)
+- Week 2 notebook is posted [here](./docs/lesson2.nb.html) with output version [here](./docs/lesson2.html) 

@@ -1,0 +1,212 @@
+---
+title: "Chapter 9. Introductory Statistics"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: textmate
+    css: mystyle.css
+    number_sections: true
+    pandoc_args: [
+      "--number-offset", 9
+    ]
+---
+
+```{r,echo=FALSE}
+rm(list=objects()) # start with a clean workspace
+source("knitr_tweaks.R")
+```
+
+
+> Thou shalt not answer questionnaires <br> 
+> Or quizzes upon World Affairs, <br>
+> &nbsp;&nbsp;&nbsp;&nbsp;Nor with compliance<br>
+> Take any test. Thou shalt not sit<br>
+> With statisticians nor commit<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;A social science<br>
+> <br>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- W.H. Auden, [Under Which Lyre: A Reactionary Tract for the Times](http://harvardmagazine.com/2007/11/a-poets-warning.html), 1946
+
+```{r} 
+load("./data/afl24.Rdata") # load data
+head(afl)                  # show the first few rows
+```
+
+## Confidence intervals
+
+As usual there are many ways to compute the confidence interval of the mean in R. One relatively simple one is with the `ciMean` function in the `lsr` package, which (conveniently) can take a data frame as input and computes confidence intervals for all the numeric variables:
+
+```{r}
+ciMean(afl)
+```
+
+By default it returns a 95\% confidence interval, but you can adjust the `conf` argument if you want something different. For instance, here's an 80\% confidence interval
+
+```{r}
+ciMean(
+  x = afl, 
+  conf = .8
+)
+```
+
+You can also give it a single variable as input if you like:
+
+```{r}
+ciMean( afl$home.score )
+```
+
+
+## Comparing two means
+
+Does the home team tend to outscore the away team? This requires a **paired samples t-test**:
+
+```{r}
+pairedSamplesTTest(~ home.score + away.score, afl)
+```
+
+Are finals games lower scoring than home and away games? This requires an **independent samples t-test**:
+
+```{r}
+afl$total.score <- afl$home.score + afl$away.score
+independentSamplesTTest(total.score ~ is.final, afl)
+```
+
+## Categorical associations
+
+Are all teams equally likely to play their home games on every weekday? For that we might consider using a **chi-square test of categorical association**, but as you can see from the output below, a little care is needed:
+
+```{r}
+associationTest(~ home.team + weekday, afl)
+```
+
+The reason for the warning, of course, is that with so few games played on weekdays, many of the expected cell counts are very small, and that violates one of the assumptions of the chi-square test. So let's create a new variable that collapses these:
+
+```{r}
+afl$weekday_small <- as.character(afl$weekday)
+weekgames <- afl$weekday_small %in% c("Mon","Tue","Wed","Thu","Fri")
+afl$weekday_small[weekgames] <- "M-F"
+afl$weekday_small <- as.factor(afl$weekday_small)
+```
+
+Now we just have three levels of this factor, corresponding to Saturday games, Sunday games, and weekday games. So if we run the test of association with this version of the variable we no longer get the warning message:
+```{r}
+associationTest(~ home.team + weekday_small, afl)
+```
+
+## Comparing several means
+
+Is there such a thing as a "high scoring ground"? Let's take a look at the average number of points per game at each different ground, only considering grounds that had at least 100 games played during the the time period:
+
+```{r}
+venue.use <- table(afl$venue)
+majors <- venue.use[venue.use >= 100]
+
+# restrict the data to these games
+afl.majors <- afl[ afl$venue %in% names(majors), ]
+```
+
+Visually it does look like there might something here:
+
+```{r, echo=FALSE}
+score.by.ground <- aggregate(total.score ~ venue, afl.majors, mean)
+score.by.ground <- sortFrame(score.by.ground, total.score)
+score.by.ground
+x <- barplot(score.by.ground$total.score)
+text(
+  x = x-.2,
+  y = 5,
+  labels = score.by.ground$venue, 
+  pos = 4, 
+  srt = 90)
+```
+
+A first pass analysis for this would be ANOVA. The underlying statistical model in ANOVA and multiple regression is essentially the same, and the work is done by the `lm` function in R. However, it's generally considered sensible to use the `aov` function in the first instance, because that does a few nice things that come in handy with later analyses.
+
+```{r}
+mod <- aov(total.score ~ venue, afl.majors)
+```
+
+To analyse it as an ANOVA, the `Anova` function in the `car` package is very nice: 
+```{r}
+Anova(mod)
+```
+
+It seems to be a real thing, but we'll come back to that in a moment because we might have some worries about confounding variables. 
+
+### Post hoc tests
+
+I am not a fan of post hoc tests, even with corrections for Type I error inflation. To see why they drive me nuts, let's run the output of the ANOVA through the `posthocPairwiseT` function. By default it uses the Holm correction, but lets just use the simpler and very conservatice Bonferroni correction: 
+
+```{r}
+posthocPairwiseT(mod, p.adjust.method = "bonferroni")
+```
+
+My main complaint? I have no idea what this means because I didn't really have any idea what I was looking for. I could certainly run through all these automatically-detected "significant" relationships to see what makes any sense, but I honestly don't know what that would buy me. Basically I'm not sure why I'm calculating a $p$-value (a tool designed to *test hypotheses*) in a situation where I really didn't have *any* hypotheses ahead of time. To my mind this use of hypothesis testing has the effect of eroding the boundary between *confirmatory tests* (where the researcher has a theory ahead of time), and *exploratory analyses* (where we're just looking for interesting patterns). I'm a big fan of doing both things as part of science, of course, I just think they need to be kept clearly separate :-)
+
+But that's a topic for another time. 
+
+
+
+## Assessing relationships 
+
+One thing that people commented on a lot during this time period was the fact that the games became lower scoring over time. Is that a real effect, or was it just random noise? 
+
+```{r}
+mod <- lm(total.score ~ year, afl)
+summary(mod)
+```
+
+
+```{r}
+yearly.score <- aggregate(
+  formula = total.score ~ year, 
+  data = afl, 
+  FUN = mean
+)
+plot(
+  x = yearly.score$year,
+  y = yearly.score$total.score,
+  type = "p",
+  pch = 19,
+  xlab = "Year",
+  ylab = "Average Points per Game"
+)
+abline(coef = mod$coef)
+```
+
+
+That's pretty clearly a real effect, but it does open up a new line of worries about the last analysis...
+
+### Hierarchical regression
+
+Suppose we're a little paranoid. Maybe the effect of `venue` is spurious: some grounds came into use at different years, and we know there's an effect of `year` on the `total.score`. Similarly, folk wisdom has it that finals games are lower scoring, and those games are disproportionately likely to be played at the MCG. Maybe there's an effect of the size of the crowd? Some stadiums are bigger than others? Maybe there's an effect of weekday, and some venues do indeed get used on different days. Maybe it's an effect of the teams playing, since different teams tend to play at different grounds (especially when considering the home team!) To address this let's dump all those variables into a regression model, and then see if adding `venue` leads to an improvement in fit over and above those. In other words, we'll do a **hierarchical regression**. Here it is in R:
+
+```{r}
+mod1 <- lm(total.score ~ year + home.team + away.team + is.final + weekday + attendance, afl.majors)
+mod2 <- lm(total.score ~ year + home.team + away.team + is.final + weekday + attendance + venue, afl.majors)
+anova(mod2, mod1)
+```
+
+Overall it does rather look like there are genuine differences between venues. Though of course there could be many other things we didn't control for!
+
+### Testing a correlation
+
+As an aside, it's often noted that a Pearson correlation is essentially equivalent to a linear regression model with a single predictor. So we should be able to replicate the `total.score ~ year` analysis as a correlation. We use the `cor.test` function to run a hypothesis test here:
+
+```{r}
+cor.test(
+  x = afl$total.score, 
+  y = afl$year
+)
+```
+
+To see that these are giving the same answer, let's take the raw correlation of $r=-.13$, square it, and compare it to the (unadjusted) $R^2$ value of 0.01739 reported above:
+
+```{r}
+r <- -0.1318585
+print(r^2)
+```
+Yes, those are the same!
+
+

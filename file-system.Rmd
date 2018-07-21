@@ -1,0 +1,159 @@
+---
+title: "11. The File System"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: textmate
+    css: mystyle.css
+    number_sections: true
+    pandoc_args: [
+      "--number-offset", 11
+    ]
+---
+
+```{r,echo=FALSE}
+rm(list=objects()) # start with a clean workspace
+source("knitr_tweaks.R")
+```
+
+I confess I've never found a nice home for this chapter. Understanding how to interact with the file system on your computer is something that no-one finds interesting. It's not complicated, or profound, but it is fiddly and annoying. Since we've finished talking about the introduction to programming, and we're about to start the next section on working with data, I might as well put it here. 
+
+Prepare to be bored.
+
+## File paths 
+
+Once upon a time everyone who used computers could safely be assumed to understand how the file system worked, because it was impossible to successfully use a computer if you didn’t! However, modern operating systems are much more user friendly, and as a consequence of this they go to great lengths to hide the file system from users. So these days it’s not at all uncommon for people to have used computers most of their life and not be familiar with the way that computers organise files. If you already know this stuff, skip straight to the next section. Otherwise, read on. I’ll try to give a brief introduction that will be useful for those of you who have never been forced to learn how to navigate around a computer using a DOS or Unix shell.
+
+In this section I describe the basic idea behind file locations and file paths. Regardless of whether you’re using Window, Mac OS or Linux, every file on the computer is assigned a (fairly) human readable address, and every address has the same basic structure: it describes a *path* that starts from a root location, through as series of *folders* (or if you’re an old-school computer user, *directories*), and finally ends up at the file.
+
+On a Windows computer the root is the physical drive (well, partition technically) on which the file is stored, and for most home computers the name of the hard drive that stores all your files is `C:` and therefore most file names on Windows begin with `C:`. After that comes the folders, and on Windows the folder names are separated by a `\` symbol. So, the complete path to the *Learning Statistics with R* book on my Windows computer might be something like this:
+```
+C:\Users\dan\Rbook\LSR.pdf
+```
+and what that means is that the book is called `LSR.pdf`, and it’s in a folder called `Rbook` which itself is in a folder called `dan` which itself is ... well, you get the idea. On Linux, Unix and Mac OS systems, the addresses look a little different, but they’re more or less identical in spirit. Instead of using the backslash, folders are separated using a forward slash, and unlike Windows, they don’t treat the physical drive as being the root of the file system. So, the path to the LSR book on my Mac might be something like this:
+```
+/Users/dan/Rbook/LSR.pdf
+```
+
+So that’s what we mean by the “path” to a file. 
+
+## Working directory
+
+The next concept to grasp is the idea of a working directory and how to change it. For those of you who have used command line interfaces previously, this should be obvious already. But if not, here’s what I mean. The working directory is just “whatever folder I’m currently looking at”. Suppose that I’m currently looking for files in Explorer (if you’re using Windows) or using Finder (on a Mac). The folder I currently have open is my user directory (i.e., `C:\Users\dan` or `/Users/dan`). That’s my current working directory.
+
+The fact that we can imagine that the program is “in” a particular directory means that we can talk about moving from our current location to a new one. What that means is that we might want to specify a new location in relation to our current location. To do so, we need to introduce two new conventions. Regardless of what operating system you’re using, we use `.` to refer to the current working directory, and `..` to refer to the directory above it (the parent directory). This allows us to specify a path to a new location in relation to our current location, as the following examples illustrate. Let’s assume that I’m using my Windows computer, and my working directory is `C:\Users\dan\Rbook`). The table below shows several addresses in relation to my current one:
+
+The fact that we can imagine that the program is “in” a particular directory means that we can talk about moving *from* our current location *to* a new one. What that means is that we might want to specify a new location in relation to our current location. To do so, we need to introduce two new conventions. Regardless of what operating system you’re using, we use `.` to refer to the current working directory, and `..` to refer to the directory above it. This allows us to specify a path to a new location in relation to our current location, as the following examples illustrate. Let’s assume that I’m using my Windows computer, and my working directory is `C:\Users\dan\Rbook`). The table below shows several addresses in relation to my current one:
+
+ | absolute path                 | relative path                     |
+ | ----------------------------- | --------------------------------- |
+ | (i.e., from root)             | (i.e. from `C:\Users\dan\Rbook`) |
+ | | |
+ | `C:\Users\dan`               | `..`                              |
+ | `C:\Users`                    | `..\..`                           | 
+ | `C:\Users\dan\Rbook\source`  | `.\source`                        |
+ | `C:\Users\dan\nerdstuff`     | `..\nerdstuff`                    |
+
+## Home directory
+
+There’s one last thing I want to call attention to: the `~` directory. I normally wouldn’t bother, but R makes reference to this concept sometimes. It’s quite common on computers that have multiple users to define `~` to be the user’s home directory. On my Mac, for instance, the home directory `~` for the "dan" user is `\Users\dan\`.^[You might notice that my computer is the only person still allowed to [deadname](https://en.wiktionary.org/wiki/deadname) me `r emo::ji("grinning")` -- the user home directory seems to be tangled with so many things on a computer that I'm afraid to rename this. Not that it bothers me - I think "Dan" is a perfectly sensible nickname for "Danielle" and I'm pretty sure my computer isn't trying to be mean to me! Well, not about this anyway.] And so, not surprisingly, it is possible to define other directories in terms of their relationship to the home directory. For example, an alternative way to describe the location of the `LSR.pdf` file on my Mac would be
+```
+~\Rbook\LSR.pdf
+```
+That’s about all you really need to know about file paths. And since this section already feels too long, it’s time to look at how to navigate the file system in R.
+
+## Navigating with R
+
+In this section I’ll talk about how to navigate this file system from within R itself. It’s not particularly user friendly, and so you’ll probably be happy to know that RStudio provides you with an easier method, and I will describe it in a moment. So in practice, you won’t really need to use the commands that I babble on about in this section, but I do think it helps to see them in operation at least once before forgetting about them forever. 
+
+Okay, let’s get started. When you want to load or save a file in R it’s important to know what the working directory is. You can find out by using the `getwd` command. For the moment, let’s assume that I’m using Mac OS or Linux, since there’s some subtleties to Windows. Here’s what happens:
+
+```{r,eval=FALSE}
+getwd()
+```
+```
+## [1] "/Users/dan"
+```
+
+We can change the working directory quite easily using `setwd`. The `setwd` function has only the one argument, `dir`, is a character string specifying a path to a directory, or a path relative to the working directory. Since I’m currently located at `/Users/dan`, the following two are equivalent:
+
+```{r,eval=FALSE}
+setwd("/Users/dan/Rbook/data")
+setwd("./Rbook/data")
+```
+
+Now that we’re here, we can type `list.files()` to get a list of all the files in that directory. Since this is the directory in which I store all of the data files that I used when writing the LSR book, here’s what we get as the result:
+```{r,eval=FALSE}
+list.files()
+```
+```
+## [1] "afl24.Rdata"             "aflsmall.Rdata"        "aflsmall2.Rdata"
+## [4] "agpp.Rdata"              "all.zip"               "annoying.Rdata"
+## [7] "anscombesquartet.Rdata"  "awesome.Rdata"         "awesome2.Rdata"
+BLAH BLAH BLAH 
+```
+Not terribly exciting, I’ll admit, but it’s useful to know about. 
+
+In any case, there’s only one more thing I want to make a note of, which is that R also makes use of the home directory `~`. You can find out what it is by using the `path.expand` function, like this:
+
+```{r,eval=FALSE}
+path.expand("~")
+```
+```
+## [1] "/Users/dan"
+```
+You can change the user directory if you want, but we’re not going to make use of it very much so there’s no reason to. The only reason I’m even bothering to mention it at all is that when you use RStudio to open a file, you’ll see output on screen that defines the path to the file relative to the `~` directory. You can see this in the image below, where you can see an example of me working at the console on my Mac, and the (barely visible) grey text shows that my current working directory is `~/Rbook/data/`
+
+<img src="./img/filesystem_home.png" width=300px>
+
+I’d prefer you not to be confused when you see this, but other than that there's not much to see here!
+
+## Navigating with RStudio
+
+Although I think it’s important to understand how all R commands work, in many situations there’s an easier way. For our purposes, the easiest way to navigate the file system is to make use of RStudio’s built in tools. The “files” panel is actually a pretty workable file browser. Not only can you just point and click on the names to move around the file system, you can also use it to set the working directory, and even load files. Here's what it looks like:
+
+<img src="./img/filesystem_filepane.png" width=400>
+
+At the top of the file panel you see some text that says `Home > Rbook > data`. What that means is that it’s displaying the files that are stored in the `~/Rbook/data` directory (which for me would be `/Users/dan/Rbook/data`). It does *not* mean that this is the R working directory. If you want to change the R working directory, using the file panel, you need to click on the button that reads “More”. This will bring up a little menu, and one of the options will be “Set as Working Directory”. If you select that option, then R really will change the working directory. You can tell that it has done so because this command appears in the console:
+
+```{r,eval=FALSE}
+setwd("~/Rbook/data")
+```
+
+In other words, RStudio sends a command to the R console, exactly as if you’d typed it yourself. The file panel can be used to do other things too. If you want to move “up” to the parent folder (e.g., from `~/Rbook/data` to `~/Rbook`) click on the “..” link in the file panel. To move to a subfolder, click on the name of the folder that you want to open. You can open some types of file by clicking on them. You can delete files from your computer using the “delete” button, rename them with the “rename” button, and so on.
+
+As you can tell, the file panel is a very handy tool for navigating the file system. But it can do more than just navigate. It can be used to open files, rename them, delete, copy or move them, and create new folders. However, since most of that functionality isn’t critical to the core goals here, I’ll let you discover those on your own.
+
+
+## What's the deal with Windows?
+
+Let’s suppose I’m on Windows. As before, I can find out what my current working directory is like this:
+
+```{r,eval=FALSE}
+getwd()
+```
+```
+[1] "C:/Users/dan/
+```
+This seems about right, but you might be wondering why R is displaying a Windows path using the wrong type of slash. The answer is slightly complicated, and has to do with the fact that R treats the `\` character as “special” (I'll talk about this later when introducing text manipulation). If you’re deeply wedded to the idea of specifying a path using the Windows style slashes, then you need to type `\\` whenever you mean `\`. In other words, if you want to specify the working directory on a Windows computer, you need to use one of the following commands:
+
+```{r,eval=FALSE}
+setwd( "C:/Users/dan" )
+setwd( "C:\\Users\\dan" )
+```
+ 
+Annoying.
+
+## Robust paths?
+
+Okay, you might be asking, what if I'm writing code and I don't know what machine it will be running on? How do I specify a path that doesn't require *me* to know ahead of time what the operating system on that machine uses? I'm so glad you asked. There's a function called `file.path` that lets you do exactly that: 
+
+```{r}
+file.path("Users","dan","Rbook","LSR.pdf")
+```
+
+The `file.path` function works out how to construct the path it needs by inspecting the `.Platform` variable (try typing that at the console if you want to see what information it stores) that the local R system uses to keep track of information about the operating system. If you use `file.path` to specify locations, then you don't have to worry about particulars of the operating system because R will do that for you.
+
+Now, what you might be thinking is that this only half solves the problem. What if a user downloads all your files to some place on their machine and you don't know where it has ended up. It's a bit beyond the scope of this resource to talk about solutions to that problem but I'll quickly mention the [here](https://cran.r-project.org/web/packages/here/index.html) R package that I find really useful. I wrote a blog post about it [here](http://djnavarro.net/post/2018-05-21-pants-to-the-mast/), and at some point I'll probably fold some of that content into these notes.

@@ -1,27 +1,55 @@
-name: intern
+name: R for Psychological Science
 navbar:
-  title: psyr
+  title: R for Psychological Science
   left:
-  - text: Fundamentals
+  - text: Core
     menu:
     - text: Getting started
-      href: starting.html
-    - text: Core concepts
-      href: concepts.html
-    - text: R data types
-      href: data.html
-  - text: Applications
+      href: getting-started.html
+    - text: Variables
+      href: variables.html     
+    - text: Scripts
+      href: scripts.html
+    - text: Packages
+      href: packages.html      
+    - text: Workspaces
+      href: workspaces.html
+    - text: Vectors
+      href: vectors.html        
+    - text: Loops
+      href: loops.html
+    - text: Branches
+      href: branches.html    
+    - text: Functions
+      href: functions.html    
+    - text: Programming
+      href: programming.html   
+    - text: File system
+      href: file-system.html        
+
+  - text: Data
     menu:
-    - text: Drawing graphs
-      href: graphs.html
+    - text: Data types
+      href: xx-data-types.html    
+    - text: Visualising data
+      href: xx-visualising-data.html
+    - text: Describing data
+      href: xx-describing-data.html
+  - text: Stats
+    menu:
     - text: Probability distributions
-      href: distributions.html      
-    - text: Intro stats
-      href: introstats.html
+      href: xx-distributions.html      
+    - text: Introductory statistics
+      href: xx-introductory-statistics.html
+  - text: More
+    menu:
     - text: Shiny apps
-      href: shiny.html
+      href: xx-shiny.html
     - text: Miscellaneous
-      href: misc.html
+      href: xx-miscellaneous.html
+  right:
+  - text: compcogscisydney.org
+    href: https://compcogscisydney.org
 output_dir: _site
 output:
   html_document:

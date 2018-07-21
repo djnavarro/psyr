@@ -1,0 +1,185 @@
+---
+title: "7. Loops"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: textmate
+    css: mystyle.css
+    number_sections: true
+    pandoc_args: [
+      "--number-offset", 7
+    ]
+---
+
+```{r,echo=FALSE}
+rm(list=objects()) # start with a clean workspace
+source("knitr_tweaks.R")
+```
+
+
+Back when I introduced [scripts](./scripts.html) I said that R starts at the top of the file and runs straight through to the end of the file. That was a tiny bit of a lie. It is true that unless you insert commands to explicitly alter how the script runs, that is what will happen. However, you actually have quite a lot of flexibility in this respect. Depending on how you write the script, you can have R repeat several commands, or skip over different commands, and so on. This topic is referred to as **flow control**, and the first concept to discuss in this respect is the idea of a **loop**. The basic idea is very simple: a loop is a block of code (i.e., a sequence of commands) that R will execute over and over again until some termination criterion is met. Looping is a very powerful idea. There are (at least) three different ways to construct a loop in R, based on the `while`, `for` and `repeat` functions. I’ll discuss the first two here.
+
+## The `while` loop
+
+A `while` loop is a simple thing. The basic format of the loop looks like this:
+```
+while ( CONDITION ) {
+  STATEMENT1
+  STATEMENT2
+  ETC 
+}
+```
+The code corresponding to `condition` needs to produce a logical value, either `TRUE` or `FALSE`. Whenever R encounters a while statement, it checks to see if the condition is `TRUE`. If it is, then R goes on to execute all of the commands inside the curly brackets, proceeding from top to bottom as usual. However, when it gets to the bottom of those statements, it moves back up to the while statement. Then, like the mindless automaton it is, it checks to see if the condition is `TRUE`. If it is, then R goes on to execute all the commands inside ... well, you get the idea. This continues endlessly until at some point the `condition` turns out to be `FALSE`. Once that happens, R jumps to the bottom of the loop (i.e., to the `}` character), and then continues on with whatever commands appear next in the script.
+
+To start with, let’s keep things simple, and use a `while` loop to calculate the smallest multiple of 179 that is greater than or equal to 1000. This is of course a very silly example since you can actually calculate it using simple arithmetic operations, but the point here isn’t to do something novel. The point is to show how to write a `while` loop. Here’s the code in action:
+
+```{r}
+x <- 0
+while(x < 1000) {
+  x <- x + 179
+}
+print(x)
+```
+
+When we run this code, R starts at the top and creates a new variable called `x` and assigns it a value of 0. It then moves down to the loop, and “notices” that the condition here is `x < 1000`. Since the current value of `x` is zero, the condition is `TRUE`, so it enters the body of the loop (inside the curly braces). There’s only one command here, which instructs R to increase the value of `x` by 179. R then returns to the top of the loop, and rechecks the condition. The value of `x` is now 179, but that’s still less than 1000, so the loop continues. To see this, we can move the `print` statement inside the body of the loop so that we can see each increment take place. Let’s watch:
+
+```{r}
+x <- 0
+while(x < 1000) {
+  x <- x + 179
+  print(x)
+}
+```
+
+Truly fascinating stuff. 
+
+## The `for` loop
+
+The `for` loop is also pretty simple, though not quite as simple as the `while` loop. The basic format of this loop goes like this:
+
+```
+for ( VAR in VECTOR ) {
+  STATEMENT1
+  STATEMENT2
+  ETC 
+}
+```
+
+In a `for` loop, R runs a fixed number of iterations. We have a vector which has several elements, each one corresponding to a possible value of the variable `var`. In the first iteration of the loop, `var` is given a value corresponding to the first element of vector; in the second iteration of the loop `var` gets a value corresponding to the second value in vector; and so on. Once we’ve exhausted all of the values in the vector, the loop terminates and the flow of the program continues down the script. For example, this loop will print the word "hello" three times:
+
+```{r}
+for(i in 1:3) {
+  print("hello")
+}
+```
+
+However, there’s nothing that stops you from using something non-numeric as the vector of possible values, as the following example illustrates. This time around, we’ll use a character vector to control our loop, which in this case will be a vector of words. And what we’ll do is calculate the length of the word, and print it out. Here’s the script:
+
+```{r}
+# the words
+words <- c("it","was","the","dirty","end","of","winter")
+
+# loop over the words
+for(w in words) {
+  l <- nchar(w)
+  print(l)
+}
+```
+
+Of course, we actually didn't need that loop at all since the `nchar` function can take vectors of words as its input, like so:
+```{r}
+nchar(words)
+```
+
+
+## An example
+
+To give you a sense of how you can use a loop in a more complex situation, let’s write a simple script to simulate the progression of a mortgage. Suppose we have a nice young couple who borrow \$300000 from the bank, at an annual interest rate of 5%. The mortgage is a 30 year loan, so they need to pay it off within 360 months total. Our happy couple decide to set their monthly mortgage payment at \$1600 per month. Will they pay off the loan in time or not? Only time will tell. Or, alternatively, we could simulate the whole process and get R to tell us. The code to run this is a fair bit more complicated, so we'll keep it all in a script called [mortgage.R](./scripts/mortgage.R). 
+
+```{r, eval=FALSE}
+# setup
+month <- 0         # count the number of months
+balance <- 300000  # initial mortgage balance
+payments <- 1600   # monthly payments
+interest <- 0.05   # 5% interest rate per year
+total_paid <- 0    # track what you’ve paid the bank
+
+# convert annual interest to a monthly multiplier
+monthly_multiplier <- (1 + interest) ^ (1/12)
+
+# keep looping until the loan is paid off...
+while(balance > 0){
+  
+  # do the calculations for this month
+  month <- month + 1# one more month
+  
+  balance <- balance * monthly_multiplier # add the interest 
+  balance <- balance - payments # make the payments 
+  total_paid <- total_paid + payments # track the total paid
+  
+  # print the results on screen
+  cat("month", month, ": balance", round(balance), "\n")
+  
+}
+
+# print the total payments at the end
+cat("total payments made", total_paid, "\n")
+```
+
+To explain what’s going on, let’s go through it carefully. In the first block of code (lines 2-6) all we’re doing is specifying all the variables that define the problem:
+
+```{r,eval=FALSE}
+month <- 0         # count the number of months
+balance <- 300000  # initial mortgage balance
+payments <- 1600   # monthly payments
+interest <- 0.05   # 5% interest rate per year
+total_paid <- 0    # track what you’ve paid the bank
+```
+
+The loan starts with a `balance` of \$300,000 owed to the bank on `month` zero, and at that point in time the `total_paid` money is nothing. The couple is making monthly `payments` of \$1600, at an annual `interest` rate of 5%. 
+
+Next, on line 9, we convert the annual percentage interest into a monthly multiplier.
+```{r,eval=FALSE}
+monthly_multiplier <- (1 + interest) ^ (1/12)
+```
+That is, the number that you have to multiply the current balance by each month in order to produce an annual interest rate of 5%. An annual interest rate of 5% implies that, if no payments were made over 12 months the balance would end up being 1.05 times what it was originally, so the *annual* multiplier is 1.05. To calculate the monthly multiplier, we need to calculate the 12th root of 1.05 (i.e., raise 1.05 to the power of 1/12). We store this value in as the `monthly_multiplier` variable, which as it happens corresponds to a value of about 1.004. All of which is a rather long winded way of saying that the annual interest rate of 5% corresponds to a monthly interest rate of about 0.4%.
+
+Anyway... all of that is really just setting the stage. It’s not the interesting part of the script. The interesting part -- such as it is -- is the loop which unfolds over lines 12-23. The `while` statement on line 12 tells R that it needs to keep looping until the balance reaches zero. If we strip out the parts of the code that print the results to the screen, the important part of the loop looks like this:
+```{r,eval=FALSE}
+while(balance > 0){
+  month <- month + 1                      # one more month
+  balance <- balance * monthly_multiplier # add the interest 
+  balance <- balance - payments           # make the payments 
+  total_paid <- total_paid + payments     # track the total paid
+}
+```
+
+Firstly we increase the value `month` by 1 (on line 15). Next, the bank charges the interest (on line 16), so the `balance` goes up. Then, the couple makes their monthly payment (on line 17) and the `balance` goes down. Finally, we keep track of the total amount of money that the couple has paid so far, by adding the payments to the running tally (on line 18). After having done all this number crunching, we tell R (on line 21) to issue the couple with a very terse monthly statement, which just indicates how many months they’ve been paying the loan and how much money they still owe the bank. Which is rather rude of us really. I’ve grown attached to this couple and I really feel they deserve better than that. But, that’s banks for you.
+
+In any case, the key thing here is the tension between the increase in `balance` on line 16 and the decrease on line 17. As long as the decrease is bigger, then the balance will eventually drop to zero and the loop will eventually terminate. If not, the loop will continue forever! This is very bad programming on my part: I should have included something to force R to stop if this goes on too long. However, I haven’t shown you how to evaluate `if` statements yet, so we’ll just have to hope that the author of the book has rigged the example so that the code actually runs. Hm. I wonder what the odds of that are? Anyway, assuming that the loop does eventually terminate, there’s one last line of code (line 26) that prints out the total amount of money that the couple handed over to the bank over the lifetime of the loan.
+
+Now that I’ve explained everything in the script in tedious detail, let’s run it and see what happens:
+
+```{r, output.lines=c(1:10)}
+source("./scripts/mortgage.R")
+```
+```{r, output.lines=c(352:357), echo=FALSE}
+source("./scripts/mortgage.R")
+```
+
+So our nice young couple have paid off their \$300,000 loan in just 4 months shy of the 30 year term of their loan, at a bargain basement price of \$568,046. A happy ending!
+
+
+## Turtle
+
+```{r, fig.show='animate', interval=0.3, cache=TRUE}
+library(grid)           # grid graphics
+library(TurtleGraphics) # load the TurtleGraphics package 
+turtle_init()           # initialise the terrarium
+for(i in 1:6) {
+  turtle_forward(distance = 10)  # move 
+  turtle_left(angle = 60)        # turn 
+}
+```

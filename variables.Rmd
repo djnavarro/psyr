@@ -1,0 +1,302 @@
+---
+title: "2. Variables"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: textmate
+    css: mystyle.css
+    number_sections: true
+    pandoc_args: [
+      "--number-offset", 2
+    ]
+---
+
+```{r,echo=FALSE}
+rm(list=objects()) # start with a clean workspace
+source("knitr_tweaks.R")
+```
+
+One of the most important things to be able to do in R (or any programming language, for that matter) is to store information in **variables**. At a conceptual level you can think of a variable as label for a certain piece of information, or even several different pieces of information. When doing statistical analysis in R your data are stored as variables in R, but we also create variables to do other things. Before we delve into all the messy details of data sets and statistical analysis, let’s look at the very basics for how we create variables and work with them.
+
+## Numeric data
+
+Since we’ve been working with numbers so far, let’s start by creating variables to store our numbers. The first quantity we might care about is the number of questionnaire items included in our survey, so we'll create a variable called `n_items`, and we'll assign a **value** to that variable . If the survey contains 20 items then that value should be `20`. We do this by using the **assignment operator**,^[Actually, in keeping with the R tradition of providing you with a billion different screwdrivers  when you’re actually looking for a hammer, this isn't the only way to do it. In addition to the `<-` operator, we can also use `->` and `=`. There’s also the `assign()` function, and the `<<-` and `->>` operators, all of which have slightly different behaviour. I won't talk much about any of those here.] written as a leftward pointing arrow `<-`. Note that you cannot insert spaces here: if you type  `< -` R will interpret the command very differently `r emo::ji("grimace")`. To create the variable `n_items`, the command needed is:
+
+```{r}
+n_items <- 20
+```
+
+We sometimes describe this verbally by saying that the variable *gets* a value of 20.
+
+The leftwards arrow is a nice visual convention: it tells you that R is taking the value of `20` and assigning it "to" the variable `n_items`. This is really nice, because R is also smart enough to let you use a rightward pointing arrow to assign in the other direction, like `20 -> n_item`. I tend to describe this form of the command by saying that 20 *goes to* the variable, but I'm not sure anyone else talks that way. 
+
+In any case when you hit enter after typing this command, R doesn’t print out any output. It just gives you another command prompt. However, behind the scenes R has created a variable called `items` and given it a value of `20`. You can check that this has happened by asking R to print the variable on screen. And the simplest way to do that is to type the name of the variable and hit enter:
+
+```{r}
+n_items
+```
+
+In addition to defining the `n_items` variable, I can also create a variable called `item_time`, indicating how many seconds we might expect a person to spend answering an item on average. So now there are two variables we define:
+```{r}
+n_items <- 20
+item_time <- 15
+```
+The nice thing about variables (in fact, the whole point of having variables) is that we can do anything with a variable that we ought to be able to do with the information that it stores. That is, since R allows me to multiply `20` by `15`
+```{r}
+20 * 15
+```
+it also allows me to multiply `n_items` by `item_time`
+```{r}
+n_items * item_time
+```
+As far as R is concerned, the `n_items * item_time` command is the same as the `20 * 15` command. Not surprisingly, I can assign the output of this calculation to a new variable, which I’ll call `survey_time`. When we do this, the new variable gets the value `r 20*15`. So let’s do that, and then get R to print out the value of `survey_time` so that we can verify that it’s done what we asked:
+```{r}
+survey_time <- n_items * item_time
+survey_time
+```
+That’s fairly straightforward. 
+
+A slightly more subtle thing we can do is reassign the value of a variable, based on its current value. For instance, if we want to provide a more realistic estimate of how long it will take for people to complete the survey, we will need to account for the fact that it takes people some amount of time to complete the consent form that accompanies the survey. So let's assume that takes about 100 seconds,
+```{r}
+consent_time <- 100
+```
+Now what we need to do is *update* the value of the `survey_time` variable, which we could do like this:
+```{r}
+survey_time <- survey_time + consent_time
+survey_time
+```
+
+In this calculation, R has taken the old value of `survey_time` (i.e., `r n_items * item_time`) and added the `consent_time` to that value, producing a value of `r survey_time`. This new value is now re-assigned to the `survey_time` variable, overwriting its previous value. 
+
+
+## Character data
+
+A lot of the time your data will be numeric in nature, but not always. Sometimes your data really needs to be described using text, not using numbers. For example, we might want to keep track of what *kind* of survey we are running. If we were asking people multiple choice questions we might create a variable `survey_type` that records that information: 
+
+```{r}
+survey_type <- "multiple choice"
+```
+
+The quote marks here are used to tell R that the information enclosed within the quotes is one piece of text data, known as a **character string**. You can use single quotes or double quotes for this purpose, so R treats these two commands as identical:
+
+```{r}
+survey_type <- "multiple choice"
+survey_type <- 'multiple choice'
+```
+
+If you try to do this without the quote marks, R will get complain and it will "throw" an error message at you, like this:
+```{r,error=TRUE}
+survey_type <- multiple choice
+```
+
+Eh, fair enough. 
+
+###  Working with text
+
+Working with text data is somewhat more complicated than working with numeric data, and I discuss some of the more useful ideas later, but for purposes of the current chapter we only need a bare bones sketch. The only other thing I want to do before moving on is show you an example of a function that can be applied to text data. So far, most of the functions that we have seen (i.e., `sqrt`, `abs` and `round`) only make sense when applied to numeric data - you can’t calculate the square root of `"multiple choice"`, for instance. So it might be nice to see an example of a function that can be applied to text.
+
+The function I’m going to introduce you to is called `nchar`, and what it does is count the number of individual characters that make up a string. The `survey_type` variable contains the string `"multiple choice"`. So how many characters are there in this string? Sure, I could count them, but that’s boring, and more to the point it’s a terrible strategy if I want to know the length of [Pride and Prejudice](https://en.wikisource.org/wiki/Pride_and_Prejudice).^[For no reason I want to mention that there is an R package called **janeaustenr** that does nothing other than contain the entire text to all of Jane Austen's novels and it is the best thing in all the world.] That’s where the `nchar` function is helpful:
+
+```{r}
+nchar(survey_type)
+```
+
+Notice that this answer counts the space between words as a character. That is, it's returning the number of *characters* not the number of *letters*. The `nchar` function can do a bit more than this, and there’s a lot of other functions that you can do to extract more information from text or do all sorts of fancy things. However, the goal here is not to teach any of that! The goal right now is just to see an example of a function that actually does work when applied to text.
+
+
+## Logical data
+
+Time to move onto a third kind of data. A key concept in that a lot of R relies on is the idea of a **logical value**. A logical value is an assertion about whether something is true or false. This is implemented in R in a pretty straightforward way. There are two logical values, namely `TRUE` and `FALSE`. Despite the simplicity, a logical values are very useful things. For example, to return to the survey we are designing, I might want to define a variable `consent_given` that indicates whether a person has in fact consented to participate in the study, like so:^[It’s kind of tedious to type `TRUE` or `FALSE` over and over again, so R provides you with a shortcut. You can use `T` and `F` instead. However, it is not a good idea to do this. The values `TRUE` and `FALSE` are *reserved keywords* in R and so R won't let you define a variable called `TRUE`. This is for a good reason - it protects you from accidentally redefining the meaning of "true" and "false". There is no such protection for `T` and `F`. It's better to type the full word]
+
+```{r}
+consent_given <- TRUE
+```
+
+Because `TRUE` and `FALSE` are logical valiues that pertain to... well... truth and falseness, there are a number of special rules that they follow.
+
+### Truth values
+
+In George Orwell’s classic book [1984](https://en.wikipedia.org/wiki/Nineteen_Eighty-Four), one of the slogans used by the totalitarian Party was “two plus two equals five”, the idea being that the political domination of human freedom becomes complete when it is possible to subvert even the most basic of truths. It’s a terrifying thought, especially when the protagonist Winston Smith finally breaks down under torture and agrees to the proposition. According to the book, humans are "infinitely malleable", and can be made to believe whatever is required of us. Regardless of what might be true of humans, R is *not* infinitely malleable. It has rather firm opinions on the topic of what is and isn’t true, at least as regards basic mathematics. If I ask it to calculate `2 + 2`, it always gives the same answer...
+
+```{r}
+2 + 2
+```
+
+... and of course that answer is never `5`. That being said, there's something to notice here. In this command, R is just doing the calculations. I haven’t asked it to explicitly *test* whether `2 + 2 = 4` is a true statement. If I want R to make an explicit judgement on that topic, I can use a command like this:
+
+```{r}
+2 + 2 == 4
+```
+
+What I’ve done here is use the **equality operator**, `==`, to force R to make a “true or false” judgement. Note that the use of the double equals `==` is important here. If we tried to do this with a single equals sign, R won't do what we want it to^[In this context `x == 4` is interpreted as a test of whether `x` is equal to `4`, whereas `x = 4` will be treated as an assignment operation, exactly as if you'd typed `x <- 4`] Okay, let’s see what R thinks of the Party slogan:
+
+```{r}
+2 + 2 == 5
+```
+
+Yay!  Freedom and ponies for all! `r emo::ji("unicorn")` 
+
+### Equal (and not equal)
+
+Working with logical data is mostly a matter of common sense. For instance, in the previous section we talked about the *equals to* operator `==` which checks to see if two things are the same as one another:
+
+```{r}
+2 + 2 == 4
+2 + 2 == 5
+```
+
+It also provides the *not equals* operator `!=`, which tests to see if two things are different to each other:
+
+```{r}
+2 + 2 != 4
+2 + 2 != 5
+```
+
+It's worth noting that you can also apply equality operations to text. R understands that a `cat` is a `cat` so you get this:
+
+```{r}
+"cat" == "cat"
+```
+
+However, R is very particular about what counts as equality. For two pieces of text to be equal, they must be precisely the same, so all of the following return `FALSE`:
+
+```{r,results='hold'}
+"cat" == "CAT"
+"cat" == "c a t"
+"cat" == "cat "
+```
+
+### Less than (and greater than)
+
+This idea extends naturally to other basic mathematical ideas. The *less than* operator `<` can be used to test whether one number is smaller than another number:
+
+```{r}
+2 < 5
+```
+
+That makes sense. One thing that is worth noting, however, is that `2 < 2` returns `FALSE`, since these two numbers are the *same*. Neither one is less than or greater than the other. If we want to test whether something is *less than or equal to*, then we can use the `<=` operator. The behaviour of this operator is illustrated below:
+
+```{r}
+2 <= 5
+2 <= 2
+```
+
+As you might imagine, there are two more operators along these lines: `>` is the *greater than* operator, and `>=` is the *greater than or equal to* operator, and their behaviour is exactly what you'd expect.^[As an aside, R does allow you to compare text using the `<` operator, and it provides a test of which text comes first in the alphabet (e.g. try `"cat" < "dog"`). However, it's not an amazingly useful thing to do, and it doesn't always behave the way you might expect.]
+
+### "Not"
+
+There are three more logical operators I want to introduce now. The first of these is  `!`, and it behaves like the word *"not"* in everyday language. If a fact is "not true" then it must be "false". We can express this idea in R like this:
+
+```{r}
+!TRUE
+```
+
+To return to our running example of the survey, if we were sending the survey to school children, we would need to make sure that a parent or other responsible adult has provided consent for them to participate, let's suppose that we have a variable called `age` 
+
+```{r}
+age <- 12
+```
+
+We can use that to determine whether the participant is an `adult`
+
+```{r}
+adult <- age >= 18
+```
+
+In the code snippet above, what we've done is constructed a test of whether the participant is 18 or older (i.e. `age >= 18`). So this will be a logical value (i.e., `TRUE` or `FALSE`), and this result is the value that gets assigned to the `adult` variable. However, in our scenario, the only time where we will want to seek parental consent is when the participant is *not* an adult, so what we want to know is this:
+
+```{r}
+!adult
+```
+
+Not surprisingly, since the participant is only twelve, it is of course `TRUE` that we'll need to check with a parent or legal guardian in order to have them participate in the survey.
+
+### "Or"
+
+Okay, let's extend this logic a little further. Suppose we wanted to create a variable that checks whether we need to obtain consent from a legal guardian. As per the example above, one reason why this might be necessary is if the participant is a minor. However, there are other possible reasons. For instance, intellectual disability may in some cases require a legal guardian to provide consent on the participant's behalf. In such situations, we might need to check to see whether the participant is a minor, *or* has an intellectual disability:  
+
+```{r}
+minor <- FALSE
+disability <- TRUE
+```
+
+If one or both of these variables is `TRUE` then we need to obtain guardian consent, which we would express in R as follows:
+
+```{r}
+guardian_consent_needed <- minor | disability
+guardian_consent_needed
+```
+
+
+### "And"
+
+The last operator to introduce is `&` which has a meaning simlar to the word *"and"*. A logical expression `x & y` is true only if *both* `x` and `y` are true. In our survey example, for example, a survey might only be counted as valid data if we have properly obtained consent (i.e. `consent_given` is `TRUE`) and if the survey has been corectly filled out (i.e., `survey_complete` is `TRUE`). If a participant has provided consent but not filled out the survey properly, we might have these variables:
+```{r}
+consent_given <- TRUE
+survey_complete <- FALSE
+```
+
+So do we have a `valid_response` in this case?
+
+```{r}
+valid_response <- consent_given & survey_complete
+valid_response
+```
+
+## Naming your variables
+
+What should you call your variables? R allows some flexibility in this regard, but there are some limitations, as the following list of rules^[Actually, you can override a lot of these rules if you want to, and quite easily. All you have to do is add quote marks or backticks around your non-standard variable name. For instance `') my annoyance>' <- 350` would work just fine, but it’s almost never a good idea to do this.] illustrates:
+
+- Names can only use the upper case alphabetic characters `A-Z` as well as the lower case characters `a-z`. You can also include numeric characters `0-9` in the variable name, as well as the period `.` or underscore `_` character. In other words,  `SuR.v_eY` is a valid (but stupid) variable name, while `survey?` is not.
+- Names cannot include spaces: `survey_time` is valid, but `survey time` is not.
+- Names are case sensitive: `survey` and `Survey` are different variable names.
+- Names must start with a letter or a period. You can’t use something like `_survey` or `1survey` as a variable name. Technically, you can use `.survey` as a variable name, but it’s not usually a good idea. By convention, variables starting with a `.` are used for special purposes, and best avoided in everyday usage.
+- Names cannot be one of the reserved keywords. These are special words that R needs to keep “safe” from us mere users, so you can’t use them as the names of variables. The keywords are: `if`, `else`, `repeat`, `while`, `function`, `for`, `in`, `next`, `break`, `TRUE`, `FALSE`, `NULL`, `Inf`, `NaN`, `NA`, `NA_integer_`, `NA_real_`, `NA_complex_`, and finally, `NA_character_`. Don’t bother memorising these: if you make a mistake and try to use one of the keywords as a variable name, R will complain about it like a whiny little robot `r emo::ji("robot")`
+
+In addition to those rules that R enforces, there are some informal conventions that people tend to follow when naming variables. You aren’t obliged to follow these conventions, and there are many situations in which it’s advisable to ignore them, but it’s generally a good idea to follow them when you can:
+
+- *Be informative*. As a general rule, using meaningful names like `n_items` and `item_time` is preferred over arbitrary ones like `x` and `y`. Otherwise it’s very hard to remember what the contents of different variables are, and it becomes hard to understand what your commands actually do.
+- *Be brief*. Typing is a pain and no-one likes doing it. So we usually prefer to use a name like `n_items` over a name like `number_of_survey_items`. Obviously there’s a bit of a tension between using informative names (which tend to be long) and using short names (which tend to be meaningless), so use a bit of common sense when trading off these two conventions.
+- *Be consistent*. Pick a variable naming style and stick with it. I'll use "snake case" throughout, in which we use the underscore character to separate words (as in `item_time`). There are other styles that you'll see in R. When I first started writing these notes I was using `.` to separate words (as in `item.time`) but for various reasons I've decided that's less than ideal and as I go through these notes to revise them I'm switching everything to underscores. Other people like "camel case", which uses capitalisation to separate words (e.g.,`ItemTime`). It's largely a matter of personal style.
+
+
+## Exercises
+
+**Numeric data.** 
+
+In the example above, there are three variables that we use to estimate how long the survey will take to complete:
+
+- `n_items` is the number of items in our survey
+- `item_time` is the time it takes to complete an item
+- `consent_time` is the time it takes to fill out the consent form
+
+Suppose we are creating a new survey that will consist of 30 items that that 25 seconds each, and the consent form takes 120 seconds. Create a variable `new_survey_time` that calculates how long this new survey will take. 
+
+**Character data** 
+
+In our new survey, the reason that the questions take a little longer to answer is that people are being asked to provide *free response* data. Create a variable called `new_survey_type` that records this information.
+
+- R has a function called `toupper` that converts text from lower case to upper case. Try typing `toupper("multiple choice")` at the console and see what happens. 
+
+- R also has a function called `tolower`. What does it do?
+
+
+**Logical data**
+
+Suppose we have now finished collecting the data, and we have responses from one participant indicating that they identify as non-binary but were assigned female gender at birth.
+
+```{r}
+assigned_gender <- "female"
+identified_gender <- "non-binary"
+```
+
+Create a variable `transgender` that is `TRUE` if `assigned_gender` is different to `identified_gender`. 
+
+As a second exercise, suppose that the survey allows people to specify their marital status as `"single"`, `"widowed"`, `"married"` or `"de facto"`. For the purposes of some analyses we might want to collapse this to a binary variable `has_spouse` that is `TRUE` if the participant is married or in a de facto relationship, but `FALSE` otherwise.
+
+How would we do this in R?
+
+
+
