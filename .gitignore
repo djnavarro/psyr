@@ -1,2 +1,5 @@
 _site
 .Rhistory
+.DS_store
+.RData
+~$images.pptx
