@@ -182,26 +182,51 @@ for(value in 1:10) {
 }
 ```
 
+The intuition here is that R starts by setting `value` to 1. It then computes and prints `137 * value`, then moves back to the top of the loop. When it gets there, it increases `value` by 1, and then repeats the calculation. It keeps doing this until the `value` reaches 10 and then it stops. That intuition is essentially correct, but it's worth unpacking it a bit further using a different example where R loops over something other than a sequence of numbers...
 
 ### Looping over other vectors
 
-However, there’s nothing that stops you from using something non-numeric as the vector of possible values, as the following example illustrates. This time around, we’ll use a character vector to control our loop, which in this case will be a vector of words. And what we’ll do is calculate the length of the word, and print it out. Here’s the script:
+In the example above, the `for` loop was defined over the numbers from 1 to 10, specified using the R code `1:10`. However, it's worth keeping in mind that as far as R is concerned, `1:10` is actually a vector:
 
 ```{r}
-# the words
-words <- c("it","was","the","dirty","end","of","winter")
+1:10
+```
 
-# loop over the words
-for(w in words) {
-  l <- nchar(w)
-  print(l)
+So in the previous example, the intuition about the `for` loop is slightly misleading. When R gets to the top of the loop the action it takes is "*assigning* `value` *equal to the next element of the vector*". In this case it turns out that this action causes R to "*increase* `value` *by 1*", but that's not true in general. To illustrate that, here's an example in which a `for` loop iterates over a character vector. First, I'll create a vector of `words`:
+
+```{r}
+words <- c("it", "was", "the", "dirty", "end", "of", "winter")
+```
+
+Now what I'll do is create a `for` loop using this vector. For every word in the vector of `words` R will do three things:
+
+- Count the number of letters in the word
+- Convert the word to upper case
+- Print a nice summary to the console
+
+Here it is:
+
+```{r}
+for(this_word in words) {
+  n_letters <- nchar(this_word)
+  block_word <- toupper(this_word)
+  cat(block_word, "has", n_letters, "letters\n")
 }
 ```
 
-Of course, we actually didn't need that loop at all since the `nchar` function can take vectors of words as its input, like so:
+### Vectorised code?
+
+Of course, there are ways of doing this that don't require you to write the loop manually. Because many functions in R operate naturally on vectors, you can take advantage of this. Code that bypasses the need to write loops is called *vectorised* code, and there are some good reasons to do this (sometimes) once you're comfortable working in R. Here's an example:
+
 ```{r}
-nchar(words)
+chars <- nchar(words)
+names(chars) <- toupper(words)
+print(chars)
 ```
+
+Sometimes vectorised code is easy to write and easy to read. I think the example above is pretty simple, for instance. It's not always so easy though!
+
+When you go out into the wider world of R programming you'll probably encounter a lot of examples of people talking about how to vectorise your code to produce better performance. My advice for novices is not to worry about that right now. Loops are perfectly fine, and it's often more intuitive to write code using loops than using vectors. Eventually you'll probably want to think about these topics but it's something that you can leave for a later date!
 
 ### For the love of turtles
 
