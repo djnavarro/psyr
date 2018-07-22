@@ -21,6 +21,8 @@ source("knitr_tweaks.R")
 library(lsr,quietly = TRUE)
 ```
 
+When teaching statistics and data analysis, there is a school of thought that argues that the student should be introduced to actual data as quickly as possible. In one sense I've broken that rule rather substantially. The entirety the *core toolkit* section went by without any real data, much less any data analysis.  
+
 
 ```{r, message = FALSE, warning = FALSE, fig.width=7}
 library(tidyverse)
@@ -39,11 +41,10 @@ plot(pic)
 
 ## The tidyverse
 
-The first line
+The first line of code in the AFL example is `library(tidyverse)`. Per the description on the [tidyverse](https://www.tidyverse.org/) website,
 
-```{r,eval=FALSE}
-library(tidyverse)
-```
+> The tidyverse is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures. 
+
 
 ## Reading CSV data
 
@@ -102,6 +103,8 @@ afl %>%
   group_by(year, game_type) %>% 
   summarise(attendance = mean(attendance)) 
 ```
+
+The pipe is discussed in some detail in Hadley Wickham's [R for Data Science](http://r4ds.had.co.nz/pipes.html) book.
 
 ## Addition operator, `+`
 
