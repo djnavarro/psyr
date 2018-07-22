@@ -48,8 +48,8 @@ It is of course a work in progress, but hopefully it is useful!
 
 Everything from here onwards is *very much* a work in progress!
 
-- [Data types](./xx-data-types.html) <span style="color:#cccccc">(to be updated)</span>
-- <span style="color:#cccccc">The tidyverse (to be added)</span>
+- [Prelude to data](./prelude-to-data.html)
+- [Data types](./data-types.html)
 - [Visualising data](./xx-visualising-data.html)  <span style="color:#cccccc">(to be updated)</span><!-- add ggplot -->
 - [Describing data](./xx-describing-data.html) <span style="color:#cccccc">(to be updated)</span><!-- skimr, group_by, summarise -->
 - <span style="color:#cccccc">Data manipulation (to be added)</span> <!-- gather/spread, etc -->

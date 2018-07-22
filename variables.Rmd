@@ -264,6 +264,28 @@ In addition to those rules that R enforces, there are some informal conventions 
 - *Be consistent*. Pick a variable naming style and stick with it. I'll use "snake case" throughout, in which we use the underscore character to separate words (as in `item_time`). There are other styles that you'll see in R. When I first started writing these notes I was using `.` to separate words (as in `item.time`) but for various reasons I've decided that's less than ideal and as I go through these notes to revise them I'm switching everything to underscores. Other people like "camel case", which uses capitalisation to separate words (e.g.,`ItemTime`). It's largely a matter of personal style.
 
 
+## Special values
+
+A final thing I want to mention in this context are some of the “special” values that you might see R produce. Most likely you’ll see them in situations where you were expecting a number, but there are quite a few other ways you can encounter them. These values are `Inf`, `NaN`, `NA` and `NULL`. These values can crop up in various different places, and so it’s important to understand what they mean.
+
+**Infinity** (`Inf`). The easiest of the special values to explain is `Inf`, since it corresponds to a value that is infinitely large. You can also have `-Inf`. The easiest way to get `Inf` is to divide a positive number by 0:
+```{r}
+1/0
+```
+In most real world data analysis situations, if you’re ending up with infinite numbers in your data, then something has gone awry. Hopefully you’ll never have to see them.
+
+**Not a Number** (`NaN`). The special value of `NaN` is short for “not a number”, and it’s basically a reserved keyword that means “there isn’t a mathematically defined number for this”. If you can remember your high school maths, remember that it is conventional to say that `0/0` doesn’t have a proper answer: mathematicians would say that `0/0` is *undefined*. R says that it’s not a number:
+```{r}
+0/0
+```
+Nevertheless, it’s still treated as a “numeric” value. To oversimplify, `NaN` corresponds to cases where you asked a proper numerical question that genuinely has no meaningful answer.
+
+**Not available** (`NA`). `NA` indicates that the value that is “supposed” to be stored here is missing. To understand what this means, it helps to recognise that the `NA` value is something that you’re most likely to see when analysing data from real world experiments. Sometimes you get equipment failures, or you lose some of the data, or whatever. The point is that some of the information that you were “expecting” to get from your study is just plain missing. Note the difference between `NA` and `NaN`. For `NaN`, we really do know what’s supposed to be stored; it’s just that it happens to correspond to something like `0/0` that doesn’t make any sense at all. In contrast, `NA` indicates that we actually don’t know what was supposed to be there. The information is missing.
+
+**No value** (`NULL`). The `NULL` value takes this “absence” concept even further. It asserts that the variable genuinely has no value whatsoever, or does not even exist. This is quite different to both `NaN` and `NA`. For `NaN` we actually know what the value is, because it’s something insane like `0/0`. For `NA`, we believe that there is *supposed* to be a value “out there” in some sense, but a dog ate our homework and so we don’t quite know what it is. But for `NULL` we strongly believe that there is no value at all.
+
+
+
 ## Exercises
 
 **Numeric data.** 

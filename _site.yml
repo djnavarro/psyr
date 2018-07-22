@@ -29,8 +29,10 @@ navbar:
 
   - text: Data
     menu:
+    - text: Prelude
+      href: prelude-to-data.html 
     - text: Data types
-      href: xx-data-types.html    
+      href: data-types.html    
     - text: Visualising data
       href: xx-visualising-data.html
     - text: Describing data
