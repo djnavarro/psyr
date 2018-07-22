@@ -161,3 +161,14 @@ for(s in 3:8) {
   turtle_polygon(sides = s, direction = which_way(s))
 }
 ```
+
+`r emo::ji("turtle")` `r emo::ji("dancing")` `r emo::ji("tada")`
+
+## Exercises
+
+- Write a function that takes a number `x` as input, takes the square root (using `sqrt`), rounds it to the nearest whole number (using `round`) and then returns the result
+- Modify your function so that the user can control the number of `digits` to which the result is rounded (recall that `round` has a `digits` argument)
+- Modify the function so that by default `digits = 0`
+
+The solutions for these exercises are [here](./scripts/solutions_functions.R).
+
