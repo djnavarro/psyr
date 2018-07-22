@@ -172,6 +172,38 @@ group==gender
             
 Factors are very useful things, and we’ll use them a lot in this book: they’re the main way to represent a nominal scale variable. And there are lots of nominal scale variables out there. I’ll talk more about factors later, but for now you know enough to be able to get started.
 
+
+
+## Ordered factors
+
+One topic that I neglected to mention when discussing factors earlier in this chapter is that there are actually two different types of factor in R, unordered factors and **ordered factors**. An unordered factor corresponds to a nominal scale variable, and all of the factors we’ve discussed so far in this book have been unordered. However, it’s sometimes useful to explicitly tell R that your variable is ordinal scale, and if so you need to declare it to be an ordered factor. For instance, suppose we have a variable consisting of Likert scale data:
+
+```{r}
+likert <- c(1, 7, 3, 4, 4, 4, 2, 6, 5, 5)
+```
+
+We can declare this to be an ordered factor in by using the `factor` function, and setting `ordered = TRUE`. To illustrate how this works, let’s create an ordered factor called `likert.ordinal` and have a look at it:
+
+```{r}
+likert.ordinal <- factor( 
+  x = likert,                 # the raw data
+  levels = c(7,6,5,4,3,2,1),  # strongest agreement is 1, weakest is 7
+  ordered = TRUE              # and it’s ordered
+)
+print(likert.ordinal)
+```
+
+Notice that when we print out the ordered factor, R explicitly tells us what order the levels come in. Because I wanted to order my levels in terms of *increasing* strength of endorsement, and because a response of 1 corresponded to the strongest agreement and 7 to the strongest disagreement, it was important that I tell R to encode 7 as the lowest value and 1 as the largest. Always check this when creating an ordered factor: it’s very easy to accidentally encode your data “upside down” if you’re not paying attention. In any case, note that we can (and should) attach meaningful names to these factor levels by using the `levels` function, like this:
+```{r}
+levels( likert.ordinal ) <- c( 
+  "strong.disagree", "disagree", "weak.disagree",
+  "neutral", "weak.agree", "agree", "strong.agree" 
+)
+print( likert.ordinal )
+```
+
+One nice thing about using ordered factors is that there are analyses for which R automatically treats ordered factors differently from unordered factors, and generally in a way that is more appropriate for ordinal data. However, I won’t go into details here. Like so many things in this chapter, my main goal here is to make you aware that R has this capability built into it; so if you ever need to start thinking about ordinal scale variables in more detail, you have at least some idea where to start looking!
+
 ## Data frames
 
 It’s now time to go back and deal with the somewhat confusing thing that happened earlier when we tried to open up a CSV file. Apparently we succeeded in loading the data, but it came to us in a very odd looking format. At the time, I told you that this was a **data frame**. Now I’d better explain what that means.
@@ -554,35 +586,6 @@ I find this a lot easier to read - it's usually a good idea to label your arrays
 A["nonbinary",,]
 ```
 
-## Ordered factors
-
-One topic that I neglected to mention when discussing factors earlier in this chapter is that there are actually two different types of factor in R, unordered factors and **ordered factors**. An unordered factor corresponds to a nominal scale variable, and all of the factors we’ve discussed so far in this book have been unordered. However, it’s sometimes useful to explicitly tell R that your variable is ordinal scale, and if so you need to declare it to be an ordered factor. For instance, suppose we have a variable consisting of Likert scale data:
-
-```{r}
-likert <- c(1, 7, 3, 4, 4, 4, 2, 6, 5, 5)
-```
-
-We can declare this to be an ordered factor in by using the `factor` function, and setting `ordered = TRUE`. To illustrate how this works, let’s create an ordered factor called `likert.ordinal` and have a look at it:
-
-```{r}
-likert.ordinal <- factor( 
-  x = likert,                 # the raw data
-  levels = c(7,6,5,4,3,2,1),  # strongest agreement is 1, weakest is 7
-  ordered = TRUE              # and it’s ordered
-)
-print(likert.ordinal)
-```
-
-Notice that when we print out the ordered factor, R explicitly tells us what order the levels come in. Because I wanted to order my levels in terms of *increasing* strength of endorsement, and because a response of 1 corresponded to the strongest agreement and 7 to the strongest disagreement, it was important that I tell R to encode 7 as the lowest value and 1 as the largest. Always check this when creating an ordered factor: it’s very easy to accidentally encode your data “upside down” if you’re not paying attention. In any case, note that we can (and should) attach meaningful names to these factor levels by using the `levels` function, like this:
-```{r}
-levels( likert.ordinal ) <- c( 
-  "strong.disagree", "disagree", "weak.disagree",
-  "neutral", "weak.agree", "agree", "strong.agree" 
-)
-print( likert.ordinal )
-```
-
-One nice thing about using ordered factors is that there are analyses for which R automatically treats ordered factors differently from unordered factors, and generally in a way that is more appropriate for ordinal data. However, I won’t go into details here. Like so many things in this chapter, my main goal here is to make you aware that R has this capability built into it; so if you ever need to start thinking about ordinal scale variables in more detail, you have at least some idea where to start looking!
 
 ## Dates and times
 
