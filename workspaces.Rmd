@@ -138,7 +138,12 @@ One word of warning: what you *don’t* want to do is use the “File” menu to
 
 ## Exercises
 
+For the first exercise, let's make sure you understand how to load and save workspaces:
+
 - Create a few variables, and save them to a workspace file
 - Close RStudio, reopen it, and then reload your workspace file
 
+For the second exercise, we'll focus on the housekeeping aspect:
 
+- Use the RStudio environment pane to remove a variables
+- Use the `rm` command to remove a variable
