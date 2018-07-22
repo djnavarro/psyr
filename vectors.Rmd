@@ -114,7 +114,7 @@ Another way to edit variables in is to use the `edit` function. I won't go into 
 edit(scale_name)
 ```
 
-## Named elements
+## Naming elements
 
 One very handy thing in R is that it lets you assign meaningul *names* to the different elements in a vector. For example, the `raw_scores` vector that we introduced earlier contains the actual data from a study but when you print it out on its own
 
@@ -208,12 +208,10 @@ At this point, I hope you can see why logical indexing is such a useful thing. I
 
 ## Exercises
 
-Try creating a few different variables of your own, and then ask yourself questions like “how do I get R to spit out all the elements that are [blah]”. For instance, I might create vectors with the genders and ages of diffent people
-
-```{r}
-age <- c(19, 34, 7, 67)
-gender <- c("male","female","female","female")
-```
-
-Create a logical vector `adult` that indicates whether each participant was over the age of 18, and then use it to print out the `gender` of all the adult participants. 
+- Use the combine function `c` to create a numeric vector called `age` that lists the ages of four people (e.g., 19, 34, 7 and 67)
+- Use the square brackets `[]` to print out the `age` of the second person. 
+- Use the square brackets `[]` to print out the `age` of the second person and third persons
+- Use the combine function `c` to create a character vector called `gender` that lists the gender of those four people
+- Create a logical vector `adult` that indicates whether each participant was 18 or older. Instead of using `c`, try using a logical operator like `>` or `>=` to automatically create `adult` from `age`
+- Test your logical indexing skills. Print out the `gender` of all the `adult` participants.
 
