@@ -18,6 +18,7 @@ output:
 ```{r,include=FALSE}
 rm(list=objects()) # start with a clean workspace
 source("knitr_tweaks.R")
+library(tidyverse,quietly = TRUE)
 library(shiny, quietly = TRUE)
 library(shinyjs, quietly = TRUE)
 library(rdrop2, quietly = TRUE)

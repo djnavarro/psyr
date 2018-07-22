@@ -19,6 +19,7 @@ output:
 rm(list=objects()) # start with a clean workspace
 source("knitr_tweaks.R")
 library(lsr,quietly = TRUE)
+library(tidyverse,quietly = TRUE)
 ```
 
 > He divided the universe in forty categories or classes, these being further subdivided into differences, which was then subdivided into species. He assigned to each class a monosyllable of two letters; to each difference, a consonant; to each species, a vowel. For example: `de`, which means an element; `deb`, the first of the elements, fire; `deba`, a part of the element fire, a flame. … The words of the analytical language created by John Wilkins are not mere arbitrary symbols; each letter in them has a meaning, like those from the Holy Writ had for the Cabbalists. <br>
