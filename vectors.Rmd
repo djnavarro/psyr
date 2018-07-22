@@ -215,3 +215,5 @@ At this point, I hope you can see why logical indexing is such a useful thing. I
 - Create a logical vector `adult` that indicates whether each participant was 18 or older. Instead of using `c`, try using a logical operator like `>` or `>=` to automatically create `adult` from `age`
 - Test your logical indexing skills. Print out the `gender` of all the `adult` participants.
 
+The solutions for these exercises are [here](./scripts/solutions_vectors.R)
+
