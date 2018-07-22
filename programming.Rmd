@@ -308,7 +308,7 @@ for(trial in 2:n_trials) {
 }
 ```
 
-It's a little more complex this time because we have read off two strength values and pass them to the `update_RW` function.^[In fact, we could make this code a lot simpler if we'd recorded the strengths as a **matrix** rather than two vectors, but since I haven't introduce matrices yet I've left it in this slightly more clunky form with vectors] Hopefully it is clear what this code is doing.
+It's a little more complex this time because we have read off two strength values and pass them to the `update_RW` function.^[In fact, we could make this code a lot simpler if we'd recorded the strengths as a **matrix** rather than two vectors, but since I haven't introduced matrices yet I've left it in this slightly more clunky form with vectors] Hopefully it is clear what this code is doing.
 
 As with the previous two examples we could print out `strength_A` and `strength_B`, but realistically no-one likes looking at long lists of numbers so let's just draw the picture. In the plot below, the blue line shows the associative strength to A and the red line shows the associative strength to B:
 
