@@ -97,6 +97,8 @@ This should look fairly familiar to anyone who has imported data from other soft
 
 ## Pipe operator, `%>%`
 
+**WRITE ME**
+
 ```{r,eval = FALSE}
 afl %>% 
   group_by(year, game_type) %>% 
@@ -105,10 +107,9 @@ afl %>%
 
 The pipe is discussed in some detail in Hadley Wickham's [R for Data Science](http://r4ds.had.co.nz/pipes.html) book.
 
-## Addition operator, `+`
+## Other remarks
 
-
-## Formula operator, `~`
+Before turning to a discussion of [data types](./data-types.html) there are two other things I want to briefly comment upon in this example. Take a look at the code I used to draw the figure:
 
 ```{r,eval = FALSE}
 ggplot(aes(x = year, y = attendance)) + 
@@ -117,24 +118,17 @@ ggplot(aes(x = year, y = attendance)) +
   geom_smooth() 
 ```
 
+The format of this command is written as if it were a sum. That is, it takes the form of `ggplot() + facet_wrap() + geom_point() + geom_smooth()`. I'll explain the details when discussing data visualisation but for the moment I want to mention this because it might seem odd. Clearly we aren't doing anything like the addition in the usual sense of the term; in this context `+` means something more akin to "adding a layer to a plot". 
 
-The last kind of variable that I want to introduce before finally being able to start talking about something a little more  practical is the **formula**. Formulas were originally introduced into R as a convenient way to specify a particular type of statistical model (linear regression) but they’re such handy things that they’ve spread. Formulas are now used in a lot of different contexts, so it makes sense to introduce them early.
-
-Stated simply, a formula object is a variable, but it’s a special type of variable that specifies a relationship between other variables. A formula is specified using the “tilde operator” `~`. A very simple example of a formula is shown below^[Note that, when I write out the formula, R doesn’t check to see if the `out` and `pred` variables actually exist: it’s only later on when you try to use the formula for something that this happens.]
-```{r}
-formula1 <- out ~ pred
-formula1
+The second odd feature is the part of the code that reads `~ game_types`. The **tilde operator** `~` is used to specifies a kind of R object known as a **formula**. Formulas were originally introduced into R as a convenient way to specify statistical models (especially linear regression models) but they appear a lot of different contexts. Stated simply, a formula object is a variable, but it’s a special type of variable that specifies a relationship between other variables. So in a regression context I might write a "two-sided" formula like this
+```{r,eval=FALSE}
+outcome ~ predictor1 + predictor2
 ```
-
-The precise meaning of this formula depends on exactly what you want to do with it, but in broad terms it means “the `out` (outcome) variable, analysed in terms of the `pred`  (predictor) variable”. That said, although the simplest and most common form of a formula uses the “one variable on the left, one variable on the right” format, there are others. For instance, the following examples are all reasonably common
-
-```{r}
-formula2 <-  out ~ pred1 + pred2  # more than one variable on the right
-formula3 <-  out ~ pred1 * pred2  # different relationship between predictors
-formula4 <-  ~ var1 + var2        # a ’one-sided’ formula
+In other contexts I might construct a cross-tabulation with a "one-sided" formula like this
+```{r,eval=FALSE}
+~ variable1 + variable2
 ```
-
-and there are many more variants besides. Formulas are pretty flexible things, and so different functions will make use of different formats, depending on what the function is intended to do. At this point you don't need to know much about formulas - I only mention them now so you don't get surprised by them later!
+Formulas are pretty flexible things, and so different functions will make use of different formats, depending on what the function is intended to do. 
 
 
 
