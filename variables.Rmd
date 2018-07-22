@@ -272,9 +272,11 @@ In the example above, there are three variables that we use to estimate how long
 - `item_time` is the time it takes to complete an item
 - `consent_time` is the time it takes to fill out the consent form
 
-Suppose we are creating a new survey that will consist of 30 items that that 25 seconds each, and the consent form takes 120 seconds. Create a variable `new_survey_time` that calculates how long this new survey will take. 
+Suppose we are creating a new survey that will consist of 30 items that that 25 seconds each, and the consent form takes 120 seconds: 
 
-**Character data** 
+- Create a variable `new_survey_time` that calculates how long this new survey will take. 
+
+**Character data.** 
 
 In our new survey, the reason that the questions take a little longer to answer is that people are being asked to provide *free response* data. Create a variable called `new_survey_type` that records this information.
 
@@ -283,7 +285,7 @@ In our new survey, the reason that the questions take a little longer to answer 
 - R also has a function called `tolower`. What does it do?
 
 
-**Logical data**
+**Logical data.**
 
 Suppose we have now finished collecting the data, and we have responses from one participant indicating that they identify as non-binary but were assigned female gender at birth.
 
@@ -292,11 +294,9 @@ assigned_gender <- "female"
 identified_gender <- "non-binary"
 ```
 
-Create a variable `transgender` that is `TRUE` if `assigned_gender` is different to `identified_gender`. 
+- Create a variable `transgender` that is `TRUE` if `assigned_gender` is different to `identified_gender`. 
 
-As a second exercise, suppose that the survey allows people to specify their marital status as `"single"`, `"widowed"`, `"married"` or `"de facto"`. For the purposes of some analyses we might want to collapse this to a binary variable `has_spouse` that is `TRUE` if the participant is married or in a de facto relationship, but `FALSE` otherwise.
-
-How would we do this in R?
+- As a second exercise, suppose that the survey allows people to specify their marital status as `"single"`, `"widowed"`, `"married"` or `"de facto"`. For the purposes of some analyses we might want to collapse this to a binary variable `has_spouse` that is `TRUE` if the participant is married or in a de facto relationship, but `FALSE` otherwise. How would we do this in R?
 
 
 
