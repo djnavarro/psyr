@@ -230,11 +230,31 @@ When you go out into the wider world of R programming you'll probably encounter 
 
 ### For the love of turtles
 
+One of the things I used to find annoying about writing notes for programming classes is that programs are fundamentally *dynamic* things. They do stuff, and if you want to have a good feel for how they work you really do need to see the action happening. In contrast, lecture notes are - traditionally - static things. It's just a fixed set of words. Except... this is the internet, so I can include animations! 
+
+If you recall, back when I introduced [packages](./packages.html) I installed the **TurtleGraphics** package from my GitHub page. Turtle graphics is a classic teaching tool in computer science, originally invented in the 1960s and reimplemnented over and over again in different programming languages. Let's load that package.
+```{r, message=FALSE}
+library(TurtleGraphics)
+```
+Here's the idea. You have a turtle, and she lives in a nice warm terrarium:
+```{r}
+turtle_init()
+```
+Your job is to give her instructions, to *program* her to undertake certain actions. So for example, you can use the `turtle_forward` command to get her to walk forwards, the `turtle_left` command to get her to rotate to the left, and so on. For example, if I used this command my turtle would walk forward 10 steps and leave a trail behind her showing the path she took.
+```{r,eval=FALSE}
+turtle_forward(distance = 10)
+```
+
+That seems simple enough, but what if I want my turtle to draw a more complicated shape? Let's say I want her to draw a hexagon. There are six sides to the hexagon, so the most natural way to write code for this is to write a `for` loop that loops over the sides! At each iteration within the loop, I'll have the turtle walk fowards, and then turn 60 degrees to the left. Here's what happens:
+
 ```{r, fig.show='animate', interval=0.3, cache=TRUE, message=FALSE}
-library(TurtleGraphics) # load the TurtleGraphics package 
-turtle_init()           # initialise the terrarium
-for(i in 1:6) {
-  turtle_forward(distance = 10)  # move 
-  turtle_left(angle = 60)        # turn 
+turtle_init() 
+for(side in 1:6) {
+  turtle_forward(distance = 10)  
+  turtle_left(angle = 60)        
 }
 ```
+
+Yay for turtles! Everybody loves turtles! `r stringr::str_dup(emo::ji("turtle"),6)`
+
+## Exercises
