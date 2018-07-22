@@ -180,82 +180,107 @@ update_RW <- function(value, alpha=.3, beta=.3, lambda=1) {
 ### Conditioning 
 
 ```{r}
-n_trials <- 20
-strength <- rep(0,n_trials)
+n_trials <- 20              # 20 trials
+strength <- rep(0,n_trials) # vector of 20 zeros
 
+# update strength after every trial
 for(trial in 2:n_trials) {
   strength[trial] <- update_RW( strength[trial-1] )
 }
 print(strength)
 ```
 
-You can see in the output that with repeated stimulus presentations, the strength of the association rises quickly. It's a little easier to see what's going on if we draw a picture though. Later on I'll introduce data visualisation with R, but for now here's a simple plotting command that will draw it for us:
+You can see in the output that with repeated stimulus presentations, the strength of the association rises quickly. It's a little easier to see what's going on if we draw a picture though:
 
-
-```{r}
+```{r,echo=FALSE}
 plot(strength, 
      xlab="Trial Number",
      ylab="Association",
      type="b", pch=19)
 ```
 
-
-
-
+I've hidden the R command that produces the plot, because we haven't covered data visualisation yet. However, if you are interested in a sneak peek, the source code for all the analyses in this section are [here](./scripts/rescorla_wagner.R).
 
 
 ### Extinction 
 
 ```{r}
-n_trials <- 50
-strength <- rep(0,n_trials)
-lambda <- .3
+n_trials <- 50              # 50 trials
+strength <- rep(0,n_trials) # vector of 50 zeros
+lambda <- .3                # max association for shock
 
 for(trial in 2:n_trials) {
+  
+  # remove the shock after trial 25
   if(trial > 25) lambda <- 0
   
+  # update associative strength on each trial
   strength[trial] <- update_RW(
     value = strength[trial-1],
     lambda = lambda
-   )
+  )
 }
+print(strength)
+```
 
+As you'd expect, once we stop presenting the shock the association strength starts to weaken. Here it is as a pretty picture:
+
+```{r,echo=FALSE}
 plot(strength, 
      xlab="Trial Number",
      ylab="Association",
      type="b",pch=19)
 ```
 
-
 ### Blocking
-
 
 ```{r}
 n_trials <- 50
+
+# vectors of zeros
 strength_A <- rep(0,n_trials)
 strength_B <- rep(0,n_trials)
+
+# initially only A is present
 alpha <- c(.3, 0)
 
 for(trial in 2:n_trials) {
+  
+  # after trial 15, both stimuli are present
   if(trial > 15) alpha <- c(.3, .3)
   
+  # current associative strengths
   v_old <- c(strength_A[trial-1], strength_B[trial-1])
+  
+  # update both
   v_new <- update_RW(
     value = v_old,
     alpha = alpha
    )
   
+  # record the updated strengths
   strength_A[trial] <- v_new[1]
   strength_B[trial] <- v_new[2]
 }
+```
 
+As with the previous two examples we could print out `strength_A` and `strength_B`, but realistically no-one likes looking at long lists of numbers so let's just draw the picture. In the plot below, the blue line shows the associative strength to A and the red line shows the associative strength to B:
+
+```{r,echo=FALSE}
 plot(strength_A, 
      xlab="Trial Number",
      ylab="Association",
      type="b", pch=19, col="blue")
-lines(strength_B, 
-     pch=19, col="red",
-     type="b")
+
+lines(
+  x = 15:50,
+  y = strength_B[15:50], 
+  pch=19, 
+  col="red",
+  type="b"
+)
+
+abline(v = 15, lty = 3)
 ```
 
 
