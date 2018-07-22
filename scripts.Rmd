@@ -103,7 +103,9 @@ It does still create the variable `x` when you `source` the script, but it wonâ€
 
 ## Exercises
 
-- Write a script that calculates the number of seconds in a day, and prints the result to the console
+- Write a script that calculates the number of seconds in a year (assuming 365 days), and prints the result to the console
 - After saving your script as `myscript.R` or whatever, close RStudio. It will probably ask if you want to "save the workspace" as ".Rdata" or something similar. Ignore that message and select "no" (we'll talk about workspaces shortly). Reopen RStudio and run your script.
+
+A script that solves the first problem is included [here](./scripts/solutions_scripts.R).
 
 
