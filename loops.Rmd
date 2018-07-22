@@ -214,6 +214,10 @@ for(this_word in words) {
 }
 ```
 
+From the perspective of the R interpreter this is what the code four the `for` loop is doing. It's pretty similar to the `while` loop, but not quite the same:
+
+<img src="./img/loop_for1.png" width="350px">
+
 ### Vectorised code?
 
 Of course, there are ways of doing this that don't require you to write the loop manually. Because many functions in R operate naturally on vectors, you can take advantage of this. Code that bypasses the need to write loops is called *vectorised* code, and there are some good reasons to do this (sometimes) once you're comfortable working in R. Here's an example:
@@ -271,7 +275,7 @@ As an exercise in using a `while` loop, consider this vector:
 telegram <- c("All","is","well","here","STOP","This","is","fine")
 ```
 
-Write a `while` loop that prints words from `telegram` until it reaches `STOP`. When it encounters the word `STOP`, end the loop. So what you want is output that looks like this. 
+- Write a `while` loop that prints words from `telegram` until it reaches `STOP`. When it encounters the word `STOP`, end the loop. So what you want is output that looks like this. 
 
 ```{r,echo=FALSE}
 word <- ""
@@ -283,5 +287,6 @@ while(word != "STOP") {
 }
 ```
 
+The solutions for these exercises are [here](./scripts/solutions_loops.R).
 
 
