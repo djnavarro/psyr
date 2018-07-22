@@ -192,4 +192,10 @@ A few other packages that you might want to install
 - The **psych** and **car** packages
 - The **devtools** package 
 
+If you haven't already done so while reading this section
+
+- Load the **devtools** package
+- Use the `install_github` command to install **TurtleGraphics** from my GitHub page (i.e., `repo = "djnavarro/TurtleGraphics"`)
+
+
 
