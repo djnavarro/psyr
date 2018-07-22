@@ -147,3 +147,7 @@ For the second exercise, we'll focus on the housekeeping aspect:
 
 - Use the RStudio environment pane to remove a variables
 - Use the `rm` command to remove a variable
+
+The solutions for these exercises are [here](./scripts/solutions_workspace.R) and a copy of the workspace file it generates is [here](./output/solutions_workspace.Rdata).
+
+
