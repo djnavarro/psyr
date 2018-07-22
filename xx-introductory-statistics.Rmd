@@ -1,7 +1,9 @@
 ---
-title: "Chapter 9. Introductory Statistics"
+title: "Introductory Statistics"
 output:
   html_document:
+    includes:
+      in_header: header.html    
     toc: true
     toc_float: true
     theme: flatly
@@ -9,7 +11,7 @@ output:
     css: mystyle.css
     number_sections: true
     pandoc_args: [
-      "--number-offset", 9
+      "--number-offset", 99
     ]
 ---
 

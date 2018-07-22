@@ -2,6 +2,8 @@
 title: "1. Getting Started"
 output:
   html_document:
+    includes:
+      in_header: header.html    
     toc: true
     toc_float: true
     theme: flatly

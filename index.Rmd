@@ -2,6 +2,8 @@
 title: '<div class="jumbotron"><h1 class="title toc-ignore display-3">R for Psychological Science</h1><p class="lead">An introductory resource</p></div>'
 output:
   html_document:
+    includes:
+      in_header: header.html
     toc: true
     toc_float: true
     theme: flatly
@@ -44,10 +46,12 @@ It is of course a work in progress, but hopefully it is useful!
 
 ## Part 2: Working with data
 
+Everything from here onwards is *very much* a work in progress!
+
 - [Data types](./xx-data-types.html) <span style="color:#cccccc">(to be updated)</span>
 - <span style="color:#cccccc">The tidyverse (to be added)</span>
 - [Visualising data](./xx-visualising-data.html)  <span style="color:#cccccc">(to be updated)</span><!-- add ggplot -->
-- [Summarising data](./xx-summarising-data.html) <span style="color:#cccccc">(to be updated)</span><!-- skimr, group_by, summarise -->
+- [Describing data](./xx-describing-data.html) <span style="color:#cccccc">(to be updated)</span><!-- skimr, group_by, summarise -->
 - <span style="color:#cccccc">Data manipulation (to be added)</span> <!-- gather/spread, etc -->
 - <span style="color:#cccccc">Working with text (to be added)</span>  <!-- stringr -->
 - <span style="color:#cccccc">Additional tricks (to be added)</span>  <!-- dates -->
@@ -78,12 +82,14 @@ It is of course a work in progress, but hopefully it is useful!
 - Archiving code with github, osf (& codeocean)
 - Source code for this site: https://github.com/djnavarro/psyr
 
+- Exercises: programming with turtles ([part1](./docs/turtle1.html), [part2](./docs/turtle2.html))
+- Week 1 slides are posted [here](./docs/overview.pdf)
+- Week 2 notebook is posted [here](./docs/lesson2.nb.html) with output version [here](./docs/lesson2.html) 
 
 -->
 
 ## Other things
 
-- Data sets are in [this zip file](./docs/data.zip)
-- Exercises: programming with turtles ([part1](./docs/turtle1.html), [part2](./docs/turtle2.html))
-- Week 1 slides are posted [here](./docs/overview.pdf)
-- Week 2 notebook is posted [here](./docs/lesson2.nb.html) with output version [here](./docs/lesson2.html) 
+- Data sets are [here](./docs/data.zip)
+- Github repository is [here](https://github.com/djnavarro/psyr)
+

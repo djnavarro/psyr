@@ -2,6 +2,8 @@
 title: "7. Loops"
 output:
   html_document:
+    includes:
+      in_header: header.html
     toc: true
     toc_float: true
     theme: flatly
