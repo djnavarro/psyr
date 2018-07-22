@@ -124,5 +124,11 @@ for(today in days) {
 
 ## Exercises
 
+- Write your own version of the "feelings" script that expresses your opinions about summer, winter, autumn and spring
+- Test your script out.
+- Expand your script so that it loops over vector of four `seasons` and prints out your feelings about each of them
+
+The solutions for these exercises are [here](./scripts/solutions_branch.R).
+
 
 
