@@ -298,5 +298,7 @@ identified_gender <- "non-binary"
 
 - As a second exercise, suppose that the survey allows people to specify their marital status as `"single"`, `"widowed"`, `"married"` or `"de facto"`. For the purposes of some analyses we might want to collapse this to a binary variable `has_spouse` that is `TRUE` if the participant is married or in a de facto relationship, but `FALSE` otherwise. How would we do this in R?
 
+The solutions for these exercises are [here](./scripts/solutions_variables.R).
+
 
 
