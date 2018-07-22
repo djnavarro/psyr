@@ -258,3 +258,30 @@ for(side in 1:6) {
 Yay for turtles! Everybody loves turtles! `r stringr::str_dup(emo::ji("turtle"),6)`
 
 ## Exercises
+
+To start with, here are some exercises with `for` loops and turtles:
+
+- Use **TurtleGraphics** to draw a square rather than a hexagon
+- Use **TurtleGraphics** to draw a triangle. 
+- Is there a way in which you can get R to automatically work out the `angle` rather than you having to manually work it out?
+
+As an exercise in using a `while` loop, consider this vector:
+
+```{r}
+telegram <- c("All","is","well","here","STOP","This","is","fine")
+```
+
+Write a `while` loop that prints words from `telegram` until it reaches `STOP`. When it encounters the word `STOP`, end the loop. So what you want is output that looks like this. 
+
+```{r,echo=FALSE}
+word <- ""
+ind <- 0
+while(word != "STOP") {
+  ind <- ind + 1
+  word <- telegram[ind]
+  print(word)
+}
+```
+
+
+
