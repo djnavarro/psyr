@@ -24,6 +24,63 @@ library(lsr,quietly = TRUE)
 > He divided the universe in forty categories or classes, these being further subdivided into differences, which was then subdivided into species. He assigned to each class a monosyllable of two letters; to each difference, a consonant; to each species, a vowel. For example: `de`, which means an element; `deb`, the first of the elements, fire; `deba`, a part of the element fire, a flame. … The words of the analytical language created by John Wilkins are not mere arbitrary symbols; each letter in them has a meaning, like those from the Holy Writ had for the Cabbalists. <br>
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--Jorge Luis Borges, [The Analytical Language of John Wilkins](https://en.wikipedia.org/wiki/The_Analytical_Language_of_John_Wilkins)
 
+
+## Variable class
+
+As we’ve seen, R allows you to store different kinds of data. In particular, the variables we’ve defined so far have either been character data (text), numeric data, or logical data. This is quite useful, but notice that it means that R makes a big distinction between `5` and `"5"`. Without quote marks, R treats `5` as the number five, and will allow you to do calculations with it. With the quote marks, R treats `"5"` as the textual character five, and doesn’t recognise it as a number any more than it recognises `"p"` or `"five"` as numbers. As a consequence, there’s a big difference between typing `x <- 5` and typing `x <- "5"`. In the former, we’re storing the number `5`; in the latter, we’re storing the character `"5"`. Thus, if we try to do multiplication with the character versions, R gets stroppy
+```{r, error=TRUE}
+x <- "5" # x is character 
+y <- "4" # y is character 
+x * y
+```
+
+Okay, let’s suppose that I’ve forgotten what kind of data I stored in the variable `x` (which happens depressingly often). R provides a function that will let us find out. Actually, it provides *several* different functions that are used for different purposes. For now I only want to discuss the `class` function. The **class** of a variable is a “high level” classification, and it captures psychologically (or statistically) meaningful distinctions. For instance `"2011-09-12"` and `"my birthday"` are both text strings, but there’s an important difference between the two: one of them is a date. So it would be nice if we could get R to recognise that `"2011-09-12"` is a date, and allow us to do things like add or subtract from it. The class of a variable is what R uses to keep track of things like that. Because the class of a variable is critical for determining what R can or can’t do with it, the `class` function is very handy.
+
+Later on, I’ll talk a bit about how you can convince R to **coerce** a variable to change from one class to another. That’s a useful skill for real world data analysis, but it’s not something that we need right now. In the meantime, the following examples illustrate the use of the `class` function:
+
+```{r}
+x <- "hello world" 
+class(x)
+x <- TRUE
+class(x)
+x <- 100
+class(x)
+```
+
+### Coercion
+
+Sometimes you want to change the variable class. This can happen for all sorts of reasons. Sometimes when you import data from files, it can come to you in the wrong format: numbers sometimes get imported as text, dates usually get imported as text, and many other possibilities besides. Regardless of how you’ve ended up in this situation, there’s a very good chance that sometimes you’ll want to convert a variable from one class into another one. Or, to use the correct term, you want to **coerce** the variable from one class into another. Coercion is a little tricky, and so I’ll only discuss the very basics here, using a few simple examples. However, you'll see more examples of coercion as you go through this tutorial.
+
+Firstly, let’s suppose we have a variable `x` that is *supposed* to be representing a number, but the data file that you’ve been given has encoded it as text (this happens quite a lot). Let’s imagine that the variable is something like this:
+
+```{r}
+x <- c("15","19")  # the variable
+class(x)           # what class is it?
+```
+
+Obviously, if I want to do mathematical calculations using `x` in its current state, R is going to get very annoyed at me. It thinks that `x` is text, so it’s not going to allow me to try to do mathematics using it! Obviously, we need to coerce `x` from "character" to "numeric". We can do that in a straightforward way by using the `as.numeric` function:
+
+```{r}
+x <- as.numeric(x)  # coerce the variable
+class(x)            # what class is it?
+x + 1               # hey, addition works!
+```
+
+Not surprisingly, we can also convert it back again if we need to. The function that we use to do this is the `as.character` function:
+
+```{r}
+x <- as.character(x)   # coerce back to text
+class(x)               # check the class
+```
+
+However, there’s some fairly obvious limitations: you can’t coerce the string `"hello world"` into a number because, well, there’s isn’t a number that corresponds to it. If you try, R metaphorically shrugs its shoulders and declares it to be missing:
+
+```{r}
+as.numeric( "hello world" )  # this isn’t going to work.
+```
+
+That gives you a feel for how to change between numeric and character data. What about logical data? To cover this briefly, coercing text to logical data is pretty intuitive: you use the `as.logical` function, and the character strings `"T"`, `"TRUE"`, `"True"` and `"true"` all convert to the logical value of `TRUE`. Similarly `"F"`, `"FALSE"`, `"False"`, and `"false"` all become `FALSE`. All other strings convert to `NA`. When you go back the other way using `as.character`, `TRUE` converts to `"TRUE"` and `FALSE` converts to `"FALSE"`. Converting numbers to logicals – again using `as.logical` – is straightforward. Following the standard convention in the study of Boolean logic, the number `0` converts to `FALSE`. Everything else is `TRUE`. Going back using `as.numeric`, `FALSE` converts to `0` and `TRUE` converts to `1`.
+
 ## Factors
 
 Okay, it’s time to start introducing some of the data types that are somewhat more specific to statistics. As every single research methodology class is at pains to ppoint out, when we assign numbers to possible outcomes, these numbers can mean quite different things depending on what kind of quantity in the world we are attempting to measure. In particular, psychologists commonly make the distinction between *nominal*, *ordinal*, *interval* and *ratio scale* data. How do we capture this distinction in R? Currently, we only seem to have a single numeric data type. That’s probably not going to be enough, is it?

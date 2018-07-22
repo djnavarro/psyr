@@ -1,5 +1,5 @@
 ---
-title: "9. Writing Functions"
+title: "9. Writing functions"
 output:
   html_document:
     includes:
