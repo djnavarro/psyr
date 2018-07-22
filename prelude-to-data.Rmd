@@ -35,9 +35,9 @@ afl <- read_csv("./data/afl.csv")
 afl
 ```
 
-For the moment let's not worry too much about what this code is doing or what the output means. The gist of the output is pretty clear. We have information about 4296 games. For each game we have the names of the home and away team, the number of points scored by each team, the date the game was played, the venue where it was played, the official attendance statistics, and whether it was a regular home-and-away game or part of the finals series. 
+For the moment let's not worry too much about what this code is doing or what the output means. The gist of the output is pretty clear. We have information about 4296 football vgames. For each game we have recorded 12 variables: the names of the home and away team, the number of points scored by each team, information about when the game was played, the venue where it was played, the official attendance statistics, and whether it was a regular home-and-away game or part of the finals series. 
 
-How do I extract meaningful information out of this data set? Let's say my goal is to investigate how the average attendance at AFL games has changed over the years, and I'd like to look at regular season games separate from finals. To do so, I first summarise the AFL data in terms of the relevant variables: 
+That's nice, but currently our data takes the form of a table with 4296 rows and 12 columns, and I have no idea what any of it *means*. How do I extract meaningful information out of this data set? Let's say my goal is to investigate how the average attendance at AFL games has changed over the years, and I'd like to look at regular season games separate from finals. To do so, I first summarise the AFL data in terms of the relevant variables: 
 
 ```{r, message = FALSE, warning = FALSE, fig.width=7}
 attendance <- afl %>% 
@@ -46,20 +46,22 @@ attendance <- afl %>%
 attendance
 ```
 
-This summary contains the information I need, but it's a lot easier to understand if I turn it into a pretty picture. Again, I can do that with a short command:
+Again, while you probably won't be completely sure how this code works, the gist of it is pretty clear. I'm taking the raw AFL data, grouping the games by the year and whether they were finals games, and calculting the mean attendance.  This *summary* of the data is a huge improvement over the raw data itself, but it's still just a long list of numbers. Like most people, I don't enjoy looking at numbers - I like pictures. 
+
+As before we can take this `attendance` data and turn it into something nicer. The command to do ths is a little more involved but again the gist of it should be clear:
 
 ```{r, message = FALSE, warning = FALSE, fig.width=7}
 pic <- attendance %>%
-  ggplot(aes(x = year, y = attendance)) + 
-  facet_wrap(~game_type) +
-  geom_point() + 
-  geom_smooth() 
-plot(pic)
+  ggplot(aes(x = year, y = attendance)) +  # year on x-axis, attendance on y-axis
+  facet_wrap(~game_type) +                 # separate "facets" for each game_type
+  geom_point() +                           # add the data as "points"
+  geom_smooth()                            # overlay a smooth regression line
+plot(pic) 
 ```
 
-It is only at this point the data speak for themselves. Attendance at home and away games (right panel) rose smoothly from 1987 to 2010. For finals games (left panel) the attendance is higher throughout but the trend is different. Average attendance declined somewhat until about 2004 and then rose thereafter. Noting that, a data analyst would be prompted to investigate further. 
+Yay! We now have something that has *meaning* to a human reader. Attendance at home and away games (right panel) rose smoothly from 1987 to 2010. For finals games (left panel) the attendance is higher throughout but the trend is different. Average attendance declined somewhat until about 2004 and then rose thereafter. Noting that, a data analyst would be prompted to investigate further. 
 
-My goal in this section is to introduce the R tools that I used in this analysis. So before going into any of the details about data analysis in R, I'll comment on a few things going on in the code I've shown above.
+This brief example highlights several key topics when working with data - we have to import data, summarise data, and visualise it in a fashion that makes intuitive sense to people. My goal in this section is to introduce R tools that we can use to do this. Before diving into  the details, I'll comment on a few things going on in this code.
 
 ## The tidyverse
 
@@ -69,7 +71,7 @@ The first line of code in the AFL example is `library(tidyverse)`. Per the descr
 
 When I wrote *Learning Statistics with R* to accompany my first statistics class the tidyverse didn't play much of a part, because most of it didn't exist. Over the last several years the tidyverse has had a huge influence on how data analysis in R is typically conducted, so in these notes I'll very often rely on tools from the tidyverse. 
 
-## Reading CSV data
+## Reading a CSV file
 
 In the second line of code I use the `read_csv` function to import the data into R. The command is this one:
 
@@ -95,7 +97,15 @@ After selecting the file you want to import, RStudio will present you with an im
 This should look fairly familiar to anyone who has imported data from other software such as Excel or SPSS. I won't use that method in these notes because it's easier to type `read_csv` but it's worth noting that the option is there.
 
 
-## Pipe operator, `%>%`
+## The pipe, `%>%`
+
+The other thing I want to comment on is that there are some new operators that have appeared in this example. There are a number of operations that will look familiar, such as the equality operator `==` and the assignment operator `<-`. There are two entirely new operators, `~` and `%>%`, and there's one familiar operator `+` that we're using in a novel way. For two of these cases, there's not too much we need to talk about right now...
+
+- The **tilde** operator is used to define **formulas**, which provide a way of describing the relationships between variables. They appear most often in statistical modelling. For instance if I want to build a regression model to describe the relationship between `anxiety` and  demographic variables such as `gender` and `age`, I would express the model conceptually using the formula `anxiety ~ gender + age`. Formulas tend to mean different things in different concepts, but for now it's enough to note that they're an abstract way to describe *relationships*
+
+- The **addition** operator is being used in an unusual way in this code: when I construct a plot by writing `ggplot() + geom_point() + ` etc I'm not literally doing arithmetic, but I'm doing something conceptually similar... adding *layers* to a plot. Under the hood, the **ggplot2** package (part of the tidyverse) has its own special definition of `+` that applies to the plots that it draws. Again, I'll talk more about it later: for now let's just notice that R does allow packages to do clever things like this `r emo::ji("grinning")`
+
+... but what's the story with the `%>%` operator??? 
 
 **WRITE ME**
 
@@ -106,31 +116,6 @@ afl %>%
 ```
 
 The pipe is discussed in some detail in Hadley Wickham's [R for Data Science](http://r4ds.had.co.nz/pipes.html) book.
-
-## Other remarks
-
-Before turning to a discussion of [data types](./data-types.html) there are two other things I want to briefly comment upon in this example. Take a look at the code I used to draw the figure:
-
-```{r,eval = FALSE}
-ggplot(aes(x = year, y = attendance)) + 
-  facet_wrap(~game_type) +
-  geom_point() + 
-  geom_smooth() 
-```
-
-The format of this command is written as if it were a sum. That is, it takes the form of `ggplot() + facet_wrap() + geom_point() + geom_smooth()`. I'll explain the details when discussing data visualisation but for the moment I want to mention this because it might seem odd. Clearly we aren't doing anything like the addition in the usual sense of the term; in this context `+` means something more akin to "adding a layer to a plot". 
-
-The second odd feature is the part of the code that reads `~ game_types`. The **tilde operator** `~` is used to specifies a kind of R object known as a **formula**. Formulas were originally introduced into R as a convenient way to specify statistical models (especially linear regression models) but they appear a lot of different contexts. Stated simply, a formula object is a variable, but it’s a special type of variable that specifies a relationship between other variables. So in a regression context I might write a "two-sided" formula like this
-```{r,eval=FALSE}
-outcome ~ predictor1 + predictor2
-```
-In other contexts I might construct a cross-tabulation with a "one-sided" formula like this
-```{r,eval=FALSE}
-~ variable1 + variable2
-```
-Formulas are pretty flexible things, and so different functions will make use of different formats, depending on what the function is intended to do. 
-
-
 
 
 <!--
