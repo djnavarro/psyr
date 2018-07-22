@@ -10,10 +10,10 @@ update_RW <- function(value, alpha=.3, beta=.3, lambda=1) {
 
 ### Example 1: conditioning
 
-n_trials <- 20              # 20 trials
-strength <- rep(0,n_trials) # vector of 20 zeros
+n_trials <- 20                # 20 trials
+strength <- numeric(n_trials) # vector off zeros
 
-# update strength after every trial
+# present CS-US pairings and update
 for(trial in 2:n_trials) {
   strength[trial] <- update_RW( strength[trial-1] )
 }
@@ -31,9 +31,9 @@ plot(
 
 ### Example 2: conditioning followed by extinction
 
-n_trials <- 50              # 50 trials
-strength <- rep(0,n_trials) # vector of 50 zeros
-lambda <- .3                # max association for shock
+n_trials <- 50    # 50 trials
+strength <- numeric(n_trials) # vector of zeros
+lambda <- .3      # max association for shock
 
 for(trial in 2:n_trials) {
   
@@ -61,8 +61,8 @@ plot(strength,
 n_trials <- 50
 
 # vectors of zeros
-strength_A <- rep(0,n_trials)
-strength_B <- rep(0,n_trials)
+strength_A <- numeric(n_trials)
+strength_B <- numeric(n_trials)
 
 # initially only A is present
 alpha <- c(.3, 0)
@@ -94,8 +94,8 @@ plot(strength_A,
      type="b", pch=19, col="blue")
 
 lines(
-  x = 16:50,
-  y = strength_B[16:50], 
+  x = 15:50,
+  y = strength_B[15:50], 
   pch=19, 
   col="red",
   type="b"
