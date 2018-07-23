@@ -158,7 +158,7 @@ is.data.frame(dat)
 
 That being said, there are one or two differences between tibbles and pure data frames. For the most part, my impression has been that whenever they differ, the behaviour of tibbles tends to be more intuitive.^[In the original version of these notes in *Learning Statistics with R* I had to include a lengthy discussion of a strange property of data frames called *dropping*, which confused my students (and myself) no end whenever they encountered it. By switching to tibbles, I hope never to have to discuss the matter again.] With this in mind, although I'll tend to use the terms "data frame" and "tibble" interchangeably in these notes, for the rest of these notes I'm going to use tibbles rather than pure data frames. 
 
-### Using `$`
+### Using the `$` operator
 
 So at this point our workspace contains only the one variable, a tibble called `dat`. The tibble contains 3 variables, each of which has 10 observations. So how do we get this information out again? The simplest way to use the `$` operator to point to the variable you’re interested in:
 
@@ -167,6 +167,240 @@ dat$region
 ```
 
 There’s a lot more that can be said about data frames: they’re fairly complicated beasts, and the longer you use R the more important it is to make sure you really understand them. We’ll talk a lot more about them later.
+
+### Using square brackets
+
+DO THIS
+
+
+## Matrices
+
+Up to this point we have encountered several different kinds of variables. At the simplest level, we’ve seen numeric data, logical data and character data. However, we’ve also encountered some more complicated kinds of variables, namely factors, formulas, data frames and lists. There are many more specialised data structures out there, but there’s a few more generic ones that I want to talk about in passing.
+
+The first of these is a **matrix**. Much like a data frame, a matrix is basically a big rectangular table of data, and in fact there are quite a few similarities between the two. However, there are also some key differences, so it’s important to talk about matrices in a little detail. To start with, lets create a matrix using the "row bind" function, `rbind`, which you can use to combine multiple vectors together in a row-wise fashion (I'm sure you can guess what the column bind function `cbind` does)...
+
+```{r}
+row.1 <- c( 2,3,1 )         # create data for row 1
+row.2 <- c( 5,6,7 )         # create data for row 2
+M <- rbind( row.1, row.2 )  # row bind them into a matrix
+print(M)                    # and print it out...
+```
+
+The variable `M` is a matrix, which we can confirm by using the `class` function. Notice that, when we bound the two vectors together, R retained the names of the original variables as row names. We could delete these if we wanted by typing `rownames(M)<-NULL`, but I generally prefer having meaningful names attached to my variables, so I’ll keep them. In fact, let’s also add some highly unimaginative column names as well:
+
+```{r}
+colnames(M) <- c( "col.1", "col.2", "col.3" )
+print(M)
+```
+
+### Matrix indexing
+
+You can use square brackets to subset a matrix in much the same way that you can for data frames, again specifying a row index and then a column index. For instance, `M[2,3]` pulls out the entry in the 2nd row and 3rd column of the matrix (i.e., `7`), whereas `M[2,]` pulls out the entire 2nd row, and `M[,3]` pulls out the entire 3rd column. However, it’s worth noting that when you pull out a column, R will print the results horizontally, not vertically.^[The reason for this relates to how matrices are implemented. The original matrix `M` is treated as a *two-dimensional* object, containing two rows and three columns. However, whenever you pull out a single row or a single column, the result is considered to be a vector, which has a *length* but doesn't have dimensions. Unless you explictly coerce the vector into a matrix, R doesn't really distinguish between row vectors and column vectors. This has implications for how matrix algebra is implemented in R (which I’ll admit I initially found odd). When multiplying a matrix by a vector using the `%*%` operator, R will attempt to interpret the vector as either a row vector or column vector, depending on whichever one makes the multiplication work. That is, suppose $\mathbf{M}$ is  $2\times 3$ matrix, and $v$ is a $1\times 3$ row vector. Mathematically the matrix multiplication $\mathbf{M}v$ doesn't make sense since the dimensions don’t conform, but you can multiply by the corresponding column vector, $\mathbf{M}v^T$. So, if I set `v <- M[2,]` and then try to calculate `M %*% v`, which you’d think would fail, it actually works because R treats the one dimensional array as if it were a column vector for the purposes of matrix multiplication. Note that if both objects are one dimensional arrays/vectors, this leads to ambiguity since $vv^T$ (inner product) and $v^Tv$ (outer product) yield different answers. In this situation, the `%*%` operator returns the inner product not the outer product. To understand all the details, check out the help documentation.]
+There is also a way of referring to the elements of a matrix using a single index:
+```{r}
+M <- matrix(
+  data = 1:12, # the values to include in the matrix
+  nrow = 3,    # number of rows
+  ncol = 4     # number of columns
+)
+print(M)
+```
+This is a $3\times 4$ matrix `M` that contains the numbers 1 to 12 in order, listed columnwise. You can index the elements of `M` by referring to them in that same columnwise order. To see this, notice that these two commands both extract the same element of the matrix:
+```{r}
+print(M[2,2]) 
+print(M[5])
+```
+
+
+### Matrices vs data frames
+
+The critical difference between a data frame and a matrix is that, in a data frame, we have this notion that each of the columns corresponds to a different variable: as a consequence, the columns in a data frame can be of different data types. The first column could be numeric, and the second column could contain character strings, and the third column could be logical data. In that sense, there is a fundamental asymmetry build into a data frame, because of the fact that columns represent variables (which can be qualitatively different to each other) and rows represent cases (which cannot). Matrices are different. At a fundamental level, a matrix really is just *one* variable: it just happens that this one variable is formatted into rows and columns. If you want a matrix of numeric data, every single element in the matrix *must* be a number. If you want a matrix of character strings, every single element in the matrix *must* be a character string. If you try to mix data of different types together, then R will either complain or try to coerce the matrix into something unexpected. To give you a sense of this, let's do something silly and convert one element of `M` from the number `5` to the character string `"five"`...
+```{r}
+M[2,2] <- "five" 
+print(M)
+```
+As you can see, the *entire* matrix `M` has been coerced into text. 
+
+## Arrays
+
+When doing data analysis, we often have reasons to want to use higher dimensional tables (e.g., sometimes you need to cross-tabulate three variables against each other). You can’t do this with matrices, but you can do it with arrays. An **array** is just like a matrix, except it can have more than two dimensions if you need it to. In fact, as far as R is concerned a matrix is just a special kind of array, in much the same way that a data frame is a special kind of list. I don’t want to talk about arrays too much, but I will very briefly show you an example of what a three dimensional array looks like.
+
+```{r}
+arr <- array(
+  data = 1:24, 
+  dim = c(3,4,2)
+  )
+arr
+```
+
+Of course, calling an array `arr` just makes me think of pirates `r emo::ji("skull_and_crossbones")`.
+
+### Array indexing
+
+Array indexing is a straightforward generalisation of matrix indexing, so the same logic applies. Since `arr` is a three-dimensional $3 \times 4 \times 2$ array, we need three indices to specify an element:
+```{r}
+arr[2,3,1]
+```
+Omitted indices have the same meaning that they have for matrices, so `arr[,,2]` is a two dimensional slice through the array, and as such R recognises it as a matrix even though the full three dimensional array `arr` does not count as one.^[To see this, compare `is.matrix(arr)` to `is.matrix(arr[,,2])`] Here's what `arr[,,2]` returns:
+```{r}
+arr[,,2]
+```
+
+
+<!--
+but you probably won't be surprised to note that this also works...
+```{r}
+arr[8]
+```
+-->
+
+### Array names
+
+As with other data structures, arrays can have names for specific elements. In fact, we can assign names to each of the *dimensions* too. For instance, suppose we have another array -- that we affectionately call `cubie` `r emo::ji("box")` -- it is also a three dimensional array, but that has the shape that it does because it represents a (3 genders) $\times$ (4 seasons) $\times$ (2 times) structure. We could specify the dimension names for `cubie` like this:
+```{r}
+cubie <- array(
+  data = 1:24, 
+  dim = c(3,4,2), 
+  dimnames = list(
+    "genders" = c("male", "female", "nonbinary"),
+    "seasons" = c("summer", "autumn", "winter", "spring"),
+    "times" = c("day", "night")
+    )
+  )
+cubie
+```
+I find the output for `cubie` easier to read than the one for `arr` -- it's usually a good idea to label your arrays! Plus, it makes it a little easier to extract information from them too, since you can refer to elements by names. So if I just wanted to take a slice through the array corresponding to the `"nonbinary"` values, I could do this:
+```{r}
+cubie["nonbinary",,]
+```
+
+
+## Lists
+
+The next kind of data I want to mention are lists. Lists are an extremely fundamental data structure in R, and as you start making the transition from a novice to a savvy R user you will use lists all the time. Most of the advanced data structures in R are built from lists (e.g., data frames are actually a specific type of list), so it’s useful to have a basic understanding of them.
+
+Okay, so what is a list, exactly? Like data frames, lists are just “collections of variables.” However, unlike data frames – which are basically supposed to look like a nice “rectangular” table of data – there are no constraints on what kinds of variables we include, and no requirement that the variables have any particular relationship to one another. In order to understand what this actually means, the best thing to do is create a list, which we can do using the `list` function. If I type this as my command:
+
+```{r}
+starks <- list(
+  parents = c("Eddard", "Catelyn"),
+  children = c("Robb", "Jon", "Sansa", "Arya", "Brandon", "Rickon"),
+  alive = 8
+)
+```
+
+I create a list `starks` that contains a list of the various characters that belong to House Stark in George R. R. Martin's *A Song of Ice and Fire* novels. Because Martin does seem to enjoy killing off characters, the list starts out by indicating that all eight are currently alive (at the start of the books obviously!) and we can update it if need be. When a character dies, I might do this:
+
+```{r}
+starks$alive <- starks$alive - 1
+starks
+```
+
+I can delete whole variables from the list if I want. For instance, I might just give up on the parents entirely:
+
+```{r}
+starks$parents <- NULL
+starks
+```
+
+You get the idea, I hope. The key thing with lists is that they're flexible. You can construct a list to map onto all kinds of data structures and do cool things with them. At a fundamental level, many of the more advanced data structures in R are just fancy lists.
+
+
+
+## Other ways to index
+
+Lists, data frames, matrices and arrays all allow other ways to index. TALK ABOUT THE UGLY STUFF HERE.
+
+Hadley Wickham [tweeted](https://twitter.com/hadleywickham/status/643381054758363136) this image:
+
+<img src="./img/data_list_index.png" width=500px>
+
+
+## Dates
+
+Dates (and time) are very annoying types of data. To a first approximation we can say that there are 365 days in a year, 24 hours in a day, 60 minutes in an hour and 60 seconds in a minute, but that’s not quite correct. The length of the solar day is not exactly 24 hours, and the length of solar year is not exactly 365 days, so we have a complicated system of corrections that have to be made to keep the time and date system working. On top of that, the measurement of time is usually taken relative to a local time zone, and most (but not all) time zones have both a standard time and a daylight savings time, though the date at which the switch occurs is not at all standardised. So, as a form of data, times and dates are just awful to work with. Unfortunately, they’re also important. Sometimes it’s possible to avoid having to use any complicated system for dealing with times and dates. Often you just want to know what year something happened in, so you can just use numeric data: in quite a lot of situations something as simple as declaring that `this_year` is `r format(Sys.Date(),"%Y")`, and it works just fine. If you can get away with that for your application, this is probably the best thing to do. However, sometimes you really do need to know the actual date. Or, even worse, the actual time. In this section, I’ll very briefly introduce you to the basics of how R deals with date and time data. As with a lot of things in this chapter, I won’t go into details: the goal here is to show you the basics of what you need to do if you ever encounter this kind of data in real life. And then we’ll all agree never to speak of it again.
+
+To start with, let’s talk about the date. As it happens, modern operating systems are very good at keeping track of the time and date, and can even handle all those annoying timezone issues and daylight savings pretty well. So R takes the quite sensible view that it can just ask the operating system what the date is. We can pull the date using the `Sys.Date` function:
+
+```{r}
+today <- Sys.Date()  # ask the operating system for the date
+print(today)         # display the date
+```
+
+Okay, that seems straightforward. But, it does rather look like today is just a character string, doesn’t it? That would be a problem, because dates really do have a quasi-numeric character to them, and it would be nice to be able to do basic addition and subtraction with them. Well, fear not. If you type in `class(today)`, R will tell you that the `today` variable is a `"Date"` object. What this means is that, hidden underneath this text string, R has a numeric representation.^[Date objects are coded internally as the number of days that have passed since January 1, 1970.] What that means is that you  can in fact add and subtract days. For instance, if we add `1` to `today`, R will print out the date for tomorrow:
+```{r}
+today + 1
+```
+Let’s see what happens when we add 365 days:
+```{r}
+today + 365
+```
+R provides a number of functions for working with dates, but I don’t want to talk about them in any detail, other than to say that the **lubridate** package (part of the tidyverse) makes things a lot easier than they used to be. A little while back I wrote a [blog post about lubridate](http://djnavarro.net/post/2018-05-02-lubridate/) and may fold it into these notes one day.
+
+<!--
+
+## Variable class
+
+As we’ve seen, R allows you to store different kinds of data. In particular, the variables we’ve defined so far have either been character data (text), numeric data, or logical data. This is quite useful, but notice that it means that R makes a big distinction between `5` and `"5"`. Without quote marks, R treats `5` as the number five, and will allow you to do calculations with it. With the quote marks, R treats `"5"` as the textual character five, and doesn’t recognise it as a number any more than it recognises `"p"` or `"five"` as numbers. As a consequence, there’s a big difference between typing `x <- 5` and typing `x <- "5"`. In the former, we’re storing the number `5`; in the latter, we’re storing the character `"5"`. Thus, if we try to do multiplication with the character versions, R gets stroppy
+```{r, error=TRUE}
+x <- "5" # x is character 
+y <- "4" # y is character 
+x * y
+```
+
+Okay, let’s suppose that I’ve forgotten what kind of data I stored in the variable `x` (which happens depressingly often). R provides a function that will let us find out. Actually, it provides *several* different functions that are used for different purposes. For now I only want to discuss the `class` function. The **class** of a variable is a “high level” classification, and it captures psychologically (or statistically) meaningful distinctions. For instance `"2011-09-12"` and `"my birthday"` are both text strings, but there’s an important difference between the two: one of them is a date. So it would be nice if we could get R to recognise that `"2011-09-12"` is a date, and allow us to do things like add or subtract from it. The class of a variable is what R uses to keep track of things like that. Because the class of a variable is critical for determining what R can or can’t do with it, the `class` function is very handy.
+
+Later on, I’ll talk a bit about how you can convince R to **coerce** a variable to change from one class to another. That’s a useful skill for real world data analysis, but it’s not something that we need right now. In the meantime, the following examples illustrate the use of the `class` function:
+
+```{r}
+x <- "hello world" 
+class(x)
+x <- TRUE
+class(x)
+x <- 100
+class(x)
+```
+
+-->
+
+## Coercion
+
+Sometimes you want to change the variable class. This can happen for all sorts of reasons. Sometimes when you import data from files, it can come to you in the wrong format: numbers sometimes get imported as text, dates usually get imported as text, and many other possibilities besides. Regardless of how you’ve ended up in this situation, there’s a very good chance that sometimes you’ll want to convert a variable from one class into another one. Or, to use the correct term, you want to **coerce** the variable from one class into another. Coercion is a little tricky, and so I’ll only discuss the very basics here, using a few simple examples. However, you'll see more examples of coercion as you go through this tutorial.
+
+Firstly, let’s suppose we have a variable `x` that is *supposed* to be representing a number, but the data file that you’ve been given has encoded it as text (this happens quite a lot). Let’s imagine that the variable is something like this:
+
+```{r}
+x <- c("15","19")  # the variable
+class(x)           # what class is it?
+```
+
+Obviously, if I want to do mathematical calculations using `x` in its current state, R is going to get very annoyed at me. It thinks that `x` is text, so it’s not going to allow me to try to do mathematics using it! Obviously, we need to coerce `x` from "character" to "numeric". We can do that in a straightforward way by using the `as.numeric` function:
+
+```{r}
+x <- as.numeric(x)  # coerce the variable
+class(x)            # what class is it?
+x + 1               # hey, addition works!
+```
+
+Not surprisingly, we can also convert it back again if we need to. The function that we use to do this is the `as.character` function:
+
+```{r}
+x <- as.character(x)   # coerce back to text
+class(x)               # check the class
+```
+
+However, there’s some fairly obvious limitations: you can’t coerce the string `"hello world"` into a number because, well, there’s isn’t a number that corresponds to it. If you try, R metaphorically shrugs its shoulders and declares it to be missing:
+
+```{r}
+as.numeric( "hello world" )  # this isn’t going to work.
+```
+
+That gives you a feel for how to change between numeric and character data. What about logical data? To cover this briefly, coercing text to logical data is pretty intuitive: you use the `as.logical` function, and the character strings `"T"`, `"TRUE"`, `"True"` and `"true"` all convert to the logical value of `TRUE`. Similarly `"F"`, `"FALSE"`, `"False"`, and `"false"` all become `FALSE`. All other strings convert to `NA`. When you go back the other way using `as.character`, `TRUE` converts to `"TRUE"` and `FALSE` converts to `"FALSE"`. Converting numbers to logicals – again using `as.logical` – is straightforward. Following the standard convention in the study of Boolean logic, the number `0` converts to `FALSE`. Everything else is `TRUE`. Going back using `as.numeric`, `FALSE` converts to `0` and `TRUE` converts to `1`.
+
+
+
+
+
 
 
 
@@ -394,208 +628,5 @@ And now let us never speak of this again.
 
 -->
 
-## Matrices
 
-Up to this point we have encountered several different kinds of variables. At the simplest level, we’ve seen numeric data, logical data and character data. However, we’ve also encountered some more complicated kinds of variables, namely factors, formulas, data frames and lists. There are many more specialised data structures out there, but there’s a few more generic ones that I want to talk about in passing.
-
-The first of these is a **matrix**. Much like a data frame, a matrix is basically a big rectangular table of data, and in fact there are quite a few similarities between the two. However, there are also some key differences, so it’s important to talk about matrices in a little detail. To start with, lets create a matrix using the "row bind" function, `rbind`, which you can use to combine multiple vectors together in a row-wise fashion (I'm sure you can guess what the column bind function `cbind` does)...
-
-```{r}
-row.1 <- c( 2,3,1 )         # create data for row 1
-row.2 <- c( 5,6,7 )         # create data for row 2
-M <- rbind( row.1, row.2 )  # row bind them into a matrix
-print(M)                    # and print it out...
-```
-
-The variable `M` is a matrix, which we can confirm by using the `class` function. Notice that, when we bound the two vectors together, R retained the names of the original variables as row names. We could delete these if we wanted by typing `rownames(M)<-NULL`, but I generally prefer having meaningful names attached to my variables, so I’ll keep them. In fact, let’s also add some highly unimaginative column names as well:
-
-```{r}
-colnames(M) <- c( "col.1", "col.2", "col.3" )
-print(M)
-```
-
-### Matrix indexing
-
-You can use square brackets to subset a matrix in much the same way that you can for data frames, again specifying a row index and then a column index. For instance, `M[2,3]` pulls out the entry in the 2nd row and 3rd column of the matrix (i.e., `7`), whereas `M[2,]` pulls out the entire 2nd row, and `M[,3]` pulls out the entire 3rd column. However, it’s worth noting that when you pull out a column, R will print the results horizontally, not vertically.^[The reason for this relates to how matrices are implemented. The original matrix `M` is treated as a *two-dimensional* object, containing two rows and three columns. However, whenever you pull out a single row or a single column, the result is considered to be a vector, which has a *length* but doesn't have dimensions. Unless you explictly coerce the vector into a matrix, R doesn't really distinguish between row vectors and column vectors. This has implications for how matrix algebra is implemented in R (which I’ll admit I initially found odd). When multiplying a matrix by a vector using the `%*%` operator, R will attempt to interpret the vector as either a row vector or column vector, depending on whichever one makes the multiplication work. That is, suppose $\mathbf{M}$ is  $2\times 3$ matrix, and $v$ is a $1\times 3$ row vector. Mathematically the matrix multiplication $\mathbf{M}v$ doesn't make sense since the dimensions don’t conform, but you can multiply by the corresponding column vector, $\mathbf{M}v^T$. So, if I set `v <- M[2,]` and then try to calculate `M %*% v`, which you’d think would fail, it actually works because R treats the one dimensional array as if it were a column vector for the purposes of matrix multiplication. Note that if both objects are one dimensional arrays/vectors, this leads to ambiguity since $vv^T$ (inner product) and $v^Tv$ (outer product) yield different answers. In this situation, the `%*%` operator returns the inner product not the outer product. To understand all the details, check out the help documentation.]
-There is also a way of referring to the elements of a matrix using a single index:
-```{r}
-M <- matrix(
-  data = 1:12, # the values to include in the matrix
-  nrow = 3,    # number of rows
-  ncol = 4     # number of columns
-)
-print(M)
-```
-This is a $3\times 4$ matrix `M` that contains the numbers 1 to 12 in order, listed columnwise. You can index the elements of `M` by referring to them in that same columnwise order. To see this, notice that these two commands both extract the same element of the matrix:
-```{r}
-print(M[2,2]) 
-print(M[5])
-```
-
-
-### Matrices vs data frames
-
-The critical difference between a data frame and a matrix is that, in a data frame, we have this notion that each of the columns corresponds to a different variable: as a consequence, the columns in a data frame can be of different data types. The first column could be numeric, and the second column could contain character strings, and the third column could be logical data. In that sense, there is a fundamental asymmetry build into a data frame, because of the fact that columns represent variables (which can be qualitatively different to each other) and rows represent cases (which cannot). Matrices are different. At a fundamental level, a matrix really is just *one* variable: it just happens that this one variable is formatted into rows and columns. If you want a matrix of numeric data, every single element in the matrix *must* be a number. If you want a matrix of character strings, every single element in the matrix *must* be a character string. If you try to mix data of different types together, then R will either complain or try to coerce the matrix into something unexpected. To give you a sense of this, let's do something silly and convert one element of `M` from the number `5` to the character string `"five"`...
-```{r}
-M[2,2] <- "five" 
-print(M)
-```
-As you can see, the *entire* matrix `M` has been coerced into text. 
-
-## Arrays
-
-When doing data analysis, we often have reasons to want to use higher dimensional tables (e.g., sometimes you need to cross-tabulate three variables against each other). You can’t do this with matrices, but you can do it with arrays. An **array** is just like a matrix, except it can have more than two dimensions if you need it to. In fact, as far as R is concerned a matrix is just a special kind of array, in much the same way that a data frame is a special kind of list. I don’t want to talk about arrays too much, but I will very briefly show you an example of what a three dimensional array looks like.
-
-```{r}
-A <- array(
-  data = 1:24, 
-  dim = c(3,4,2)
-  )
-print(A)
-```
-
-### Array indexing
-
-Not surprisingly, you can refer the elements of an array using the same kind of logic that we used for matrices. In this case, since `A` is a three-dimensional $3 \times 4 \times 2$ array, we need three indices to specify an element,
-```{r}
-A[2,3,1]
-```
-but you probably won't be surprised to note that this also works...
-```{r}
-A[8]
-```
-
-### Array names
-
-As with other data structures, arrays can have names for specific elements. In fact, we can assign names to each of the *dimensions* too. For instance, suppose that the array `A` has the shape that it does because it represents a (3 genders) $\times$ (4 seasons) $\times$ (2 times) structure. We could specify the dimension names for `A` like this:
-```{r}
-A <- array(
-  data = 1:24, 
-  dim = c(3,4,2), 
-  dimnames = list(
-    "genders" = c("male", "female", "nonbinary"),
-    "seasons" = c("summer", "autumn", "winter", "spring"),
-    "times" = c("day", "night")
-    )
-  )
-print(A)
-```
-I find this a lot easier to read - it's usually a good idea to label your arrays! Plus, it makes it a little easier to index them too, since (as usual) you can refer to elements by names. So if I just wanted to take a slice through the array corresponding to the `"nonbinary"` values, I could do this:
-```{r}
-A["nonbinary",,]
-```
-
-
-
-
-## Lists
-
-The next kind of data I want to mention are lists. Lists are an extremely fundamental data structure in R, and as you start making the transition from a novice to a savvy R user you will use lists all the time. Most of the advanced data structures in R are built from lists (e.g., data frames are actually a specific type of list), so it’s useful to have a basic understanding of them.
-
-Okay, so what is a list, exactly? Like data frames, lists are just “collections of variables.” However, unlike data frames – which are basically supposed to look like a nice “rectangular” table of data – there are no constraints on what kinds of variables we include, and no requirement that the variables have any particular relationship to one another. In order to understand what this actually means, the best thing to do is create a list, which we can do using the `list` function. If I type this as my command:
-
-```{r}
-starks <- list(
-  parents = c("Eddard", "Catelyn"),
-  children = c("Robb", "Jon", "Sansa", "Arya", "Brandon", "Rickon"),
-  alive = 8
-)
-```
-
-I create a list `starks` that contains a list of the various characters that belong to House Stark in George R. R. Martin's *A Song of Ice and Fire* novels. Because Martin does seem to enjoy killing off characters, the list starts out by indicating that all eight are currently alive (at the start of the books obviously!) and we can update it if need be. When a character dies, I might do this:
-
-```{r}
-starks$alive <- starks$alive - 1
-starks
-```
-
-I can delete whole variables from the list if I want. For instance, I might just give up on the parents entirely:
-
-```{r}
-starks$parents <- NULL
-starks
-```
-
-You get the idea, I hope.
-
-## Dates
-
-Dates (and time) are very annoying types of data. To a first approximation we can say that there are 365 days in a year, 24 hours in a day, 60 minutes in an hour and 60 seconds in a minute, but that’s not quite correct. The length of the solar day is not exactly 24 hours, and the length of solar year is not exactly 365 days, so we have a complicated system of corrections that have to be made to keep the time and date system working. On top of that, the measurement of time is usually taken relative to a local time zone, and most (but not all) time zones have both a standard time and a daylight savings time, though the date at which the switch occurs is not at all standardised. So, as a form of data, times and dates are just awful to work with. Unfortunately, they’re also important. Sometimes it’s possible to avoid having to use any complicated system for dealing with times and dates. Often you just want to know what year something happened in, so you can just use numeric data: in quite a lot of situations something as simple as declaring that `this_year` is `r format(Sys.Date(),"%Y")`, and it works just fine. If you can get away with that for your application, this is probably the best thing to do. However, sometimes you really do need to know the actual date. Or, even worse, the actual time. In this section, I’ll very briefly introduce you to the basics of how R deals with date and time data. As with a lot of things in this chapter, I won’t go into details: the goal here is to show you the basics of what you need to do if you ever encounter this kind of data in real life. And then we’ll all agree never to speak of it again.
-
-To start with, let’s talk about the date. As it happens, modern operating systems are very good at keeping track of the time and date, and can even handle all those annoying timezone issues and daylight savings pretty well. So R takes the quite sensible view that it can just ask the operating system what the date is. We can pull the date using the `Sys.Date` function:
-
-```{r}
-today <- Sys.Date()  # ask the operating system for the date
-print(today)         # display the date
-```
-
-Okay, that seems straightforward. But, it does rather look like today is just a character string, doesn’t it? That would be a problem, because dates really do have a quasi-numeric character to them, and it would be nice to be able to do basic addition and subtraction with them. Well, fear not. If you type in `class(today)`, R will tell you that the `today` variable is a `"Date"` object. What this means is that, hidden underneath this text string, R has a numeric representation.^[Date objects are coded internally as the number of days that have passed since January 1, 1970.] What that means is that you  can in fact add and subtract days. For instance, if we add `1` to `today`, R will print out the date for tomorrow:
-```{r}
-today + 1
-```
-Let’s see what happens when we add 365 days:
-```{r}
-today + 365
-```
-R provides a number of functions for working with dates, but I don’t want to talk about them in any detail, other than to say that the **lubridate** package (part of the tidyverse) makes things a lot easier than they used to be. A little while back I wrote a [blog post about lubridate](http://djnavarro.net/post/2018-05-02-lubridate/) and may fold it into these notes one day.
-
-<!--
-
-## Variable class
-
-As we’ve seen, R allows you to store different kinds of data. In particular, the variables we’ve defined so far have either been character data (text), numeric data, or logical data. This is quite useful, but notice that it means that R makes a big distinction between `5` and `"5"`. Without quote marks, R treats `5` as the number five, and will allow you to do calculations with it. With the quote marks, R treats `"5"` as the textual character five, and doesn’t recognise it as a number any more than it recognises `"p"` or `"five"` as numbers. As a consequence, there’s a big difference between typing `x <- 5` and typing `x <- "5"`. In the former, we’re storing the number `5`; in the latter, we’re storing the character `"5"`. Thus, if we try to do multiplication with the character versions, R gets stroppy
-```{r, error=TRUE}
-x <- "5" # x is character 
-y <- "4" # y is character 
-x * y
-```
-
-Okay, let’s suppose that I’ve forgotten what kind of data I stored in the variable `x` (which happens depressingly often). R provides a function that will let us find out. Actually, it provides *several* different functions that are used for different purposes. For now I only want to discuss the `class` function. The **class** of a variable is a “high level” classification, and it captures psychologically (or statistically) meaningful distinctions. For instance `"2011-09-12"` and `"my birthday"` are both text strings, but there’s an important difference between the two: one of them is a date. So it would be nice if we could get R to recognise that `"2011-09-12"` is a date, and allow us to do things like add or subtract from it. The class of a variable is what R uses to keep track of things like that. Because the class of a variable is critical for determining what R can or can’t do with it, the `class` function is very handy.
-
-Later on, I’ll talk a bit about how you can convince R to **coerce** a variable to change from one class to another. That’s a useful skill for real world data analysis, but it’s not something that we need right now. In the meantime, the following examples illustrate the use of the `class` function:
-
-```{r}
-x <- "hello world" 
-class(x)
-x <- TRUE
-class(x)
-x <- 100
-class(x)
-```
-
--->
-
-## Coercion
-
-Sometimes you want to change the variable class. This can happen for all sorts of reasons. Sometimes when you import data from files, it can come to you in the wrong format: numbers sometimes get imported as text, dates usually get imported as text, and many other possibilities besides. Regardless of how you’ve ended up in this situation, there’s a very good chance that sometimes you’ll want to convert a variable from one class into another one. Or, to use the correct term, you want to **coerce** the variable from one class into another. Coercion is a little tricky, and so I’ll only discuss the very basics here, using a few simple examples. However, you'll see more examples of coercion as you go through this tutorial.
-
-Firstly, let’s suppose we have a variable `x` that is *supposed* to be representing a number, but the data file that you’ve been given has encoded it as text (this happens quite a lot). Let’s imagine that the variable is something like this:
-
-```{r}
-x <- c("15","19")  # the variable
-class(x)           # what class is it?
-```
-
-Obviously, if I want to do mathematical calculations using `x` in its current state, R is going to get very annoyed at me. It thinks that `x` is text, so it’s not going to allow me to try to do mathematics using it! Obviously, we need to coerce `x` from "character" to "numeric". We can do that in a straightforward way by using the `as.numeric` function:
-
-```{r}
-x <- as.numeric(x)  # coerce the variable
-class(x)            # what class is it?
-x + 1               # hey, addition works!
-```
-
-Not surprisingly, we can also convert it back again if we need to. The function that we use to do this is the `as.character` function:
-
-```{r}
-x <- as.character(x)   # coerce back to text
-class(x)               # check the class
-```
-
-However, there’s some fairly obvious limitations: you can’t coerce the string `"hello world"` into a number because, well, there’s isn’t a number that corresponds to it. If you try, R metaphorically shrugs its shoulders and declares it to be missing:
-
-```{r}
-as.numeric( "hello world" )  # this isn’t going to work.
-```
-
-That gives you a feel for how to change between numeric and character data. What about logical data? To cover this briefly, coercing text to logical data is pretty intuitive: you use the `as.logical` function, and the character strings `"T"`, `"TRUE"`, `"True"` and `"true"` all convert to the logical value of `TRUE`. Similarly `"F"`, `"FALSE"`, `"False"`, and `"false"` all become `FALSE`. All other strings convert to `NA`. When you go back the other way using `as.character`, `TRUE` converts to `"TRUE"` and `FALSE` converts to `"FALSE"`. Converting numbers to logicals – again using `as.logical` – is straightforward. Following the standard convention in the study of Boolean logic, the number `0` converts to `FALSE`. Everything else is `TRUE`. Going back using `as.numeric`, `FALSE` converts to `0` and `TRUE` converts to `1`.
 
