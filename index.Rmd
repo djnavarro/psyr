@@ -18,14 +18,13 @@ source("knitr_tweaks.R")
 
 Hi there!
 
-I've set this up as an introductory resource for psychology students taking my *Programming with R* class at UNSW. The intention behind this resource is -- eventually -- to provide a fairly detailed introduction to R programming that doesn't assume any previous experience, and then to sketch out a variety of things that you can do with R once you start to feel comfortable with it. Please don't hesitate to contact me if you spot an error or find something confusing.
+I've set this up as an introductory resource for psychology students taking my *Programming with R* class at UNSW. There are two goals with this resource. The first is to provide an introduction to R programming that doesn't assume any previous experience. The second is to provide a brief sketch of some of things that R can be useful for in psychology. Data analysis inevitably forms a large part of this, but I hope to cover a broader range of topics.
 
-The content borrows heavily from my introductory statistics lecture notes ([Learning Statistics with R](https://compcogscisydney.org/learning-statistics-with-r/)), but they're not quite equivalent, and over time the two are likely to part ways. I wrote *Learning Statistics with R* to accompany an introductory statistics class that I taught from 2011 to 2015, and the intended audience for that book is a psych student taking their first research methods class. This resource is a little different -- it's aimed at someone who has already taken an introductory research methods class of some kind, but would like to learn how to use the R programming language for their data analysis, or for any of a number of other possible tasks. 
+The content borrows from my introductory statistics lecture notes ([Learning Statistics with R](https://compcogscisydney.org/learning-statistics-with-r/)), but they're not equivalent, and over time the two are likely to part ways. I wrote *Learning Statistics with R* to accompany an introductory statistics class that I taught some years ago, and the intended audience for that book is a psych student taking their first research methods class. This resource is a little different -- it's aimed at someone who has taken an research methods class and would like to learn how to use the R programming language in their own work.
 
 <img src="./img/splash_turtle.png" width=200px style="float:right">
 
-
-It is of course a work in progress, but hopefully it is useful!
+It is of course a work in progress, but I hope it is useful! Please don't hesitate to contact me if you spot an error or find something confusing.
 
 -[Danielle](d.navarro@unsw.edu.au)
 
