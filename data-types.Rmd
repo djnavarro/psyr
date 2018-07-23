@@ -360,14 +360,26 @@ You get the idea, I hope. The key thing with lists is that they're flexible. You
 
 
 
-## Other ways to index
+## Indexing lists
 
-Lists, data frames, matrices and arrays all allow other ways to index. TALK ABOUT THE UGLY STUFF HERE.
+In the example above we used `$` to extract named elements from a list, in the same fashion that we would do for a data frame or tibble. It is also possible to index a list using square brackets, though it takes a little effort to get used to. The elements of a list can be extracted using single brackets (e.g., `starks[1]`) or double brackets (e.g., `starks[[1]]`). To see the difference between the two, notice that the single bracket version returns a list *containing* only a single vector
+```{r}
+starks[1]
+```
+This output is a list that contains one vector `starks$children`. In contrast, the double bracketed version returns the `children` vector itself:
+```{r}
+starks[[1]]
+```
 
-Hadley Wickham [tweeted](https://twitter.com/hadleywickham/status/643381054758363136) this image:
+If this seems complicated and annoying... well, yes, it is!
+
+I find it helps me to think of the list as a container. When we use single brackets, the result is still inside its container; when we use double brackets we remove it from the container. This intuition is illustrated nicely in the image below, [tweeted](https://twitter.com/hadleywickham/status/643381054758363136) by Hadley Wickham:
 
 <img src="./img/data_list_index.png" width=500px>
 
+In this example `x` is a container (list) containing many pepper sachets (elements). When we type `x[1]` we keep only one of the sachets of pepper, but it's still inside the container. When we type `x[[1]]` we take the sachet out of the container.
+
+The final panel highlights how lists can become more complicated.^[Speaking of complications... Under the hood, data frames and tibbles are secretly lists, so you can use the list indexing methods for them and so, for example, `dat[[3]]` is the same as `dat$RT`. Probably best not to worry too much about that detail right now `r emo::ji("grimace")`] Lists are just fancy containers, and there's no reason why lists can't contain other lists. In the pepper shaker scenario, if each sachet is itself a list, we would need to type `x[[1]][[1]]` to extract a grain of pepper! `r emo::ji("pepper")`
 
 ## Dates
 
