@@ -1,5 +1,5 @@
 ---
-title: "R Data Types"
+title: "13. R Data Types"
 output:
   html_document:
     includes:
@@ -11,7 +11,7 @@ output:
     css: mystyle.css
     number_sections: true
     pandoc_args: [
-      "--number-offset", 0
+      "--number-offset", 13
     ]
 ---
 
@@ -26,209 +26,98 @@ library(tidyverse,quietly = TRUE)
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--Jorge Luis Borges, [The Analytical Language of John Wilkins](https://en.wikipedia.org/wiki/The_Analytical_Language_of_John_Wilkins)
 
 
-## Variable class
-
-As we’ve seen, R allows you to store different kinds of data. In particular, the variables we’ve defined so far have either been character data (text), numeric data, or logical data. This is quite useful, but notice that it means that R makes a big distinction between `5` and `"5"`. Without quote marks, R treats `5` as the number five, and will allow you to do calculations with it. With the quote marks, R treats `"5"` as the textual character five, and doesn’t recognise it as a number any more than it recognises `"p"` or `"five"` as numbers. As a consequence, there’s a big difference between typing `x <- 5` and typing `x <- "5"`. In the former, we’re storing the number `5`; in the latter, we’re storing the character `"5"`. Thus, if we try to do multiplication with the character versions, R gets stroppy
-```{r, error=TRUE}
-x <- "5" # x is character 
-y <- "4" # y is character 
-x * y
-```
-
-Okay, let’s suppose that I’ve forgotten what kind of data I stored in the variable `x` (which happens depressingly often). R provides a function that will let us find out. Actually, it provides *several* different functions that are used for different purposes. For now I only want to discuss the `class` function. The **class** of a variable is a “high level” classification, and it captures psychologically (or statistically) meaningful distinctions. For instance `"2011-09-12"` and `"my birthday"` are both text strings, but there’s an important difference between the two: one of them is a date. So it would be nice if we could get R to recognise that `"2011-09-12"` is a date, and allow us to do things like add or subtract from it. The class of a variable is what R uses to keep track of things like that. Because the class of a variable is critical for determining what R can or can’t do with it, the `class` function is very handy.
-
-Later on, I’ll talk a bit about how you can convince R to **coerce** a variable to change from one class to another. That’s a useful skill for real world data analysis, but it’s not something that we need right now. In the meantime, the following examples illustrate the use of the `class` function:
-
-```{r}
-x <- "hello world" 
-class(x)
-x <- TRUE
-class(x)
-x <- 100
-class(x)
-```
-
-### Coercion
-
-Sometimes you want to change the variable class. This can happen for all sorts of reasons. Sometimes when you import data from files, it can come to you in the wrong format: numbers sometimes get imported as text, dates usually get imported as text, and many other possibilities besides. Regardless of how you’ve ended up in this situation, there’s a very good chance that sometimes you’ll want to convert a variable from one class into another one. Or, to use the correct term, you want to **coerce** the variable from one class into another. Coercion is a little tricky, and so I’ll only discuss the very basics here, using a few simple examples. However, you'll see more examples of coercion as you go through this tutorial.
-
-Firstly, let’s suppose we have a variable `x` that is *supposed* to be representing a number, but the data file that you’ve been given has encoded it as text (this happens quite a lot). Let’s imagine that the variable is something like this:
-
-```{r}
-x <- c("15","19")  # the variable
-class(x)           # what class is it?
-```
-
-Obviously, if I want to do mathematical calculations using `x` in its current state, R is going to get very annoyed at me. It thinks that `x` is text, so it’s not going to allow me to try to do mathematics using it! Obviously, we need to coerce `x` from "character" to "numeric". We can do that in a straightforward way by using the `as.numeric` function:
-
-```{r}
-x <- as.numeric(x)  # coerce the variable
-class(x)            # what class is it?
-x + 1               # hey, addition works!
-```
-
-Not surprisingly, we can also convert it back again if we need to. The function that we use to do this is the `as.character` function:
-
-```{r}
-x <- as.character(x)   # coerce back to text
-class(x)               # check the class
-```
-
-However, there’s some fairly obvious limitations: you can’t coerce the string `"hello world"` into a number because, well, there’s isn’t a number that corresponds to it. If you try, R metaphorically shrugs its shoulders and declares it to be missing:
-
-```{r}
-as.numeric( "hello world" )  # this isn’t going to work.
-```
-
-That gives you a feel for how to change between numeric and character data. What about logical data? To cover this briefly, coercing text to logical data is pretty intuitive: you use the `as.logical` function, and the character strings `"T"`, `"TRUE"`, `"True"` and `"true"` all convert to the logical value of `TRUE`. Similarly `"F"`, `"FALSE"`, `"False"`, and `"false"` all become `FALSE`. All other strings convert to `NA`. When you go back the other way using `as.character`, `TRUE` converts to `"TRUE"` and `FALSE` converts to `"FALSE"`. Converting numbers to logicals – again using `as.logical` – is straightforward. Following the standard convention in the study of Boolean logic, the number `0` converts to `FALSE`. Everything else is `TRUE`. Going back using `as.numeric`, `FALSE` converts to `0` and `TRUE` converts to `1`.
-
 ## Factors
 
-Okay, it’s time to start introducing some of the data types that are somewhat more specific to statistics. As every single research methodology class is at pains to ppoint out, when we assign numbers to possible outcomes, these numbers can mean quite different things depending on what kind of quantity in the world we are attempting to measure. In particular, psychologists commonly make the distinction between *nominal*, *ordinal*, *interval* and *ratio scale* data. How do we capture this distinction in R? Currently, we only seem to have a single numeric data type. That’s probably not going to be enough, is it?
-
-A little thought suggests that the numeric variable class in R is perfectly suited for capturing ratio scale data. For instance, if I were to measure response time (RT) for five different events, I could store the data in R like this:
+As psychological research methodology classes are at pains to point out, the data we analyse come in different kinds. Some variables are inherently *quantitative* in nature: response time (RT) for instance, has a natural interpretation in units of time. A response time of 1500 milliseconds is indeed 400 milliseconds slower than a response time of 1100 milliseconds, so addition and subtraction are meaningful operations. Similarly, 1500 milliseconds is twice as long as 750 milliseconds, so multiplication and division are also meaningful. So when I defined a response time variable in the previous section, I used a numeric vector. To keep my variable names concise, I'll define the same variable again using the conventional RT abbreviation:
 
 ```{r}
-RT <- c(1342, 1401, 1590, 1391, 1554, 1422, 1612, 1230, 998)
+RT <- c(420, 619, 550, 521, 1003, 486, 512, 560, 495, 610)
 ```
 
-where the data here are measured in milliseconds, as is conventional in the psychological literature. It’s perfectly sensible to talk about “twice the response time”, `2 * RT`, or the “response time plus 1 second”, `RT + 1000`, and so both of the following are perfectly reasonable things for R to do:
+Other kinds of data are inherently *nominal* in nature. If I recruit participants in an online experiment I might see that their place of residence falls is one of several different regions. For no particular reason, let's imagine that I have been sampling participants from four different regions: the United States, India, China or the European Union, which I'll represent using the codes `"us"`, `"in"`, `"ch"` and `"eu"`. My first thought would be to represent the data using a character vector:
 
 ```{r}
-2 * RT
-RT + 1000
+region_raw <- c("us","us","us","eu","in","eu","in","in","us","in")
 ```
 
-And to a lesser extent, the “numeric” class is okay for interval scale data, as long as we remember that multiplication and division aren’t terribly interesting for these sorts of variables. That is, if my IQ score is 110 and yours is 120, it’s perfectly okay to say that you’re 10 IQ points smarter than me,^[Taking the usual caveats about IQ measurement as given, of course.] but it’s not okay to say that I’m only 92% as smart as you are, because intelligence doesn’t have a "natural" zero.^[Or, more precisely, we don’t know how to measure it. Arguably, a rock has zero intelligence. But it doesn’t make sense to say that the IQ of a rock is 0 in the same way that we can say that the average human has an IQ of 100. And without knowing what the IQ value is that corresponds to a literal absence of any capacity to think, reason or learn, then we really can’t multiply or divide IQ scores and expect a meaningful answer.] Similarly, we might be willing to tolerate the use of numeric variables to represent ordinal scale variables, such as those that you typically get when you ask people to rank order items (e.g., like we do in Australian elections), though as we will see R actually has a built in tool for representing ordinal data (ordered factors: discussed later) However, when it comes to nominal scale data, it becomes completely unacceptable, because almost all of the “usual” rules for what you’re allowed to do with numbers don’t apply to nominal scale data. It is for this reason that R has **factors**.
-
-### Introducing factors
-
-Suppose, I was doing a study in which people could belong to one of three different treatment conditions. Each group of people were asked to complete the same task, but each group received different instructions. Not surprisingly, I might want to have a variable that keeps track of what group people were in. So I could type in something like this
+This seems quite reasonable, but there's a problem: as it happens there is nobody from China in this sample. So if I try to construct a frequency table of these data -- which I can do using the `table()` function in R -- the answer I get omits China entirely:
 
 ```{r}
-group <- c(1,1,1,2,2,2,1,2,1)
+table(region_raw)
 ```
 
-so that `group[i]` contains the group membership of the i-th person in my study. Clearly, this is numeric data, but equally obviously this is a nominal scale variable. There’s no sense in which “group 1” plus “group 2” equals “group 3”, but nevertheless if I try to do that, R won’t stop me because it doesn’t know any better:
-```{r}
-group + 2
-```
-
-This doesn't make a lot of sense, but R is too stupid to know any better: it thinks that `1` is an ordinary number in this context, so it sees no problem in calculating `1 + 2`. But since we’re not that stupid, we’d like to stop R from doing this. We can do so by instructing R to treat group as a factor. This is easy to do using the `as.factor` function:^[This is an example of coercing a variable from one class to another. I’ll talk about coercion in more detail later]
+Intuitively it feels like there should be a fourth entry here, indicating that we have 0 participants from China. R has a natural tool for representing this idea, called a **factor**. First, we'll create a new variable using the `factor()` function that contains the same information but represents it as a factor:
 
 ```{r}
-group <- as.factor(group)
-group
+region <- factor(region_raw)
+region
 ```
 
-It looks more or less the same as before (though it’s not immediately obvious what all that `Levels` rubbish is about), but if we ask R to tell us what the `class` of the group variable is now, it’s clear that it has done what we asked:
+This looks a much the same, and not surprisingly R still doesn't know anything about the possibility of participants from China. However, notice that at the bottom of th output it lists the *levels* of the factor. The levels of a factor are the set of values that variable could have taken. By default, `factor()` tries to guess the levels using the raw data, but we can override that manually, like this:
 
 ```{r}
-class(group)
+region <- factor(region_raw, levels = c("ch","eu","in","us"))
+region
 ```
 
-Neat. Better yet, now that I’ve converted `group` to a factor, look what happens when I try to add `2` to it:
+Now when we tabulate the `region` variable, we obtain the right answer:
 
 ```{r}
-group + 2
+table(region)
 ```
 
-This time even R is smart enough to know that I’m being an idiot, so it tells me off and then produces a vector of missing values.
-
-### Labelling the factor levels
-
-I have a confession to make. My memory is not infinite in capacity; and it seems to be getting worse as I get older. So it kind of annoys me when I get data sets where there’s a nominal scale variable called `gender` which is *supposed* to have two levels corresponding to `males` and `females`. Even setting aside the question of whether gender should be considered a binary variable in the first place (seems a little unlikely no matter how you define the concept of "gender"), it drives me crazy when I load the file and to print out the variable I get something like this:
-
-```{r}
-load("./data/badgender.Rdata")
-gender
-```
-
-Okaaaay. That’s not helpful at all, and it makes me very sad. Which number corresponds to the males and which one corresponds to the females? Wouldn’t it be nice if R could actually keep track of this? It’s way too hard to remember which number corresponds to which gender. And besides, the problem that this causes is much more serious than a single sad nerd... because R has no way of knowing that the 1s in the `group` factor are a very different kind of thing to the 1s in the `gender` factor So if I try to ask which elements of the `group` variable are equal to the corresponding elements in `gender`, R thinks this is totally kosher, and gives me this:
-```{r}
-group == gender
-```
-
-Well,that’s...especially stupid.^[Some users might wonder why R even allows the `==` operator for factors. The reason is that sometimes you really do have different factors that have the same levels. For instance, if I was analysing data associated with football games, I might have a factor called `home.team`, and another factor called `winning.team`. In that situation I really should be able to ask if `home.team == winning.team`.] The problem here is that R is very literal minded. Even though you’ve declared both `group` and `gender` to be factors, it still assumes that a `1` is a `1` no matter which variable it appears in.
-
-To fix both of these problems (my memory problem, and R’s infuriating literal interpretations), what we need to do is assign meaningful labels to the different *levels* of each factor. We can do that like this:
-
-```{r}
-levels(group) <- c("control", "treatment")
-levels(gender) <- c("male", "female")
-```
-
-Having done this R produces output that seems a lot more readable...
-
-```{r}
-group
-gender
-```
-
-And when I try to make insane comparisons it tells me to feel bad about myself...
-
-```{r, error=TRUE}
-group==gender
-```
-            
-Factors are very useful things, and we’ll use them a lot in this book: they’re the main way to represent a nominal scale variable. And there are lots of nominal scale variables out there. I’ll talk more about factors later, but for now you know enough to be able to get started.
-
-
+Much nicer.
 
 ## Ordered factors
 
-One topic that I neglected to mention when discussing factors earlier in this chapter is that there are actually two different types of factor in R, unordered factors and **ordered factors**. An unordered factor corresponds to a nominal scale variable, and all of the factors we’ve discussed so far in this book have been unordered. However, it’s sometimes useful to explicitly tell R that your variable is ordinal scale, and if so you need to declare it to be an ordered factor. For instance, suppose we have a variable consisting of Likert scale data:
+There are two different types of factor in R. Until now we have been discussing *unordered* factors, in which the categories are purely nominal and there is no notion that the categories are arranged in any particular order. However, many psychologically important variables are inherently *ordinal*. Questionnaire responses often take this form, where participants might be asked to endorse a proposition using verbal categories such as *"strongly agree", "agree", "neutral", "disagree"* and *"strongly disagree"*. The five response categories can't be given  any sensible numerical values^[For example, suppose we decide to assign them the numbers 1 to 5. If we take these numbers literally, we're implicitly assuming that is the psycholigical difference between *"strongly agree"* and *"neutral"* is the same in "size" as the difference between *"agree"* and *"disagree"*. In many situations this is probably okay to a first approximation, but in general it feels very strange.] but they can be ordered in a sensible fashion. In this situation we may want to represent the responses as an **ordered factor**. 
+
+To give you a sense of how these work in R, suppose we've been unfortunate enough to be given a data set that encodes ordinal responses numerically. In my experience that happens quite often. Let's suppose the original survey asked people how strongly they supported a polticial policy. Here we have a variable consisting of Likert scale data, where (let's suppose) in the original questionnaire 1 = *"strongly agree"* and 7 = *"strongly disagree"*,
 
 ```{r}
-likert <- c(1, 7, 3, 4, 4, 4, 2, 6, 5, 5)
+support_raw <- c(1, 7, 3, 4, 4, 4, 2, 6, 5, 5)
 ```
 
-We can declare this to be an ordered factor in by using the `factor` function, and setting `ordered = TRUE`. To illustrate how this works, let’s create an ordered factor called `likert.ordinal` and have a look at it:
+We can convert this to an ordered factor by specifying `ordered = TRUE` when we call the `factor()` function, like so:
 
 ```{r}
-likert.ordinal <- factor( 
-  x = likert,                 # the raw data
+support <- factor( 
+  x = support_raw,            # the raw data
   levels = c(7,6,5,4,3,2,1),  # strongest agreement is 1, weakest is 7
   ordered = TRUE              # and it’s ordered
 )
-print(likert.ordinal)
+support
 ```
 
-Notice that when we print out the ordered factor, R explicitly tells us what order the levels come in. Because I wanted to order my levels in terms of *increasing* strength of endorsement, and because a response of 1 corresponded to the strongest agreement and 7 to the strongest disagreement, it was important that I tell R to encode 7 as the lowest value and 1 as the largest. Always check this when creating an ordered factor: it’s very easy to accidentally encode your data “upside down” if you’re not paying attention. In any case, note that we can (and should) attach meaningful names to these factor levels by using the `levels` function, like this:
+Notice that when we print out the ordered factor, R explicitly tells us what order the levels come in. 
+
+Because I wanted to order my levels in terms of *increasing* strength of endorsement, and because a response of 1 corresponded to the strongest agreement and 7 to the strongest disagreement, it was important that I tell R to encode 7 as the lowest value and 1 as the largest. Always check this when creating an ordered factor: it’s very easy to accidentally encode your data with the levels reversed if you’re not paying attention. In any case, note that we can (and should) attach meaningful names to these factor levels by using the `levels` function, like this:
 ```{r}
-levels( likert.ordinal ) <- c( 
-  "strong.disagree", "disagree", "weak.disagree",
-  "neutral", "weak.agree", "agree", "strong.agree" 
+levels(support) <- c( 
+  "strong disagree", "disagree", "weak disagree",
+  "neutral", "weak agree", "agree", "strong agree" 
 )
-print( likert.ordinal )
+support
 ```
 
-One nice thing about using ordered factors is that there are analyses for which R automatically treats ordered factors differently from unordered factors, and generally in a way that is more appropriate for ordinal data. However, I won’t go into details here. Like so many things in this chapter, my main goal here is to make you aware that R has this capability built into it; so if you ever need to start thinking about ordinal scale variables in more detail, you have at least some idea where to start looking!
+A nice thing about using ordered factors is that some analyses in R automatically treat ordered factors differently to unordered factors, and generally in a way that is more appropriate for ordinal data. 
 
 ## Data frames
 
-It’s now time to go back and deal with the somewhat confusing thing that happened earlier when we tried to open up a CSV file. Apparently we succeeded in loading the data, but it came to us in a very odd looking format. At the time, I told you that this was a **data frame**. Now I’d better explain what that means.
+We now have three variables that we might plausibly have encountered as the result of some study, `region`, `support` and `RT`. At the moment, R has no understanding of how these variables are related to each other. Quite likely they're ordered the same way, so that the data stoed in `region[1]`, `support[1]` and `RT[1]` all come from the same person. That would be sensible, but R is a robot `r emo::ji("robot")` and does not possess common sense. To help a poor little robot out (and to make our own lives easier), it would be nice to organise these three variable into a tabular format like the one we saw in the last section with the AFL data. This is where **data frames** (and the tidyverse version, **tibbles**) are useful. 
 
-### Introducing data frames
-
-In order to understand why R has created this funny thing called a data frame, it helps to try to see what problem it solves. So let’s go back to the little scenario that I used when introducing factors in the last. In that section I recorded the `group` and `gender` for all 9 participants in my study, as well as their average `RT` on some task. 
-
-So there are these three variables in the workspace, `gender`, `group` and `RT`. And it just so happens that all three are the same size (i.e., they’re all vectors with 9 elements). Aaaand it just so happens that `gender[1]` corresponds to the gender of the first person, and `RT[1]` is the response time of that very same person, etc. In other words, you and I both know that all these variables correspond to the same data set, and they are organised in exactly the same way.
-
-However, R doesn’t know this! As far as it’s concerned, there’s no reason why the `RT` variable has to be the same length as the `gender` variable; and there’s no particular reason to think that `RT[1]` has any special relationship to `gender[1]` any more than it has a special relationship to `gender[4]`. In other words, when we store everything in separate variables like this, R doesn’t know anything about the relationships between things. It doesn’t even really know that these variables actually refer to a proper data set. The data frame fixes this: if we store our variables inside a data frame, we’re telling R to treat these variables as a single, fairly coherent data set.
-
-To see how they do this, let’s create one. So how do we create a data frame? One way we’ve already seen: if we import our data from a CSV file, R will store it as a data frame. A second way is to create it directly from some existing variables using the `data.frame` function. All you have to do is type a list of variables that you want to include in the data frame. The output of a `data.frame` command is, well, a data frame. So, if I want to store the variables from my experiment in a data frame called `exp` I can do so like this:
+ So how do we create a data frame? One way we’ve already seen: if we import our data from a CSV file, R will store it as a data frame. A second way is to create it directly from some existing variables using the `data.frame` function. All you have to do is type a list of variables that you want to include in the data frame. The output of a `data.frame` command is, well, a data frame. So, if I want to store the variables from my experiment in a data frame called `dat` I can do so like this:
 
 ```{r}
-exp <- data.frame(group, gender, RT)
-exp
+dat <- data.frame(region, support, RT)
+dat
 ```
 
-Note that `exp` is a completely self-contained variable. Once you’ve created it, it no longer depends on the original variables from which it was constructed. That is, if we make changes to the original `RT` variable, it will not lead to any changes to the `RT` data stored in `exp`. So, for the sake of my sanity, let's remove all variables from the workspace *except* for the `exp` data frame:
+Note that `dat` is a completely self-contained variable. Once you’ve created it, it no longer depends on the original variables from which it was constructed. That is, if we make changes to the original `RT` variable, it will not lead to any changes to the `RT` data stored in `dat`. So, for the sake of my sanity, let's remove all variables from the workspace *except* for the `dat` data frame:
 
 ```{r}
-rm(list = objects()[objects() != "exp"])  # ... this is ugly!
-who() # but what matters is that it worked...
+rm(region_raw, region, support_raw, support, RT)  
+who() 
 ```
 
 We can verify that the original `RT` variable is gone, because if we try to print it out R gives an error message:
@@ -236,12 +125,14 @@ We can verify that the original `RT` variable is gone, because if we try to prin
 RT
 ```
 
+So at this point our workspace has only a single variable in it, a data frame called `dat`. In this example I constructed the data frame manually so that you can see *how* a data frame is built from a set of variables, but in most real life situations you'd probably load your data frame directly from a CSV file or similar.
+
 ### Indexing data frames with `$`
 
 At this point, our workspace contains only the one variable, a data frame called expt. But as we can see when we told R to print the variable out, this data frame contains three variables, each of which has nine observations. So how do we get this information out again? After all, there’s no point in storing information if you don’t use it, and there’s no way to use information if you can’t access it. So let’s talk a bit about how to pull information out of a data frame. As is always the case with R there are several ways to do this. The simplest is to use the `$` operator to point to the variable you’re interested in, like this:
 
 ```{r}
-exp$RT
+dat$region
 ```
 
 There’s a lot more that can be said about data frames: they’re fairly complicated beasts, and the longer you use R the more important it is to make sure you really understand them. We’ll talk a lot more about them later.
@@ -614,4 +505,64 @@ weekdays(today)
 I’ll also point out that you can use the `as.Date` to coerce various different kinds of data into dates. If the data happen to be strings formatted exactly according to the international standard notation (i.e., `yyyy-mm-dd`) then the conversion is straightforward, because that’s the format that R expects to see by default. You can convert dates from other formats too, but it’s slightly trickier, and something I won't go into here.
 
 What about times? Well, times are even more annoying than dates, so much so that I don’t intend to talk about them at all right now, other than to point you in the direction of some vaguely useful things. R itself does provide you with tools for handling time data, and in fact there are two separate classes of data that are used to represent times, known by the odd names `POSIXct` and `POSIXlt`. You can use these to work with times if you want to, but for most applications you would probably be better off downloading the `chron` package, which provides some much more user friendly tools for working with times and dates.
+
+<!--
+
+## Variable class
+
+As we’ve seen, R allows you to store different kinds of data. In particular, the variables we’ve defined so far have either been character data (text), numeric data, or logical data. This is quite useful, but notice that it means that R makes a big distinction between `5` and `"5"`. Without quote marks, R treats `5` as the number five, and will allow you to do calculations with it. With the quote marks, R treats `"5"` as the textual character five, and doesn’t recognise it as a number any more than it recognises `"p"` or `"five"` as numbers. As a consequence, there’s a big difference between typing `x <- 5` and typing `x <- "5"`. In the former, we’re storing the number `5`; in the latter, we’re storing the character `"5"`. Thus, if we try to do multiplication with the character versions, R gets stroppy
+```{r, error=TRUE}
+x <- "5" # x is character 
+y <- "4" # y is character 
+x * y
+```
+
+Okay, let’s suppose that I’ve forgotten what kind of data I stored in the variable `x` (which happens depressingly often). R provides a function that will let us find out. Actually, it provides *several* different functions that are used for different purposes. For now I only want to discuss the `class` function. The **class** of a variable is a “high level” classification, and it captures psychologically (or statistically) meaningful distinctions. For instance `"2011-09-12"` and `"my birthday"` are both text strings, but there’s an important difference between the two: one of them is a date. So it would be nice if we could get R to recognise that `"2011-09-12"` is a date, and allow us to do things like add or subtract from it. The class of a variable is what R uses to keep track of things like that. Because the class of a variable is critical for determining what R can or can’t do with it, the `class` function is very handy.
+
+Later on, I’ll talk a bit about how you can convince R to **coerce** a variable to change from one class to another. That’s a useful skill for real world data analysis, but it’s not something that we need right now. In the meantime, the following examples illustrate the use of the `class` function:
+
+```{r}
+x <- "hello world" 
+class(x)
+x <- TRUE
+class(x)
+x <- 100
+class(x)
+```
+
+-->
+
+## Coercion
+
+Sometimes you want to change the variable class. This can happen for all sorts of reasons. Sometimes when you import data from files, it can come to you in the wrong format: numbers sometimes get imported as text, dates usually get imported as text, and many other possibilities besides. Regardless of how you’ve ended up in this situation, there’s a very good chance that sometimes you’ll want to convert a variable from one class into another one. Or, to use the correct term, you want to **coerce** the variable from one class into another. Coercion is a little tricky, and so I’ll only discuss the very basics here, using a few simple examples. However, you'll see more examples of coercion as you go through this tutorial.
+
+Firstly, let’s suppose we have a variable `x` that is *supposed* to be representing a number, but the data file that you’ve been given has encoded it as text (this happens quite a lot). Let’s imagine that the variable is something like this:
+
+```{r}
+x <- c("15","19")  # the variable
+class(x)           # what class is it?
+```
+
+Obviously, if I want to do mathematical calculations using `x` in its current state, R is going to get very annoyed at me. It thinks that `x` is text, so it’s not going to allow me to try to do mathematics using it! Obviously, we need to coerce `x` from "character" to "numeric". We can do that in a straightforward way by using the `as.numeric` function:
+
+```{r}
+x <- as.numeric(x)  # coerce the variable
+class(x)            # what class is it?
+x + 1               # hey, addition works!
+```
+
+Not surprisingly, we can also convert it back again if we need to. The function that we use to do this is the `as.character` function:
+
+```{r}
+x <- as.character(x)   # coerce back to text
+class(x)               # check the class
+```
+
+However, there’s some fairly obvious limitations: you can’t coerce the string `"hello world"` into a number because, well, there’s isn’t a number that corresponds to it. If you try, R metaphorically shrugs its shoulders and declares it to be missing:
+
+```{r}
+as.numeric( "hello world" )  # this isn’t going to work.
+```
+
+That gives you a feel for how to change between numeric and character data. What about logical data? To cover this briefly, coercing text to logical data is pretty intuitive: you use the `as.logical` function, and the character strings `"T"`, `"TRUE"`, `"True"` and `"true"` all convert to the logical value of `TRUE`. Similarly `"F"`, `"FALSE"`, `"False"`, and `"false"` all become `FALSE`. All other strings convert to `NA`. When you go back the other way using `as.character`, `TRUE` converts to `"TRUE"` and `FALSE` converts to `"FALSE"`. Converting numbers to logicals – again using `as.logical` – is straightforward. Following the standard convention in the study of Boolean logic, the number `0` converts to `FALSE`. Everything else is `TRUE`. Going back using `as.numeric`, `FALSE` converts to `0` and `TRUE` converts to `1`.
 
