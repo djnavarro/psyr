@@ -360,7 +360,7 @@ You get the idea, I hope. The key thing with lists is that they're flexible. You
 
 
 
-## Indexing lists
+### Indexing lists
 
 In the example above we used `$` to extract named elements from a list, in the same fashion that we would do for a data frame or tibble. It is also possible to index a list using square brackets, though it takes a little effort to get used to. The elements of a list can be extracted using single brackets (e.g., `starks[1]`) or double brackets (e.g., `starks[[1]]`). To see the difference between the two, notice that the single bracket version returns a list *containing* only a single vector
 ```{r}
@@ -371,7 +371,7 @@ This output is a list that contains one vector `starks$children`. In contrast, t
 starks[[1]]
 ```
 
-If this seems complicated and annoying... well, yes, it is!
+If this seems complicated and annoying... well, yes. Yes it is!
 
 I find it helps me to think of the list as a container. When we use single brackets, the result is still inside its container; when we use double brackets we remove it from the container. This intuition is illustrated nicely in the image below, [tweeted](https://twitter.com/hadleywickham/status/643381054758363136) by Hadley Wickham:
 
@@ -430,16 +430,19 @@ class(x)
 
 ## Coercion
 
-Sometimes you want to change the variable class. This can happen for all sorts of reasons. Sometimes when you import data from files, it can come to you in the wrong format: numbers sometimes get imported as text, dates usually get imported as text, and many other possibilities besides. Regardless of how you’ve ended up in this situation, there’s a very good chance that sometimes you’ll want to convert a variable from one class into another one. Or, to use the correct term, you want to **coerce** the variable from one class into another. Coercion is a little tricky, and so I’ll only discuss the very basics here, using a few simple examples. However, you'll see more examples of coercion as you go through this tutorial.
+Sometimes you want to change the variable class. Sometimes when you import data from files, it can come to you in the wrong format: numbers sometimes get imported as text, dates usually get imported as text, and many other possibilities besides. Sometimes you might want to convert a data frame to a tibble or vice versa. Changing the variable in this way is called **coercion**, and the functions to coerce variables are usually given names like `as.numeric()`, `as.factor()`, `as_tibble()` and so on. We've seen some explicit examples in this chapter:
 
-Firstly, let’s suppose we have a variable `x` that is *supposed* to be representing a number, but the data file that you’ve been given has encoded it as text (this happens quite a lot). Let’s imagine that the variable is something like this:
+- Coercing a data frame to a tibble
+- Coercing a character vector to a factor
+
+There are many other possibilities. A common situation requiring coercion arises when you have been given a variable `x` that is *supposed* to be representing a number, but the data file that you’ve been given has encoded it as text.
 
 ```{r}
 x <- c("15","19")  # the variable
 class(x)           # what class is it?
 ```
 
-Obviously, if I want to do mathematical calculations using `x` in its current state, R is going to get very annoyed at me. It thinks that `x` is text, so it’s not going to allow me to try to do mathematics using it! Obviously, we need to coerce `x` from "character" to "numeric". We can do that in a straightforward way by using the `as.numeric` function:
+Obviously, if I want to do mathematical calculations using `x` in its current state R wil get very sad `r emo::ji("sad")`. It thinks `x` is text and it won't allow me to do mathematics with text!  To coerce `x` from "character" to "numeric", we use the `as.numeric` function:
 
 ```{r}
 x <- as.numeric(x)  # coerce the variable
@@ -454,14 +457,18 @@ x <- as.character(x)   # coerce back to text
 class(x)               # check the class
 ```
 
-However, there’s some fairly obvious limitations: you can’t coerce the string `"hello world"` into a number because, well, there’s isn’t a number that corresponds to it. If you try, R metaphorically shrugs its shoulders and declares it to be missing:
+There are of course some limitations: you can’t coerce `"hello world"` into a number because there isn’t a number that corresponds to it. If you try, R metaphorically shrugs its shoulders and declares it to be missing:
 
 ```{r}
-as.numeric( "hello world" )  # this isn’t going to work.
+x <- c("51", "hello world")
+as.numeric(x)
 ```
 
-That gives you a feel for how to change between numeric and character data. What about logical data? To cover this briefly, coercing text to logical data is pretty intuitive: you use the `as.logical` function, and the character strings `"T"`, `"TRUE"`, `"True"` and `"true"` all convert to the logical value of `TRUE`. Similarly `"F"`, `"FALSE"`, `"False"`, and `"false"` all become `FALSE`. All other strings convert to `NA`. When you go back the other way using `as.character`, `TRUE` converts to `"TRUE"` and `FALSE` converts to `"FALSE"`. Converting numbers to logicals – again using `as.logical` – is straightforward. Following the standard convention in the study of Boolean logic, the number `0` converts to `FALSE`. Everything else is `TRUE`. Going back using `as.numeric`, `FALSE` converts to `0` and `TRUE` converts to `1`.
+Makes sense I suppose!
 
+Another case worth talking about is how R handles coercion with logical variables. Coercing text to logical data using `as.logical()` is mostly intuitive. The strings `"T"`, `"TRUE"`, `"True"` and `"true"` all convert to `TRUE`, whereas `"F"`, `"FALSE"`, `"False"`, and `"false"` all become `FALSE`. All other strings convert to `NA`. When coercing from logical to test using `as.character`, `TRUE` converts to `"TRUE"` and `FALSE` converts to `"FALSE"`. 
+
+Converting numeric values to logical data -- again using `as.logical` -- is similarly straightforward. Following the standard convention in the study of Boolean logic `0` coerces to `FALSE`. Everything else is `TRUE`. When coercing logical to numeric, `FALSE` converts to `0` and `TRUE` converts to `1`.
 
 
 
