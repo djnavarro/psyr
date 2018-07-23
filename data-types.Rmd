@@ -160,50 +160,27 @@ That being said, there are one or two differences between tibbles and pure data 
 
 ### Using the `$` operator
 
-So at this point our workspace contains only the one variable, a tibble called `dat`. The tibble contains 3 variables, each of which has 10 observations. So how do we get this information out again? The simplest way to use the `$` operator to point to the variable you’re interested in:
+At this point our workspace contains one variable, a tibble called `dat`. This tibble is acting as a container for 3 variables, each of which has 10 observations. Conceptually this is very tidy, but now we have a practical question ... how do we get the information out again? There are two qualitatively different ways to do this,^[Technically this is a lie: there are many more ways to do this, but let's not make this any more difficult than it needs to be, yeah?] reflecting two different ways to think about your data:
+
+- Your data set is a *list of variables* (...use `$`)
+- Your data set is a *table of values* (...use `[ ]`)
+
+Both perspectives are valid, and R allows you to work with your data both ways. 
+
+To start with, let's think of `dat` as a list of variables. This was the perspective we took when contructing `dat` in the first place: we took three different vectors (`region`, `support`, `RT`) and bound them together into a data frame. From this perspective, what we want is an operator that will extract one of those variables for us. This is the role plaed by `$`. If I want to refer to the `region` variable contained *within* the `dat` tibble, I would use this command:
 
 ```{r}
 dat$region
 ```
 
-There’s a lot more that can be said about data frames: they’re fairly complicated beasts, and the longer you use R the more important it is to make sure you really understand them. We’ll talk a lot more about them later.
-
-### Using square brackets
-
-Tibbles and data frames both use the `$` operator in the same way. So regardless of whether `dat` is a tibble or pure data drame, `dat$RT` refers to the response time variable (a numeric vector), and `dat$RT[5]` is the response time of the fifth participant:
-```{r}
-dat$RT[5]
-```
-There's another way in which we can extract this information. Because data frames and tibbles are rectangular, we could specify the row and column number (or name) directly within the square brackets. These two commands both refer to the same cell as `dat$RT[5]`...
-```{r,eval = FALSE}
-dat[5,3]
-dat[5,"RT"]
-```
-... but the format in which they return the answer is different. Because `dat` is a tibble, the result *remains a tibble*
-```{r}
-dat[5,3]
-```
-
-The reason tibbles work like this becomes clear if we try to us the square brackets to pick out a single row or a single column:
+As you can see, the output looks exactly the same as it did for the original variable: `dat$region` *is a vector* (an unordered factor in this case), and we can refer to an element of that vector in the same way we normally would:
 
 ```{r}
-dat[2,]
-dat[,2]
+dat$region[1]
 ```
 
-The result in both cases *remains a tibble*. For tibbles, the rule is very simple: any time you use the square brackets to index a tibble, the result is always a tibble. That would not necessarily be the case for a pure data frame. To illustrate, the tables below show the kind of object that is returned by different indexing commands. For square brackets:
+Conceptually, the metaphor here is `dataframe$variable[value]`. The table below illustrates this by showing what type of output you get with different commands:
 
-```{r,echo=FALSE}
-df <- tibble(
-  "command" = c("dat[1,1]", "dat[1,]", "dat[,1]", "dat[2:3,]","dat[,2:3]"),
-  "data frame" = c("element", "data frame", "vector", "data frame", "data frame"),
-  "tibble" = c("tibble", "tibble", "tibble", "tibble", "tibble")
-)
-knitr::kable(df)
-rm(df)
-```
-  
-In contrast, when using `$` both versions behave the same:
 
 ```{r,echo=FALSE}
 df <- tibble(
@@ -215,16 +192,68 @@ knitr::kable(df)
 rm(df)
 ```  
   
-### Summary
+As you can see, the `$` operator works the same way for pure data frames as for tibbles. This is not quite the case for when using square brackets `[ ]`, as the next section demonstrates... 
+  
 
-Data frames and tibbles are mostly used to describe data that take the form of a *case by variable* structure: each row is a case 
-(e.g., a person) and each column is a variable (e.g., measurement). Case by variable structures are fundamentally asymmetric because the rows and columns have qualitatively different meaning. They follow a version of the Anna Karenina principle:
+### Using square brackets
 
-> Cases are all alike; every variable varies in its own way
+The second way to think about a tibble is to treat it as a fancy table. There is something  appealing about this, because it emphasises the fact that the data set has a *case by variable* structure:
+```{r}
+dat
+```
+In this structure each row is a person, and each column is a variable. The square bracket notation allows you to refer to entries in the data set by their row and column number (or name). As such, the reference looks like this:
+```
+data[row,column]
+```
+R allows you to select multiple rows and colummns. For instance if you set `row` to be `1:3` then R will return the first three cases. Here is an example where we select the first three rows and the first two columns:
+```{r}
+dat[1:3, 1:2]
+```
 
-Two participants who provide data will always provide data in the same format (if they don't then you can't organise the data this way), but two variables can be different in many different ways: one column might be numeric, another is a factor, yet another might contains dates. Many psychological data sets have this characteristic. Others do not, so it is worth talking about a few other data structures that arise quite frequently!
+If we omit values for the rows (or columms) *while keeping the comma* then R will assume you want all rows (or colummns). So this returns every row in `dat` but only the first two columns:
+```{r}
+dat[, 1:2]
+```
+
+An important thing to recognise here is that -- for tibbles -- the metaphor underpinning the square bracket system is that your data have a rectangular shape that is imposed by the fact that your variable is a tibble, and no matter what you do with the square brackets the result will **always remain a tibble**. If I select just one row...
+
+```{r}
+dat[5,]
+```
+
+the result is a tibble. If I select just one column...
+
+```{r}
+dat[,3]
+```
+
+the result is a tibble. Even if I select a single value...
+
+```{r}
+dat[5,3]
+```
+
+the result is a tibble. For the square bracket system the rule is very simple: **tibbles stay tibbles**
+
+Annoyingly, this is not the case for a pure data frame. For a pure data frame, any time it is possible for R to treat the result as something else, it does: if `dat` were a pure data frame, the results would be different in some cases. This has caused my students (and myself) no end of frustration over the years because everyone forgets about this particular property of data frames and stuff breaks. In the original version of these notes published in *Learning Statistics with R* I had a length explanation of this behaviour. Nowadays I just encourage people to use tibbles instead. For what it's worth, if you are working with pure data frames, here's a summary of what to expect:
+
+```{r,echo=FALSE}
+df <- tibble(
+  "command" = c("dat[1,1]", "dat[1,]", "dat[,1]", "dat[2:3,]","dat[,2:3]"),
+  "data frame" = c("element", "data frame", "vector", "data frame", "data frame"),
+  "tibble" = c("tibble", "tibble", "tibble", "tibble", "tibble")
+)
+knitr::kable(df)
+rm(df)
+```
+  
+I **like** tibbles.^[Just FYI: you can make a pure data frame behave like a tibble. If you use `dat[,1,drop=FALSE]` you can suppress this weird thing and make R return a one-column data frame instead of a vector, but that command is so unbearably cumbersome that everyone forgets to use it.]
+
+
 
 ## Matrices
+
+Data frames and tibbles are mostly used to describe data that take the form of a *case by variable* structure: each row is a case (e.g., a participant) and each column is a variable (e.g., measurement). Case by variable structures are fundamentally asymmetric because the rows and columns have qualitatively different meaning. Two participants who provide data will always provide data in the same format (if they don't then you can't organise the data this way), but two variables can be different in many different ways: one column might be numeric, another is a factor, yet another might contains dates. Many psychological data sets have this characteristic. Others do not, so it is worth talking about a few other data structures that arise quite frequently!
 
 Much like a data frame, a **matrix** is basically a big rectangular table of data, and there are similarities between the two. However, matrices treat columns and rows in the same fashion, and as a consequence every entry in a matrix has to be of the same type (e.g. all numeric, all character, etc). Let's create a matrix using the *row bind* function, `rbind`, which combines multiple vectors in a row-wise fashion:
 
