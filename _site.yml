@@ -32,11 +32,11 @@ navbar:
     - text: Prelude
       href: prelude-to-data.html 
     - text: Data types
-      href: data-types.html    
+      href: data-types.html 
+    - text: Describing data
+      href: describing-data.html      
     - text: Visualising data
       href: xx-visualising-data.html
-    - text: Describing data
-      href: xx-describing-data.html
   - text: Stats
     menu:
     - text: Probability distributions

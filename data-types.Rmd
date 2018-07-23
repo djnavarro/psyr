@@ -1,5 +1,5 @@
 ---
-title: "13. R Data Types"
+title: "13. Data types in R"
 output:
   html_document:
     includes:

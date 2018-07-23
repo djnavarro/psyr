@@ -26,7 +26,7 @@ The content borrows from my introductory statistics lecture notes ([Learning Sta
 
 It is of course a work in progress, but I hope it is useful! Please don't hesitate to contact me if you spot an error or find something confusing.
 
--[Danielle](d.navarro@unsw.edu.au)
+-[Danielle](d.navarro@unsw.edu.au) `r emo::ji("turtle")`
 
 ## Part 1: Core toolkit
 
@@ -49,8 +49,8 @@ Everything from here onwards is *very much* a work in progress!
 
 - [Prelude to data](./prelude-to-data.html)
 - [Data types](./data-types.html)
+- [Describing data](./describing-data.html) <span style="color:#cccccc">(to be updated)</span><!-- skimr, group_by, summarise -->
 - [Visualising data](./xx-visualising-data.html)  <span style="color:#cccccc">(to be updated)</span><!-- add ggplot -->
-- [Describing data](./xx-describing-data.html) <span style="color:#cccccc">(to be updated)</span><!-- skimr, group_by, summarise -->
 - <span style="color:#cccccc">Data manipulation (to be added)</span> <!-- gather/spread, etc -->
 - <span style="color:#cccccc">Working with text (to be added)</span>  <!-- stringr -->
 - <span style="color:#cccccc">Additional tricks (to be added)</span>  <!-- dates -->
