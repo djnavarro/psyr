@@ -172,54 +172,64 @@ There’s a lot more that can be said about data frames: they’re fairly compli
 
 DO THIS
 
+### Summary
+
+Data frames and tibbles are mostly used to describe data that take the form of a *case by variable* structure: each row is a case 
+(e.g., a person) and each column is a variable (e.g., measurement). Case by variable structures are fundamentally a symmetric because the rows and columns have qualitatively different meaning. They follow a version of the Anna Karenina principle:
+
+> Cases are all alike; every variable varies in its own way
+
+Two people who provide data will always provide data in the same format (if they don't then you can't organise the data this way), but two variables can be different in many different ways: one column might be numeric, another is a factor, yet another might contains dates. Many psychological data sets have this characteristic. Others do not, so it is worth talking about a few other data structures that arise quite frequently!
 
 ## Matrices
 
-Up to this point we have encountered several different kinds of variables. At the simplest level, we’ve seen numeric data, logical data and character data. However, we’ve also encountered some more complicated kinds of variables, namely factors, formulas, data frames and lists. There are many more specialised data structures out there, but there’s a few more generic ones that I want to talk about in passing.
-
-The first of these is a **matrix**. Much like a data frame, a matrix is basically a big rectangular table of data, and in fact there are quite a few similarities between the two. However, there are also some key differences, so it’s important to talk about matrices in a little detail. To start with, lets create a matrix using the "row bind" function, `rbind`, which you can use to combine multiple vectors together in a row-wise fashion (I'm sure you can guess what the column bind function `cbind` does)...
+Much like a data frame, a **matrix** is basically a big rectangular table of data, and there are similarities between the two. However, matrices treat columns and rows in the same fashion, and as a consequence every entry in a matrix has to be of the same type (e.g. all numeric, all character, etc). Let's create a matrix using the *row bind* function, `rbind`, which combines multiple vectors in a row-wise fashion:
 
 ```{r}
-row.1 <- c( 2,3,1 )         # create data for row 1
-row.2 <- c( 5,6,7 )         # create data for row 2
-M <- rbind( row.1, row.2 )  # row bind them into a matrix
-print(M)                    # and print it out...
+row1 <- c(2, 3, 1)          # create data for row 1
+row2 <- c(5, 6, 7)          # create data for row 2
+mattie <- rbind(row1, row2) # row bind them into a matrix
+mattie
 ```
 
-The variable `M` is a matrix, which we can confirm by using the `class` function. Notice that, when we bound the two vectors together, R retained the names of the original variables as row names. We could delete these if we wanted by typing `rownames(M)<-NULL`, but I generally prefer having meaningful names attached to my variables, so I’ll keep them. In fact, let’s also add some highly unimaginative column names as well:
+Notice that when we bound the two vectors together R turned the names of the original variables into row names.^[We could delete these if we wanted by typing `rownames(mattie)<-NULL`, but I generally prefer having meaningful names attached to my variables, so I’ll keep them.] To keep things fair, let's add some exciting column names as well:
 
 ```{r}
-colnames(M) <- c( "col.1", "col.2", "col.3" )
-print(M)
+colnames(mattie) <- c("col1", "col2", "col3")
+mattie
 ```
 
 ### Matrix indexing
 
-You can use square brackets to subset a matrix in much the same way that you can for data frames, again specifying a row index and then a column index. For instance, `M[2,3]` pulls out the entry in the 2nd row and 3rd column of the matrix (i.e., `7`), whereas `M[2,]` pulls out the entire 2nd row, and `M[,3]` pulls out the entire 3rd column. However, it’s worth noting that when you pull out a column, R will print the results horizontally, not vertically.^[The reason for this relates to how matrices are implemented. The original matrix `M` is treated as a *two-dimensional* object, containing two rows and three columns. However, whenever you pull out a single row or a single column, the result is considered to be a vector, which has a *length* but doesn't have dimensions. Unless you explictly coerce the vector into a matrix, R doesn't really distinguish between row vectors and column vectors. This has implications for how matrix algebra is implemented in R (which I’ll admit I initially found odd). When multiplying a matrix by a vector using the `%*%` operator, R will attempt to interpret the vector as either a row vector or column vector, depending on whichever one makes the multiplication work. That is, suppose $\mathbf{M}$ is  $2\times 3$ matrix, and $v$ is a $1\times 3$ row vector. Mathematically the matrix multiplication $\mathbf{M}v$ doesn't make sense since the dimensions don’t conform, but you can multiply by the corresponding column vector, $\mathbf{M}v^T$. So, if I set `v <- M[2,]` and then try to calculate `M %*% v`, which you’d think would fail, it actually works because R treats the one dimensional array as if it were a column vector for the purposes of matrix multiplication. Note that if both objects are one dimensional arrays/vectors, this leads to ambiguity since $vv^T$ (inner product) and $v^Tv$ (outer product) yield different answers. In this situation, the `%*%` operator returns the inner product not the outer product. To understand all the details, check out the help documentation.]
-There is also a way of referring to the elements of a matrix using a single index:
+You can use square brackets to subset a matrix in much the same way that you can for data frames, again specifying a row index and then a column index. For instance, `mattie[2,3]` pulls out the entry in the 2nd row and 3rd column of the matrix (i.e., `7`), whereas `mattie[2,]` pulls out the entire 2nd row, and `mattie[,3]` pulls out the entire 3rd column. However, it’s worth noting that when you pull out a column, R will print the results horizontally, not vertically.^[The reason for this relates to how matrices are implemented. The original matrix `mattie` is treated as a *two-dimensional* object, containing two rows and three columns. However, whenever you pull out a single row or a single column, the result is considered to be a vector, which has a *length* but doesn't have dimensions. Unless you explictly coerce the vector into a matrix, R doesn't really distinguish between row vectors and column vectors. This has implications for how matrix algebra is implemented in R (which I’ll admit I initially found odd). When multiplying a matrix by a vector using the `%*%` operator, R will attempt to interpret the vector as either a row vector or column vector, depending on whichever one makes the multiplication work. That is, suppose $\mathbf{M}$ is  $2\times 3$ matrix, and $v$ is a $1\times 3$ row vector. Mathematically the matrix multiplication $\mathbf{M}v$ doesn't make sense since the dimensions don’t conform, but you can multiply by the corresponding column vector, $\mathbf{M}v^T$. So, if I set `v <- mattie[2,]`, the object that R returns doesn't technically have any *dimensions* only a *length*. So even though `v` was behaving like a row vector when it was part of `mattie`, R has forgotten that completely and only knows that `v` is length three. So when I try to calculate `mattie %*% v`, which you’d think would fail because I didn't transpose `v`, it actually works. In this context R treated `v` as if it were a column vector for the purposes of matrix multiplication. Note that if both objects are vectors, this leads to ambiguity since $vv^T$ (inner product) and $v^Tv$ (outer product) yield different answers. In this situation `v %*% v` returns the inner product. You can obtain the outer product with `outer(v,v)`. The help documentation may come in handy!] 
 ```{r}
-M <- matrix(
-  data = 1:12, # the values to include in the matrix
-  nrow = 3,    # number of rows
-  ncol = 4     # number of columns
-)
-print(M)
+mattie[2,]
+mattie[,3]
 ```
-This is a $3\times 4$ matrix `M` that contains the numbers 1 to 12 in order, listed columnwise. You can index the elements of `M` by referring to them in that same columnwise order. To see this, notice that these two commands both extract the same element of the matrix:
-```{r}
-print(M[2,2]) 
-print(M[5])
-```
+This can be a little confusing for novice users: because it is no longer a two dimensional object R treats the output as a regular vector.^[You can suppress this behaviour by using a command like `mattie[,3,drop=FALSE]`. It's unpleasant though. Also be warned: data frames do this too when you select one column using square brackets. Tibbles don't. One of the reasons I like tibbles actually.]
+
 
 
 ### Matrices vs data frames
 
-The critical difference between a data frame and a matrix is that, in a data frame, we have this notion that each of the columns corresponds to a different variable: as a consequence, the columns in a data frame can be of different data types. The first column could be numeric, and the second column could contain character strings, and the third column could be logical data. In that sense, there is a fundamental asymmetry build into a data frame, because of the fact that columns represent variables (which can be qualitatively different to each other) and rows represent cases (which cannot). Matrices are different. At a fundamental level, a matrix really is just *one* variable: it just happens that this one variable is formatted into rows and columns. If you want a matrix of numeric data, every single element in the matrix *must* be a number. If you want a matrix of character strings, every single element in the matrix *must* be a character string. If you try to mix data of different types together, then R will either complain or try to coerce the matrix into something unexpected. To give you a sense of this, let's do something silly and convert one element of `M` from the number `5` to the character string `"five"`...
+As mentioned above difference between a data frame and a matrix is that, at a fundamental level, a matrix really is just *one* variable: it just happens that this one variable is formatted into rows and columns. If you want a matrix of numeric data, every single element in the matrix *must* be a number. If you want a matrix of character strings, every single element in the matrix *must* be a character string. If you try to mix data of different types together, then R will either complain or try to transform the matrix into something unexpected. To give you a sense of this, let's do something silly and convert one element of `mattie` from the number `5` to the character string `"five"`...
 ```{r}
-M[2,2] <- "five" 
-print(M)
+mattie[2,2] <- "five" 
+mattie
 ```
-As you can see, the *entire* matrix `M` has been coerced into text. 
+Oh no I broke `mattie` -- she's all text now! I'm so sorry `mattie`, I still love you `r emo::ji("heart")` 
+
+### Other ways to make a matrix
+
+When I created `mattie` I used the `rbind` command. Not surprisingly there is also a `cbind` command that combines vectors column-wise rather than row-wise. There is also a `matrix` command that you can use to specify a matrix directly:
+```{r}
+matrix(
+  data = 1:12, # the values to include in the matrix
+  nrow = 3,    # number of rows
+  ncol = 4     # number of columns
+)
+```
+The result is a $3\times 4$ matrix of the numbers 1 to 12, listed column-wise.^[I won't go into details, but note that you can refer the elements of a matrix by specifying only a single index. For a $3\times 4$ matrix `M`,  `M[2,2]` and `M[5]` refer to the same cell. This method of indexing assumes column-wise ordering regardless of whether the matrix `M` was originally created in column-wise or row-wise fashion.] If you need to create a matrix row-wise, you can specify `byrow = TRUE` when calling `matrix()`.
 
 ## Arrays
 
