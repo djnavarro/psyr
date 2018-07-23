@@ -19,7 +19,7 @@ output:
 rm(list=objects()) # start with a clean workspace
 source("knitr_tweaks.R")
 library(lsr,quietly = TRUE)
-library(tidyverse,quietly = TRUE)
+library(tidyverse, quietly = TRUE)
 ```
 
 When teaching statistics and data analysis, there is a school of thought that argues that the student should be introduced to actual data as quickly as possible. In one sense I've broken that rule rather substantially. The entirety the *core toolkit* section went by without any real data, much less any data analysis. In my defence, data analysis was never the intended goal of that section. My hope with that section was to teach enough programming concepts that you'd be able to implement a psychological model in R, as we did with the [Rescorla-Wagner model](./programming.html) previously. 
@@ -70,24 +70,32 @@ The first line of code in the AFL example is `library(tidyverse)`. Per the descr
 
 > The tidyverse is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures. 
 
-When I wrote *Learning Statistics with R* to accompany my first statistics class the tidyverse didn't play much of a part, because most of it didn't exist. Over the last several years the tidyverse has had a huge influence on how data analysis in R is typically conducted, so in these notes I'll very often rely on tools from the tidyverse. From now on, when reading the code presented in these notes you should presume that there's a hidden `library(tidyverse)` command at the start of every page... because there is! `r emo::ji("grinning")`
+When I wrote *Learning Statistics with R* to accompany my first statistics class the tidyverse didn't play much of a part, because most of it didn't exist. Over the last several years the tidyverse has had a huge influence on how data analysis in R is typically conducted, so in these notes I'll often use on tools from the tidyverse. From now on, when reading the code presented in these notes you should presume that there's a hidden `library(tidyverse)` command at the start of every page... because there is! `r emo::ji("grinning")`
 
-## Reading a CSV file
+If you are interested in learning more about the tidyverse and the role it plays in the R data science community, an excellent place to start is with Hadley Wickham and Garrett Grolemund's book [R for Data Science](http://r4ds.had.co.nz/).^[As I type this, I realise that I've unconsciously been influenced by the title. I honestly hadn't intended *R for Psychological Science* to serve as an oblique reference to *R for Data Science*, it just felt like the natural name for the book I wanted to write.] The tidyverse emphasises an approach to data exploration illustrated below:
 
-In the second line of code I use the `read_csv` function to import the data into R. The command is this one:
+<img src="./img/prelude_explore.png" width=600px>
+
+(You'll see exactly this image used in a lot of tidyverse related documents)
+
+A typical approach to data analysis involves importing data from an external source, tidying the data and cleaning up any problems with the data set, transforming it in a fashion that extracts the relevant information, visualising the key insights, and so on. Even in the brief analysis I presented above you can see some of this process play out.
+
+
+## Importing a CSV file
+
+After loading the tidyverse, the next thing I did in my analysis was import the data into R. The raw data itself is stored as a *comma separated value* (CSV) file, a plain text file in which each row represents a single game, with values separated by commas. Here is what the raw data file looks like in a text editor:
+
+<img src="./img/csv_afl.png" width=800px>
+
+To import this data into a nice formay that R can work with, I used the `read_csv` function. The `read_csv` function comes from the **readr** package that is automatically loaded as part of the tidyverse (there is a very similar `read.csv` function that is comes with "base" R, but I've come to prefer the tidyverse version). Here's the line of code again:
 
 ```{r, eval=FALSE}
 afl <- read_csv("./data/afl.csv")
 ```
 
-The raw data itself is stored as a *comma separated value* (CSV) file, a plain text file in which each row represents a single game, with values separated by commas. The screenshot below shows the raw data file open in a text editor:
+What this does is import the data from the text file shown in the screen shot, assign it to a variable called `afl`. The format of the `afl` variable looks rather like a table. More precisely, it is an example of an R data format called as a **tibble**. Later we'll talk more about tibbles, and the closely related **data frame**. For now, let’s just be happy that we imported the data and that it looks about right.
 
-<img src="./img/csv_afl.png" width=800px>
-
-So what this line of code does is import the data from the text file shown in the screen shot, assign it to a variable called `afl`. The format of this AFL variable looks rather like a table, and is an example of an R data formay known as a **tibble**. Later we'll talk more about tibbles, and the closely related **data frame**. For now, let’s just be happy that we imported the data and that it looks about right.
-
-One thing I will mention is that RStudio provides a nice point-and-click method for importing CSV data. Go to the environment pane, select the "import data set" and then choose "from text (readr)", like so^[**readr** is the name of the particular tidyverse package that supplies the `read_csv` function. There is a `read.csv` function that comes with R, but I've come to prefer the tidyverse version.] 
-
+One thing I will mention is that RStudio provides a nice point-and-click method for importing CSV data. Go to the environment pane, select the "import data set" and then choose "from text (readr)":
 
 <img src="./img/csv_import1.png" width=300px>
 
@@ -97,26 +105,53 @@ After selecting the file you want to import, RStudio will present you with an im
 
 This should look fairly familiar to anyone who has imported data from other software such as Excel or SPSS. I won't use that method in these notes because it's easier to type `read_csv` but it's worth noting that the option is there.
 
-
 ## The pipe, `%>%`
 
-The other thing I want to comment on is that there are some new operators that have appeared in this example. There are a number of operations that will look familiar, such as the equality operator `==` and the assignment operator `<-`. There are two entirely new operators, `~` and `%>%`, and there's one familiar operator `+` that we're using in a novel way. For two of these cases, there's not too much we need to talk about right now...
+There's another thing I want to comment on: some new operators have appeared in this example! Many of the operations are familiar from the last section, such as the equality operator `==` and the assignment operator `<-`. However there are two entirely new operators, `~` and `%>%`, and one familiar operator `+` being used in a novel way: 
 
-- The **tilde** operator is used to define **formulas**, which provide a way of describing the relationships between variables. They appear most often in statistical modelling. For instance if I want to build a regression model to describe the relationship between `anxiety` and  demographic variables such as `gender` and `age`, I would express the model conceptually using the formula `anxiety ~ gender + age`. Formulas tend to mean different things in different concepts, but for now it's enough to note that they're an abstract way to describe *relationships*
+- The **tilde** operator `~` is used to define **formulas** in R, which provide a way of describing the relationships between variables. They appear most often in statistical modelling. For instance if I want to build a regression model to describe the relationship between `anxiety` and  demographic variables such as `gender` and `age`, I would express the model conceptually using the formula `anxiety ~ gender + age`. Formulas tend to mean different things in different concepts, but for now it's enough to note that they're an abstract way to describe *relationships*
 
-- The **addition** operator is being used in an unusual way in this code: when I construct a plot by writing `ggplot() + geom_point() + ` etc I'm not literally doing arithmetic, but I'm doing something conceptually similar... adding *layers* to a plot. Under the hood, the **ggplot2** package (part of the tidyverse) has its own special definition of `+` that applies to the plots that it draws. Again, I'll talk more about it later: for now let's just notice that R does allow packages to do clever things like this `r emo::ji("grinning")`
+- The **addition** operator `+` is being used in an unusual way. When I construct a plot by writing `ggplot() + geom_point() + ` etc I'm not literally doing arithmetic, but I'm doing something conceptually similar... adding *layers* to a plot. Under the hood, the **ggplot2** package (part of the tidyverse) has its own special definition of `+` that applies to the plots that it draws. Again, I'll talk more about it later: for now let's just notice that R does allow packages to do clever things like this `r emo::ji("grinning")`
 
-... but what's the story with the `%>%` operator??? 
+Okay, but what's the story with `%>%`??? 
 
-**WRITE ME**
+### The pipe metaphor
+
+The `%>%` operator is called a **pipe**, and is discussed in some detail in the [R for Data Science](http://r4ds.had.co.nz/pipes.html) book. Unlike the operators we've discussed so far (`==`, `&`, etc) the pipe `%>%` isn't part of base R. It was introduced as part of the **magrittr** package, and has become widely adopted.  You'll see it appear in many different contexts. Although **magrittr** isn't loaded as part of the tidyverse, the tidyverse does exported `%>%`, and because you should assume from now on that I have the tidyverse loaded, I'll have access to the pipe for the rest of these notes. 
+
+So what is it, and how does it work?
+
+Let's start by looking at how I used the pipe in the brief analysis above. Here's the command I used to transform the raw `afl` data into the smaller summary data `attendance`:
 
 ```{r,eval = FALSE}
-afl %>% 
+attendance <- afl %>% 
   group_by(year, game_type) %>% 
   summarise(attendance = mean(attendance)) 
 ```
 
-The pipe is discussed in some detail in Hadley Wickham's [R for Data Science](http://r4ds.had.co.nz/pipes.html) book.
+The question is, how does this code work, and what do those `%>%` symbols mean? To see what's happening here, let's strip this code back to its essential features:
+
+```{r,eval = FALSE}
+output <- input %>% 
+  group_by() %>% 
+  summarise() 
+```
+
+If we reorganise this so that it all fits in a single line you get a good sense of what's happening here. We take some `input` object that then gets passed to  `group_by()` function, the output of `group_by()` gets passed to `summarise()`, and the final result gets assigned to `output`:
+
+```{r,eval = FALSE}
+output <- input %>% group_by() %>% summarise() 
+```
+
+For many people -- myself included -- this way of thinking about data analysis is appealing. At a conceptual level, data analysis is often a series of transformations that you apply to a data set, so I often have this intuition that what I'm doing is constructing a conveyor belt... data goes in this side, and meaning comes out on that side! This intuition forms the basis of the"pipe" metaphor, and it becomes obvious if we switch from using the leftward assign `<-` operator to the right assign `->`. We take data as an `input`, pipe it through a series of functions, and out pops something meaningful as our `output`: 
+
+
+```{r,eval = FALSE}
+input %>% group_by() %>% summarise() -> output
+```
+
+
+### An introduction to the pipe
 
 
 <!--
