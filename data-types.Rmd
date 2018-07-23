@@ -28,13 +28,17 @@ library(tidyverse,quietly = TRUE)
 
 ## Factors
 
-As psychological research methodology classes are at pains to point out, the data we analyse come in different kinds. Some variables are inherently *quantitative* in nature: response time (RT) for instance, has a natural interpretation in units of time. A response time of 1500 milliseconds is indeed 400 milliseconds slower than a response time of 1100 milliseconds, so addition and subtraction are meaningful operations. Similarly, 1500 milliseconds is twice as long as 750 milliseconds, so multiplication and division are also meaningful. So when I defined a response time variable in the previous section, I used a numeric vector. To keep my variable names concise, I'll define the same variable again using the conventional RT abbreviation:
+As psychological research methodology classes are at pains to point out, the data we analyse come in different kinds. Some variables are inherently *quantitative* in nature: response time (RT) for instance, has a natural interpretation in units of time. So when I defined a response time variable in the previous section, I used a numeric vector.  To keep my variable names concise, I'll define the same variable again using the conventional RT abbreviation:
 
 ```{r}
 RT <- c(420, 619, 550, 521, 1003, 486, 512, 560, 495, 610)
 ```
 
-Other kinds of data are inherently *nominal* in nature. If I recruit participants in an online experiment I might see that their place of residence falls is one of several different regions. For no particular reason, let's imagine that I have been sampling participants from four different regions: the United States, India, China or the European Union, which I'll represent using the codes `"us"`, `"in"`, `"ch"` and `"eu"`. My first thought would be to represent the data using a character vector:
+A response time of 1500 milliseconds is indeed 400 milliseconds slower than a response time of 1100 milliseconds, so addition and subtraction are meaningful operations. Similarly, 1500 milliseconds is twice as long as 750 milliseconds, so multiplication and division are also meaningful. That's not the case for other kinds of data.
+
+### Unordered factors
+
+Some variables are inherently *nominal* in nature. If I recruit participants in an online experiment I might see that their place of residence falls is one of several different regions. For no particular reason, let's imagine that I have been sampling participants from four different regions: the United States, India, China or the European Union, which I'll represent using the codes `"us"`, `"in"`, `"ch"` and `"eu"`. My first thought would be to represent the data using a character vector:
 
 ```{r}
 region_raw <- c("us","us","us","eu","in","eu","in","in","us","in")
@@ -68,7 +72,7 @@ table(region)
 
 Much nicer.
 
-## Ordered factors
+### Ordered factors
 
 There are two different types of factor in R. Until now we have been discussing *unordered* factors, in which the categories are purely nominal and there is no notion that the categories are arranged in any particular order. However, many psychologically important variables are inherently *ordinal*. Questionnaire responses often take this form, where participants might be asked to endorse a proposition using verbal categories such as *"strongly agree", "agree", "neutral", "disagree"* and *"strongly disagree"*. The five response categories can't be given  any sensible numerical values^[For example, suppose we decide to assign them the numbers 1 to 5. If we take these numbers literally, we're implicitly assuming that is the psycholigical difference between *"strongly agree"* and *"neutral"* is the same in "size" as the difference between *"agree"* and *"disagree"*. In many situations this is probably okay to a first approximation, but in general it feels very strange.] but they can be ordered in a sensible fashion. In this situation we may want to represent the responses as an **ordered factor**. 
 
@@ -106,30 +110,57 @@ A nice thing about using ordered factors is that some analyses in R automaticall
 
 We now have three variables that we might plausibly have encountered as the result of some study, `region`, `support` and `RT`. At the moment, R has no understanding of how these variables are related to each other. Quite likely they're ordered the same way, so that the data stoed in `region[1]`, `support[1]` and `RT[1]` all come from the same person. That would be sensible, but R is a robot `r emo::ji("robot")` and does not possess common sense. To help a poor little robot out (and to make our own lives easier), it would be nice to organise these three variable into a tabular format like the one we saw in the last section with the AFL data. This is where **data frames** (and the tidyverse version, **tibbles**) are useful. 
 
- So how do we create a data frame? One way we’ve already seen: if we import our data from a CSV file, R will store it as a data frame. A second way is to create it directly from some existing variables using the `data.frame` function. All you have to do is type a list of variables that you want to include in the data frame. The output of a `data.frame` command is, well, a data frame. So, if I want to store the variables from my experiment in a data frame called `dat` I can do so like this:
+### Making a data frame
+
+So how do we create a data frame? One way we’ve already seen: if we import our data from a CSV file, R will store it as a data frame. A second way is to create it directly from some existing variables using the `data.frame` function. All you have to do is type a list of variables that you want to include in the data frame. The output of a `data.frame` command is, well, a data frame. So, if I want to store the variables from my experiment in a data frame called `dat` I can do so like this:
 
 ```{r}
 dat <- data.frame(region, support, RT)
 dat
 ```
 
-Note that `dat` is a completely self-contained variable. Once you’ve created it, it no longer depends on the original variables from which it was constructed. That is, if we make changes to the original `RT` variable, it will not lead to any changes to the `RT` data stored in `dat`. So, for the sake of my sanity, let's remove all variables from the workspace *except* for the `dat` data frame:
+Note that `dat` is a self-contained variable. Once created, it no longer depends on the variables from which it was constructed. If we make changes to the original `RT` variable, these will not influence the copy in `dat` (or vice versa). So for the sake of my sanity I'm going to remove all the originals:
 
 ```{r}
 rm(region_raw, region, support_raw, support, RT)  
 who() 
 ```
 
-We can verify that the original `RT` variable is gone, because if we try to print it out R gives an error message:
-```{r,error=TRUE}
-RT
+As you can see, our workspace has only a single variable, a data frame called `dat`. In this example I constructed the data frame manually so that you can see *how* a data frame is built from a set of variables, but in most real life situations you'd probably load your data frame directly from a CSV file or similar.
+
+### Making a tibble
+ 
+Constructing a tibble from raw variables is essentially the same as constructing a data frame, and the function we use to do this is `tibble`. If I hadn't deleted all the raw variables in the previous section, this command would work:
+
+```{r,eval = FALSE}
+dat <- tibble(region, support, RT)
 ```
 
-So at this point our workspace has only a single variable in it, a data frame called `dat`. In this example I constructed the data frame manually so that you can see *how* a data frame is built from a set of variables, but in most real life situations you'd probably load your data frame directly from a CSV file or similar.
+Alas they are gone, and I will have to try a different method. Fortunately, I can **coerce** my existing data frame `dat` into a tibble using the `as_tibble()` function. Actually, because I don't want to retain the original version anymore I'm going to overwrite the original data frame with a shiny new tibble `r emo::ji("grinning")`
 
-### Indexing data frames with `$`
+```{r}
+dat <- as_tibble(dat)
+dat
+```
 
-At this point, our workspace contains only the one variable, a data frame called expt. But as we can see when we told R to print the variable out, this data frame contains three variables, each of which has nine observations. So how do we get this information out again? After all, there’s no point in storing information if you don’t use it, and there’s no way to use information if you can’t access it. So let’s talk a bit about how to pull information out of a data frame. As is always the case with R there are several ways to do this. The simplest is to use the `$` operator to point to the variable you’re interested in, like this:
+Coercion is an important R concept, and one that we'll talk about again at the end of this section. In the meantime, there are some nice things to note about the output when we print `dat`. It states that the variable is a tibble with 10 rows and 3 columns. Underneath the variable names it tells you what type of data they store: `region` is a factor (`<fct>`), `support` is an ordered factor (`<ord>`) and RT is numeric (`<dbl>`, short for "double")^[The origin of the term "double" comes from [double precision floating point](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) the format in which numeric variables are represented internally]. 
+
+### Tibbles are data frames
+
+Under the hood, tibbles are essentially the same thing as data frames and are designed to behave the same way. In fact, if we use the `class()` function to see what R thinks `dat` really is...
+```{r}
+class(dat)
+```
+... it agrees that in addition to being a tibble, `dat` is also a data frame! We can check this more directly using the `is.data.frame()` function: 
+```{r}
+is.data.frame(dat)
+```
+
+That being said, there are one or two differences between tibbles and pure data frames. For the most part, my impression has been that whenever they differ, the behaviour of tibbles tends to be more intuitive.^[In the original version of these notes in *Learning Statistics with R* I had to include a lengthy discussion of a strange property of data frames called *dropping*, which confused my students (and myself) no end whenever they encountered it. By switching to tibbles, I hope never to have to discuss the matter again.] With this in mind, although I'll tend to use the terms "data frame" and "tibble" interchangeably in these notes, for the rest of these notes I'm going to use tibbles rather than pure data frames. 
+
+### Using `$`
+
+So at this point our workspace contains only the one variable, a tibble called `dat`. The tibble contains 3 variables, each of which has 10 observations. So how do we get this information out again? The simplest way to use the `$` operator to point to the variable you’re interested in:
 
 ```{r}
 dat$region
@@ -137,35 +168,9 @@ dat$region
 
 There’s a lot more that can be said about data frames: they’re fairly complicated beasts, and the longer you use R the more important it is to make sure you really understand them. We’ll talk a lot more about them later.
 
-## Lists
 
-The next kind of data I want to mention are lists. Lists are an extremely fundamental data structure in R, and as you start making the transition from a novice to a savvy R user you will use lists all the time. Most of the advanced data structures in R are built from lists (e.g., data frames are actually a specific type of list), so it’s useful to have a basic understanding of them.
 
-Okay, so what is a list, exactly? Like data frames, lists are just “collections of variables.” However, unlike data frames – which are basically supposed to look like a nice “rectangular” table of data – there are no constraints on what kinds of variables we include, and no requirement that the variables have any particular relationship to one another. In order to understand what this actually means, the best thing to do is create a list, which we can do using the `list` function. If I type this as my command:
-
-```{r}
-starks <- list(
-  parents = c("Eddard", "Catelyn"),
-  children = c("Robb", "Jon", "Sansa", "Arya", "Brandon", "Rickon"),
-  alive = 8
-)
-```
-
-I create a list `starks` that contains a list of the various characters that belong to House Stark in George R. R. Martin's *A Song of Ice and Fire* novels. Because Martin does seem to enjoy killing off characters, the list starts out by indicating that all eight are currently alive (at the start of the books obviously!) and we can update it if need be. When a character dies, I might do this:
-
-```{r}
-starks$alive <- starks$alive - 1
-starks
-```
-
-I can delete whole variables from the list if I want. For instance, I might just give up on the parents entirely:
-
-```{r}
-starks$parents <- NULL
-starks
-```
-
-You get the idea, I hope.
+<!--
 
 ## Data frames revisited
 
@@ -387,6 +392,8 @@ Because of the fact that a data frame is basically a table of data, R provides a
 
 And now let us never speak of this again.
 
+-->
+
 ## Matrices
 
 Up to this point we have encountered several different kinds of variables. At the simplest level, we’ve seen numeric data, logical data and character data. However, we’ve also encountered some more complicated kinds of variables, namely factors, formulas, data frames and lists. There are many more specialised data structures out there, but there’s a few more generic ones that I want to talk about in passing.
@@ -479,9 +486,41 @@ A["nonbinary",,]
 ```
 
 
-## Dates and times
 
-Times and dates are very annoying types of data. To a first approximation we can say that there are 365 days in a year, 24 hours in a day, 60 minutes in an hour and 60 seconds in a minute, but that’s not quite correct. The length of the solar day is not exactly 24 hours, and the length of solar year is not exactly 365 days, so we have a complicated system of corrections that have to be made to keep the time and date system working. On top of that, the measurement of time is usually taken relative to a local time zone, and most (but not all) time zones have both a standard time and a daylight savings time, though the date at which the switch occurs is not at all standardised. So, as a form of data, times and dates are just awful to work with. Unfortunately, they’re also important. Sometimes it’s possible to avoid having to use any complicated system for dealing with times and dates. Often you just want to know what year something happened in, so you can just use numeric data: in quite a lot of situations something as simple as delcaring that `this.year` is `r format(Sys.Date(),"%Y")`, and it works just fine. If you can get away with that for your application, this is probably the best thing to do. However, sometimes you really do need to know the actual date. Or, even worse, the actual time. In this section, I’ll very briefly introduce you to the basics of how R deals with date and time data. As with a lot of things in this chapter, I won’t go into details: the goal here is to show you the basics of what you need to do if you ever encounter this kind of data in real life. And then we’ll all agree never to speak of it again.
+
+## Lists
+
+The next kind of data I want to mention are lists. Lists are an extremely fundamental data structure in R, and as you start making the transition from a novice to a savvy R user you will use lists all the time. Most of the advanced data structures in R are built from lists (e.g., data frames are actually a specific type of list), so it’s useful to have a basic understanding of them.
+
+Okay, so what is a list, exactly? Like data frames, lists are just “collections of variables.” However, unlike data frames – which are basically supposed to look like a nice “rectangular” table of data – there are no constraints on what kinds of variables we include, and no requirement that the variables have any particular relationship to one another. In order to understand what this actually means, the best thing to do is create a list, which we can do using the `list` function. If I type this as my command:
+
+```{r}
+starks <- list(
+  parents = c("Eddard", "Catelyn"),
+  children = c("Robb", "Jon", "Sansa", "Arya", "Brandon", "Rickon"),
+  alive = 8
+)
+```
+
+I create a list `starks` that contains a list of the various characters that belong to House Stark in George R. R. Martin's *A Song of Ice and Fire* novels. Because Martin does seem to enjoy killing off characters, the list starts out by indicating that all eight are currently alive (at the start of the books obviously!) and we can update it if need be. When a character dies, I might do this:
+
+```{r}
+starks$alive <- starks$alive - 1
+starks
+```
+
+I can delete whole variables from the list if I want. For instance, I might just give up on the parents entirely:
+
+```{r}
+starks$parents <- NULL
+starks
+```
+
+You get the idea, I hope.
+
+## Dates
+
+Dates (and time) are very annoying types of data. To a first approximation we can say that there are 365 days in a year, 24 hours in a day, 60 minutes in an hour and 60 seconds in a minute, but that’s not quite correct. The length of the solar day is not exactly 24 hours, and the length of solar year is not exactly 365 days, so we have a complicated system of corrections that have to be made to keep the time and date system working. On top of that, the measurement of time is usually taken relative to a local time zone, and most (but not all) time zones have both a standard time and a daylight savings time, though the date at which the switch occurs is not at all standardised. So, as a form of data, times and dates are just awful to work with. Unfortunately, they’re also important. Sometimes it’s possible to avoid having to use any complicated system for dealing with times and dates. Often you just want to know what year something happened in, so you can just use numeric data: in quite a lot of situations something as simple as declaring that `this_year` is `r format(Sys.Date(),"%Y")`, and it works just fine. If you can get away with that for your application, this is probably the best thing to do. However, sometimes you really do need to know the actual date. Or, even worse, the actual time. In this section, I’ll very briefly introduce you to the basics of how R deals with date and time data. As with a lot of things in this chapter, I won’t go into details: the goal here is to show you the basics of what you need to do if you ever encounter this kind of data in real life. And then we’ll all agree never to speak of it again.
 
 To start with, let’s talk about the date. As it happens, modern operating systems are very good at keeping track of the time and date, and can even handle all those annoying timezone issues and daylight savings pretty well. So R takes the quite sensible view that it can just ask the operating system what the date is. We can pull the date using the `Sys.Date` function:
 
@@ -498,13 +537,7 @@ Let’s see what happens when we add 365 days:
 ```{r}
 today + 365
 ```
-R provides a number of functions for working with dates, but I don’t want to talk about them in any detail. I will, however, make passing mention of the `weekdays` function which will tell you what day of the week a particular date corresponded to, which is extremely convenient in some situations:
-```{r}
-weekdays(today)
-```
-I’ll also point out that you can use the `as.Date` to coerce various different kinds of data into dates. If the data happen to be strings formatted exactly according to the international standard notation (i.e., `yyyy-mm-dd`) then the conversion is straightforward, because that’s the format that R expects to see by default. You can convert dates from other formats too, but it’s slightly trickier, and something I won't go into here.
-
-What about times? Well, times are even more annoying than dates, so much so that I don’t intend to talk about them at all right now, other than to point you in the direction of some vaguely useful things. R itself does provide you with tools for handling time data, and in fact there are two separate classes of data that are used to represent times, known by the odd names `POSIXct` and `POSIXlt`. You can use these to work with times if you want to, but for most applications you would probably be better off downloading the `chron` package, which provides some much more user friendly tools for working with times and dates.
+R provides a number of functions for working with dates, but I don’t want to talk about them in any detail, other than to say that the **lubridate** package (part of the tidyverse) makes things a lot easier than they used to be. A little while back I wrote a [blog post about lubridate](http://djnavarro.net/post/2018-05-02-lubridate/) and may fold it into these notes one day.
 
 <!--
 
