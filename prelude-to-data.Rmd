@@ -153,6 +153,52 @@ input %>% group_by() %>% summarise() -> output
 
 ### An introduction to the pipe
 
+Suppose I have collected data from 10 participants in an experiment, and have recorded their response times to some stimulus, expressed in milliseconds:
+
+```{r}
+response_time <- c(420, 619, 550, 521, 1003, 486, 512, 560, 495, 610)
+```
+
+A histogram of these data (plotted using the `hist` function) is shown below:
+
+```{r, echo=FALSE}
+hist(response_time,axes=FALSE,col="#20c997",breaks = 10, main="",xlab="Response Time", ylab="", border = "white")
+axis(1)
+```
+
+As is grossly typical of response times, the data have a positive skew and so I might want to work with log-transformed scores. So what I would want to do is log-transform the response time data (using `log`), then calculate the mean (using `mean`). Next I would exponentiate the results (using `exp`) in order to convert the result back to a number in milliseconds. Then I might decide to `round` it to two decimal places, and `print` the results to screen. At each step, I'll need to compute an intermediate result, which I'll imaginatively call `a`, `b`, `c` and `d`: 
+
+```{r}
+a <- log(response_time)
+b <- mean(a)
+c <- exp(b)
+d <- round(c, digits = 2)
+print(d)
+```
+
+Here's the same thing^[Well, I suppose the piped version would be more akin to `print(round(exp(mean(log(response_time)))),digits=2)` but let's not get bogged down with technicalities] written as piped code:
+
+```{r}
+response_time %>% log %>% 
+  mean %>% 
+  exp %>% 
+  round(digits = 2) %>%
+  print
+```
+
+It's immediately clear that the pipe is serving the same role that all those intermediate variables `a`, `b`, `c` and `d` were serving in the original version. We can make this a little more explicit like this:
+
+```{r}
+response_time %>% log(.) %>% 
+  mean(.) %>% 
+  exp(.) %>% 
+  round(., digits = 2) %>%
+  print(.)
+```
+
+In this version, `.` shows where the results of the previous command are being passed to the next. If you don't specify explicitly, then by default `%>%` will pass the results of one function as the *first* argument to the next function. Most of the time I won't bother using `.` because I think code looks nicer with as little clutter as possible, but it is occasionally useful.
+
+In any case, I think that's enough on pipes for now! 
 
 <!--
 
