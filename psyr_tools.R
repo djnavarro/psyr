@@ -6,7 +6,10 @@ psyr_render <- function() {
 }
 
 psyr_commit <- function(message) {
-  system(paste(here("_shell","git_commit.sh"), message))
+  message <- paste0('"',message,'"')
+  cmd <- paste(here("_shell","git_commit.sh"), message)
+  #cat(cmd)
+  system(cmd)
 }
 
 psyr_push <- function() {
