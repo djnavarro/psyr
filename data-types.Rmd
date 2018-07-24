@@ -112,7 +112,7 @@ We now have three variables that we might plausibly have encountered as the resu
 
 ### Making a data frame
 
-So how do we create a data frame or tibble? One way we’ve already seen: if we import our data from a CSV file, R will create one for you. A second method is to create a data frame directly from some existing variables using the `data.frame` function. In real world data analysis this method is less common, but it's very helpful for understanding what a data frame actually is, so that's what we'll do in this section.
+So how do we create a data frame (or tibble)? One way we’ve already seen: if we import our data from a CSV file, R will create one for you. A second method is to create a data frame directly from some existing variables using the `data.frame` function. In real world data analysis this method is less common, but it's very helpful for understanding what a data frame actually is, so that's what we'll do in this section.
 
 Manually constructing a data frame is simple. All you have to do when calling `data.frame` is type a list of variables that you want to include in the data frame. If I want to store the variables from my experiment in a data frame called `dat` I can do so like this:
 
