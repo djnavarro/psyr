@@ -75,16 +75,26 @@ if(today == "Monday") {
 
 So let's set the value of `today` to `Monday` and source the script:
 
-```{r}
+```{r eval = FALSE}
 today <- "Monday"
 source("./scripts/feelings.R")
+```
+```{r branch_monday_feels,echo=FALSE}
+# force the script to evaluate in the local environment 
+# the knitr niceties
+today <- "Monday"
+source("./scripts/feelings.R", local = TRUE)
 ```
 
 That's very sad. However, tomorrow should be better:
 
-```{r}
+```{r,eval=FALSE}
 today <- "Tuesday"
 source("./scripts/feelings.R")
+```
+```{r,echo=FALSE}
+today <- "Tuesday"
+source("./scripts/feelings.R", local = TRUE)
 ```
 
 ## Another example
@@ -118,9 +128,14 @@ days <- c(
 
 Now let's combine what we learned in the [loops](./loops.html) section with our new skills with `if` and `else`. Let's loop over all the `days` and ask R to express some feelings on every day:
 
-```{r}
+```{r,eval=FALSE}
 for(today in days) {
   source("./scripts/more_feelings.R") 
+}
+```
+```{r,echo=FALSE}
+for(today in days) {
+  source("./scripts/more_feelings.R", local = TRUE) 
 }
 ```
 

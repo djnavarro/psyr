@@ -78,8 +78,11 @@ Then save the script using the menus (File > Save) as `hello.R`. So far, nothing
 <img src="./img/script_hello.png" width=600px align="center">
 
 If so, you have now successfully written your first R program. Because I don’t want to take screenshots for every single script, I’m going to present the content of scripts using the same kind of extracts that I've been using for everything else. So how do we run the script? I saved `hello.R` to a `scripts` folder, so I would run the script using the following command:
-```{r}
+```{r,eval=FALSE}
 source("./scripts/hello.R")
+```
+```{r,echo=FALSE}
+source("./scripts/hello.R", local=TRUE)
 ```
 If you don't know how to interpret the `"./scripts/hello.R"`, don't panic. I'll talk about [file paths](./file-paths.html) later. But for now, just note that `.` means *the current folder*. Because these notes are posted on the web, `.` refers to the folder in which they are stored, which is `https://compcogscisydney.org/psyr`. So in these notes when I write that I have sourced the file locate at `"./scripts/hello.R"`, I'm referring to a real file located here:
 

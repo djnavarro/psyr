@@ -320,7 +320,7 @@ If you click and drag on the image you can rotate it as much as you like. Better
 Another example, slightly adapted from the package documentation:
 
 ```{r}
-data(volcano) # load the volcano data set
+data(volcano, envir = parent.frame()) # load the volcano data set
 
 zval <- 5 * volcano        # increase the height
 xval <- 15 * (1:nrow(zval))   # spacing (S to N)

@@ -146,11 +146,14 @@ Anyway, assuming that the loop does eventually terminate, there’s one last lin
 
 Now that I’ve explained everything in the script in tedious detail, let’s run it and see what happens:
 
-```{r, output.lines=c(1:10)}
+```{r, eval=FALSE}
 source("./scripts/mortgage.R")
 ```
+```{r, output.lines=c(1:10), echo=FALSE}
+source("./scripts/mortgage.R", local = TRUE)
+```
 ```{r, output.lines=c(352:357), echo=FALSE}
-source("./scripts/mortgage.R")
+source("./scripts/mortgage.R", local = TRUE)
 ```
 
 So our nice young couple have paid off the \$300,000 loan just 4 months shy of the 30 year term of their mortgage, all at a bargain basement price of \$568,046. 

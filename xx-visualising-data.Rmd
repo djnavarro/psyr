@@ -32,10 +32,12 @@ To give a sense of the importance of this chapter, I want to start with a classi
 ```{r, echo=FALSE}
 library(HistData)
 
-data(Snow.deaths)
-data(Snow.pumps)
-data(Snow.streets)
-data(Snow.polygons)
+# make sure data are loaded into the calling environment
+# in the chunk not the .GlobalEnv from which I call psyr_render
+data(Snow.deaths, envir = parent.frame())
+data(Snow.pumps, envir = parent.frame())
+data(Snow.streets, envir = parent.frame())
+data(Snow.polygons, envir = parent.frame())
 
 ## draw a rough approximation to Snow's map and data
 
