@@ -104,15 +104,17 @@ levels(support) <- c(
 support
 ```
 
-A nice thing about using ordered factors is that some analyses in R automatically treat ordered factors differently to unordered factors, and generally in a way that is more appropriate for ordinal data. 
+A nice thing about ordered factors is that some analyses in R automatically treat ordered factors differently to unordered factors, and generally in a way that is more appropriate for ordinal data. 
 
 ## Data frames
 
-We now have three variables that we might plausibly have encountered as the result of some study, `region`, `support` and `RT`. At the moment, R has no understanding of how these variables are related to each other. Quite likely they're ordered the same way, so that the data stoed in `region[1]`, `support[1]` and `RT[1]` all come from the same person. That would be sensible, but R is a robot `r emo::ji("robot")` and does not possess common sense. To help a poor little robot out (and to make our own lives easier), it would be nice to organise these three variable into a tabular format like the one we saw in the last section with the AFL data. This is where **data frames** (and the tidyverse version, **tibbles**) are useful. 
+We now have three variables that we might plausibly have encountered as the result of some study, `region`, `support` and `RT`. At the moment, R has no understanding of how these variables are related to each other. Quite likely they're ordered the same way, so that the data stored in `region[1]`, `support[1]` and `RT[1]` all come from the same person. That would be sensible, but R is a robot `r emo::ji("robot")` and does not possess common sense. To help a poor little robot out (and to make our own lives easier), it's nice to organise these three variable into a tabular format. We saw this in the last section, in which the AFL data was presented as a table. This is where **data frames** -- and the tidyverse analog **tibbles** -- are very useful. 
 
 ### Making a data frame
 
-So how do we create a data frame? One way we’ve already seen: if we import our data from a CSV file, R will store it as a data frame. A second way is to create it directly from some existing variables using the `data.frame` function. All you have to do is type a list of variables that you want to include in the data frame. The output of a `data.frame` command is, well, a data frame. So, if I want to store the variables from my experiment in a data frame called `dat` I can do so like this:
+So how do we create a data frame or tibble? One way we’ve already seen: if we import our data from a CSV file, R will create one for you. A second method is to create a data frame directly from some existing variables using the `data.frame` function. In real world data analysis this method is less common, but it's very helpful for understanding what a data frame actually is, so that's what we'll do in this section.
+
+Manually constructing a data frame is simple. All you have to do when calling `data.frame` is type a list of variables that you want to include in the data frame. If I want to store the variables from my experiment in a data frame called `dat` I can do so like this:
 
 ```{r}
 dat <- data.frame(region, support, RT)
@@ -409,7 +411,7 @@ I find it helps me to think of the list as a container. When we use single brack
 
 In this example `x` is a container (list) containing many pepper sachets (elements). When we type `x[1]` we keep only one of the sachets of pepper, but it's still inside the container. When we type `x[[1]]` we take the sachet out of the container.
 
-The final panel highlights how lists can become more complicated.^[Speaking of complications... Under the hood, data frames and tibbles are secretly lists, so you can use the list indexing methods for them and so, for example, `dat[[3]]` is the same as `dat$RT`. Probably best not to worry too much about that detail right now `r emo::ji("grimace")`] Lists are just fancy containers, and there's no reason why lists can't contain other lists. In the pepper shaker scenario, if each sachet is itself a list, we would need to type `x[[1]][[1]]` to extract a grain of pepper! `r emo::ji("pepper")`
+The final panel highlights how lists can become more complicated.^[Speaking of complications... Under the hood, data frames and tibbles are secretly lists, so you can use the list indexing methods for them and so, for example, `dat[[3]]` is the same as `dat$RT`. Probably best not to worry too much about that detail right now `r emo::ji("grimace")`] Lists are just fancy containers, and there's no reason why lists can't contain other lists. In the pepper shaker scenario, if each sachet is itself a list, we would need to type `x[[1]][[1]]` to extract the tasty, tasty pepper! `r emo::ji("pepper")`
 
 ## Dates
 
