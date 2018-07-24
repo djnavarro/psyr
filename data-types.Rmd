@@ -133,60 +133,61 @@ As you can see, our workspace has only a single variable, a data frame called `d
 Constructing a tibble from raw variables is essentially the same as constructing a data frame, and the function we use to do this is `tibble`. If I hadn't deleted all the raw variables in the previous section, this command would work:
 
 ```{r,eval = FALSE}
-dat <- tibble(region, support, RT)
+tib <- tibble(region, support, RT)
 ```
 
-Alas they are gone, and I will have to try a different method. Fortunately, I can **coerce** my existing data frame `dat` into a tibble using the `as_tibble()` function. Actually, because I don't want to retain the original version anymore I'm going to overwrite the original data frame with a shiny new tibble `r emo::ji("grinning")`
+Alas they are gone, and I will have to try a different method. Fortunately, I can **coerce** my existing data frame `dat` into a tibble using the `as_tibble()` function, and use it to create a tibble called `tib`. I'm very imaginative `r emo::ji("grinning")`
 
 ```{r}
-dat <- as_tibble(dat)
-dat
+tib <- as_tibble(dat)
+tib
 ```
 
-Coercion is an important R concept, and one that we'll talk about again at the end of this section. In the meantime, there are some nice things to note about the output when we print `dat`. It states that the variable is a tibble with 10 rows and 3 columns. Underneath the variable names it tells you what type of data they store: `region` is a factor (`<fct>`), `support` is an ordered factor (`<ord>`) and RT is numeric (`<dbl>`, short for "double")^[The origin of the term "double" comes from [double precision floating point](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) the format in which numeric variables are represented internally]. 
+Coercion is an important R concept, and one that we'll talk about again at the end of this section. In the meantime, there are some nice things to note about the output when we print `tib`. It states that the variable is a tibble with 10 rows and 3 columns. Underneath the variable names it tells you what type of data they store: `region` is a factor (`<fct>`), `support` is an ordered factor (`<ord>`) and RT is numeric (`<dbl>`, short for "double")^[The origin of the term "double" comes from [double precision floating point](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) the format in which numeric variables are represented internally]. 
 
 ### Tibbles are data frames
 
-Under the hood, tibbles are essentially the same thing as data frames and are designed to behave the same way. In fact, if we use the `class()` function to see what R thinks `dat` really is...
+Under the hood, tibbles are essentially the same thing as data frames and are designed to behave the same way. In fact, if we use the `class()` function to see what R thinks `tib` really is...
 ```{r}
-class(dat)
+class(tib)
 ```
-... it agrees that in addition to being a tibble, `dat` is also a data frame! We can check this more directly using the `is.data.frame()` function: 
+... it agrees that in addition to being a tibble, `tib` is also a data frame! We can check this more directly using the `is.data.frame()` function: 
 ```{r}
-is.data.frame(dat)
+is.data.frame(tib)
 ```
 
-That being said, there are one or two differences between tibbles and pure data frames. For the most part, my impression has been that whenever they differ, the behaviour of tibbles tends to be more intuitive.^[In the original version of these notes in *Learning Statistics with R* I had to include a lengthy discussion of a strange property of data frames called *dropping*, which confused my students (and myself) no end whenever they encountered it. By switching to tibbles, I hope never to have to discuss the matter again.] With this in mind, although I'll tend to use the terms "data frame" and "tibble" interchangeably in these notes, for the rest of these notes I'm going to use tibbles rather than pure data frames. 
+That being said, there are one or two differences between tibbles and pure data frames. For the most part, my impression has been that whenever they differ, the behaviour of tibbles tends to be more intuitive. With this in mind, although I'll tend to use the terms "data frame" and "tibble" interchangeably in these notes, for the rest of these notes I'm going to work with tibbles like `tib` rather than pure data frames like `dat`. 
 
 ### Using the `$` operator
 
-At this point our workspace contains one variable, a tibble called `dat`. This tibble is acting as a container for 3 variables, each of which has 10 observations. Conceptually this is very tidy, but now we have a practical question ... how do we get the information out again? There are two qualitatively different ways to do this,^[Technically this is a lie: there are many more ways to do this, but let's not make this any more difficult than it needs to be, yeah?] reflecting two different ways to think about your data:
+At this point our workspace contains a data frame called `dat`, a tibble called `tib`, but no longer contains the original variables. That's okay because the tibble (data frame) is acting as a container that keeps them in a nice tidy rectangular shape. Conceptually this is very nice, but now we have a practical question ... how do we get information out again? There are two qualitatively different ways to do this,^[Technically this is a lie: there are many more ways to do this, but let's not make this any more difficult than it needs to be, yeah?] reflecting two different ways to think about your data:
 
 - Your data set is a *list of variables* (...use `$`)
 - Your data set is a *table of values* (...use `[ ]`)
 
 Both perspectives are valid, and R allows you to work with your data both ways. 
 
-To start with, let's think of `dat` as a list of variables. This was the perspective we took when contructing `dat` in the first place: we took three different vectors (`region`, `support`, `RT`) and bound them together into a data frame. From this perspective, what we want is an operator that will extract one of those variables for us. This is the role plaed by `$`. If I want to refer to the `region` variable contained *within* the `dat` tibble, I would use this command:
+To start with, let's think of `tib` as a list of variables. This was the perspective we took when constructing `dat` in the first place: we took three different vectors (`region`, `support`, `RT`) and bound them together into a data frame, which we later coerced into the tibble `tib`. From this perspective, what we want is an operator that will extract one of those variables for us. This is the role plaed by `$`. If I want to refer to the `region` variable contained *within* the `tib` tibble, I would use this command:
 
 ```{r}
-dat$region
+tib$region
 ```
 
-As you can see, the output looks exactly the same as it did for the original variable: `dat$region` *is a vector* (an unordered factor in this case), and we can refer to an element of that vector in the same way we normally would:
+As you can see, the output looks exactly the same as it did for the original variable: `tib$region` *is a vector* (an unordered factor in this case), and we can refer to an element of that vector in the same way we normally would:
 
 ```{r}
-dat$region[1]
+tib$region[1]
 ```
 
-Conceptually, the metaphor here is `dataframe$variable[value]`. The table below illustrates this by showing what type of output you get with different commands:
+Conceptually, the metaphor here is `dataset$variable[value]`. The table below illustrates this by showing what type of output you get with different commands:
 
 
 ```{r,echo=FALSE}
 df <- tibble(
-  "command" = c("dat", "dat$RT", "dat$RT[1]"),
-  "data frame" = c("data frame", "vector", "element"),
-  "tibble" = c("tibble", "vector", "element")
+  "data frame command" = c("dat", "dat$RT", "dat$RT[1]"),
+  "data frame output" = c("data frame", "vector", "element"),
+  "tibble command" = c("tib", "tib$RT", "tib$RT[1]"),  
+  "tibble output" = c("tibble", "vector", "element")
 )
 knitr::kable(df)
 rm(df)
@@ -199,56 +200,56 @@ As you can see, the `$` operator works the same way for pure data frames as for 
 
 The second way to think about a tibble is to treat it as a fancy table. There is something  appealing about this, because it emphasises the fact that the data set has a *case by variable* structure:
 ```{r}
-dat
+tib
 ```
 In this structure each row is a person, and each column is a variable. The square bracket notation allows you to refer to entries in the data set by their row and column number (or name). As such, the reference looks like this:
 ```
-data[row,column]
+dataset[row,column]
 ```
 R allows you to select multiple rows and colummns. For instance if you set `row` to be `1:3` then R will return the first three cases. Here is an example where we select the first three rows and the first two columns:
 ```{r}
-dat[1:3, 1:2]
+tib[1:3, 1:2]
 ```
 
-If we omit values for the rows (or columms) *while keeping the comma* then R will assume you want all rows (or colummns). So this returns every row in `dat` but only the first two columns:
+If we omit values for the rows (or columms) *while keeping the comma* then R will assume you want all rows (or colummns). So this returns every row in `tib` but only the first two columns:
 ```{r}
-dat[, 1:2]
+tib[, 1:2]
 ```
 
 An important thing to recognise here is that -- for tibbles -- the metaphor underpinning the square bracket system is that your data have a rectangular shape that is imposed by the fact that your variable is a tibble, and no matter what you do with the square brackets the result will **always remain a tibble**. If I select just one row...
 
 ```{r}
-dat[5,]
+tib[5,]
 ```
 
 the result is a tibble. If I select just one column...
 
 ```{r}
-dat[,3]
+tib[,3]
 ```
 
 the result is a tibble. Even if I select a single value...
 
 ```{r}
-dat[5,3]
+tib[5,3]
 ```
 
 the result is a tibble. For the square bracket system the rule is very simple: **tibbles stay tibbles**
 
-Annoyingly, this is not the case for a pure data frame. For a pure data frame, any time it is possible for R to treat the result as something else, it does: if `dat` were a pure data frame, the results would be different in some cases. This has caused my students (and myself) no end of frustration over the years because everyone forgets about this particular property of data frames and stuff breaks. In the original version of these notes published in *Learning Statistics with R* I had a length explanation of this behaviour. Nowadays I just encourage people to use tibbles instead. For what it's worth, if you are working with pure data frames, here's a summary of what to expect:
+Annoyingly, this is not the case for a pure data frame like `dat`. For a pure data frame, any time it is possible for R to treat the result as something else, it does: if I were to use the same commands for the data frame `dat`, the results would be different in some cases. This has caused my students (and myself) no end of frustration over the years because everyone forgets about this particular property of data frames and stuff breaks. In the original version of these notes published in *Learning Statistics with R* I had a length explanation of this behaviour. Nowadays I just encourage people to use tibbles instead. For what it's worth, if you are working with pure data frames, here's a summary of what to expect:
 
 ```{r,echo=FALSE}
 df <- tibble(
-  "command" = c("dat[1,1]", "dat[1,]", "dat[,1]", "dat[2:3,]","dat[,2:3]"),
-  "data frame" = c("element", "data frame", "vector", "data frame", "data frame"),
-  "tibble" = c("tibble", "tibble", "tibble", "tibble", "tibble")
+  "data frame command" = c("dat[1,1]", "dat[1,]", "dat[,1]", "dat[2:3,]","dat[,2:3]"),
+  "data frame output" = c("element", "data frame", "vector", "data frame", "data frame"),
+  "tibble command" = c("tib[1,1]", "tib[1,]", "tib[,1]", "tib[2:3,]","tib[,2:3]"),  
+  "tibble output" = c("tibble", "tibble", "tibble", "tibble", "tibble")
 )
 knitr::kable(df)
 rm(df)
 ```
   
 I **like** tibbles.^[Just FYI: you can make a pure data frame behave like a tibble. If you use `dat[,1,drop=FALSE]` you can suppress this weird thing and make R return a one-column data frame instead of a vector, but that command is so unbearably cumbersome that everyone forgets to use it.]
-
 
 
 ## Matrices
