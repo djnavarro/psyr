@@ -34,11 +34,11 @@ As psychological research methodology classes are at pains to point out, the dat
 RT <- c(420, 619, 550, 521, 1003, 486, 512, 560, 495, 610)
 ```
 
-A response time of 1500 milliseconds is indeed 400 milliseconds slower than a response time of 1100 milliseconds, so addition and subtraction are meaningful operations. Similarly, 1500 milliseconds is twice as long as 750 milliseconds, so multiplication and division are also meaningful. That's not the case for other kinds of data.
+A response time of 1500 milliseconds is indeed 400 milliseconds slower than a response time of 1100 milliseconds, so addition and subtraction are meaningful operations. Similarly, 1500 milliseconds is twice as long as 750 milliseconds, so multiplication and division are also meaningful. That's not the case for other kinds of data, and this is where **factors** can be useful...
 
 ### Unordered factors
 
-Some variables are inherently *nominal* in nature. If I recruit participants in an online experiment I might see that their place of residence falls is one of several different regions. For no particular reason, let's imagine that I have been sampling participants from four different regions: the United States, India, China or the European Union, which I'll represent using the codes `"us"`, `"in"`, `"ch"` and `"eu"`. My first thought would be to represent the data using a character vector:
+Some variables are inherently *nominal* in nature. If I recruit participants in an online experiment I might see that their place of residence falls in one of several different regions. For simplicity, let's imagine that my study is designed to sample people from one of four distinct geographical regions: the United States, India, China or the European Union, which I'll represent using the codes `"us"`, `"in"`, `"ch"` and `"eu"`. My first thought would be to represent the data using a character vector:
 
 ```{r}
 region_raw <- c("us","us","us","eu","in","eu","in","in","us","in")
@@ -57,7 +57,7 @@ region <- factor(region_raw)
 region
 ```
 
-This looks a much the same, and not surprisingly R still doesn't know anything about the possibility of participants from China. However, notice that at the bottom of th output it lists the *levels* of the factor. The levels of a factor are the set of values that variable could have taken. By default, `factor()` tries to guess the levels using the raw data, but we can override that manually, like this:
+This looks a much the same, and not surprisingly R still doesn't know anything about the possibility of participants from China. However, notice that the bottom of the output lists the *levels* of the factor. The levels of a factor specify the set of values that variable could have taken. By default, `factor()` tries to guess the levels using the raw data, but we can override that manually, like this:
 
 ```{r}
 region <- factor(region_raw, levels = c("ch","eu","in","us"))
@@ -108,7 +108,7 @@ A nice thing about ordered factors is that some analyses in R automatically trea
 
 ## Data frames
 
-We now have three variables that we might plausibly have encountered as the result of some study, `region`, `support` and `RT`. At the moment, R has no understanding of how these variables are related to each other. Quite likely they're ordered the same way, so that the data stored in `region[1]`, `support[1]` and `RT[1]` all come from the same person. That would be sensible, but R is a robot `r emo::ji("robot")` and does not possess common sense. To help a poor little robot out (and to make our own lives easier), it's nice to organise these three variable into a tabular format. We saw this in the last section, in which the AFL data was presented as a table. This is where **data frames** -- and the tidyverse analog **tibbles** -- are very useful. 
+We now have three variables that we might plausibly have encountered as the result of some study, `region`, `support` and `RT`.^[Admittedly it would be a strange study that produced only these three variables, but I hope you'll forgive the lack of realism on this point.] At the moment, R has no understanding of how these variables are related to each other. Quite likely they're ordered the same way, so that the data stored in `region[1]`, `support[1]` and `RT[1]` all come from the same person. That would be sensible, but R is a robot `r emo::ji("robot")` and does not possess common sense. To help a poor little robot out (and to make our own lives easier), it's nice to organise these three variable into a tabular format. We saw this in the last section, in which the AFL data was presented as a table. This is where **data frames** -- and the tidyverse analog **tibbles** -- are very useful. 
 
 ### Making a data frame
 
