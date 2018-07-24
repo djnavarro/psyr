@@ -89,6 +89,7 @@ Everything from here onwards is *very much* a work in progress!
 
 ## Other things
 
+- Slides from the introductory lecture: [pptx](./docs/overview.pptx), [pdf](./docs/overview.pdf)
 - Data sets are [here](./docs/data.zip)
 - Github repository is [here](https://github.com/djnavarro/psyr)
 
