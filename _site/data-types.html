@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- ###### start inserted header ##### -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115940772-1');
+</script>
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:title" content="R for Psychological Science">
+<meta property="og:description" content="An introductory resource">
+<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="mystyle.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Psychological Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Core
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="getting-started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li>
+      <a href="scripts.html">Scripts</a>
+    </li>
+    <li>
+      <a href="packages.html">Packages</a>
+    </li>
+    <li>
+      <a href="workspaces.html">Workspaces</a>
+    </li>
+    <li>
+      <a href="vectors.html">Vectors</a>
+    </li>
+    <li>
+      <a href="loops.html">Loops</a>
+    </li>
+    <li>
+      <a href="branches.html">Branches</a>
+    </li>
+    <li>
+      <a href="functions.html">Functions</a>
+    </li>
+    <li>
+      <a href="programming.html">Programming</a>
+    </li>
+    <li>
+      <a href="file-system.html">File system</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="prelude-to-data.html">Prelude</a>
+    </li>
+    <li>
+      <a href="data-types.html">Data types</a>
+    </li>
+    <li>
+      <a href="describing-data.html">Describing data</a>
+    </li>
+    <li>
+      <a href="xx-visualising-data.html">Visualising data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Stats
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-distributions.html">Probability distributions</a>
+    </li>
+    <li>
+      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-shiny.html">Shiny apps</a>
+    </li>
+    <li>
+      <a href="xx-miscellaneous.html">Miscellaneous</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://compcogscisydney.org">compcogscisydney.org</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="13" style="list-style-type: decimal">
+<li>Data types in R</li>
+</ol></h1>
+
+</div>
+
+
+<blockquote>
+<p>He divided the universe in forty categories or classes, these being further subdivided into differences, which was then subdivided into species. He assigned to each class a monosyllable of two letters; to each difference, a consonant; to each species, a vowel. For example: <code>de</code>, which means an element; <code>deb</code>, the first of the elements, fire; <code>deba</code>, a part of the element fire, a flame. … The words of the analytical language created by John Wilkins are not mere arbitrary symbols; each letter in them has a meaning, like those from the Holy Writ had for the Cabbalists. <br>       –Jorge Luis Borges, <a href="https://en.wikipedia.org/wiki/The_Analytical_Language_of_John_Wilkins">The Analytical Language of John Wilkins</a></p>
+</blockquote>
+<div id="factors" class="section level2">
+<h2><span class="header-section-number">13.1</span> Factors</h2>
+<p>As psychological research methodology classes are at pains to point out, the data we analyse come in different kinds. Some variables are inherently <em>quantitative</em> in nature: response time (RT) for instance, has a natural interpretation in units of time. So when I defined a response time variable in the previous section, I used a numeric vector. To keep my variable names concise, I’ll define the same variable again using the conventional RT abbreviation:</p>
+<pre class="r"><code>RT &lt;- c(420, 619, 550, 521, 1003, 486, 512, 560, 495, 610)</code></pre>
+<p>A response time of 1500 milliseconds is indeed 400 milliseconds slower than a response time of 1100 milliseconds, so addition and subtraction are meaningful operations. Similarly, 1500 milliseconds is twice as long as 750 milliseconds, so multiplication and division are also meaningful. That’s not the case for other kinds of data, and this is where <strong>factors</strong> can be useful…</p>
+<div id="unordered-factors" class="section level3">
+<h3><span class="header-section-number">13.1.1</span> Unordered factors</h3>
+<p>Some variables are inherently <em>nominal</em> in nature. If I recruit participants in an online experiment I might see that their place of residence falls in one of several different regions. For simplicity, let’s imagine that my study is designed to sample people from one of four distinct geographical regions: the United States, India, China or the European Union, which I’ll represent using the codes <code>&quot;us&quot;</code>, <code>&quot;in&quot;</code>, <code>&quot;ch&quot;</code> and <code>&quot;eu&quot;</code>. My first thought would be to represent the data using a character vector:</p>
+<pre class="r"><code>region_raw &lt;- c(&quot;us&quot;,&quot;us&quot;,&quot;us&quot;,&quot;eu&quot;,&quot;in&quot;,&quot;eu&quot;,&quot;in&quot;,&quot;in&quot;,&quot;us&quot;,&quot;in&quot;)</code></pre>
+<p>This seems quite reasonable, but there’s a problem: as it happens there is nobody from China in this sample. So if I try to construct a frequency table of these data – which I can do using the <code>table()</code> function in R – the answer I get omits China entirely:</p>
+<pre class="r"><code>table(region_raw)</code></pre>
+<pre><code>## region_raw
+## eu in us 
+##  2  4  4</code></pre>
+<p>Intuitively it feels like there should be a fourth entry here, indicating that we have 0 participants from China. R has a natural tool for representing this idea, called a <strong>factor</strong>. First, we’ll create a new variable using the <code>factor()</code> function that contains the same information but represents it as a factor:</p>
+<pre class="r"><code>region &lt;- factor(region_raw)
+region</code></pre>
+<pre><code>##  [1] us us us eu in eu in in us in
+## Levels: eu in us</code></pre>
+<p>This looks a much the same, and not surprisingly R still doesn’t know anything about the possibility of participants from China. However, notice that the bottom of the output lists the <em>levels</em> of the factor. The levels of a factor specify the set of values that variable could have taken. By default, <code>factor()</code> tries to guess the levels using the raw data, but we can override that manually, like this:</p>
+<pre class="r"><code>region &lt;- factor(region_raw, levels = c(&quot;ch&quot;,&quot;eu&quot;,&quot;in&quot;,&quot;us&quot;))
+region</code></pre>
+<pre><code>##  [1] us us us eu in eu in in us in
+## Levels: ch eu in us</code></pre>
+<p>Now when we tabulate the <code>region</code> variable, we obtain the right answer:</p>
+<pre class="r"><code>table(region)</code></pre>
+<pre><code>## region
+## ch eu in us 
+##  0  2  4  4</code></pre>
+<p>Much nicer.</p>
+</div>
+<div id="ordered-factors" class="section level3">
+<h3><span class="header-section-number">13.1.2</span> Ordered factors</h3>
+<p>There are two different types of factor in R. Until now we have been discussing <em>unordered</em> factors, in which the categories are purely nominal and there is no notion that the categories are arranged in any particular order. However, many psychologically important variables are inherently <em>ordinal</em>. Questionnaire responses often take this form, where participants might be asked to endorse a proposition using verbal categories such as <em>“strongly agree”, “agree”, “neutral”, “disagree”</em> and <em>“strongly disagree”</em>. The five response categories can’t be given any sensible numerical values<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> but they can be ordered in a sensible fashion. In this situation we may want to represent the responses as an <strong>ordered factor</strong>.</p>
+<p>To give you a sense of how these work in R, suppose we’ve been unfortunate enough to be given a data set that encodes ordinal responses numerically. In my experience that happens quite often. Let’s suppose the original survey asked people how strongly they supported a polticial policy. Here we have a variable consisting of Likert scale data, where (let’s suppose) in the original questionnaire 1 = <em>“strongly agree”</em> and 7 = <em>“strongly disagree”</em>,</p>
+<pre class="r"><code>support_raw &lt;- c(1, 7, 3, 4, 4, 4, 2, 6, 5, 5)</code></pre>
+<p>We can convert this to an ordered factor by specifying <code>ordered = TRUE</code> when we call the <code>factor()</code> function, like so:</p>
+<pre class="r"><code>support &lt;- factor( 
+  x = support_raw,            # the raw data
+  levels = c(7,6,5,4,3,2,1),  # strongest agreement is 1, weakest is 7
+  ordered = TRUE              # and it’s ordered
+)
+support</code></pre>
+<pre><code>##  [1] 1 7 3 4 4 4 2 6 5 5
+## Levels: 7 &lt; 6 &lt; 5 &lt; 4 &lt; 3 &lt; 2 &lt; 1</code></pre>
+<p>Notice that when we print out the ordered factor, R explicitly tells us what order the levels come in.</p>
+<p>Because I wanted to order my levels in terms of <em>increasing</em> strength of endorsement, and because a response of 1 corresponded to the strongest agreement and 7 to the strongest disagreement, it was important that I tell R to encode 7 as the lowest value and 1 as the largest. Always check this when creating an ordered factor: it’s very easy to accidentally encode your data with the levels reversed if you’re not paying attention. In any case, note that we can (and should) attach meaningful names to these factor levels by using the <code>levels</code> function, like this:</p>
+<pre class="r"><code>levels(support) &lt;- c( 
+  &quot;strong disagree&quot;, &quot;disagree&quot;, &quot;weak disagree&quot;,
+  &quot;neutral&quot;, &quot;weak agree&quot;, &quot;agree&quot;, &quot;strong agree&quot; 
+)
+support</code></pre>
+<pre><code>##  [1] strong agree    strong disagree weak agree      neutral        
+##  [5] neutral         neutral         agree           disagree       
+##  [9] weak disagree   weak disagree  
+## 7 Levels: strong disagree &lt; disagree &lt; weak disagree &lt; ... &lt; strong agree</code></pre>
+<p>A nice thing about ordered factors is that some analyses in R automatically treat ordered factors differently to unordered factors, and generally in a way that is more appropriate for ordinal data.</p>
+</div>
+</div>
+<div id="data-frames" class="section level2">
+<h2><span class="header-section-number">13.2</span> Data frames</h2>
+<p>We now have three variables that we might plausibly have encountered as the result of some study, <code>region</code>, <code>support</code> and <code>RT</code>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> At the moment, R has no understanding of how these variables are related to each other. Quite likely they’re ordered the same way, so that the data stored in <code>region[1]</code>, <code>support[1]</code> and <code>RT[1]</code> all come from the same person. That would be sensible, but R is a robot 🤖 and does not possess common sense. To help a poor little robot out (and to make our own lives easier), it’s nice to organise these three variable into a tabular format. We saw this in the last section, in which the AFL data was presented as a table. This is where <strong>data frames</strong> – and the tidyverse analog <strong>tibbles</strong> – are very useful.</p>
+<div id="making-a-data-frame" class="section level3">
+<h3><span class="header-section-number">13.2.1</span> Making a data frame</h3>
+<p>So how do we create a data frame (or tibble)? One way we’ve already seen: if we import our data from a CSV file, R will create one for you. A second method is to create a data frame directly from some existing variables using the <code>data.frame</code> function. In real world data analysis this method is less common, but it’s very helpful for understanding what a data frame actually is, so that’s what we’ll do in this section.</p>
+<p>Manually constructing a data frame is simple. All you have to do when calling <code>data.frame</code> is type a list of variables that you want to include in the data frame. If I want to store the variables from my experiment in a data frame called <code>dat</code> I can do so like this:</p>
+<pre class="r"><code>dat &lt;- data.frame(region, support, RT)
+dat</code></pre>
+<pre><code>##    region         support   RT
+## 1      us    strong agree  420
+## 2      us strong disagree  619
+## 3      us      weak agree  550
+## 4      eu         neutral  521
+## 5      in         neutral 1003
+## 6      eu         neutral  486
+## 7      in           agree  512
+## 8      in        disagree  560
+## 9      us   weak disagree  495
+## 10     in   weak disagree  610</code></pre>
+<p>Note that <code>dat</code> is a self-contained variable. Once created, it no longer depends on the variables from which it was constructed. If we make changes to the original <code>RT</code> variable, these will not influence the copy in <code>dat</code> (or vice versa). So for the sake of my sanity I’m going to remove all the originals:</p>
+<pre class="r"><code>rm(region_raw, region, support_raw, support, RT)  
+who() </code></pre>
+<pre><code>##    -- Name --   -- Class --   -- Size --
+##    dat          data.frame    10 x 3</code></pre>
+<p>As you can see, our workspace has only a single variable, a data frame called <code>dat</code>. In this example I constructed the data frame manually so that you can see <em>how</em> a data frame is built from a set of variables, but in most real life situations you’d probably load your data frame directly from a CSV file or similar.</p>
+</div>
+<div id="making-a-tibble" class="section level3">
+<h3><span class="header-section-number">13.2.2</span> Making a tibble</h3>
+<p>Constructing a tibble from raw variables is essentially the same as constructing a data frame, and the function we use to do this is <code>tibble</code>. If I hadn’t deleted all the raw variables in the previous section, this command would work:</p>
+<pre class="r"><code>tib &lt;- tibble(region, support, RT)</code></pre>
+<p>Alas they are gone, and I will have to try a different method. Fortunately, I can <strong>coerce</strong> my existing data frame <code>dat</code> into a tibble using the <code>as_tibble()</code> function, and use it to create a tibble called <code>tib</code>. I’m very imaginative 😀</p>
+<pre class="r"><code>tib &lt;- as_tibble(dat)
+tib</code></pre>
+<pre><code>## # A tibble: 10 x 3
+##    region support            RT
+##    &lt;fct&gt;  &lt;ord&gt;           &lt;dbl&gt;
+##  1 us     strong agree      420
+##  2 us     strong disagree   619
+##  3 us     weak agree        550
+##  4 eu     neutral           521
+##  5 in     neutral          1003
+##  6 eu     neutral           486
+##  7 in     agree             512
+##  8 in     disagree          560
+##  9 us     weak disagree     495
+## 10 in     weak disagree     610</code></pre>
+<p>Coercion is an important R concept, and one that we’ll talk about again at the end of this section. In the meantime, there are some nice things to note about the output when we print <code>tib</code>. It states that the variable is a tibble with 10 rows and 3 columns. Underneath the variable names it tells you what type of data they store: <code>region</code> is a factor (<code>&lt;fct&gt;</code>), <code>support</code> is an ordered factor (<code>&lt;ord&gt;</code>) and RT is numeric (<code>&lt;dbl&gt;</code>, short for “double”)<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>.</p>
+</div>
+<div id="tibbles-are-data-frames" class="section level3">
+<h3><span class="header-section-number">13.2.3</span> Tibbles are data frames</h3>
+<p>Under the hood, tibbles are essentially the same thing as data frames and are designed to behave the same way. In fact, if we use the <code>class()</code> function to see what R thinks <code>tib</code> really is…</p>
+<pre class="r"><code>class(tib)</code></pre>
+<pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<p>… it agrees that in addition to being a tibble, <code>tib</code> is also a data frame! We can check this more directly using the <code>is.data.frame()</code> function:</p>
+<pre class="r"><code>is.data.frame(tib)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>That being said, there are one or two differences between tibbles and pure data frames. For the most part, my impression has been that whenever they differ, the behaviour of tibbles tends to be more intuitive. With this in mind, although I’ll tend to use the terms “data frame” and “tibble” interchangeably in these notes, for the rest of these notes I’m going to work with tibbles like <code>tib</code> rather than pure data frames like <code>dat</code>.</p>
+</div>
+<div id="using-the-operator" class="section level3">
+<h3><span class="header-section-number">13.2.4</span> Using the <code>$</code> operator</h3>
+<p>At this point our workspace contains a data frame called <code>dat</code>, a tibble called <code>tib</code>, but no longer contains the original variables. That’s okay because the tibble (data frame) is acting as a container that keeps them in a nice tidy rectangular shape. Conceptually this is very nice, but now we have a practical question … how do we get information out again? There are two qualitatively different ways to do this,<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> reflecting two different ways to think about your data:</p>
+<ul>
+<li>Your data set is a <em>list of variables</em> (…use <code>$</code>)</li>
+<li>Your data set is a <em>table of values</em> (…use <code>[ ]</code>)</li>
+</ul>
+<p>Both perspectives are valid, and R allows you to work with your data both ways.</p>
+<p>To start with, let’s think of <code>tib</code> as a list of variables. This was the perspective we took when constructing <code>dat</code> in the first place: we took three different vectors (<code>region</code>, <code>support</code>, <code>RT</code>) and bound them together into a data frame, which we later coerced into the tibble <code>tib</code>. From this perspective, what we want is an operator that will extract one of those variables for us. This is the role plaed by <code>$</code>. If I want to refer to the <code>region</code> variable contained <em>within</em> the <code>tib</code> tibble, I would use this command:</p>
+<pre class="r"><code>tib$region</code></pre>
+<pre><code>##  [1] us us us eu in eu in in us in
+## Levels: ch eu in us</code></pre>
+<p>As you can see, the output looks exactly the same as it did for the original variable: <code>tib$region</code> <em>is a vector</em> (an unordered factor in this case), and we can refer to an element of that vector in the same way we normally would:</p>
+<pre class="r"><code>tib$region[1]</code></pre>
+<pre><code>## [1] us
+## Levels: ch eu in us</code></pre>
+<p>Conceptually, the metaphor here is <code>dataset$variable[value]</code>. The table below illustrates this by showing what type of output you get with different commands:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">data frame command</th>
+<th align="left">data frame output</th>
+<th align="left">tibble command</th>
+<th align="left">tibble output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">dat</td>
+<td align="left">data frame</td>
+<td align="left">tib</td>
+<td align="left">tibble</td>
+</tr>
+<tr class="even">
+<td align="left">dat$RT</td>
+<td align="left">vector</td>
+<td align="left">tib$RT</td>
+<td align="left">vector</td>
+</tr>
+<tr class="odd">
+<td align="left">dat$RT[1]</td>
+<td align="left">element</td>
+<td align="left">tib$RT[1]</td>
+<td align="left">element</td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, the <code>$</code> operator works the same way for pure data frames as for tibbles. This is not quite the case for when using square brackets <code>[ ]</code>, as the next section demonstrates…</p>
+</div>
+<div id="using-square-brackets" class="section level3">
+<h3><span class="header-section-number">13.2.5</span> Using square brackets</h3>
+<p>The second way to think about a tibble is to treat it as a fancy table. There is something appealing about this, because it emphasises the fact that the data set has a <em>case by variable</em> structure:</p>
+<pre class="r"><code>tib</code></pre>
+<pre><code>## # A tibble: 10 x 3
+##    region support            RT
+##    &lt;fct&gt;  &lt;ord&gt;           &lt;dbl&gt;
+##  1 us     strong agree      420
+##  2 us     strong disagree   619
+##  3 us     weak agree        550
+##  4 eu     neutral           521
+##  5 in     neutral          1003
+##  6 eu     neutral           486
+##  7 in     agree             512
+##  8 in     disagree          560
+##  9 us     weak disagree     495
+## 10 in     weak disagree     610</code></pre>
+<p>In this structure each row is a person, and each column is a variable. The square bracket notation allows you to refer to entries in the data set by their row and column number (or name). As such, the reference looks like this:</p>
+<pre><code>dataset[row,column]</code></pre>
+<p>R allows you to select multiple rows and colummns. For instance if you set <code>row</code> to be <code>1:3</code> then R will return the first three cases. Here is an example where we select the first three rows and the first two columns:</p>
+<pre class="r"><code>tib[1:3, 1:2]</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   region support        
+##   &lt;fct&gt;  &lt;ord&gt;          
+## 1 us     strong agree   
+## 2 us     strong disagree
+## 3 us     weak agree</code></pre>
+<p>If we omit values for the rows (or columms) <em>while keeping the comma</em> then R will assume you want all rows (or colummns). So this returns every row in <code>tib</code> but only the first two columns:</p>
+<pre class="r"><code>tib[, 1:2]</code></pre>
+<pre><code>## # A tibble: 10 x 2
+##    region support        
+##    &lt;fct&gt;  &lt;ord&gt;          
+##  1 us     strong agree   
+##  2 us     strong disagree
+##  3 us     weak agree     
+##  4 eu     neutral        
+##  5 in     neutral        
+##  6 eu     neutral        
+##  7 in     agree          
+##  8 in     disagree       
+##  9 us     weak disagree  
+## 10 in     weak disagree</code></pre>
+<p>An important thing to recognise here is that – for tibbles – the metaphor underpinning the square bracket system is that your data have a rectangular shape that is imposed by the fact that your variable is a tibble, and no matter what you do with the square brackets the result will <strong>always remain a tibble</strong>. If I select just one row…</p>
+<pre class="r"><code>tib[5,]</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   region support    RT
+##   &lt;fct&gt;  &lt;ord&gt;   &lt;dbl&gt;
+## 1 in     neutral  1003</code></pre>
+<p>the result is a tibble. If I select just one column…</p>
+<pre class="r"><code>tib[,3]</code></pre>
+<pre><code>## # A tibble: 10 x 1
+##       RT
+##    &lt;dbl&gt;
+##  1   420
+##  2   619
+##  3   550
+##  4   521
+##  5  1003
+##  6   486
+##  7   512
+##  8   560
+##  9   495
+## 10   610</code></pre>
+<p>the result is a tibble. Even if I select a single value…</p>
+<pre class="r"><code>tib[5,3]</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##      RT
+##   &lt;dbl&gt;
+## 1  1003</code></pre>
+<p>the result is a tibble. For the square bracket system the rule is very simple: <strong>tibbles stay tibbles</strong></p>
+<p>Annoyingly, this is not the case for a pure data frame like <code>dat</code>. For a pure data frame, any time it is possible for R to treat the result as something else, it does: if I were to use the same commands for the data frame <code>dat</code>, the results would be different in some cases. This has caused my students (and myself) no end of frustration over the years because everyone forgets about this particular property of data frames and stuff breaks. In the original version of these notes published in <em>Learning Statistics with R</em> I had a length explanation of this behaviour. Nowadays I just encourage people to use tibbles instead. For what it’s worth, if you are working with pure data frames, here’s a summary of what to expect:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">data frame command</th>
+<th align="left">data frame output</th>
+<th align="left">tibble command</th>
+<th align="left">tibble output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">dat[1,1]</td>
+<td align="left">element</td>
+<td align="left">tib[1,1]</td>
+<td align="left">tibble</td>
+</tr>
+<tr class="even">
+<td align="left">dat[1,]</td>
+<td align="left">data frame</td>
+<td align="left">tib[1,]</td>
+<td align="left">tibble</td>
+</tr>
+<tr class="odd">
+<td align="left">dat[,1]</td>
+<td align="left">vector</td>
+<td align="left">tib[,1]</td>
+<td align="left">tibble</td>
+</tr>
+<tr class="even">
+<td align="left">dat[2:3,]</td>
+<td align="left">data frame</td>
+<td align="left">tib[2:3,]</td>
+<td align="left">tibble</td>
+</tr>
+<tr class="odd">
+<td align="left">dat[,2:3]</td>
+<td align="left">data frame</td>
+<td align="left">tib[,2:3]</td>
+<td align="left">tibble</td>
+</tr>
+</tbody>
+</table>
+<p>I <strong>like</strong> tibbles.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+</div>
+</div>
+<div id="matrices" class="section level2">
+<h2><span class="header-section-number">13.3</span> Matrices</h2>
+<p>Data frames and tibbles are mostly used to describe data that take the form of a <em>case by variable</em> structure: each row is a case (e.g., a participant) and each column is a variable (e.g., measurement). Case by variable structures are fundamentally asymmetric because the rows and columns have qualitatively different meaning. Two participants who provide data will always provide data in the same format (if they don’t then you can’t organise the data this way), but two variables can be different in many different ways: one column might be numeric, another is a factor, yet another might contains dates. Many psychological data sets have this characteristic. Others do not, so it is worth talking about a few other data structures that arise quite frequently!</p>
+<p>Much like a data frame, a <strong>matrix</strong> is basically a big rectangular table of data, and there are similarities between the two. However, matrices treat columns and rows in the same fashion, and as a consequence every entry in a matrix has to be of the same type (e.g. all numeric, all character, etc). Let’s create a matrix using the <em>row bind</em> function, <code>rbind</code>, which combines multiple vectors in a row-wise fashion:</p>
+<pre class="r"><code>row1 &lt;- c(2, 3, 1)          # create data for row 1
+row2 &lt;- c(5, 6, 7)          # create data for row 2
+mattie &lt;- rbind(row1, row2) # row bind them into a matrix
+mattie</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## row1    2    3    1
+## row2    5    6    7</code></pre>
+<p>Notice that when we bound the two vectors together R turned the names of the original variables into row names.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> To keep things fair, let’s add some exciting column names as well:</p>
+<pre class="r"><code>colnames(mattie) &lt;- c(&quot;col1&quot;, &quot;col2&quot;, &quot;col3&quot;)
+mattie</code></pre>
+<pre><code>##      col1 col2 col3
+## row1    2    3    1
+## row2    5    6    7</code></pre>
+<div id="matrix-indexing" class="section level3">
+<h3><span class="header-section-number">13.3.1</span> Matrix indexing</h3>
+<p>You can use square brackets to subset a matrix in much the same way that you can for data frames, again specifying a row index and then a column index. For instance, <code>mattie[2,3]</code> pulls out the entry in the 2nd row and 3rd column of the matrix (i.e., <code>7</code>), whereas <code>mattie[2,]</code> pulls out the entire 2nd row, and <code>mattie[,3]</code> pulls out the entire 3rd column. However, it’s worth noting that when you pull out a column, R will print the results horizontally, not vertically.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></p>
+<pre class="r"><code>mattie[2,]</code></pre>
+<pre><code>## col1 col2 col3 
+##    5    6    7</code></pre>
+<pre class="r"><code>mattie[,3]</code></pre>
+<pre><code>## row1 row2 
+##    1    7</code></pre>
+<p>This can be a little confusing for novice users: because it is no longer a two dimensional object R treats the output as a regular vector.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
+</div>
+<div id="matrices-vs-data-frames" class="section level3">
+<h3><span class="header-section-number">13.3.2</span> Matrices vs data frames</h3>
+<p>As mentioned above difference between a data frame and a matrix is that, at a fundamental level, a matrix really is just <em>one</em> variable: it just happens that this one variable is formatted into rows and columns. If you want a matrix of numeric data, every single element in the matrix <em>must</em> be a number. If you want a matrix of character strings, every single element in the matrix <em>must</em> be a character string. If you try to mix data of different types together, then R will either complain or try to transform the matrix into something unexpected. To give you a sense of this, let’s do something silly and convert one element of <code>mattie</code> from the number <code>5</code> to the character string <code>&quot;five&quot;</code>…</p>
+<pre class="r"><code>mattie[2,2] &lt;- &quot;five&quot; 
+mattie</code></pre>
+<pre><code>##      col1 col2   col3
+## row1 &quot;2&quot;  &quot;3&quot;    &quot;1&quot; 
+## row2 &quot;5&quot;  &quot;five&quot; &quot;7&quot;</code></pre>
+<p>Oh no I broke <code>mattie</code> – she’s all text now! I’m so sorry <code>mattie</code>, I still love you ❤️</p>
+</div>
+<div id="other-ways-to-make-a-matrix" class="section level3">
+<h3><span class="header-section-number">13.3.3</span> Other ways to make a matrix</h3>
+<p>When I created <code>mattie</code> I used the <code>rbind</code> command. Not surprisingly there is also a <code>cbind</code> command that combines vectors column-wise rather than row-wise. There is also a <code>matrix</code> command that you can use to specify a matrix directly:</p>
+<pre class="r"><code>matrix(
+  data = 1:12, # the values to include in the matrix
+  nrow = 3,    # number of rows
+  ncol = 4     # number of columns
+)</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    4    7   10
+## [2,]    2    5    8   11
+## [3,]    3    6    9   12</code></pre>
+<p>The result is a <span class="math inline">\(3\times 4\)</span> matrix of the numbers 1 to 12, listed column-wise.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> If you need to create a matrix row-wise, you can specify <code>byrow = TRUE</code> when calling <code>matrix()</code>.</p>
+</div>
+</div>
+<div id="arrays" class="section level2">
+<h2><span class="header-section-number">13.4</span> Arrays</h2>
+<p>When doing data analysis, we often have reasons to want to use higher dimensional tables (e.g., sometimes you need to cross-tabulate three variables against each other). You can’t do this with matrices, but you can do it with arrays. An <strong>array</strong> is just like a matrix, except it can have more than two dimensions if you need it to. In fact, as far as R is concerned a matrix is just a special kind of array, in much the same way that a data frame is a special kind of list. I don’t want to talk about arrays too much, but I will very briefly show you an example of what a three dimensional array looks like.</p>
+<pre class="r"><code>arr &lt;- array(
+  data = 1:24, 
+  dim = c(3,4,2)
+  )
+arr</code></pre>
+<pre><code>## , , 1
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    1    4    7   10
+## [2,]    2    5    8   11
+## [3,]    3    6    9   12
+## 
+## , , 2
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]   13   16   19   22
+## [2,]   14   17   20   23
+## [3,]   15   18   21   24</code></pre>
+<p>Of course, calling an array <code>arr</code> just makes me think of pirates ☠️.</p>
+<div id="array-indexing" class="section level3">
+<h3><span class="header-section-number">13.4.1</span> Array indexing</h3>
+<p>Array indexing is a straightforward generalisation of matrix indexing, so the same logic applies. Since <code>arr</code> is a three-dimensional <span class="math inline">\(3 \times 4 \times 2\)</span> array, we need three indices to specify an element:</p>
+<pre class="r"><code>arr[2,3,1]</code></pre>
+<pre><code>## [1] 8</code></pre>
+<p>Omitted indices have the same meaning that they have for matrices, so <code>arr[,,2]</code> is a two dimensional slice through the array, and as such R recognises it as a matrix even though the full three dimensional array <code>arr</code> does not count as one.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> Here’s what <code>arr[,,2]</code> returns:</p>
+<pre class="r"><code>arr[,,2]</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   13   16   19   22
+## [2,]   14   17   20   23
+## [3,]   15   18   21   24</code></pre>
+<!--
+but you probably won't be surprised to note that this also works...
+
+```r
+arr[8]
+```
+
+```
+## [1] 8
+```
+-->
+</div>
+<div id="array-names" class="section level3">
+<h3><span class="header-section-number">13.4.2</span> Array names</h3>
+<p>As with other data structures, arrays can have names for specific elements. In fact, we can assign names to each of the <em>dimensions</em> too. For instance, suppose we have another array – that we affectionately call <code>cubie</code> 📤 – it is also a three dimensional array, but that has the shape that it does because it represents a (3 genders) <span class="math inline">\(\times\)</span> (4 seasons) <span class="math inline">\(\times\)</span> (2 times) structure. We could specify the dimension names for <code>cubie</code> like this:</p>
+<pre class="r"><code>cubie &lt;- array(
+  data = 1:24, 
+  dim = c(3,4,2), 
+  dimnames = list(
+    &quot;genders&quot; = c(&quot;male&quot;, &quot;female&quot;, &quot;nonbinary&quot;),
+    &quot;seasons&quot; = c(&quot;summer&quot;, &quot;autumn&quot;, &quot;winter&quot;, &quot;spring&quot;),
+    &quot;times&quot; = c(&quot;day&quot;, &quot;night&quot;)
+    )
+  )
+cubie</code></pre>
+<pre><code>## , , times = day
+## 
+##            seasons
+## genders     summer autumn winter spring
+##   male           1      4      7     10
+##   female         2      5      8     11
+##   nonbinary      3      6      9     12
+## 
+## , , times = night
+## 
+##            seasons
+## genders     summer autumn winter spring
+##   male          13     16     19     22
+##   female        14     17     20     23
+##   nonbinary     15     18     21     24</code></pre>
+<p>I find the output for <code>cubie</code> easier to read than the one for <code>arr</code> – it’s usually a good idea to label your arrays! Plus, it makes it a little easier to extract information from them too, since you can refer to elements by names. So if I just wanted to take a slice through the array corresponding to the <code>&quot;nonbinary&quot;</code> values, I could do this:</p>
+<pre class="r"><code>cubie[&quot;nonbinary&quot;,,]</code></pre>
+<pre><code>##         times
+## seasons  day night
+##   summer   3    15
+##   autumn   6    18
+##   winter   9    21
+##   spring  12    24</code></pre>
+</div>
+</div>
+<div id="lists" class="section level2">
+<h2><span class="header-section-number">13.5</span> Lists</h2>
+<p>The next kind of data I want to mention are lists. Lists are an extremely fundamental data structure in R, and as you start making the transition from a novice to a savvy R user you will use lists all the time. Most of the advanced data structures in R are built from lists (e.g., data frames are actually a specific type of list), so it’s useful to have a basic understanding of them.</p>
+<p>Okay, so what is a list, exactly? Like data frames, lists are just “collections of variables.” However, unlike data frames – which are basically supposed to look like a nice “rectangular” table of data – there are no constraints on what kinds of variables we include, and no requirement that the variables have any particular relationship to one another. In order to understand what this actually means, the best thing to do is create a list, which we can do using the <code>list</code> function. If I type this as my command:</p>
+<pre class="r"><code>starks &lt;- list(
+  parents = c(&quot;Eddard&quot;, &quot;Catelyn&quot;),
+  children = c(&quot;Robb&quot;, &quot;Jon&quot;, &quot;Sansa&quot;, &quot;Arya&quot;, &quot;Brandon&quot;, &quot;Rickon&quot;),
+  alive = 8
+)</code></pre>
+<p>I create a list <code>starks</code> that contains a list of the various characters that belong to House Stark in George R. R. Martin’s <em>A Song of Ice and Fire</em> novels. Because Martin does seem to enjoy killing off characters, the list starts out by indicating that all eight are currently alive (at the start of the books obviously!) and we can update it if need be. When a character dies, I might do this:</p>
+<pre class="r"><code>starks$alive &lt;- starks$alive - 1
+starks</code></pre>
+<pre><code>## $parents
+## [1] &quot;Eddard&quot;  &quot;Catelyn&quot;
+## 
+## $children
+## [1] &quot;Robb&quot;    &quot;Jon&quot;     &quot;Sansa&quot;   &quot;Arya&quot;    &quot;Brandon&quot; &quot;Rickon&quot; 
+## 
+## $alive
+## [1] 7</code></pre>
+<p>I can delete whole variables from the list if I want. For instance, I might just give up on the parents entirely:</p>
+<pre class="r"><code>starks$parents &lt;- NULL
+starks</code></pre>
+<pre><code>## $children
+## [1] &quot;Robb&quot;    &quot;Jon&quot;     &quot;Sansa&quot;   &quot;Arya&quot;    &quot;Brandon&quot; &quot;Rickon&quot; 
+## 
+## $alive
+## [1] 7</code></pre>
+<p>You get the idea, I hope. The key thing with lists is that they’re flexible. You can construct a list to map onto all kinds of data structures and do cool things with them. At a fundamental level, many of the more advanced data structures in R are just fancy lists.</p>
+<div id="indexing-lists" class="section level3">
+<h3><span class="header-section-number">13.5.1</span> Indexing lists</h3>
+<p>In the example above we used <code>$</code> to extract named elements from a list, in the same fashion that we would do for a data frame or tibble. It is also possible to index a list using square brackets, though it takes a little effort to get used to. The elements of a list can be extracted using single brackets (e.g., <code>starks[1]</code>) or double brackets (e.g., <code>starks[[1]]</code>). To see the difference between the two, notice that the single bracket version returns a list <em>containing</em> only a single vector</p>
+<pre class="r"><code>starks[1]</code></pre>
+<pre><code>## $children
+## [1] &quot;Robb&quot;    &quot;Jon&quot;     &quot;Sansa&quot;   &quot;Arya&quot;    &quot;Brandon&quot; &quot;Rickon&quot;</code></pre>
+<p>This output is a list that contains one vector <code>starks$children</code>. In contrast, the double bracketed version returns the <code>children</code> vector itself:</p>
+<pre class="r"><code>starks[[1]]</code></pre>
+<pre><code>## [1] &quot;Robb&quot;    &quot;Jon&quot;     &quot;Sansa&quot;   &quot;Arya&quot;    &quot;Brandon&quot; &quot;Rickon&quot;</code></pre>
+<p>If this seems complicated and annoying… well, yes. Yes it is!</p>
+<p>I find it helps me to think of the list as a container. When we use single brackets, the result is still inside its container; when we use double brackets we remove it from the container. This intuition is illustrated nicely in the image below, <a href="https://twitter.com/hadleywickham/status/643381054758363136">tweeted</a> by Hadley Wickham:</p>
+<p><img src="img/data_list_index.png" width=500px></p>
+<p>In this example <code>x</code> is a container (list) containing many pepper sachets (elements). When we type <code>x[1]</code> we keep only one of the sachets of pepper, but it’s still inside the container. When we type <code>x[[1]]</code> we take the sachet out of the container.</p>
+<p>The final panel highlights how lists can become more complicated.<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a> Lists are just fancy containers, and there’s no reason why lists can’t contain other lists. In the pepper shaker scenario, if each sachet is itself a list, we would need to type <code>x[[1]][[1]]</code> to extract the tasty, tasty pepper! 🌶</p>
+</div>
+</div>
+<div id="dates" class="section level2">
+<h2><span class="header-section-number">13.6</span> Dates</h2>
+<p>Dates (and time) are very annoying types of data. To a first approximation we can say that there are 365 days in a year, 24 hours in a day, 60 minutes in an hour and 60 seconds in a minute, but that’s not quite correct. The length of the solar day is not exactly 24 hours, and the length of solar year is not exactly 365 days, so we have a complicated system of corrections that have to be made to keep the time and date system working. On top of that, the measurement of time is usually taken relative to a local time zone, and most (but not all) time zones have both a standard time and a daylight savings time, though the date at which the switch occurs is not at all standardised. So, as a form of data, times and dates are just awful to work with. Unfortunately, they’re also important. Sometimes it’s possible to avoid having to use any complicated system for dealing with times and dates. Often you just want to know what year something happened in, so you can just use numeric data: in quite a lot of situations something as simple as declaring that <code>this_year</code> is 2018, and it works just fine. If you can get away with that for your application, this is probably the best thing to do. However, sometimes you really do need to know the actual date. Or, even worse, the actual time. In this section, I’ll very briefly introduce you to the basics of how R deals with date and time data. As with a lot of things in this chapter, I won’t go into details: the goal here is to show you the basics of what you need to do if you ever encounter this kind of data in real life. And then we’ll all agree never to speak of it again.</p>
+<p>To start with, let’s talk about the date. As it happens, modern operating systems are very good at keeping track of the time and date, and can even handle all those annoying timezone issues and daylight savings pretty well. So R takes the quite sensible view that it can just ask the operating system what the date is. We can pull the date using the <code>Sys.Date</code> function:</p>
+<pre class="r"><code>today &lt;- Sys.Date()  # ask the operating system for the date
+print(today)         # display the date</code></pre>
+<pre><code>## [1] &quot;2018-07-25&quot;</code></pre>
+<p>Okay, that seems straightforward. But, it does rather look like today is just a character string, doesn’t it? That would be a problem, because dates really do have a quasi-numeric character to them, and it would be nice to be able to do basic addition and subtraction with them. Well, fear not. If you type in <code>class(today)</code>, R will tell you that the <code>today</code> variable is a <code>&quot;Date&quot;</code> object. What this means is that, hidden underneath this text string, R has a numeric representation.<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> What that means is that you can in fact add and subtract days. For instance, if we add <code>1</code> to <code>today</code>, R will print out the date for tomorrow:</p>
+<pre class="r"><code>today + 1</code></pre>
+<pre><code>## [1] &quot;2018-07-26&quot;</code></pre>
+<p>Let’s see what happens when we add 365 days:</p>
+<pre class="r"><code>today + 365</code></pre>
+<pre><code>## [1] &quot;2019-07-25&quot;</code></pre>
+<p>R provides a number of functions for working with dates, but I don’t want to talk about them in any detail, other than to say that the <strong>lubridate</strong> package (part of the tidyverse) makes things a lot easier than they used to be. A little while back I wrote a <a href="http://djnavarro.net/post/2018-05-02-lubridate/">blog post about lubridate</a> and may fold it into these notes one day.</p>
+<!--
+
+## Variable class
+
+As we’ve seen, R allows you to store different kinds of data. In particular, the variables we’ve defined so far have either been character data (text), numeric data, or logical data. This is quite useful, but notice that it means that R makes a big distinction between `5` and `"5"`. Without quote marks, R treats `5` as the number five, and will allow you to do calculations with it. With the quote marks, R treats `"5"` as the textual character five, and doesn’t recognise it as a number any more than it recognises `"p"` or `"five"` as numbers. As a consequence, there’s a big difference between typing `x <- 5` and typing `x <- "5"`. In the former, we’re storing the number `5`; in the latter, we’re storing the character `"5"`. Thus, if we try to do multiplication with the character versions, R gets stroppy
+
+```r
+x <- "5" # x is character 
+y <- "4" # y is character 
+x * y
+```
+
+```
+## Error in x * y: non-numeric argument to binary operator
+```
+
+Okay, let’s suppose that I’ve forgotten what kind of data I stored in the variable `x` (which happens depressingly often). R provides a function that will let us find out. Actually, it provides *several* different functions that are used for different purposes. For now I only want to discuss the `class` function. The **class** of a variable is a “high level” classification, and it captures psychologically (or statistically) meaningful distinctions. For instance `"2011-09-12"` and `"my birthday"` are both text strings, but there’s an important difference between the two: one of them is a date. So it would be nice if we could get R to recognise that `"2011-09-12"` is a date, and allow us to do things like add or subtract from it. The class of a variable is what R uses to keep track of things like that. Because the class of a variable is critical for determining what R can or can’t do with it, the `class` function is very handy.
+
+Later on, I’ll talk a bit about how you can convince R to **coerce** a variable to change from one class to another. That’s a useful skill for real world data analysis, but it’s not something that we need right now. In the meantime, the following examples illustrate the use of the `class` function:
+
+
+```r
+x <- "hello world" 
+class(x)
+```
+
+```
+## [1] "character"
+```
+
+```r
+x <- TRUE
+class(x)
+```
+
+```
+## [1] "logical"
+```
+
+```r
+x <- 100
+class(x)
+```
+
+```
+## [1] "numeric"
+```
+
+-->
+</div>
+<div id="coercion" class="section level2">
+<h2><span class="header-section-number">13.7</span> Coercion</h2>
+<p>Sometimes you want to change the variable class. Sometimes when you import data from files, it can come to you in the wrong format: numbers sometimes get imported as text, dates usually get imported as text, and many other possibilities besides. Sometimes you might want to convert a data frame to a tibble or vice versa. Changing the variable in this way is called <strong>coercion</strong>, and the functions to coerce variables are usually given names like <code>as.numeric()</code>, <code>as.factor()</code>, <code>as_tibble()</code> and so on. We’ve seen some explicit examples in this chapter:</p>
+<ul>
+<li>Coercing a data frame to a tibble</li>
+<li>Coercing a character vector to a factor</li>
+</ul>
+<p>There are many other possibilities. A common situation requiring coercion arises when you have been given a variable <code>x</code> that is <em>supposed</em> to be representing a number, but the data file that you’ve been given has encoded it as text.</p>
+<pre class="r"><code>x &lt;- c(&quot;15&quot;,&quot;19&quot;)  # the variable
+class(x)           # what class is it?</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>Obviously, if I want to do mathematical calculations using <code>x</code> in its current state R wil get very sad 😿. It thinks <code>x</code> is text and it won’t allow me to do mathematics with text! To coerce <code>x</code> from “character” to “numeric”, we use the <code>as.numeric</code> function:</p>
+<pre class="r"><code>x &lt;- as.numeric(x)  # coerce the variable
+class(x)            # what class is it?</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code>x + 1               # hey, addition works!</code></pre>
+<pre><code>## [1] 16 20</code></pre>
+<p>Not surprisingly, we can also convert it back again if we need to. The function that we use to do this is the <code>as.character</code> function:</p>
+<pre class="r"><code>x &lt;- as.character(x)   # coerce back to text
+class(x)               # check the class</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>There are of course some limitations: you can’t coerce <code>&quot;hello world&quot;</code> into a number because there isn’t a number that corresponds to it. If you try, R metaphorically shrugs its shoulders and declares it to be missing:</p>
+<pre class="r"><code>x &lt;- c(&quot;51&quot;, &quot;hello world&quot;)
+as.numeric(x)</code></pre>
+<pre><code>## Warning: NAs introduced by coercion</code></pre>
+<pre><code>## [1] 51 NA</code></pre>
+<p>Makes sense I suppose!</p>
+<p>Another case worth talking about is how R handles coercion with logical variables. Coercing text to logical data using <code>as.logical()</code> is mostly intuitive. The strings <code>&quot;T&quot;</code>, <code>&quot;TRUE&quot;</code>, <code>&quot;True&quot;</code> and <code>&quot;true&quot;</code> all convert to <code>TRUE</code>, whereas <code>&quot;F&quot;</code>, <code>&quot;FALSE&quot;</code>, <code>&quot;False&quot;</code>, and <code>&quot;false&quot;</code> all become <code>FALSE</code>. All other strings convert to <code>NA</code>. When coercing from logical to test using <code>as.character</code>, <code>TRUE</code> converts to <code>&quot;TRUE&quot;</code> and <code>FALSE</code> converts to <code>&quot;FALSE&quot;</code>.</p>
+<p>Converting numeric values to logical data – again using <code>as.logical</code> – is similarly straightforward. Following the standard convention in the study of Boolean logic <code>0</code> coerces to <code>FALSE</code>. Everything else is <code>TRUE</code>. When coercing logical to numeric, <code>FALSE</code> converts to <code>0</code> and <code>TRUE</code> converts to <code>1</code>.</p>
+<!--
+
+## Data frames revisited
+
+Working with data frames can sometimes be complicated, so I'm going to revisit them again now that we've talked about lists. At it's core, a data frame genuinely is a list, one that just happens to have a special "rectangular" structure. However, this rectangular structure means that in addition to working with it using the `$` operator (as one would do for a list), there are some other possibilities too, based on the fact that a data frame has rows and columns. Let's return to the *In the Night Garden* data set. First, let's construct a data frame, `itng`...
+
+
+```r
+load("./data/nightgarden.Rdata")
+itng <- data.frame( speaker, utterance )
+itng
+```
+
+```
+##        speaker utterance
+## 1   upsy-daisy       pip
+## 2   upsy-daisy       pip
+## 3   upsy-daisy       onk
+## 4   upsy-daisy       onk
+## 5    tombliboo        ee
+## 6    tombliboo        oo
+## 7  makka-pakka       pip
+## 8  makka-pakka       pip
+## 9  makka-pakka       onk
+## 10 makka-pakka       onk
+```
+
+... and we'll assume the goal is to be able to select different subsets of this data set.
+
+
+### The `subset` function
+
+There are several different ways to subset a data frame in R, some easier than others. I’ll start by discussing the `subset` function, which is probably the conceptually simplest way do it. For our purposes there are three different arguments that you’ll be most interested in:
+
+- `x`. The data frame that you want to subset.
+- `subset`. A vector of logical values indicating which cases (rows) of the data frame you want to keep. By default, all cases will be retained.
+- `select`. This argument indicates which variables (columns) in the data frame you want to keep. This can either be a list of variable names, or a logical vector indicating which ones to keep, or even just a numeric vector containing the relevant column numbers. By default, all variables will be retained.
+
+Let’s start with an example in which I use all three of these arguments. Suppose that I want to subset the `itng` data frame, keeping only the utterances made by Makka-Pakka. What that means is that I need to use the `select` argument to pick out the `utterance` variable, and I also need to use the `subset` variable, to pick out the cases when Makka-Pakka is speaking (i.e., `speaker == "makka-pakka"`). Therefore, the command I need to use is this:
+
+
+```r
+df <- subset( 
+  x = itng,
+  subset = speaker == "makka-pakka",
+  select = utterance 
+  )
+print( df )
+```
+
+```
+##    utterance
+## 7        pip
+## 8        pip
+## 9        onk
+## 10       onk
+```
+
+The variable `df` here is still a data frame, but it only contains one variable (called `utterance`) and four cases. Notice that the row numbers are the same ones from the *original* data frame. It’s worth taking a moment to briefly explain this. The reason that this happens is that these "row numbers" are actually row names. When you create a new data frame from scratch R will assign each row a fairly boring row name, identical to the row number. However, when you subset the data frame, each row keeps its original row name. This can be quite useful, since – as in the current example – it provides you a visual reminder of what each row in the new data frame corresponds to in the original data frame. However, if it annoys you, you can change the row names using the `rownames` function, or remove them entirely with the `rownames(df) <- NULL` command.
+
+In any case, let’s return to the `subset` function, and look at what happens when we don’t use all three of the arguments. Firstly, suppose that I didn’t bother to specify the `select` argument. Let’s see what happens:
+
+
+```r
+subset( 
+  x = itng,
+  subset = speaker == "makka-pakka" 
+)
+```
+
+```
+##        speaker utterance
+## 7  makka-pakka       pip
+## 8  makka-pakka       pip
+## 9  makka-pakka       onk
+## 10 makka-pakka       onk
+```
+
+Not surprisingly, R has kept the same cases from the original data set (i.e., rows 7 through 10), but this time it has retained all of the variables from the data frame. Equally unsurprisingly, if I don’t specify the `subset` argument, what we find is that R keeps all of the cases:
+
+
+```r
+subset( 
+  x = itng,
+  select = utterance 
+)
+```
+
+```
+##    utterance
+## 1        pip
+## 2        pip
+## 3        onk
+## 4        onk
+## 5         ee
+## 6         oo
+## 7        pip
+## 8        pip
+## 9        onk
+## 10       onk
+```
+
+Again, it’s important to note that this output is still a data frame: it’s just a data frame with only a single variable.
+
+### Brackets I: Rows & columns
+
+Throughout the book so far, whenever I’ve been subsetting a vector I’ve tended use the square brackets `[ ]` to do so. But in the previous section when I started talking about subsetting a data frame I used the `subset` function. As a consequence, you might be wondering whether it is possible to use the square brackets to subset a data frame. The answer, of course, is yes. Not only can you use square brackets for this purpose, as you become more familiar with R you’ll find that this is actually much more convenient than using `subset`. Unfortunately, the use of square brackets for this purpose is somewhat complicated, and there are a few cases that cause some confusion. So be warned: this section is more complicated than it feels like it “should” be. With that warning in place, I’ll try to walk you through it slowly. For this section, I’ll use a slightly different *In the Night Garden* data set, namely the `garden` data frame that is stored in the `nightgarden2.Rdata` file:
+
+
+```r
+load( "./data/nightgarden2.Rdata" )
+garden
+```
+
+```
+##            speaker utterance line
+## case.1  upsy-daisy       pip    1
+## case.2  upsy-daisy       pip    2
+## case.3   tombliboo        ee    5
+## case.4 makka-pakka       pip    7
+## case.5 makka-pakka       onk    9
+```
+
+As you can see, the `garden` data frame contains three variables and five cases, and this time around I’ve used the `rownames` function to attach slightly verbose labels to each of the cases. Moreover, let’s assume that what we want to do is to pick out rows 4 and 5 (the two cases when Makka-Pakka is speaking), and columns 1 and 2 (variables `speaker` and `utterance`).
+
+How shall we do this? As usual, there’s more than one way. The first way is based on the observation that, since a data frame is rectangular, every element in the data frame has a *row number* and a *column number*. So, if we want to pick out a single element, we have to specify the row number *and* a column number within the square brackets. By convention, the row number comes first. So, for the data frame above, which has five rows and three columns, the numerical indexing scheme looks like this:
+
+
+        col 1   col 2   col 3 
+------  ------  ------  ------
+row 1   [1,1]   [1,2]   [1,3] 
+row 2   [2,1]   [2,2]   [2,3] 
+row 3   [3,1]   [3,2]   [3,3] 
+row 4   [4,1]   [4,2]   [4,3] 
+row 5   [5,1]   [5,2]   [5,3] 
+
+If I want the 3rd case of the 2nd variable, what I would type is `garden[3,2]`, and R would print out some output showing that this element corresponds to the utterance `"ee"`. However, let’s hold off from actually doing that for a moment, because there’s something slightly counterintuitive about the specifics of what R does under those circumstances. Instead, let’s aim to solve our original problem, which is to pull out two rows (4 and 5) and two columns (1 and 2). This is fairly simple to do, since R allows us to specify multiple rows and multiple columns. So let’s try that:
+
+
+```r
+garden[ 4:5, 1:2 ]
+```
+
+```
+##            speaker utterance
+## case.4 makka-pakka       pip
+## case.5 makka-pakka       onk
+```
+
+Clearly, that’s exactly what we asked for: the output here is a data frame containing two variables and two cases. Note that I could have gotten the same answer if I’d used the `c` function to produce my vectors rather than the `:` operator. That is, the following command is equivalent to the last one:
+
+
+```r
+garden[ c(4,5), c(1,2) ]
+```
+
+```
+##            speaker utterance
+## case.4 makka-pakka       pip
+## case.5 makka-pakka       onk
+```
+
+It’s just not as pretty. However, if the columns and rows that you want to keep don’t happen to be next to each other in the original data frame, then you might find that you have to resort to using commands like `garden[ c(2,4,5), c(1,3) ]` to extract them.
+
+A second way to do the same thing is to use the names of the rows and columns. That is, instead of using the row numbers and column numbers, you use the character strings that are used as the labels for the rows and columns. To apply this idea to our `garden` data frame, we would use a command like this:
+
+```r
+garden[ c("case.4", "case.5"), c("speaker", "utterance") ]
+```
+
+```
+##            speaker utterance
+## case.4 makka-pakka       pip
+## case.5 makka-pakka       onk
+```
+
+Once again, this produces exactly the same output, so I haven’t bothered to show it. Note that, although this version is more annoying to type than the previous version, it’s a bit easier to *read*, because it’s often more meaningful to refer to the elements by their names rather than their numbers. Also note that you don’t have to use the same convention for the rows and columns. For instance, I often find that the variable names are meaningful and so I sometimes refer to them by name, whereas the row names are pretty arbitrary so it’s easier to refer to them by number. In fact, that’s more or less exactly what’s happening with the garden data frame, so it probably makes more sense to use this as the command:
+
+```r
+garden[ 4:5, c("speaker", "utterance") ]
+```
+
+```
+##            speaker utterance
+## case.4 makka-pakka       pip
+## case.5 makka-pakka       onk
+```
+Again, the output is identical.
+
+Finally, both the rows and columns can be indexed using logicals vectors as well. For example, although I claimed earlier that my goal was to extract cases 4 and 5, it’s pretty obvious that what I really wanted to do was select the cases where Makka-Pakka is speaking. So what I could have done is create a logical vector that indicates which cases correspond to Makka-Pakka speaking:
+
+
+```r
+garden$speaker == "makka-pakka"
+```
+
+```
+## [1] FALSE FALSE FALSE  TRUE  TRUE
+```
+
+As you can see, the 4th and 5th elements of this vector are `TRUE` while the others are `FALSE`. So I can use this vector to select the rows that I want to keep:
+
+```r
+garden[ garden$speaker == "makka-pakka", c("speaker", "utterance") ]
+```
+
+```
+##            speaker utterance
+## case.4 makka-pakka       pip
+## case.5 makka-pakka       onk
+```
+And of course the output is, yet again, the same.
+
+### Brackets II: Some elaborations
+
+There are two fairly useful elaborations on this “rows and columns” approach that I should point out. Firstly, what if you want to keep all of the rows, or all of the columns? To do this, all we have to do is leave the corresponding entry blank, but it is crucial to remember to *keep the comma!* For instance, suppose I want to keep all the rows in the `garden` data, but I only want to retain the first two columns. The easiest way do this is to use a command like this:
+
+
+```r
+garden[ , 1:2 ]
+```
+
+```
+##            speaker utterance
+## case.1  upsy-daisy       pip
+## case.2  upsy-daisy       pip
+## case.3   tombliboo        ee
+## case.4 makka-pakka       pip
+## case.5 makka-pakka       onk
+```
+
+
+Alternatively, if I want to keep all the columns but only want the last two rows, I use the same trick, but this time I leave the second index blank. So my command becomes:
+
+
+```r
+garden[ 4:5, ]
+```
+
+```
+##            speaker utterance line
+## case.4 makka-pakka       pip    7
+## case.5 makka-pakka       onk    9
+```
+
+The second elaboration I should note is that it’s still okay to use negative indexes as a way of telling R to delete certain rows or columns. For instance, if I want to delete the 3rd column, then I use this command:
+
+
+```r
+garden[ , -3 ]
+```
+
+```
+##            speaker utterance
+## case.1  upsy-daisy       pip
+## case.2  upsy-daisy       pip
+## case.3   tombliboo        ee
+## case.4 makka-pakka       pip
+## case.5 makka-pakka       onk
+```
+
+
+whereas if I want to delete the 3rd row, then I’d use this one:
+
+
+```r
+garden[ -3,  ]
+```
+
+```
+##            speaker utterance line
+## case.1  upsy-daisy       pip    1
+## case.2  upsy-daisy       pip    2
+## case.4 makka-pakka       pip    7
+## case.5 makka-pakka       onk    9
+```
+
+So that’s nice.
+
+### Brackets III:  “dropping”
+
+At this point some of you might be wondering why I’ve been so terribly careful to choose my examples in such a way as to ensure that the output always has are multiple rows and multiple columns. The reason for this is that I’ve been trying to hide the somewhat curious “dropping” behaviour that R produces when the output only has a single column. I’ll start by showing you what happens, and then I’ll try to explain it. Firstly, let’s have a look at what happens when the output contains only a single row:
+
+
+```r
+garden[ 5, ]
+```
+
+```
+##            speaker utterance line
+## case.5 makka-pakka       onk    9
+```
+
+This is exactly what you’d expect to see: a data frame containing three variables, and only one case per variable. Okay, no problems so far. What happens when you ask for a single column? Suppose, for instance, I try this as a command:
+
+
+```r
+garden[ , 3 ]
+```
+
+Based on everything that I’ve shown you so far, you would be well within your rights to expect to see R produce a data frame containing a single variable and five cases. After all, that is what the `subset` command does in this situation, and it’s pretty consistent with everything else that I’ve shown you so far about how square brackets work. In other words, you should expect to see this:
+
+```
+##        line
+## case.1    1
+## case.2    2
+## case.3    5
+## case.4    7
+## case.5    9
+```
+However, that is emphatically not what happens. What you actually get is this:
+
+```r
+garden[, 3]
+```
+
+```
+## [1] 1 2 5 7 9
+```
+
+That output is not a *data frame at all!* That’s just an ordinary numeric vector containing 5 elements. What’s going on here is that R has “noticed” that the output that we’ve asked for doesn’t really “need” to be wrapped up in a data frame at all, because it only corresponds to a single variable. So what it does is “drop” the output from a data frame *containing* a single variable, “down” to a simpler output that corresponds to that variable. This behaviour is convenient for day to day usage once you’ve become familiar with it – and I suppose that’s the real reason why R does this – but there’s no escaping the fact that it is *deeply* confusing to novices. It’s especially confusing because the behaviour appears only for a very specific case: (a) it only works for columns and not for rows, because the columns correspond to variables and the rows do not, and (b) it only applies to the “rows and columns” version of the square brackets, and not to the `subset` function, or to the “just columns” use of the square brackets (next section). As I say, it’s very confusing when you’re just starting out. For what it’s worth, you can suppress this behaviour if you want, by setting `drop = FALSE` when you construct your bracketed expression. That is, you could do something like this:
+
+```r
+garden[, 3, drop=FALSE]
+```
+
+```
+##        line
+## case.1    1
+## case.2    2
+## case.3    5
+## case.4    7
+## case.5    9
+```
+I suppose that helps a little bit, in that it gives you some control over the dropping behaviour, but I’m not sure it helps to make things any easier to understand. Anyway, that’s the “dropping” special case. Fun, isn’t it?
+
+### Brackets IV: Columns only
+
+
+As if the weird “dropping” behaviour wasn’t annoying enough, R actually provides a completely different way of using square brackets to index a data frame. Specifically, if you *only* give a single index, R will assume you want the corresponding columns, not the rows. Do not be fooled by the fact that this second method also uses square brackets: it behaves differently to the “rows and columns” method that I’ve discussed in the last few sections. Let’s start with the following command:
+
+
+```r
+garden[ 1:2 ]
+```
+
+```
+##            speaker utterance
+## case.1  upsy-daisy       pip
+## case.2  upsy-daisy       pip
+## case.3   tombliboo        ee
+## case.4 makka-pakka       pip
+## case.5 makka-pakka       onk
+```
+
+
+As you can see, the output gives me the first two columns, much as if I’d typed `garden[,1:2]`. It doesn’t give me the first two rows, which is what I’d have gotten if I’d used a command like `garden[1:2,]`. Not only that, if I ask for a single column, R does not drop the output:
+
+
+```r
+garden[3]
+```
+
+```
+##        line
+## case.1    1
+## case.2    2
+## case.3    5
+## case.4    7
+## case.5    9
+```
+
+As I said earlier, the only case where dropping occurs by default is when you use the “row and columns” version of the square brackets, and the output happens to correspond to a single column. However, if you really want to force R to drop the output, you can do so using the “double brackets” notation:
+
+
+```r
+garden[[3]]
+```
+
+```
+## [1] 1 2 5 7 9
+```
+
+Note that R will only allow you to ask for one column at a time using the double brackets. If you try to ask for multiple columns in this way, you get completely different behaviour, which may or may not produce an error, but definitely won’t give you the output you’re expecting. The only reason I’m mentioning it at all is that you might run into double brackets when doing further reading, and a lot of books don’t explicitly point out the difference between `[ ]` and `[[ ]]`. 
+
+### Whyyyyy?
+
+Okay, for those few readers that have persevered with this section long enough to get here without having set fire to somethin, I should explain why R has these two different systems for subsetting a data frame (i.e., “row and column” versus “just columns”), and why they behave so differently to each other. I’m not 100% sure about the motivation since I never did manage to read through very much of the  references that describe the early development of R, but I think the answer relates to the fact that data frames are actually a very strange hybrid of two different kinds of thing. At a low level, a data frame is a *list*. I can demonstrate this to you by overriding the normal `print` function and forcing R to print out the garden data frame using the default print method (see later!) rather than the special one that is defined only for data frames. Here’s what we get:
+
+
+```r
+print.default( garden )
+```
+
+```
+## $speaker
+## [1] upsy-daisy  upsy-daisy  tombliboo   makka-pakka makka-pakka
+## Levels: makka-pakka tombliboo upsy-daisy
+## 
+## $utterance
+## [1] pip pip ee  pip onk
+## Levels: ee onk oo pip
+## 
+## $line
+## [1] 1 2 5 7 9
+## 
+## attr(,"class")
+## [1] "data.frame"
+```
+
+Apart from the weird part of the output right at the bottom, this is identical to the print out that you get when you print out a list. In other words, a data frame *is* a list. View from this “list based” perspective, it’s clear what `garden[1]` is: it’s the first variable stored in the list, namely `speaker`. In other words, when you use the “just columns” way of indexing a data frame, using only a single index, R assumes that you’re thinking about the data frame as if it were a list of variables. In fact, when you use the `$` operator you’re taking advantage of the fact that the data frame is secretly a list.
+
+However, a data frame is more than just a list. It’s a very special kind of list where all the variables are of the same length, and the first element in each variable happens to correspond to the first “case” in the data set. That’s why no-one ever wants to see a data frame printed out in the default “list-like” way that I’ve shown in the extract above. In terms of the deeper meaning behind what a data frame is used for, a data frame really does have this rectangular shape to it:
+
+
+```r
+print( garden )
+```
+
+```
+##            speaker utterance line
+## case.1  upsy-daisy       pip    1
+## case.2  upsy-daisy       pip    2
+## case.3   tombliboo        ee    5
+## case.4 makka-pakka       pip    7
+## case.5 makka-pakka       onk    9
+```
+
+Because of the fact that a data frame is basically a table of data, R provides a second “row and column” method for interacting with the data frame. This method makes much more sense in terms of the "table of data" interpretation of what a data frame is, and so for the most part it’s this method that people tend to prefer. Throughout this tutorial I'll aim to stick to the “row and column” approach (though I will use `$` a lot), and avoid referring to the “just columns” approach. However, it does get used a lot in practice, so I think it’s important that this book explain what’s going on.
+
+And now let us never speak of this again.
+
+-->
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>For example, suppose we decide to assign them the numbers 1 to 5. If we take these numbers literally, we’re implicitly assuming that is the psycholigical difference between <em>“strongly agree”</em> and <em>“neutral”</em> is the same in “size” as the difference between <em>“agree”</em> and <em>“disagree”</em>. In many situations this is probably okay to a first approximation, but in general it feels very strange.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Admittedly it would be a strange study that produced only these three variables, but I hope you’ll forgive the lack of realism on this point.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>The origin of the term “double” comes from <a href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">double precision floating point</a> the format in which numeric variables are represented internally<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Technically this is a lie: there are many more ways to do this, but let’s not make this any more difficult than it needs to be, yeah?<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Just FYI: you can make a pure data frame behave like a tibble. If you use <code>dat[,1,drop=FALSE]</code> you can suppress this weird thing and make R return a one-column data frame instead of a vector, but that command is so unbearably cumbersome that everyone forgets to use it.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>We could delete these if we wanted by typing <code>rownames(mattie)&lt;-NULL</code>, but I generally prefer having meaningful names attached to my variables, so I’ll keep them.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>The reason for this relates to how matrices are implemented. The original matrix <code>mattie</code> is treated as a <em>two-dimensional</em> object, containing two rows and three columns. However, whenever you pull out a single row or a single column, the result is considered to be a vector, which has a <em>length</em> but doesn’t have dimensions. Unless you explictly coerce the vector into a matrix, R doesn’t really distinguish between row vectors and column vectors. This has implications for how matrix algebra is implemented in R (which I’ll admit I initially found odd). When multiplying a matrix by a vector using the <code>%*%</code> operator, R will attempt to interpret the vector as either a row vector or column vector, depending on whichever one makes the multiplication work. That is, suppose <span class="math inline">\(\mathbf{M}\)</span> is <span class="math inline">\(2\times 3\)</span> matrix, and <span class="math inline">\(v\)</span> is a <span class="math inline">\(1\times 3\)</span> row vector. Mathematically the matrix multiplication <span class="math inline">\(\mathbf{M}v\)</span> doesn’t make sense since the dimensions don’t conform, but you can multiply by the corresponding column vector, <span class="math inline">\(\mathbf{M}v^T\)</span>. So, if I set <code>v &lt;- mattie[2,]</code>, the object that R returns doesn’t technically have any <em>dimensions</em> only a <em>length</em>. So even though <code>v</code> was behaving like a row vector when it was part of <code>mattie</code>, R has forgotten that completely and only knows that <code>v</code> is length three. So when I try to calculate <code>mattie %*% v</code>, which you’d think would fail because I didn’t transpose <code>v</code>, it actually works. In this context R treated <code>v</code> as if it were a column vector for the purposes of matrix multiplication. Note that if both objects are vectors, this leads to ambiguity since <span class="math inline">\(vv^T\)</span> (inner product) and <span class="math inline">\(v^Tv\)</span> (outer product) yield different answers. In this situation <code>v %*% v</code> returns the inner product. You can obtain the outer product with <code>outer(v,v)</code>. The help documentation may come in handy!<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>You can suppress this behaviour by using a command like <code>mattie[,3,drop=FALSE]</code>. It’s unpleasant though. Also be warned: data frames do this too when you select one column using square brackets. Tibbles don’t. One of the reasons I like tibbles actually.<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>I won’t go into details, but note that you can refer the elements of a matrix by specifying only a single index. For a <span class="math inline">\(3\times 4\)</span> matrix <code>M</code>, <code>M[2,2]</code> and <code>M[5]</code> refer to the same cell. This method of indexing assumes column-wise ordering regardless of whether the matrix <code>M</code> was originally created in column-wise or row-wise fashion.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>To see this, compare <code>is.matrix(arr)</code> to <code>is.matrix(arr[,,2])</code><a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>Speaking of complications… Under the hood, data frames and tibbles are secretly lists, so you can use the list indexing methods for them and so, for example, <code>dat[[3]]</code> is the same as <code>dat$RT</code>. Probably best not to worry too much about that detail right now 😬<a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p>Date objects are coded internally as the number of days that have passed since January 1, 1970.<a href="#fnref12">↩</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

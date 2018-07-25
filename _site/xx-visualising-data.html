@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Visualising Data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- ###### start inserted header ##### -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115940772-1');
+</script>
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:title" content="R for Psychological Science">
+<meta property="og:description" content="An introductory resource">
+<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="mystyle.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Psychological Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Core
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="getting-started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li>
+      <a href="scripts.html">Scripts</a>
+    </li>
+    <li>
+      <a href="packages.html">Packages</a>
+    </li>
+    <li>
+      <a href="workspaces.html">Workspaces</a>
+    </li>
+    <li>
+      <a href="vectors.html">Vectors</a>
+    </li>
+    <li>
+      <a href="loops.html">Loops</a>
+    </li>
+    <li>
+      <a href="branches.html">Branches</a>
+    </li>
+    <li>
+      <a href="functions.html">Functions</a>
+    </li>
+    <li>
+      <a href="programming.html">Programming</a>
+    </li>
+    <li>
+      <a href="file-system.html">File system</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="prelude-to-data.html">Prelude</a>
+    </li>
+    <li>
+      <a href="data-types.html">Data types</a>
+    </li>
+    <li>
+      <a href="describing-data.html">Describing data</a>
+    </li>
+    <li>
+      <a href="xx-visualising-data.html">Visualising data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Stats
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-distributions.html">Probability distributions</a>
+    </li>
+    <li>
+      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-shiny.html">Shiny apps</a>
+    </li>
+    <li>
+      <a href="xx-miscellaneous.html">Miscellaneous</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://compcogscisydney.org">compcogscisydney.org</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Visualising Data</h1>
+
+</div>
+
+
+<blockquote>
+<p>Above all else show the data. <br>       –Edward Tufte, <em>The Visual Display of Quantitative Information</em>, 2001</p>
+</blockquote>
+<p>Visualising data is one of the most important tasks facing the data analyst. It’s important for two distinct but closely related reasons. Firstly, there’s the matter of drawing “presentation graphics”: displaying your data in a clean, visually appealing fashion makes it easier for your reader to understand what you’re trying to tell them. Equally important, perhaps even more important, is the fact that drawing graphs helps you to understand the data. To that end, it’s important to draw “exploratory graphics” that help you learn about the data as you go about analysing it. These points might seem pretty obvious, but I cannot count the number of times I’ve seen people forget them.</p>
+<p>To give a sense of the importance of this chapter, I want to start with a classic illustration of just how powerful a good graph can be. To that end, the figure below shows a redrawing of one of the most famous data visualisations of all time (courtesy of Michael Friendly’s <code>HistData</code> package): John Snow’s 1854 map of cholera deaths. The map is elegant in its simplicity. In the background we have a street map, which helps orient the viewer. Over the top, we see a large number of small dots, each one representing the location of a cholera case. The larger symbols show the location of water pumps, labelled by name. Even the most casual inspection of the graph makes it very clear that the source of the outbreak is almost certainly the Broad Street pump. Upon viewing this graph, Dr Snow arranged to have the handle removed from the pump, ending the outbreak that had killed over 500 people. Such is the power of a good data visualisation.</p>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-2-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>The goals in this chapter are twofold: firstly, to discuss several fairly standard graphs that we use a lot when analysing and presenting data, and secondly, to show you how to create these graphs in R. The graphs themselves tend to be pretty straightforward, so in that respect this chapter is pretty simple. Where people usually struggle is learning how to produce graphs, and especially, learning how to produce good graphs.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Fortunately, learning how to draw graphs in R is reasonably simple, as long as you’re not too picky about what your graph looks like. What I mean when I say this is that R has a lot of very good graphing functions, and most of the time you can produce a clean, high-quality graphic without having to learn very much about the low-level details of how R handles graphics. Unfortunately, on those occasions when you do want to do something non-standard, or if you need to make highly specific changes to the figure, you actually do need to learn a fair bit about the these details; and those details are both complicated and boring. With that in mind, the structure of this chapter is as follows: I’ll start out by giving you a very quick overview of how graphics work in R. I’ll then discuss several different kinds of graph and how to draw them, as well as showing the basics of how to customise these plots. I’ll then talk in more detail about R graphics, discussing some of those complicated and boring issues.</p>
+<div id="an-overview-of-r-graphics" class="section level2">
+<h2><span class="header-section-number">99.1</span> An overview of R graphics</h2>
+<p>Reduced to its simplest form, you can think of an R graphic as being much like a painting. You start out with an empty canvas. Every time you use a graphics function, it paints some new things onto your canvas. Later on, you can paint more things over the top if you want; but just like painting, you can’t “undo” your strokes. If you make a mistake, you have to throw away your painting and start over. Fortunately, this is way more easy to do when using R than it is when painting a picture in real life: you delete the plot and then type a new set of commands. This way of thinking about drawing graphs is referred to as the <strong>painter’s model</strong>. So far, this probably doesn’t sound particularly complicated, and for the vast majority of graphs you’ll want to draw it’s exactly as simple as it sounds. Much like painting in real life, the headaches usually start when we dig into details. To see why, I’ll expand this “painting metaphor” a bit further just to show you the basics of what’s going on under the hood, but before I do I want to stress that you really don’t need to understand all these complexities in order to draw graphs. I’d been using R for years before I even realised that most of these issues existed! However, I don’t want you to go through the same pain I went through every time I inadvertently discovered one of these things, so here’s a quick overview.</p>
+<p>Firstly, if you want to paint a picture, you need to paint it on something. In real life, you can paint on lots of different things. Painting onto canvas isn’t the same as painting onto paper, and neither one is the same as painting on a wall. In R, the thing that you paint your graphic onto is called a <strong>device</strong>. For most applications that we’ll look at in this book, this “device” will be a window on your computer. If you’re using the default Windows IDE (i.e., <code>R.exe</code>) to work in R, then the name for this device is <code>windows</code>; on the default Mac application (<code>R.app</code>) it’s called <code>quartz</code> because that’s the name of the software that the Mac OS uses to draw pretty pictures; and on Linux/Unix, you’re probably using <code>X11</code>. However, if we’re being realistic here you’re probably using Rstudio, which provides its own graphics device called <code>RStudioGD</code> that forces R to paint inside the “plots” panel in Rstudio (and it has the same name no matter what operating system you’re on). However, from the computer’s perspective there’s nothing terribly special about drawing pictures on screen: and so R is quite happy to paint pictures directly into a file. R can paint several different types of image files: <code>jpeg</code>, <code>png</code>, <code>pdf</code>, <code>postscript</code>, <code>tiff</code> and <code>bmp</code> files are all among the options that you have available to you. For the most part, these different devices all behave the same way, so you don’t really need to know much about the differences between them when learning how to draw pictures. But, just like real life painting, sometimes the specifics do matter. Unless stated otherwise, you can assume that I’m drawing a picture on screen, using the appropriate device (i.e., <code>windows</code>, <code>quartz</code>, <code>X11</code> or <code>RStudioGD</code>). One the rare occasions where these behave differently from one another, I’ll try to point it out in the text.</p>
+<p>Secondly, when you paint a picture you need to paint it with something. Maybe you want to do an oil painting, but maybe you want to use watercolour. And, generally speaking, you pretty much have to pick one or the other. The analog to this in R is a “graphics system”. A graphics system defines a collection of graphics commands about what to draw and where to draw it. Something that surprises most new R users is the discovery that R actually has several mutually incompatible graphics systems. The two of most interest to us are the <strong>traditional graphics</strong> system (in the graphics package) and the <strong>ggplot</strong> system that forms part of the <em>tidyverse</em> (to be discussed elsewhere!) Not surprisingly, the traditional graphics system is the older of the two: in fact, it’s actually older than R since it has it’s origins in S, the system from which R is descended. In this chapter I’m going to stay within the traditional graphics system, and talk about the <code>ggplot2</code> package at a later date.</p>
+<p>Thirdly, a painting is usually done in a particular style. Maybe it’s a still life, maybe it’s an impressionist piece, or maybe you’re trying to annoy me by pretending that cubism is a legitimate artistic style. Regardless, each artistic style imposes some overarching aesthetic and perhaps even constraints on what you can do with it. A graphics system allows a variety of possible styles, but there are nevertheless quite a lot of constraints built into each system - it takes a <em>lot</em> of work to try to mimic the output of one system in another!</p>
+<p>At this point, I think we’ve covered more than enough background material. The point that I’m trying to make by providing this discussion isn’t to scare you with all these horrible details, but rather to try to convey to you the fact that R doesn’t really provide a single coherent graphics system. Instead, R itself provides a platform, and different people have built different graphical tools using that platform. As a consequence of this fact, there are many different universes of graphics, and a great multitude of packages that live in them. At this stage you don’t need to understand these complexities, but it’s useful to know that they’re there. But for now, I think we can be happy with a simpler view of things: we’ll draw pictures on screen using the traditional graphics system, and as much as possible we’ll stick to high level commands only.</p>
+<p>So let’s start painting.</p>
+</div>
+<div id="an-introduction-to-plotting" class="section level2">
+<h2><span class="header-section-number">99.2</span> An introduction to plotting</h2>
+<p>Before I discuss any specialised graphics, let’s start by drawing a few very simple graphs just to get a feel for what it’s like to draw pictures using R. To that end, let’s create a small vector <code>Fibonacci</code> that contains a few numbers we’d like R to draw for us. Then, we’ll ask R to <code>plot</code> those numbers:</p>
+<pre class="r"><code>Fibonacci &lt;- c( 1,1,2,3,5,8,13 )
+plot( Fibonacci )</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-3-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>As you can see, what R has done is plot the values stored in the Fibonacci variable on the vertical axis (y-axis) and the corresponding index on the horizontal axis (x-axis). In other words, since the 4th element of the vector has a value of 3, we get a dot plotted at the location (4,3). That’s pretty straightforward, and the image is probably pretty close to what you would have had in mind when I suggested that we plot the <code>Fibonacci</code> data. However, there’s quite a lot of customisation options available to you, so we should probably spend a bit of time looking at some of those options. So, be warned: this ends up being a fairly long section, because there’s so many possibilities open to you. Don’t let it overwhelm you though… while all of the options discussed here are handy to know about, you can get by just fine only knowing a few of them. The only reason I’ve included all this stuff right at the beginning is that it ends up making the rest of the chapter a lot more readable!</p>
+<div id="a-tedious-digression" class="section level3">
+<h3><span class="header-section-number">99.2.1</span> A tedious digression</h3>
+<p>Before we go into any discussion of customising plots, we need a little more background. The im- portant thing to note when using the <code>plot</code> function, is that it’s another example of a generic function much like <code>print</code>, so its behaviour changes depending on what kind of input you give it. The <code>plot</code> function is quite fancy in this respect than the other two, and its behaviour depends on two arguments, <code>x</code> (the first input, which is required) and <code>y</code> (which is optional). This makes it (a) extremely powerful once you get the hang of it, and (b) hilariously unpredictable, when you’re not sure what you’re doing. As much as possible, I’ll try to make clear what type of inputs produce what kinds of outputs. For now, however, it’s enough to note that I’m only doing very basic plotting, and as a consequence all of the work is being done by the <code>plot.default</code> function.</p>
+<p>What kinds of customisations might we be interested in? If you look at the help documentation for the default plotting method (i.e., type <code>?plot.default</code> or <code>help(&quot;plot.default&quot;)</code>) you’ll see a very long list of arguments that you can specify to customise your plot. I’ll talk about several of them in a moment, but first I want to point out something that might seem quite wacky. When you look at all the different options that the help file talks about, you’ll notice that some of the options that it refers to are “proper” arguments to the <code>plot.default</code> function, but it also goes on to mention a bunch of things that look like they’re supposed to be arguments, but they’re not listed in the “Usage” section of the file, and the documentation calls them <strong>graphical parameters</strong> instead. Even so, it’s usually possible to treat them as if they were arguments of the plotting function. Very odd. In order to stop my readers trying to find a brick and look up my home address, I’d better explain what’s going on; or at least give the basic gist behind it.</p>
+<p>What exactly is a graphical parameter? Basically, the idea is that there are some characteristics of a plot which are pretty universal: for instance, regardless of what kind of graph you’re drawing, you probably need to specify what colour to use for the plot, right? So you’d expect there to be something like a <code>col</code> argument to every single graphics function in R? Well, sort of. In order to avoid having hundreds of arguments for every single function, what R does is refer to a bunch of these “graphical parameters” which are pretty general purpose. Graphical parameters can be changed directly by using the low-level <code>par</code> function, which I discuss briefly latr on though not in a lot of detail. If you look at the help files for graphical parameters (i.e., type <code>?par</code>) you’ll see that there’s lots of them. Fortunately, (a) the default settings are generally pretty good so you can ignore the majority of the parameters, and (b) as you’ll see as we go through this chapter, you very rarely need to use <code>par</code> directly, because you can “pretend” that graphical parameters are just additional arguments to your high-level function (e.g. <code>plot</code>). In short… yes, R does have these wacky “graphical parameters” which can be quite confusing. But in most basic uses of the plotting functions, you can act as if they were just undocumented additional arguments to your function.</p>
+</div>
+<div id="customising-the-title-and-the-axis-labels" class="section level3">
+<h3><span class="header-section-number">99.2.2</span> Customising the title and the axis labels</h3>
+<p>One of the first things that you’ll find yourself wanting to do when customising your plot is to label it better. You might want to specify more appropriate axis labels, add a title or add a subtitle. The arguments that you need to specify to make this happen are:</p>
+<ul>
+<li><code>main</code>. A character string containing the title.</li>
+<li><code>sub</code>. A character string containing the subtitle.</li>
+<li><code>xlab</code>. A character string containing the x-axis label.</li>
+<li><code>ylab</code>. A character string containing the y-axis label.</li>
+</ul>
+<p>Let’s have a look at what happens when we make use of all these arguments. Here’s the command…</p>
+<pre class="r"><code>plot( 
+  x = Fibonacci,
+  main = &quot;You specify title using the &#39;main&#39; argument&quot;,
+  sub = &quot;The subtitle appears here! (Use the &#39;sub&#39; argument for this)&quot;,
+  xlab = &quot;The x-axis label is &#39;xlab&#39;&quot;,
+  ylab = &quot;The y-axis label is &#39;ylab&#39;&quot;
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-4-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>That’s about what we’d expect. Even so, there’s a couple of interesting features worth calling your attention to. Firstly, notice that the subtitle is drawn below the plot, which I personally find annoying; as a consequence I almost never use subtitles. You may have a different opinion, of course, but the important thing is that you remember where the subtitle actually goes. Secondly, notice that R has decided to use boldface text and a larger font size for the title. This is one of my most hated default settings in R graphics, since I feel that it draws too much attention to the title. Generally, while I do want my reader to look at the title, I find that the R defaults are a bit overpowering, so I often like to change the settings. To that end, there are a bunch of graphical parameters that you can use to customise the font style:</p>
+<ul>
+<li><em>Font styles</em>: <code>font.main</code>, <code>font.sub</code>, <code>font.lab</code>, <code>font.axis</code>. These four parameters control the font style used for the plot title (<code>font.main</code>), the subtitle (<code>font.sub</code>), the axis labels (<code>font.lab</code>: note that you can’t specify separate styles for the x-axis and y-axis without using low level commands), and the numbers next to the tick marks on the axis (<code>font.axis</code>). Somewhat irritatingly, these arguments are numbers instead of meaningful names: a value of <code>1</code> corresponds to plain text, <code>2</code> means boldface, <code>3</code> means italic and <code>4</code> means bold italic.</li>
+<li><em>Font colours</em>: <code>col.main</code>, <code>col.sub</code>, <code>col.lab</code>, <code>col.axis</code>. These parameters do pretty much what the name says: each one specifies a colour in which to type each of the different bits of text. Conveniently, R has a very large number of named colours (type <code>colours()</code> to see a list of over 650 colour names that R knows), so you can use the English language name of the colour to select it.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Thus, the parameter value here string like <code>&quot;red&quot;</code>, <code>&quot;gray25&quot;</code> or <code>&quot;springgreen4&quot;</code> (yes, R really does recognise four different shades of “spring green”).</li>
+<li><em>Font size</em>: <code>cex.main</code>, <code>cex.sub</code>, <code>cex.lab</code>, <code>cex.axis</code>. Font size is handled in a slightly curious way in R. The <code>cex</code> part here is short for “character expansion”, and it’s essentially a magnification value. By default, all of these are set to a value of 1, except for the font title: <code>cex.main</code> has a default magnification of 1.2, which is why the title font is 20% bigger than the others.</li>
+<li><em>Font family</em>: <code>family</code>. This argument specifies a font family to use: the simplest way to use it is to set it to <code>&quot;sans&quot;</code>, <code>&quot;serif&quot;</code>, or <code>&quot;mono&quot;</code>, corresponding to a san serif font, a serif font, or a monospaced font. If you want to, you can give the name of a specific font, but keep in mind that different operating systems use different fonts, so it’s probably safest to keep it simple. Better yet, unless you have some deep objections to the R defaults, just ignore this parameter entirely. That’s what I usually do.</li>
+</ul>
+<p>To give you a sense of how you can use these parameters to customise your titles, let’s play around with several of these arguments:</p>
+<pre class="r"><code>plot( 
+  x = Fibonacci,                           # the data to plot
+  main = &quot;The first 7 Fibonacci numbers&quot;,  # the title
+  xlab = &quot;Position in the sequence&quot;,       # x-axis label
+  ylab = &quot;The Fibonacci number&quot;,           # y-axis label
+  font.main = 1,                           # plain text for title
+  cex.main = 1,                            # normal size for title
+  font.axis = 2,                           # bold text for numbering
+  col.lab = &quot;gray50&quot;                       # grey colour for labels
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-5-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>Although this command is quite long, it’s not complicated: all it does is override a bunch of the default parameter values. The only difficult aspect to this is that you have to remember what each of these parameters is called, and what all the different values are. And in practice I never remember: I have to look up the help documentation every time, or else look it up in this book.</p>
+</div>
+<div id="changing-the-plot-type" class="section level3">
+<h3><span class="header-section-number">99.2.3</span> Changing the plot type</h3>
+<p>Adding and customising the titles associated with the plot is one way in which you can play around with what your picture looks like. Another thing that you’ll want to do is customise the appearance of the actual plot! To start with, let’s look at the single most important options that the <code>plot</code> function provides for you to use, which is the <code>type</code> argument. The <code>type</code> argument specifies the visual style of the plot. The possible values for this are:</p>
+<ul>
+<li><code>type = &quot;p&quot;</code>. Draw the <strong>p</strong>oints only.</li>
+<li><code>type = &quot;l&quot;</code>. Draw a <strong>l</strong>ine through the points.</li>
+<li><code>type = &quot;o&quot;</code>. Draw the line <strong>o</strong>ver the top of the points.</li>
+<li><code>type = &quot;b&quot;</code>. Draw <strong>b</strong>oth points and lines, but don’t overplot.</li>
+<li><code>type = &quot;h&quot;</code>. Draw “<strong>h</strong>istogram-like” vertical bars.</li>
+<li><code>type = &quot;s&quot;</code>. Draw a <strong>s</strong>taircase, going horizontally then vertically.</li>
+<li><code>type = &quot;S&quot;</code>. Draw a <strong>S</strong>taircase, going vertically then horizontally.</li>
+<li><code>type = &quot;c&quot;</code>. Draw only the <strong>c</strong>onnecting lines from the “b” version.</li>
+<li><code>type = &quot;n&quot;</code>. Draw <strong>n</strong>othing. (Apparently this is useful sometimes?)</li>
+</ul>
+<p>The simplest way to illustrate what each of these really looks like is just to draw them. To that end, the figure below shows the same Fibonacci data, drawn using six different types of plot. As you can see, by altering the type argument you can get a qualitatively different appearance to your plot. In other words, as far as R is concerned, the only difference between a scatterplot and a line plot is that you draw a scatterplot by setting <code>type = &quot;p&quot;</code> and you draw a line plot by setting <code>type = &quot;l&quot;</code>.</p>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="changing-other-features-of-the-plot" class="section level3">
+<h3><span class="header-section-number">99.2.4</span> Changing other features of the plot</h3>
+<p>The second group of parameters I want to discuss are those related to the formatting of the plot itself:</p>
+<ul>
+<li><em>Colour of the plot</em>: <code>col</code>. As we saw with the previous colour-related parameters, the simplest way to specify this parameter is using a character string: e.g., <code>col = &quot;blue&quot;</code>.</li>
+<li><em>Character used to plot points</em>: <code>pch</code>. The plot character parameter is a number between 1 and 25. What it does is tell R what symbol to use to draw the points that it plots. The simplest way to illustrate what the different values do is with a picture. The first figure below shows what the diffrent plotting characters look like. The default plotting character is a hollow circle (i.e., <code>pch = 1</code>).</li>
+<li><em>Background colour</em>: <code>bg</code>. The plot characters 21:25 have a separate “background colour” that is distinct from the main colour <code>col</code>. To see this, the plot below sets <code>bg = &quot;blue&quot;</code>.</li>
+<li><em>Plot size</em>: <code>cex</code>. This parameter describes a character expansion factor (i.e., magnification) for the plotted characters. By default <code>cex = 1</code>, but if you want bigger symbols in your graph you should specify a larger value.</li>
+<li><em>Line type</em>: <code>lty</code>. The line type parameter describes the kind of line that R draws. It has seven values which you can specify using a number between 0 and 6, or using a meaningful character string: <code>&quot;blank&quot;</code>, <code>&quot;solid&quot;</code>, <code>&quot;dashed&quot;</code>, <code>&quot;dotted&quot;</code>, <code>&quot;dotdash&quot;</code>, <code>&quot;longdash&quot;</code>, or <code>&quot;twodash&quot;</code>. Note that the <code>“blank”</code> version (value 0) just means that R doesn’t draw the lines at all. The other six versions are shown in the second figure below.</li>
+<li><em>Line width</em>: <code>lwd</code>. The last graphical parameter in this category that I want to mention is the line width parameter, which is just a number specifying the width of the line. The default value is <code>1</code>. Not surprisingly, larger values produce thicker lines and smaller values produce thinner lines. Try playing around with different values of <code>lwd</code> to see what happens.</li>
+</ul>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>To illustrate what you can do by altering these parameters, let’s try the following command:</p>
+<pre class="r"><code>plot( 
+  x = Fibonacci,
+  type = &quot;b&quot;,
+  col = &quot;blue&quot;,
+  pch = 19,
+  cex=5,
+  lty=2,
+  lwd=4
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-8-1.png" width="456" style="display: block; margin: auto;" /></p>
+</div>
+<div id="changing-the-appearance-of-the-axes" class="section level3">
+<h3><span class="header-section-number">99.2.5</span> Changing the appearance of the axes</h3>
+<p>There are several other possibilities worth discussing. Ignoring all the graphical parameters for the moment, there’s a few other arguments to the <code>plot</code> function that you might want to use. As before, many of these are standard arguments that are used by a lot of high level graphics functions:</p>
+<ul>
+<li><em>Changing the axis scales</em>: <code>xlim</code>, <code>ylim</code>. Generally R does a pretty good job of figuring out where to set the edges of the plot. However, you can override its choices by setting the <code>xlim</code> and <code>ylim</code> arguments. For instance, if I decide I want the vertical scale of the plot to run from 0 to 100, then I’d set <code>ylim = c(0, 100)</code>.</li>
+<li><em>Suppress labelling</em>: <code>ann</code>. This is a logical-valued argument that you can use if you don’t want R to include any text for a title, subtitle or axis label. To do so, set <code>ann = FALSE</code>. This will stop R from including any text that would normally appear in those places. Note that this will override any of your manual titles. For example, if you try to add a title using the main argument, but you also specify <code>ann = FALSE</code>, no title will appear.</li>
+<li><em>Suppress axis drawing</em>: <code>axes</code>. Again, this is a logical valued argument. Suppose you don’t want R to draw any axes at all. To suppress the axes, all you have to do is add <code>axes = FALSE</code>. This will remove the axes and the numbering, but not the axis labels (i.e. the <code>xlab</code> and <code>ylab</code> text). Note that you can get finer grain control over this by specifying the <code>xaxt</code> and <code>yaxt</code> graphical parameters instead (see below).</li>
+<li><em>Include a framing box</em>: <code>frame.plot</code>. Suppose you’ve removed the axes by setting axes = FALSE, but you still want to have a simple box drawn around the plot; that is, you only wanted to get rid of the numbering and the tick marks, but you want to keep the box. To do that, you set frame.plot = TRUE. Alternatively, you can use <code>box()</code> as a command to do the same. )</li>
+</ul>
+<p>Note that this list isn’t exhaustive. There are a various other arguments you can play with if you want to, but those are the ones you are probably most likely to want to use. As always, however, if these aren’t enough options for you, there’s also a number of other graphical parameters that you might want to play with as well. That’s the focus of the next section. In the meantime, here’s a command that makes use of all these different options:</p>
+<pre class="r"><code>plot( 
+  x = Fibonacci,     # the data
+  xlim = c(0, 15),   # expand the x-scale
+  ylim = c(0, 15),   # expand the y-scale
+  ann = FALSE,       # delete all annotations
+  axes = FALSE,      # delete the axes
+  frame.plot = TRUE  # but include a framing box
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-9-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>As one might hope, the axis scales on both the horizontal and vertical dimensions have been expanded, the axes have been suppressed as have the annotations, but I’ve kept a box around the plot.</p>
+<p>Before moving on, I should point out that there are several graphical parameters relating to the axes, the box, and the general appearance of the plot which allow finer grain control over the appearance of the axes and the annotations.</p>
+<ul>
+<li><em>Suppressing the axes individually</em>: <code>xaxt</code>, <code>yaxt</code>. These graphical parameters are basically just fancier versions of the <code>axes</code> argument we discussed earlier. If you want to stop R from drawing the vertical axis but you’d like it to keep the horizontal axis, set <code>yaxt = &quot;n&quot;</code>. I trust that you can figure out how to keep the vertical axis and suppress the horizontal one!</li>
+<li><em>Box type</em>: <code>bty</code>. In the same way that <code>xaxt</code>, <code>yaxt</code> are just fancy versions of <code>axes</code>, the box type parameter is really just a fancier version of the <code>frame.plot</code> argument, allowing you to specify exactly which out of the four borders you want to keep. The way we specify this parameter is a bit stupid, in my opinion: the possible values are <code>&quot;o&quot;</code> (the default), <code>&quot;l&quot;</code>, <code>&quot;7&quot;</code>, <code>&quot;c&quot;</code>, <code>&quot;u&quot;</code>, or <code>&quot;]&quot;</code>, each of which will draw only those edges that the corresponding character suggests. That is, the letter <code>&quot;c&quot;</code> has a top, a bottom and a left, but is blank on the right hand side, whereas <code>&quot;7&quot;</code> has a top and a right, but is blank on the left and the bottom. Alternatively a value of <code>&quot;n&quot;</code> means that no box will be drawn.</li>
+<li><em>Orientation of the axis labels</em>: <code>las</code>. I presume that the name of this parameter is an acronym of label style or something along those lines; but what it actually does is govern the orientation of the text used to label the individual tick marks (i.e., the numbering, not the <code>xlab</code> and <code>ylab</code> axis labels). There are four possible values for <code>las</code>: A value of <code>0</code> means that the labels of both axes are printed parallel to the axis itself (the default). A value of <code>1</code> means that the text is always horizontal. A value of <code>2</code> means that the labelling text is printed at right angles to the axis. Finally, a value of <code>3</code> means that the text is always vertical.</li>
+</ul>
+<p>Again, these aren’t the only possibilities. There are a few other graphical parameters that I haven’t mentioned that you could use to customise the appearance of the axes,<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> but that’s probably enough (or more than enough) for now. To give a sense of how you could use these parameters, let’s try the following command:</p>
+<pre class="r"><code>plot( 
+  x = Fibonacci, # the data
+  xaxt = &quot;n&quot;,    # don’t draw the x-axis
+  bty = &quot;]&quot;,     # keep bottom, right and top of box only
+  las = 1        # rotate the text
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-10-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>As you can see, this isn’t a very useful plot at all. However, it does illustrate the graphical parameters we’re talking about, so I suppose it serves its purpose.</p>
+</div>
+<div id="dont-panic" class="section level3">
+<h3><span class="header-section-number">99.2.6</span> Don’t panic</h3>
+<p>At this point, a lot of readers will be probably be thinking something along the lines of, “if there’s this much detail just for drawing a simple plot, how horrible is it going to get when we start looking at more complicated things?” Perhaps, contrary to my earlier pleas for mercy, you’ve found a brick to hurl and are right now leafing through a phone book trying to find my address.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> Well, fear not! And please, put the brick down. In a lot of ways, we’ve gone through the hardest part: we’ve already covered vast majority of the plot customisations that you might want to do. As you’ll see, each of the other high level plotting commands we’ll talk about will only have a smallish number of additional options. Better yet, even though I’ve told you about a billion different ways of tweaking your plot, you don’t usually need them. So in practice, now that you’ve read over it once to get the gist, the majority of the content of this section is stuff you can safely forget: just remember to come back to this section later on when you want to tweak your plot.</p>
+</div>
+</div>
+<div id="histograms" class="section level2">
+<h2><span class="header-section-number">99.3</span> Histograms</h2>
+<p>Now that we’ve tamed (or possibly fled from) the beast that is R graphical parameters, let’s talk more seriously about some real life graphics that you’ll want to draw. We begin with the humble <strong>histogram</strong>. Histograms are one of the simplest and most useful ways of visualising data. They make most sense when you have an interval or ratio scale and what you want to do is get an overall impression of the data. You probably know how histograms work, since they’re so widely used, but for the sake of completeness I’ll describe them. All you do is divide up the possible values into <strong>bins</strong>, and then count the number of observations that fall within each bin. This count is referred to as the frequency of the bin, and is displayed as a bar. The height of the bar represents the proportion of cases that fall within that bin.</p>
+<p>For some reason I just happen to be sitting on a data set that contains the winning margin (in points) for every single game played in the 2010 AFL (Australian Football League) season, stored in a variable called <code>afl.margins</code>. Let’s draw it as a histogram. The function you need to use is called <code>hist</code>, and it has pretty reasonable default settings:</p>
+<pre class="r"><code>load(&quot;./data/aflsmall.Rdata&quot;)
+hist(afl.margins)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-11-1.png" width="456" style="display: block; margin: auto;" /> Although this image would need a lot of cleaning up in order to make a good presentation graphic (i.e., one you’d include in a report), it nevertheless does a pretty good job of describing the data. In fact, the big strength of a histogram is that (properly used) it shows the entire spread of the data, so you can get a pretty good sense about what the data looks like. The downside to histograms is that they aren’t very compact: unlike some of the other plots I’ll talk about it’s hard to cram 20-30 histograms into a single image without overwhelming the viewer.</p>
+<p>The main thing that you need to be aware of when drawing histograms is determining where the <code>breaks</code> that separate bins should be located, and (relatedly) how many breaks there should be. In the figure above, you can see that R has made pretty sensible choices all by itself: the breaks are located at 0, 10, 20, …, 120, which is exactly what I would have done had I been forced to make a choice myself. However, there’s nothing stopping you from overriding the default values:</p>
+<pre class="r"><code>hist( x = afl.margins, breaks = 3 )     # histogram on the left has three breaks
+hist( x = afl.margins, breaks = 0:116 ) # histogram on the right specifies the edge locations</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-13-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>On the right, the bins are only 1 point wide. As a result, although the plot is very informative (it displays the entire data set with no loss of information at all!) the plot is very hard to interpret, and feels quite cluttered. On the other hand, the plot on the left has a bin width of 50 points, and has the opposite problem: it’s very easy to “read” this plot, but it doesn’t convey a lot of information about the data. One gets the sense that this histogram is hiding too much. In short, the way in which you specify the breaks has a big effect on what the histogram looks like, so it’s important to make sure you choose the breaks sensibly. In general R does a pretty good job of selecting the breaks on its own, since it makes use of some quite clever tricks that statisticians have devised for automatically selecting the right bins for a histogram, but nevertheless it’s usually a good idea to play around with the breaks a bit to see what happens.</p>
+<p>There is one fairly important thing to add regarding how the <code>breaks</code> argument works. There are two different ways you can specify the breaks. You can either specify <em>how many</em> breaks you want (which is what I did on the left when I typed <code>breaks = 3</code>) and let R figure out where they should go, or you can provide a vector that tells R exactly where the breaks should be placed (which is what I did on the right when I typed <code>breaks = 0:116</code>). The behaviour of the <code>hist</code> function is slightly different depending on which version you use. If all you do is tell it how many breaks you want, R treats it as a “suggestion” not as a demand. It assumes you want “approximately 3” breaks, but if it doesn’t think that this would look very pretty on screen, it picks a different (but similar) number. It does this for a sensible reason – it tries to make sure that the breaks are located at sensible values (like 10) rather than stupid ones (like 7.224414). And most of the time R is right: usually, when a human researcher says “give me 3 breaks”, he or she really does mean “give me approximately 3 breaks, and don’t put them in stupid places”. However, sometimes R is dead wrong. Sometimes you really do mean “exactly 3 breaks”, and you know precisely where you want them to go. So you need to invoke “real person privilege”, and order R to do what it’s bloody well told. In order to do that, you have to input the full vector that tells R exactly where you want the breaks. If you do that, R will go back to behaving like the nice little obedient calculator that it’s supposed to be.</p>
+<div id="visual-style-of-your-histogram" class="section level3">
+<h3><span class="header-section-number">99.3.1</span> Visual style of your histogram</h3>
+<p>Okay, so at this point we can draw a basic histogram, and we can alter the number and even the location of the breaks. However, the visual style of the histograms shown in the previous plots could stand to be improved. We can fix this by making use of some of the other arguments to the <code>hist</code> function. Most of the things you might want to try doing have already been covered, but there’s a few new things:</p>
+<ul>
+<li><em>Shading lines</em>: <code>density</code>, <code>angle</code>. You can add diagonal lines to shade the bars: the <code>density</code> value is a number indicating how many lines per inch R should draw (the default value of <code>NULL</code> means no lines), and the <code>angle</code> is a number indicating how many degrees from horizontal the lines should be drawn at (default is <code>angle = 45</code> degrees).</li>
+<li><em>Specifics regarding colours</em>: <code>col</code>, <code>border</code>. You can also change the colours: in this instance the <code>col</code> parameter sets the colour of the shading (either the shading lines if there are any, or else the colour of the interior of the bars if there are not), and the <code>border</code> argument sets the <code>colour</code> of the edges of the bars.</li>
+<li><em>Labelling the bars</em>: <code>labels</code>. You can also attach labels to each of the bars using the <code>labels</code> argument. The simplest way to do this is to set <code>labels = TRUE</code>, in which case R will add a number just above each bar, that number being the exact number of observations in the bin. Alternatively, you can choose the labels yourself, by inpuyting a vector of strings, e.g., <code>labels = c(&quot;label 1&quot;,&quot;label 2&quot;,&quot;etc&quot;)</code></li>
+</ul>
+<p>Not surprisingly, this doesn’t exhaust the possibilities. If you type <code>help(&quot;hist&quot;)</code> or <code>?hist</code> and have a look at the help documentation for histograms, you’ll see a few more options. A histogram that makes use of the histogram-specific customisations as well as several of the options we discussed earlier is shown below:</p>
+<pre class="r"><code>hist( 
+  x = afl.margins,           # data
+  main = &quot;2010 AFL margins&quot;, # title of the plot
+  xlab = &quot;Margin&quot;,           # set the x-axis label
+  density = 10,              # draw shading lines: 10 per inch
+  angle = 40,                # set the angle of the shading lines is 40 degrees
+  border = &quot;gray20&quot;,         # set the colour of the borders of the bars
+  col = &quot;gray80&quot;,            # set the colour of the shading lines
+  labels = TRUE,             # add frequency labels to each bar
+  ylim = c(0,40)             # change the scale of the y-axis
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-14-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>Overall, this is a much nicer histogram than the default ones.</p>
+</div>
+</div>
+<div id="stem-and-leaf-plots" class="section level2">
+<h2><span class="header-section-number">99.4</span> Stem and leaf plots</h2>
+<p>Histograms are one of the most widely used methods for displaying the observed values for a variable. They’re simple, pretty, and very informative. However, they do take a little bit of effort to draw. Sometimes it can be quite useful to make use of simpler, if less visually appealing, options. One such alternative - an especially old-school alternative - is the <strong>stem and leaf plot</strong>. To a first approximation you can think of a stem and leaf plot as a kind of text-based histogram. Stem and leaf plots aren’t used as widely these days as they were 30 years ago, since it’s now just as easy to draw a histogram as it is to draw a stem and leaf plot. Not only that, they don’t work very well for larger data sets. As a consequence you probably won’t have as much of a need to use them yourself, though you may run into them in older publications. However, I admit that I have a bit of a soft spot for the stem and leaf plot, as a cute illustration of what you can achieve with a very limited medium. The function for drawing these plots is called <code>stem</code>, and here it is applied to the <code>afl.margins</code>:</p>
+<pre class="r"><code>stem( afl.margins )</code></pre>
+<pre><code>## 
+##   The decimal point is 1 digit(s) to the right of the |
+## 
+##    0 | 001111223333333344567788888999999
+##    1 | 0000011122234456666899999
+##    2 | 00011222333445566667788999999
+##    3 | 01223555566666678888899
+##    4 | 012334444477788899
+##    5 | 00002233445556667
+##    6 | 0113455678
+##    7 | 01123556
+##    8 | 122349
+##    9 | 458
+##   10 | 148
+##   11 | 6</code></pre>
+<p>The values to the left of the <code>|</code> are called <em>stems</em> and the values to the right are called <em>leaves</em>. If you just look at the shape that the leaves make, you can see something that looks a lot like a histogram made out of numbers, just rotated by 90 degrees. But if you know how to read the plot, there’s quite a lot of additional information here: each of the digits that make up the leaves corresponds to a single observation. For instance, let’s consider the row at the bottom that reads <code>11|6</code> and compare it to…</p>
+<pre class="r"><code>max( afl.margins )</code></pre>
+<pre><code>## [1] 116</code></pre>
+<p>Hm… <code>11 | 6</code> versus <code>116</code>. Obviously the stem and leaf plot is trying to tell us that the largest value in the data set is <code>116</code>. Similarly, when we look at the line that reads <code>10 | 148</code>, the way we interpret it to note that the stem and leaf plot is telling us that the data set contains observations with values <code>101</code>, <code>104</code> and <code>108</code>. Finally, when we see something like <code>5 | 00002233445556667</code> the four 0s in the the stem and leaf plot are telling us that there are four observations with value <code>50</code>, and so on. In short, there’s really quite a lot of information compressed into a stem and leaf plot. However, given that I seem to be the last person alive who still likes the stem and leaf plot, I should move on.</p>
+</div>
+<div id="boxplots" class="section level2">
+<h2><span class="header-section-number">99.5</span> Boxplots</h2>
+<p>Another alternative to histograms is a <strong>boxplot</strong>, sometimes called a “box and whiskers” plot. Like histograms, they’re most suited to interval or ratio scale data. The idea behind a boxplot is to provide a simple visual depiction of the <em>median</em>, the <em>interquartile range</em>, and the <em>range</em> of the data.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> Because they do so in a fairly compact way, boxplots are a popular statistical graphic, especially during the exploratory stage of data analysis when you’re trying to understand the data yourself. Let’s have a look at how they work, again using the <code>afl.margins</code> data as our example. Firstly, let’s actually calculate these numbers ourselves using the <code>summary</code> function</p>
+<pre class="r"><code>summary( afl.margins )</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00   12.75   30.50   35.30   50.50  116.00</code></pre>
+<p>So how does a boxplot capture these numbers? The easiest way to describe what a boxplot looks like is just to draw one. The function for doing this in R is (surprise, surprise) <code>boxplot</code>. As always there’s a lot of optional arguments that you can specify if you want, but for the most part you can just let R choose the defaults for you. That said, I’m going to override one of the defaults to start with by specifying the <code>range</code> option, but for the most part you won’t want to do this (I’ll explain why in a minute). With that as preamble, let’s try the following command:</p>
+<pre class="r"><code>boxplot( 
+  x = afl.margins, 
+  range = 100
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-18-1.png" width="456" style="display: block; margin: auto;" /> To read this plot - the thick line in the middle of the box is the median; the box itself spans the range from the 25th percentile to the 75th percentile; and the “whiskers” cover the full range from the minimum value to the maximum value.</p>
+<p>In practice, this isn’t quite how boxplots usually work. In most applications, the “whiskers” don’t cover the full range from minimum to maximum. Instead, they actually go out to the most extreme data point that doesn’t exceed a certain bound. By default, this value is 1.5 times the interquartile range, corresponding to a <code>range</code> value of 1.5. Any observation whose value falls outside this range is plotted as a circle instead of being covered by the whiskers, and is commonly referred to as an <strong>outlier</strong>.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> For the AFL margins data, there is one observation - the game with a margin of 116 points - that falls outside this range. As a consequence, the upper whisker is pulled back to the next largest observation (a value of 108), and the observation at 116 is plotted as a circle, as illustrated below:</p>
+<pre class="r"><code>boxplot( afl.margins )</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-19-1.png" width="456" style="display: block; margin: auto;" /></p>
+<div id="visual-style-of-your-boxplot" class="section level3">
+<h3><span class="header-section-number">99.5.1</span> Visual style of your boxplot</h3>
+<p>I’ll talk a little more about the relationship between boxplots and outliers in a moment, but before I do let’s take the time to clean this figure up. Boxplots in R are extremely customisable. In addition to the usual range of graphical parameters that you can tweak to make the plot look nice, you can also exercise nearly complete control over every element to the plot. Consider the boxplot in below: in this version of the plot, not only have I added labels (<code>xlab</code>, <code>ylab</code>) and removed the stupid border (<code>frame.plot</code>), I’ve also dimmed all of the graphical elements of the boxplot except the central bar that plots the median (<code>border</code>) so as to draw more attention to the median rather than the rest of the boxplot. You’ve seen all these options in previous sections in this chapter, so hopefully those customisations won’t need any further explanation. However, I’ve done two new things as well: I’ve deleted the cross-bars at the top and bottom of the whiskers (known as the “staples” of the plot), and converted the whiskers themselves to solid lines. The arguments that I used to do this are called by the ridiculous names of <code>staplewex</code> and <code>whisklty</code>,<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> and I’ll explain these in a moment. But first, here’s the command:</p>
+<pre class="r"><code> boxplot( 
+   x = afl.margins,           # the data
+   xlab = &quot;AFL games, 2010&quot;,  # x-axis label
+   ylab = &quot;Winning Margin&quot;,   # y-axis label
+   border = &quot;grey50&quot;,         # dim the border of the box
+   frame.plot = FALSE,        # don’t draw a frame
+   staplewex = 0,             # don’t draw staples
+   whisklty = 1               # solid line for whisker
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-20-1.png" width="456" style="display: block; margin: auto;" /> Overall, I think the resulting boxplot is a huge improvement in visual design over the default version. In my opinion at least, there’s a fairly minimalist aesthetic that governs good statistical graphics. Ideally, every visual element that you add to a plot should convey part of the message. If your plot includes things that don’t actually help the reader learn anything new, you should consider removing them. Personally, I can’t see the point of the cross-bars on a standard boxplot, so I’ve deleted them.</p>
+<p>Okay, what commands can we use to customise the boxplot? If you type <code>?boxplot</code> and flick through the help documentation, you’ll notice that it does mention <code>staplewex</code> as an argument, but there’s no mention of <code>whisklty</code>. The reason for this is that the function that handles the drawing is called <code>bxp</code>, so if you type <code>?bxp</code> all the gory details appear. Here’s the short summary. In order to understand why these arguments have such stupid names, you need to recognise that they’re put together from two components. The first part of the argument name specifies one part of the box plot: <code>staple</code> refers to the staples of the plot (i.e., the cross-bars), and <code>whisk</code> refers to the whiskers. The second part of the name specifies a graphical parameter: <code>wex</code> is a width parameter, and <code>lty</code> is a line type parameter. The parts of the plot you can customise are:</p>
+<ul>
+<li><code>box</code>. The box that covers the interquartile range.</li>
+<li><code>med</code>. The line used to show the median.</li>
+<li><code>whisk</code>. The vertical lines used to draw the whiskers.</li>
+<li><code>staple</code>. The cross bars at the ends of the whiskers.</li>
+<li><code>out</code>. The points used to show the outliers.</li>
+</ul>
+<p>The actual graphical parameters that you might want to specify are slightly different for each visual element, just because they’re different shapes from each other. As a consequence, the following options are available:</p>
+<ul>
+<li><em>Width expansion</em>: <code>boxwex</code>, <code>staplewex</code>, <code>outwex</code>. These are scaling factors that govern the width of various parts of the plot. The default scaling factor is (usually) 0.8 for the box, and 0.5 for the other two. Note that in the case of the outliers this parameter is meaningless unless you decide to draw lines plotting the outliers rather than use points.</li>
+<li><em>Line type</em>: <code>boxlty</code>, <code>medlty</code>, <code>whisklty</code>, <code>staplelty</code>, <code>outlty</code>. These govern the line type for the relevant elements. The values for this are exactly the same as those used for the regular lty parameter, with two exceptions. There’s an additional option where you can set <code>medlty = &quot;blank&quot;</code> to suppress the median line completely (useful if you want to draw a point for the median rather than plot a line). Similarly, by default the outlier line type is set to <code>outlty = &quot;blank&quot;</code>, because the default behaviour is to draw outliers as points instead of lines.</li>
+<li><em>Line width</em>: <code>boxlwd</code>, <code>medlwd</code>, <code>whisklwd</code>, <code>staplelwd</code>, <code>outlwd</code>. These govern the line widths for the relevant elements, and behave the same way as the regular <code>lwd</code> parameter. The only thing to note is that the default value for <code>medlwd</code> value is three times the value of the others.</li>
+<li><em>Line colour</em>: <code>boxcol</code>, <code>medcol</code>, <code>whiskcol</code>, <code>staplecol</code>, <code>outcol</code>. These govern the colour of the lines used to draw the relevant elements. Specify a colour in the same way that you usually do.</li>
+<li><em>Fill colour</em>: <code>boxfill</code>. What colour should we use to fill the box?</li>
+<li><em>Point character</em>: <code>medpch</code>, <code>outpch</code>. These behave like the regular <code>pch</code> parameter used to select the plot character. Note that you can set <code>outpch = NA</code> to stop R from plotting the outliers at all, and you can also set <code>medpch = NA</code> to stop it from drawing a character for the median (this is the default!)</li>
+<li><em>Point expansion</em>: <code>medcex</code>, <code>outcex</code>. Size parameters for the points used to plot medians and outliers. These are only meaningful if the corresponding points are actually plotted. So for the default boxplot, which includes outlier points but uses a line rather than a point to draw the median, only the <code>outcex</code> parameter is meaningful.</li>
+<li><em>Background colours</em>: <code>medbg</code>, <code>outbg</code>. Again, the background colours are only meaningful if the points are actually plotted.</li>
+</ul>
+<p>Taken as a group, these parameters allow you almost complete freedom to select the graphical style for your boxplot that you feel is most appropriate to the data set you’re trying to describe. That said, when you’re first starting out there’s no shame in using the default settings! But if you want to master the art of designing beautiful figures, it helps to try playing around with these parameters to see what works and what doesn’t. Finally, I should mention a few other arguments that you might want to make use of:</p>
+<ul>
+<li><code>horizontal</code>. Set this to <code>TRUE</code> to display the plot horizontally rather than vertically. varwidth. Set this to TRUE to get R to scale the width of each box so that the areas are proportional to the number of observations that contribute to the boxplot. This is only useful if you’re drawing multiple boxplots at once.</li>
+<li><code>show.names</code>. Set this to <code>TRUE</code> to get R to attach labels to the boxplots.</li>
+<li><code>notch</code>. If you set <code>notch = TRUE</code>, R will draw little notches in the sides of each box. If the notches of two boxplots don’t overlap, then there is a “statistically significant” difference between the corresponding medians (more on this later when I talk about statistical inference)</li>
+</ul>
+</div>
+<div id="drawing-multiple-boxplots" class="section level3">
+<h3><span class="header-section-number">99.5.2</span> Drawing multiple boxplots</h3>
+<p>What if you want to draw multiple boxplots at once? Suppose, for instance, I wanted separate boxplots showing the AFL margins not just for 2010, but for every year between 1987 and 2010. To do that, the first thing we’ll have to do is find the data. These are stored in the <code>aflsmall2.Rdata</code> file, which contains a data frame called <code>afl2</code>:</p>
+<pre class="r"><code>load(&quot;./data/aflsmall2.Rdata&quot;) # load the data
+head(afl2)                     # display the first six rows</code></pre>
+<pre><code>##   margin year
+## 1     33 1987
+## 2     59 1987
+## 3     45 1987
+## 4     91 1987
+## 5     39 1987
+## 6      1 1987</code></pre>
+<p>The <code>afl2</code> data frame contains data from a total of 4296 games, so it would be nice to summarise them in an easily digestible fashion. Specifically, what we want to do is have R draw boxplots for the <code>margin</code> variable, plotted separately for each <code>year</code>. The way to do this using the <code>boxplot</code> function is to input a <code>formula</code> rather than a variable as the input. In this case, the formula we want is <code>margin ~ year</code>. So our command now looks like this:</p>
+<pre class="r"><code>boxplot( 
+  formula = margin ~ year, 
+  data = afl2
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-22-1.png" width="768" style="display: block; margin: auto;" /> Even this, the default version of the plot, gives a sense of why it’s sometimes useful to choose boxplots instead of histograms. Even before taking the time to turn this basic output into something more readable, it’s possible to get a good sense of what the data look like from year to year without getting overwhelmed with too much detail. Now imagine what would have happened if I’d tried to cram 24 histograms into this space: no chance at all that the reader is going to learn anything useful.</p>
+<p>That being said, the default boxplot leaves a great deal to be desired in terms of visual clarity. The outliers are too visually prominent, the dotted lines look messy, and the interesting content (i.e., the behaviour of the median and the interquartile range across years) gets a little obscured. Fortunately, this is easy to fix, since we’ve already covered a lot of tools you can use to customise your output. After playing around with several different versions of the plot, the one I settled on is shown below. The command I used to produce it is long, but not complicated:</p>
+<pre class="r"><code>boxplot( 
+  formula =  margin ~ year, # the formula
+  data = afl2,              # the data set
+  xlab = &quot;AFL season&quot;,      # x axis label
+  ylab = &quot;Winning Margin&quot;,  # y axis label
+  frame.plot = FALSE,       # don’t draw a frame
+  staplewex = 0,            # don’t draw staples
+  staplecol = &quot;white&quot;,      # (fixes a tiny display issue)
+  boxwex = .75,             # narrow the boxes slightly
+  boxfill = &quot;grey80&quot;,       # lightly shade the boxes
+  whisklty = 1,             # solid line for whiskers
+  whiskcol = &quot;grey70&quot;,      # dim the whiskers
+  boxcol = &quot;grey70&quot;,        # dim the box borders
+  outcol = &quot;grey70&quot;,        # dim the outliers
+  outpch = 20,              # outliers as solid dots
+  outcex = .5,              # shrink the outliers
+  medlty = &quot;blank&quot;,         # no line for the medians
+  medpch = 20,              # instead, draw solid dots
+  medlwd = 1.5              # make them larger
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-23-1.png" width="768" style="display: block; margin: auto;" /> Of course, given that the command is that long, you might have guessed that I didn’t spend ages typing all that rubbish in over and over again. Instead, I wrote a script, which I kept tweaking until it produced the figure that I wanted. We talked about scripts earlier - and I hope most readers are using them at this point - but just in case you’re not, and given the length of this command, I thought I’d remind you that there’s an easier way of trying out different commands than typing them all in over and over.</p>
+</div>
+</div>
+<div id="scatterplots" class="section level2">
+<h2><span class="header-section-number">99.6</span> Scatterplots</h2>
+<p><strong>Scatterplots</strong> are a simple but effective tool for visualising data. We’ve already seen scatterplots in this chapter, when using the `plot function to draw the Fibonacci variable as a collection of dots. However, for the purposes of this section I have a slightly different notion in mind. Instead of just plotting one variable, what I want to do with my scatterplot is display the relationship between two variables. It’s this latter application that we usually have in mind when we use the term “scatterplot”. In this kind of plot, each observation corresponds to one dot: the horizontal location of the dot plots the value of the observation on one variable, and the vertical location displays its value on the other variable. In many situations you don’t really have a clear opinions about what the causal relationship is (e.g., does A cause B, or does B cause A, or does some other variable C control both A and B). If that’s the case, it doesn’t really matter which variable you plot on the x-axis and which one you plot on the y-axis. However, in many situations you do have a pretty strong idea which variable you think is most likely to be causal, or at least you have some suspicions in that direction. If so, then it’s conventional to plot the cause variable on the x-axis, and the effect variable on the y-axis. With that in mind, let’s look at how to draw scatterplots in R. Here’s a simple data set, one that I came up with when my first child was very young…</p>
+<pre class="r"><code>load(&quot;./data/parenthood.Rdata&quot;)
+head(parenthood)</code></pre>
+<pre><code>##   mySleep babySleep myGrump day
+## 1    7.59     10.18      56   1
+## 2    7.91     11.66      60   2
+## 3    5.14      7.92      82   3
+## 4    7.71      9.61      55   4
+## 5    6.68      9.75      67   5
+## 6    5.99      5.04      72   6</code></pre>
+<p>As you might guess, this - fictious but annoyingly plausible - data set tracks the relationship between the amount of sleep that I get (<code>mySleep</code>) and how grumpy I am the next day (<code>myGrump</code>), as a function of how much the baby has slept (<code>babySleep</code>), across a sequence of 100 days (<code>day</code>). Here’s the scatterplot showing the relationship between my sleep and my grumpines:</p>
+<pre class="r"><code>plot( 
+  x = parenthood$mySleep, # data on the x-axis 
+  y = parenthood$myGrump  # data on the y-axis
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-25-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>As usual, we want to add some labels, but there’s a few other things we might want to do as well. Firstly, it’s sometimes useful to rescale the plots. By default, R selects the scale so that the data fall neatly in the middle. But, in this case, we happen to know that the grumpiness measure falls on a scale from 0 to 100 (apparently!), and the hours slept falls on a natural scale between 0 hours and about 12 or so hours (the longest I can sleep in real life). So the command I might use to draw this is:</p>
+<pre class="r"><code>plot( 
+  x = parenthood$mySleep,         # data on the x-axis
+  y = parenthood$myGrump,         # data on the y-axis
+  xlab = &quot;My sleep (hours)&quot;,      # x-axis label
+  ylab = &quot;My grumpiness (0-100)&quot;, # y-axis label
+  xlim = c(0,12),                 # scale the x-axis
+  ylim = c(0,100),                # scale the y-axis
+  pch = 20,                       # change the plot type
+  col = &quot;gray50&quot;,                 # dim the dots slightly
+  frame.plot = FALSE              # don’t draw a box
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-26-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>However, it’s worth noting that our data set here has four variables, and we might want to visualise the relationships among them. To that end, the <code>pairs</code> function is pretty handy, as it will draw a <strong>scatterplot matrix</strong>, like so:</p>
+<pre class="r"><code>pairs( 
+  x = parenthood,  # data set 
+  pch = 19         # solid markers
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-27-1.png" width="576" style="display: block; margin: auto;" /> As always, the plot can be customised as much as you like in order to get something nicer.</p>
+</div>
+<div id="bar-graphs" class="section level2">
+<h2><span class="header-section-number">99.7</span> Bar graphs</h2>
+<p>Another form of graph that you often want to plot is the bar graph. The main function that you can use in R to draw them is the <code>barplot</code> function. To illustrate the use of the function, I’ll use the AFL data I’ve mentioned earlier. This time around, the data I’m interested in is a count of the number of finals games each team played in during the years 1987-2010. What I want to do is draw a bar graph that displays the number of finals that each team has played in over the time spanned by the AFL data set. So, let’s start by loading the data, and this time I’ll show a little bit of how we might process the data</p>
+<pre class="r"><code>load(&quot;./data/afl24.Rdata&quot;) # load data
+head(afl)                  # show the first few rows</code></pre>
+<pre><code>##          home.team away.team home.score away.score year round weekday day
+## 1  North Melbourne  Brisbane        104        137 1987     1     Fri  27
+## 2 Western Bulldogs  Essendon         62        121 1987     1     Sat  28
+## 3          Carlton  Hawthorn        104        149 1987     1     Sat  28
+## 4      Collingwood    Sydney         74        165 1987     1     Sat  28
+## 5        Melbourne   Fitzroy        128         89 1987     1     Sat  28
+## 6         St Kilda   Geelong        101        102 1987     1     Sat  28
+##   month is.final              venue attendance
+## 1     3    FALSE                MCG      14096
+## 2     3    FALSE      Waverley Park      22550
+## 3     3    FALSE       Princes Park      19967
+## 4     3    FALSE      Victoria Park      17129
+## 5     3    FALSE                MCG      18012
+## 6     3    FALSE Gold Coast Stadium      15867</code></pre>
+<pre class="r"><code>home.finals &lt;- table( afl$home.team[afl$is.final == TRUE] ) # count the number of home finals
+away.finals &lt;- table( afl$away.team[afl$is.final == TRUE] ) # count the number of away finals
+finals &lt;- home.finals + away.finals                         # add them together
+print(finals) </code></pre>
+<pre><code>## 
+##         Adelaide         Brisbane          Carlton      Collingwood 
+##               26               25               26               28 
+##         Essendon          Fitzroy        Fremantle          Geelong 
+##               32                0                6               39 
+##         Hawthorn        Melbourne  North Melbourne    Port Adelaide 
+##               27               28               28               17 
+##         Richmond         St Kilda           Sydney       West Coast 
+##                6               24               26               38 
+## Western Bulldogs 
+##               24</code></pre>
+<p>Here’s the bar graph:</p>
+<pre class="r"><code>barplot( finals )</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-29-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>Hm. To fix this we’re going to need to do a few things. First, we’ll need to rotate the labels on the x-asis. Earlier on I mentioned there’s a graphical argument called <code>las</code> (label style?) that lets you rotate the labels. Specifically, we’ll need to set <code>las = 2</code> in order to get vertically oriented labels. However, you can see there’s going to be a problem because the figure doesn’t have enough room to include some of the team names:</p>
+<pre class="r"><code>barplot(
+  height = finals,
+  las = 2
+)</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-30-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>A simple fix would be to use shorter names rather than the full name of all teams, and in many situations that’s probably the right thing to do. However, at other times you really do need to create a bit more space to add your labels, so I’ll show you how to do that.</p>
+</div>
+<div id="changing-global-settings" class="section level2">
+<h2><span class="header-section-number">99.8</span> Changing global settings</h2>
+<p>Altering the margins to the plot is actually a somewhat more complicated exercise than you might think. In principle it’s a very simple thing to do: the size of the margins is governed by a graphical parameter called <code>mar</code>, so all we need to do is alter this parameter. First, let’s look at what the <code>mar</code> argument specifies. The <code>mar</code> argument is a vector containing four numbers: specifying the amount of space at the <em>bottom</em>, the <em>left</em>, the <em>top</em> and then the <em>right</em> of the figure. The units are “number of ‘lines’”. The default value is <code>mar = c(5.1, 4.1, 4.1, 2.1)</code>, meaning that R leaves 5.1 “lines” empty at the bottom, 4.1 lines on the left and the bottom, and only 2.1 lines on the right. In order to make more room at the bottom, what I need to do is change the first of these numbers. A value of 10.1 should do the trick.</p>
+<p>So far this doesn’t seem any different to the other graphical parameters that we’ve talked about. However, because of the way that the traditional graphics system in R works, you need to specify what the margins will be <em>before</em> calling your high-level plotting function. Unlike the other cases we’ve see, you can’t treat <code>mar</code> as if it were just another argument in your plotting function. Instead, you have to use the <code>par</code> function to change the graphical parameters beforehand, and only then try to draw your figure. Usually, the way we would to it is this:</p>
+<pre class="r"><code># global parameters
+old.par &lt;- par(no.readonly = TRUE)   # store a copy of the current values of all graphics parameers
+par( mar = c( 10.1, 4.1, 4.1, 2.1) ) # reset the margins to the plotting area
+
+# draw the plot
+barplot( 
+  height = finals,                    # the data
+  las = 2,                            # rotate labels
+  ylab = &quot;Number of Finals&quot;,          # y-axis label
+  main = &quot;Finals Played, 1987-2010&quot;,  # figure title
+  col = &quot;grey50&quot;                      # shading
+)
+
+# be polite and reset the global parameters to their previous values
+# because global parameters affect all subequent plots you draw!
+par( old.par )</code></pre>
+<p><img src="xx-visualising-data_files/figure-html/unnamed-chunk-31-1.png" width="456" style="display: block; margin: auto;" /></p>
+</div>
+<div id="saving-image-files" class="section level2">
+<h2><span class="header-section-number">99.9</span> Saving image files</h2>
+<p>Hold on, you might be thinking. What’s the good of being able to draw pretty pictures in R if I can’t save them and send them to friends to brag about how awesome my data is? How do I save the picture? This is another one of those situations where the easiest thing to do is to use the Rstudio tools. If you’re running R through Rstudio, then the easiest way to save your image is to click on the “Export” button in the Plot panel (i.e., the area in Rstudio where all the plots have been appearing). When you do that you’ll see a menu that contains the options “Save Plot as PDF” and “Save Plot as Image”. Either version works. Both will bring up dialog boxes that give you a few options that you can play with, but besides that it’s pretty simple. This works pretty nicely for most situations.</p>
+<p>Okay, as I hinted earlier, whenever you’re drawing pictures in R you’re deemed to be drawing to a device of some kind. There are devices that correspond to a figure drawn on screen, and there are devices that correspond to graphics files that R will produce for you. Assuming you’re using RStudio, the plots are being sent to the native graphics device <code>RStudioGD</code>. However, there’s nothing preventing you from manually sending the information to a different “device”, like <code>jpeg</code>. There’s a number of commands you can use to do that, but here’s a simple illustration of <code>dev.print</code>, one of the easier ones:</p>
+<pre class="r"><code>dev.print( 
+  device = jpeg,              # what are we printing to?
+  filename = &quot;thisfile.jpg&quot;,  # name of the image file
+  width = 480,                # how many pixels wide should it be
+  height = 300                # how many pixels high should it be
+)</code></pre>
+<p>This command will take the active plot and “print it” as a JPEG file. The <code>filename = &quot;thisfile.jpg&quot;</code> part tells R what to name the graphics file, and the <code>width = 480</code> and <code>height = 300</code> arguments tell R to draw an image that is 300 pixels high and 480 pixels wide. If you want a different kind of file, just change the <code>device</code> argument from <code>jpeg</code> to something else. R has devices for <code>png</code>, <code>tiff</code> and <code>bmp</code> that all work in exactly the same way as the <code>jpeg</code> command, but produce different kinds of files. It can also produce <code>pdf</code>, <code>postscript</code> and other kinds of files in this fashion.</p>
+</div>
+<div id="summary" class="section level2">
+<h2><span class="header-section-number">99.10</span> Summary</h2>
+<p>Perhaps I’m a simple minded person, but I love pictures. Every time I write a new scientific paper, one of the first things I do is sit down and think about what the pictures will be. In my head, an article is really just a sequence of pictures, linked together by a story. All the rest of it is just window dressing. What I’m really trying to say here is that the human visual system is a very powerful data analysis tool. Give it the right kind of information and it will supply a human reader with a massive amount of knowledge very quickly. Not for nothing do we have the saying “a picture is worth a thousand words”.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>I should add that this isn’t unique to R. Like everything in R there’s a pretty steep learning curve to learning how to draw graphs, and like always there’s a massive payoff at the end in terms of the quality of what you can produce. But to be honest, I’ve seen the same problems show up regardless of what system people use. I suspect that the hardest thing to do is to force yourself to take the time to think deeply about what your graphs are doing. I say that in full knowledge that only about half of my graphs turn out as well as they ought to. Understanding what makes a good graph is easy: actually designing a good graph is hard.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>On the off chance that this isn’t enough freedom for you, you can select a colour directly as a “red, green, blue” specification using the <code>rgb</code> function, or as a “hue, saturation, value” specification using the <code>hsv</code> function.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Also, there’s a low level function called <code>axis</code> that allows a lot more control over the appearance of the axes.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>If you’re doing this, I’d actually like to know where you managed to find a physical phone book…<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Sometimes referred to as Tukey’s <a href="https://en.wikipedia.org/wiki/Five-number_summary">five number summary</a> of a sample, after John Tukey.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>Outliers are a tricky topic. The “automatic” detection of outliers via boxplots is handy, but it’s not always clear what to do with them. For the AFL margins data, for instance, the <code>boxplot</code> function “detects” a single outlier, the one game in the season with a margin of 116. So does this value of 116 constitute a funny observation not? Should we “exclude” this observation from our analyses? Possibly. As it turns out the game in question was Fremantle v Hawthorn, and was played in round 21 (the second last home and away round of the season). Fremantle had already qualified for the final series and for them the outcome of the game was irrelevant; and the team decided to rest several of their star players. As a consequence, Fremantle went into the game severely underpowered. In contrast, Hawthorn had started the season very poorly but had ended on a massive winning streak, and for them a win could secure a place in the finals. With the game played on Hawthorn’s home turf - well, Launceston, which isn’t technically Hawthorn’s home ground but it kind of is a second home ground for them in practice - and with so many unusual factors at play, it is perhaps no surprise that Hawthorn annihilated Fremantle by 116 points. Two weeks later, however, the two teams met again in an elimination final on Fremantle’s home ground, and Fremantle won comfortably by 30 points. Make of that what you will, but the overarching point here is that dealing with extreme observations is always a tricky business.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>I realise there’s a kind of logic to the way these names are constructed, but they still sound dumb. When I typed this sentence, all I could think was that it sounded like the name of a kids movie if it had been written by Lewis Carroll: “The frabjous gambolles of Staplewex and Whisklty” or something along those lines.<a href="#fnref7">↩</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

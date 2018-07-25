@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- ###### start inserted header ##### -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115940772-1');
+</script>
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:title" content="R for Psychological Science">
+<meta property="og:description" content="An introductory resource">
+<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="mystyle.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Psychological Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Core
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="getting-started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li>
+      <a href="scripts.html">Scripts</a>
+    </li>
+    <li>
+      <a href="packages.html">Packages</a>
+    </li>
+    <li>
+      <a href="workspaces.html">Workspaces</a>
+    </li>
+    <li>
+      <a href="vectors.html">Vectors</a>
+    </li>
+    <li>
+      <a href="loops.html">Loops</a>
+    </li>
+    <li>
+      <a href="branches.html">Branches</a>
+    </li>
+    <li>
+      <a href="functions.html">Functions</a>
+    </li>
+    <li>
+      <a href="programming.html">Programming</a>
+    </li>
+    <li>
+      <a href="file-system.html">File system</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="prelude-to-data.html">Prelude</a>
+    </li>
+    <li>
+      <a href="data-types.html">Data types</a>
+    </li>
+    <li>
+      <a href="describing-data.html">Describing data</a>
+    </li>
+    <li>
+      <a href="xx-visualising-data.html">Visualising data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Stats
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-distributions.html">Probability distributions</a>
+    </li>
+    <li>
+      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-shiny.html">Shiny apps</a>
+    </li>
+    <li>
+      <a href="xx-miscellaneous.html">Miscellaneous</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://compcogscisydney.org">compcogscisydney.org</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="10" style="list-style-type: decimal">
+<li>Programming</li>
+</ol></h1>
+
+</div>
+
+
+<blockquote>
+<p><em>Fry</em> – <br> Who cares what you’re programmed for? <br> If someone programmed you to jump off a bridge, would you do it? <br><br> <em>Bender</em> – <br> I’ll have to check my program … [pause] … Yep! <br> <br>       –Futurama, <em>Space Pilot 3000</em>, 1999</p>
+</blockquote>
+<p>At this point you have all the tools you need to write a fully functional R program. To illustrate this, let’s write a program that implements the <a href="http://www.scholarpedia.org/article/Rescorla-Wagner_model">Rescorla-Wagner model</a> of associative learning, and apply it to a few simple experimental designs. All the code in this section is available in the <a href="./scripts/rescorla_wagner.R">rescorla_wagner.R</a> script.</p>
+<div id="rescorla-wagner" class="section level2">
+<h2><span class="header-section-number">10.1</span> Rescorla-Wagner</h2>
+<p>The Rescorla-Wagner model provides a learning rule that describes how associative strength changes during Pavlovian conditioning. Suppose we take an initially neutral stimulus (e.g., a tone), and pair it with an outcome that has inherent value to the organism (e.g., food, shock). Over time the organism learns to associate the tone with the shock and will respond to the tone in much the same way that it does to the shock. In this example the shock is referred to as the <em>unconditioned stimulus</em> (US) and the tone is the <em>conditioned stimulus</em> (CS).</p>
+<p>Suppose we present a compound stimulus AB, which consists of two things, a tone (A) and a light (B). This compound is presented together with a shock. In associative learning studies, this kind of trial is denoted AB+ to indicate that the outcome (US) was present at the same time as the two stimuli that comprise the CS. According to the Rescorla-Wagner model, the rule for updating the associative strengths <span class="math inline">\(v_A\)</span> and <span class="math inline">\(v_B\)</span> between the originally neutral stimuli and the shock is given by:</p>
+<p><span class="math display">\[
+\begin{array}{rcl}
+v_A &amp;\leftarrow&amp; v_A + \alpha_A \beta_U (\lambda_U - v_{AB}) \\
+v_B &amp;\leftarrow&amp; v_B + \alpha_B \beta_U (\lambda_U - v_{AB}) \\
+\end{array}
+\]</span> where the associative value <span class="math inline">\(v_{AB}\)</span> of the compound stimulus AB is just the sum of the values of the two items individually. This is expressed as:</p>
+<p><span class="math display">\[
+v_{AB} = v_A + v_B
+\]</span></p>
+<p>To understand this rule, note that:</p>
+<ul>
+<li><span class="math inline">\(\lambda_U\)</span> is a variable that represents the “reward value” (or “punishment value”) of the US itself, and as such represents the maximum possible association strength for the CS.</li>
+<li><span class="math inline">\(\beta_U\)</span> is a learning rate linked to the US (e.g. how quickly do I learn about shocks?)</li>
+<li><span class="math inline">\(\alpha_A\)</span> is a learning rate linked to the CS (e.g, how quickly do I learn about tones?)</li>
+<li><span class="math inline">\(\alpha_B\)</span> is also a learning rate linked to the CS (e.g, how quickly do I learn about lights?)</li>
+</ul>
+<p>So this rule is telling us that we should adjust the values of <span class="math inline">\(v_A\)</span> and <span class="math inline">\(v_B\)</span> in a fashion that partly depends on the learning rate parameters (<span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>), and partly depends on the <em>prediction error</em> (<span class="math inline">\(\lambda - v_{AB}\)</span>) corresponding to the <em>difference</em> between the actual outcome value <span class="math inline">\(\lambda\)</span> and the value of the compound <span class="math inline">\(v_{AB}\)</span>.</p>
+<p>The Rescorla-Wagner successfully predicts many phenomena in associative learning, though it does have a number of shortcomings. However, despite its simplicity it can be a little difficult at times to get a good intuitive feel for what the model predicts. To remedy this, lets implement this learning rule as an R function, and then apply it to a few experimental designs.</p>
+</div>
+<div id="r-implementation" class="section level2">
+<h2><span class="header-section-number">10.2</span> R implementation</h2>
+<p>To work out how to write a function that implements the Rescorla-Wagner update rule, the first thing we need to ask ourselves is <em>what situations do we want to describe?</em> Do we want to be able to handle stimuli consisting of only a single feature (A), compounds with two features (AB), or compounds that might have any number of features? Do we want it to handle any possible values for the parameters <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\lambda\)</span> or just some? For the current exercise, I’ll try to write something fairly general-purpose!</p>
+<div id="the-skeleton" class="section level3">
+<h3><span class="header-section-number">10.2.1</span> The skeleton</h3>
+<p>To start with, I’ll create a skeleton for the function that looks like this:</p>
+<pre class="r"><code>update_RW &lt;- function(value, alpha, beta, lambda) {
+}</code></pre>
+<p>My thinking is that <code>value</code> is going to be a vector that specifies the associative strength of association between the US and each element of the CS: that is, it will contain the values <span class="math inline">\(v_A\)</span>, <span class="math inline">\(v_B\)</span>, etc. Similarly, the <code>alpha</code> argument will be a vector that specifies the various salience parameters (<span class="math inline">\(\alpha_A\)</span>, <span class="math inline">\(\alpha_B\)</span>, etc) associated with the CS. I’m going to assume that there is only ever a single US presented, so we’ll assume that the learning rate <span class="math inline">\(\beta\)</span> and the maximum associability <span class="math inline">\(\lambda\)</span> associated with the US are just numbers.</p>
+</div>
+<div id="make-a-plan" class="section level3">
+<h3><span class="header-section-number">10.2.2</span> Make a plan</h3>
+<p>So now how do I fill out the contents of this function? The first thing I usually do is add some comments to scaffold the rest of my code. Basically I’m making a plan:</p>
+<pre class="r"><code>update_RW &lt;- function(value, alpha, beta, lambda) {
+  # compute the value of the compound stimulus
+  # compute the prediction error
+  # compute the change in strength
+  # update the association value
+  # return the new value
+}</code></pre>
+</div>
+<div id="fill-in-the-pieces" class="section level3">
+<h3><span class="header-section-number">10.2.3</span> Fill in the pieces</h3>
+<p>Since the stimulus might be a compound (e.g. AB or ABC), the first thing we need to do is calculate the value (<span class="math inline">\(V_{AB}\)</span>) of the compound stimulus. In the Rescorla-Wagner model, the associative strength for the compound is just the sum of the individual strengths, so I can use the <code>sum</code> function to add up all the elements of the <code>value</code> argument:</p>
+<pre class="r"><code>update_RW &lt;- function(value, alpha, beta, lambda) {
+  
+  # compute the value of the compound stimulus
+  value_compound &lt;- sum(value) 
+  
+  # compute the prediction error
+  # compute the change in strength
+  # update the association value
+  # return the new value
+}</code></pre>
+<p>The <code>value_compound</code> vector plays the same role in my R function that <span class="math inline">\(V_{AB}\)</span> plays in the equations for the Rescorla-Wagner model. However, if we look at the Rescorla-Wagner model, it’s clear that the quantity that actually drives learning is the <em>prediction error</em>, <span class="math inline">\(\lambda_U - V_{AB}\)</span>, namely the difference between the maximum association strength that the US supports and the current association strength for the compound. Well that’s easy… it’s just subtraction:</p>
+<pre class="r"><code>update_RW &lt;- function(value, alpha, beta, lambda) {
+  
+  # compute the value of the compound stimulus
+  value_compound &lt;- sum(value) 
+  
+  # compute the prediction error
+  prediction_error &lt;- lambda - value_compound
+  
+  # compute the change in strength
+  # update the association value
+  # return the new value
+}</code></pre>
+<p>Now we have to multiply everything by <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, in order to work out how much learning has occurred. In the Rescorla-Wagner model this is often denoted <span class="math inline">\(\Delta v\)</span>. That is:</p>
+<p><span class="math display">\[
+\begin{array}{rcl}
+\Delta v_A &amp;=&amp; \alpha_A \beta_U (\lambda_U - v_{AB}) \\
+\Delta v_B &amp;=&amp; \alpha_B \beta_U (\lambda_U - v_{AB}) \\
+\end{array}
+\]</span></p>
+<p>Within our R function, that’s really simple because that’s just multiplication. So let’s do that, and while we’re at it we’ll update the <code>value</code> (that’s just addition) and return the new association value…</p>
+<pre class="r"><code>update_RW &lt;- function(value, alpha, beta, lambda) {
+  
+  # compute the value of the compound stimulus
+  value_compound &lt;- sum(value) 
+  
+  # compute the prediction error
+  prediction_error &lt;- lambda - value_compound
+  
+  # compute the change in strength
+  value_change &lt;- alpha * beta * prediction_error 
+  
+  # update the association value
+  value &lt;- value + value_change
+  
+  # return the new value
+  return(value)
+}</code></pre>
+</div>
+<div id="tidying" class="section level3">
+<h3><span class="header-section-number">10.2.4</span> Tidying</h3>
+<p>Depending on your personal preferences, you might want to reorganise to make this a little shorter. You could do this by shortening the comments and moving them to the side. You might also want to set some sensible default values, as I have done here:</p>
+<pre class="r"><code>update_RW &lt;- function(value, alpha=.3, beta=.3, lambda=1) {
+  value_compound &lt;- sum(value)                    # value of the compound 
+  prediction_error &lt;- lambda - value_compound     # prediction error
+  value_change &lt;- alpha * beta * prediction_error # change in strength
+  value &lt;- value + value_change                   # update value
+  return(value)
+}</code></pre>
+<p>All done! Yay! 🎈</p>
+</div>
+</div>
+<div id="model-predictions" class="section level2">
+<h2><span class="header-section-number">10.3</span> Model predictions</h2>
+<p>Okay, now that we have a function <code>update_RW</code> that implements the Rescorla-Wagner learning rule, let’s use it to make predictions about three learning phenomena: <em>conditioning</em>, <em>extinction</em> and <em>blocking</em>.</p>
+<div id="conditioning" class="section level3">
+<h3><span class="header-section-number">10.3.1</span> Conditioning</h3>
+<p>For the first “experiment” to simulate, we’ll pair a simple CS (i.e. not compound) with a US for 20 trials, and examine how the association strength changes over time. So get started, we’ll specify the number of trials</p>
+<pre class="r"><code>n_trials &lt;- 20  </code></pre>
+<p>and we’ll create a numeric <code>strength</code> vector that we will use to store the association strengths. The way we’ll do that is like this:</p>
+<pre class="r"><code>strength &lt;- numeric(n_trials)
+strength</code></pre>
+<pre><code>##  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</code></pre>
+<p>As you can see, the <code>numeric</code> function has created a vector of zeros for us. When trial 1 begins association strength is in fact zero, so that much is correct at least, but of course we’ll need to use the <code>update_RW</code> function to fill in the other values correctly. To do that, all we have to do is let the experiment run! We set up a loop in which we “present” the CS-US pairing and update the association strength at the end of each trial:</p>
+<pre class="r"><code>for(trial in 2:n_trials) {
+  strength[trial] &lt;- update_RW( strength[trial-1] )
+}</code></pre>
+<p>That’s it! Now we print out the association strength:</p>
+<pre class="r"><code>print(strength)</code></pre>
+<pre><code>##  [1] 0.0000000 0.0900000 0.1719000 0.2464290 0.3142504 0.3759679 0.4321307
+##  [8] 0.4832390 0.5297475 0.5720702 0.6105839 0.6456313 0.6775245 0.7065473
+## [15] 0.7329580 0.7569918 0.7788626 0.7987649 0.8168761 0.8333572</code></pre>
+<p>You can see in the output that with repeated stimulus presentations, the strength of the association rises quickly. It’s a little easier to see what’s going on if we draw a picture though:</p>
+<p><img src="programming_files/figure-html/unnamed-chunk-12-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>I’ve hidden the R command that produces the plot, because we haven’t covered data visualisation yet. However, if you are interested in a sneak peek, the source code for all the analyses in this section are <a href="./scripts/rescorla_wagner.R">here</a>.</p>
+</div>
+<div id="extinction" class="section level3">
+<h3><span class="header-section-number">10.3.2</span> Extinction</h3>
+<p>For the second example, let’s consider the extinction of a learned association. What we’ll do this time is start out doing the same thing as last time. For the first 25 trials we’ll present a CS-US trial that pairs a tone with a shock (or whatever) and over that time the association for the CS will rise to match the reward “value” (<span class="math inline">\(\lambda = .3\)</span>) linked to the US. Then for the next 25 trials we will present the CS alone with no US present. We’ll capture this by setting <span class="math inline">\(\lambda = 0\)</span> to reflect the fact that the “value” to be predicted is now zero (i.e. no shock). For simplicity, we’ll leave the learning rate <span class="math inline">\(\beta\)</span> the same for shock and no-shock.</p>
+<p>Okay here goes. First, let’s set up our variables:</p>
+<pre class="r"><code>n_trials &lt;- 50                
+strength &lt;- numeric(n_trials) 
+lambda &lt;- .3 # initial reward value </code></pre>
+<p>Now we have to set up our loop, same as before. This time around we need to include an <code>if</code> statement in the loop, to check whether we have moved from the learning phase (trials 1 to 25) to the extinction phase (trials 26 to 50), and adjust the value of <span class="math inline">\(\lambda\)</span> accordingly.</p>
+<pre class="r"><code>for(trial in 2:n_trials) {
+  
+  # remove the shock after trial 25
+  if(trial &gt; 25) {
+    lambda &lt;- 0
+  }
+  
+  # update associative strength on each trial
+  strength[trial] &lt;- update_RW(
+    value = strength[trial-1],
+    lambda = lambda
+  )
+}</code></pre>
+<p>What we expect to see in this situation is that after trial 25 when the shock is removed, the association strength starts to weaken because the learner is now associating the CS with no-shock (i.e. <span class="math inline">\(\lambda\)</span> has dropped to zero and so the association <span class="math inline">\(v\)</span> is slowly reverting to that value). Here’s the raw numbers:</p>
+<pre class="r"><code>print(strength)</code></pre>
+<pre><code>##  [1] 0.00000000 0.02700000 0.05157000 0.07392870 0.09427512 0.11279036
+##  [7] 0.12963922 0.14497169 0.15892424 0.17162106 0.18317516 0.19368940
+## [13] 0.20325735 0.21196419 0.21988741 0.22709755 0.23365877 0.23962948
+## [19] 0.24506283 0.25000717 0.25450653 0.25860094 0.26232685 0.26571744
+## [25] 0.26880287 0.24461061 0.22259565 0.20256205 0.18433146 0.16774163
+## [31] 0.15264488 0.13890684 0.12640523 0.11502876 0.10467617 0.09525531
+## [37] 0.08668234 0.07888093 0.07178164 0.06532129 0.05944238 0.05409256
+## [43] 0.04922423 0.04479405 0.04076259 0.03709395 0.03375550 0.03071750
+## [49] 0.02795293 0.02543716</code></pre>
+<p>Here they are as a pretty picture:</p>
+<p><img src="programming_files/figure-html/unnamed-chunk-16-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>That looks right to me! Extinction is initially effective at removing the association, but it’s effectiveness declines over time, so that by the end of the task there’s still some association left.</p>
+</div>
+<div id="blocking" class="section level3">
+<h3><span class="header-section-number">10.3.3</span> Blocking</h3>
+<p>For the final example, consider a blocking paradigm. In this design we might initially pair a tone with a shock (A+ trials) for a number of trials until an association is learned. Then we present a compound stimulus AB (tone plus light) together with a shock (AB+). During the first phase, the learner quickly acquires a strong association between A and the shock, but then during the second phase they don’t learn very much about B, because A already predicts the shock.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>Because we are presenting a compound stimulus, the values that we pass to the <code>update_RW</code> function can be vectors. But that’s okay, we designed our function to be able to handle that. So let’s start by setting up our modelling exercise:</p>
+<pre class="r"><code># total number of trials across 
+# both phases of the task
+n_trials &lt;- 50
+
+# vectors of zeros
+strength_A &lt;- rep(0,n_trials)
+strength_B &lt;- rep(0,n_trials)</code></pre>
+<p>There are two strength vectors here, one for the tone (A) and one for the light (B). Of course, during the first phase of the task the light isn’t actually present, which we can capture by setting the relevant learning rate (or salience) parameter <span class="math inline">\(\alpha\)</span> to 0:</p>
+<pre class="r"><code>alpha &lt;- c(.3, 0)</code></pre>
+<p>This means that at the start of the task, the model will learn about the tone but not the light. After trial 15, however, both stimuli will be present. For simplicity I’ll assume they’re equally salient, so after trial 15 the <span class="math inline">\(\alpha\)</span> value becomes .3 for both stimuli.</p>
+<p>As before we construct a loop over the trials:</p>
+<pre class="r"><code>for(trial in 2:n_trials) {
+  
+  # after trial 15, both stimuli are present
+  if(trial &gt; 15) alpha &lt;- c(.3, .3)
+  
+  # vector of current associative strengths
+  v_old &lt;- c(strength_A[trial-1], strength_B[trial-1])
+  
+  # vector of new associative strengths
+  v_new &lt;- update_RW(
+    value = v_old,
+    alpha = alpha
+   )
+  
+  # record the new strengths
+  strength_A[trial] &lt;- v_new[1]
+  strength_B[trial] &lt;- v_new[2]
+}</code></pre>
+<p>It’s a little more complex this time because we have read off two strength values and pass them to the <code>update_RW</code> function.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Hopefully it is clear what this code is doing.</p>
+<p>As with the previous two examples we could print out <code>strength_A</code> and <code>strength_B</code>, but realistically no-one likes looking at long lists of numbers so let’s just draw the picture. In the plot below, the blue line shows the associative strength to A and the red line shows the associative strength to B:</p>
+<p><img src="programming_files/figure-html/unnamed-chunk-20-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>That’s the blocking effect, right there 😀. The model learns a strong association between the tone and the shock (blue) but the association it learns between the light and the shock (red) is much weaker.</p>
+</div>
+</div>
+<div id="done" class="section level2">
+<h2><span class="header-section-number">10.4</span> Done!</h2>
+<p>If you’ve been following along yourself you are now officially a computational modeller. Nice work!</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>In a real blocking study there would be various control conditions but I’m not going to bother modelling those here. I just want to show how our code works for the important one!<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>In fact, we could make this code a lot simpler if we’d recorded the strengths as a <strong>matrix</strong> rather than two vectors, but since I haven’t introduced matrices yet I’ve left it in this slightly more clunky form with vectors<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

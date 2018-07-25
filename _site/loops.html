@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- ###### start inserted header ##### -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115940772-1');
+</script>
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:title" content="R for Psychological Science">
+<meta property="og:description" content="An introductory resource">
+<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="mystyle.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Psychological Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Core
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="getting-started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li>
+      <a href="scripts.html">Scripts</a>
+    </li>
+    <li>
+      <a href="packages.html">Packages</a>
+    </li>
+    <li>
+      <a href="workspaces.html">Workspaces</a>
+    </li>
+    <li>
+      <a href="vectors.html">Vectors</a>
+    </li>
+    <li>
+      <a href="loops.html">Loops</a>
+    </li>
+    <li>
+      <a href="branches.html">Branches</a>
+    </li>
+    <li>
+      <a href="functions.html">Functions</a>
+    </li>
+    <li>
+      <a href="programming.html">Programming</a>
+    </li>
+    <li>
+      <a href="file-system.html">File system</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="prelude-to-data.html">Prelude</a>
+    </li>
+    <li>
+      <a href="data-types.html">Data types</a>
+    </li>
+    <li>
+      <a href="describing-data.html">Describing data</a>
+    </li>
+    <li>
+      <a href="xx-visualising-data.html">Visualising data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Stats
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-distributions.html">Probability distributions</a>
+    </li>
+    <li>
+      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-shiny.html">Shiny apps</a>
+    </li>
+    <li>
+      <a href="xx-miscellaneous.html">Miscellaneous</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://compcogscisydney.org">compcogscisydney.org</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="7" style="list-style-type: decimal">
+<li>Loops</li>
+</ol></h1>
+
+</div>
+
+
+<p>Back when I introduced <a href="./scripts.html">scripts</a> I said that R starts at the top of the file and runs straight through to the end of the file. That was a tiny bit of a lie. It is true that unless you insert commands to explicitly alter how the script runs, that is what will happen. However, you actually have quite a lot of flexibility in this respect. Depending on how you write the script, you can have R repeat several commands, or skip over different commands, and so on. This topic is referred to as <strong>flow control</strong>.</p>
+<p>The first kind of flow control that I want to talk about is a <strong>loop</strong>. The idea is simple: a loop is a block of code (i.e., a sequence of commands) that R will execute over and over again until some <em>termination criterion</em> is met. To illustrate the idea, here’s a schematic picture showing the difference between what R does with a script that contains a loop and one that doesn’t:</p>
+<p><img src="img/loop_schematic.png" width="600px"></p>
+<p>Looping is a very powerful idea, because it allows you to automate repetitive tasks. Much like my children, R will execute an continuous cycle of <em>“are we there yet? are we there yet? are we there yet?”</em> checks against the termination criterion, and it will keep going forever until it is finally <em>there</em> and can break out of the loop. Rather unlike my children, however, I find that this behaviour is actually helpful.</p>
+<p>There are several different ways to construct a loop in R. There are two methods I’ll talk about here, one using the <code>while</code> command and another using the <code>for</code> command.</p>
+<div id="the-while-loop" class="section level2">
+<h2><span class="header-section-number">7.1</span> The <code>while</code> loop</h2>
+<p>A <code>while</code> loop is a simple thing. The basic format of the loop looks like this:</p>
+<pre><code>while ( CONDITION ) {
+  STATEMENT1
+  STATEMENT2
+  ETC 
+}</code></pre>
+<p>The code corresponding to <code>condition</code> needs to produce a logical value, either <code>TRUE</code> or <code>FALSE</code>. Whenever R encounters a while statement, it checks to see if the condition is <code>TRUE</code>. If it is, then R goes on to execute all of the commands inside the curly brackets, proceeding from top to bottom as usual. However, when it gets to the bottom of those statements, it moves back up to the while statement. Then, like the mindless automaton it is, it checks to see if the condition is <code>TRUE</code>. If it is, then R goes on to execute all the commands inside … well, you get the idea. This continues endlessly until at some point the <code>condition</code> turns out to be <code>FALSE</code>. Once that happens, R jumps to the bottom of the loop (i.e., to the <code>}</code> character), and then continues on with whatever commands appear next in the script.</p>
+<div id="a-simple-example" class="section level3">
+<h3><span class="header-section-number">7.1.1</span> A simple example</h3>
+<p>To start with, let’s keep things simple, and use a <code>while</code> loop to calculate the smallest multiple of 179 that is greater than or equal to 1000. This is of course a very silly example, since you can calculate it using simple arithmetic, but the point here isn’t to do something novel. The point is to show how to write a <code>while</code> loop. Here’s the code in action:</p>
+<pre class="r"><code>x &lt;- 0
+while(x &lt; 1000) {
+  x &lt;- x + 179
+}
+print(x)</code></pre>
+<pre><code>## [1] 1074</code></pre>
+<p>When we run this code, R starts at the top and creates a new variable called <code>x</code> and assigns it a value of 0. It then moves down to the loop, and “notices” that the condition here is <code>x &lt; 1000</code>. Since the current value of <code>x</code> is zero, the condition is <code>TRUE</code>, so it enters the body of the loop (inside the curly braces). There’s only one command here, which instructs R to increase the value of <code>x</code> by 179. R then returns to the top of the loop, and rechecks the condition. The value of <code>x</code> is now 179, but that’s still less than 1000, so the loop continues. Here’s a visual representation of that:</p>
+<p><img src="img/loop_while1.png" width="300px"></p>
+<p>To see this in action, we can move the <code>print</code> statement inside the body of the loop. By doing that, R will print out the value of <code>x</code> every time it gets updated. Let’s watch:</p>
+<pre class="r"><code>x &lt;- 0
+while(x &lt; 1000) {
+  x &lt;- x + 179
+  print(x)
+}</code></pre>
+<pre><code>## [1] 179
+## [1] 358
+## [1] 537
+## [1] 716
+## [1] 895
+## [1] 1074</code></pre>
+<p>Truly fascinating stuff. 🤔</p>
+</div>
+<div id="mortgage-calculator" class="section level3">
+<h3><span class="header-section-number">7.1.2</span> Mortgage calculator</h3>
+<p>To give you a sense of how you can use a <code>while</code> loop in a more complex situation, let’s write a simple script to simulate the progression of a mortgage. Suppose we have a nice young couple who borrow $300000 from the bank, at an annual interest rate of 5%.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> The mortgage is a 30 year loan, so they need to pay it off within 360 months total. Our happy couple decide to set their monthly mortgage payment at $1600 per month. Will they pay off the loan in time or not? Only time will tell.</p>
+<p>Or, alternatively, we could simulate the whole process and get R to tell us. The code to run this is a little more complicated, so we’ll keep it all in a script called <a href="./scripts/mortgage.R">mortgage.R</a>.</p>
+<pre class="r"><code># setup
+month &lt;- 0         # count the number of months
+balance &lt;- 300000  # initial mortgage balance
+payments &lt;- 1600   # monthly payments
+interest &lt;- 0.05   # 5% interest rate per year
+total_paid &lt;- 0    # track what you’ve paid the bank
+
+# convert annual interest to a monthly multiplier
+monthly_multiplier &lt;- (1 + interest) ^ (1/12)
+
+# keep looping until the loan is paid off...
+while(balance &gt; 0){
+  
+  # do the calculations for this month
+  month &lt;- month + 1# one more month
+  
+  balance &lt;- balance * monthly_multiplier # add the interest 
+  balance &lt;- balance - payments # make the payments 
+  total_paid &lt;- total_paid + payments # track the total paid
+  
+  # print the results on screen
+  cat(&quot;month&quot;, month, &quot;: balance&quot;, round(balance), &quot;\n&quot;)
+  
+}
+
+# print the total payments at the end
+cat(&quot;total payments made&quot;, total_paid, &quot;\n&quot;)</code></pre>
+<p>To explain what’s going on, let’s go through this script line by line. In the first part of the code, all we’re doing is specifying the variables that define the problem:</p>
+<pre class="r"><code>month &lt;- 0         # count the number of months
+balance &lt;- 300000  # initial mortgage balance
+payments &lt;- 1600   # monthly payments
+interest &lt;- 0.05   # 5% interest rate per year
+total_paid &lt;- 0    # track what you’ve paid the bank</code></pre>
+<p>The loan starts with a <code>balance</code> of $300,000 owed to the bank on <code>month</code> zero, and at that point in time the <code>total_paid</code> money is nothing. The couple is making monthly <code>payments</code> of $1600, at an annual <code>interest</code> rate of 5%.</p>
+<p>The next step is to convert the <em>annual</em> percentage interest into a <em>monthly</em> multiplier. That’s this line:</p>
+<pre class="r"><code>monthly_multiplier &lt;- (1 + interest) ^ (1/12)</code></pre>
+<p>If you’re like me and somehow have a panic attack every time someone asks you to do calculations with money, it might help to unpack this line a bit. What we’re trying to calculate here is a number (<code>monthly_multiplier</code>) that we would have to multiply the current balance by <em>each month</em> in order to produce an annual interest rate of 5%. An annual interest rate of 5% implies that, if no payments were made over 12 months the balance would end up being 1.05 times what it was originally, so the <em>annual</em> multiplier is 1.05. To calculate the monthly multiplier, we need to calculate the 12th root of 1.05 (i.e., raise 1.05 to the power of 1/12). We store this value in as the <code>monthly_multiplier</code> variable, which as it happens corresponds to a value of about 1.004. All of which is a rather long winded way of saying that the annual interest rate of 5% corresponds to a monthly interest rate of about 0.4%.</p>
+<p>Have I mentioned how much I <em>hate</em> financial calculations?</p>
+<p>Anyway… all of that is really just setting the stage. The interesting part of the script is the loop. The <code>while</code> statement tells R that it needs to keep looping until the <code>balance</code> falls below zero. If we strip out the frills, the loop looks like this:</p>
+<pre class="r"><code>while(balance &gt; 0){
+  month &lt;- month + 1                      # one more month
+  balance &lt;- balance * monthly_multiplier # add the interest 
+  balance &lt;- balance - payments           # make the payments 
+  total_paid &lt;- total_paid + payments     # track the total paid
+}</code></pre>
+<p>Firstly we increase the value <code>month</code> by 1. Next, the bank charges the interest, so the <code>balance</code> goes up. Then, the couple makes their monthly payment and the <code>balance</code> goes down. Finally, we keep track of the total amount of money that the couple has paid so far. After having done this number crunching, we tell R to issue the couple with a very terse monthly statement (that’s one of the frills I removed), indicating indicates how many months they’ve been paying the loan and how much money they still owe the bank. Which is rather rude of us really. I’ve grown attached to this couple and I really feel they deserve better. I guess that’s banks for you.</p>
+<p>In any case, the key thing here is the tension between the increase in <code>balance</code> due to interest and the decrease due to repayments. As long as the decrease is bigger, then the balance will eventually drop to zero and the loop will eventually terminate. If not, the loop will continue forever! This is very bad programming on my part: I should have included something to force R to stop if this goes on too long. For now, we’ll just have to hope that the author has rigged the example so that the loop actually terminates. Hm. I wonder what the odds of that are?</p>
+<p>Anyway, assuming that the loop does eventually terminate, there’s one last line of code that prints the total amount of money that the couple handed over to the bank over the lifetime of the loan.</p>
+<p>Now that I’ve explained everything in the script in tedious detail, let’s run it and see what happens:</p>
+<pre class="r"><code>source(&quot;./scripts/mortgage.R&quot;)</code></pre>
+<pre><code>## month 1 : balance 299622 
+## month 2 : balance 299243 
+## month 3 : balance 298862 
+## month 4 : balance 298480 
+## month 5 : balance 298096 
+## month 6 : balance 297710 
+## month 7 : balance 297323 
+## month 8 : balance 296934 
+## month 9 : balance 296544 
+## month 10 : balance 296152 
+BLAH BLAH BLAH</code></pre>
+<pre><code>BLAH BLAH BLAH
+## month 352 : balance 4806 
+## month 353 : balance 3226 
+## month 354 : balance 1639 
+## month 355 : balance 46 
+## month 356 : balance -1554 
+## total payments made 569600</code></pre>
+<p>So our nice young couple have paid off the $300,000 loan just 4 months shy of the 30 year term of their mortgage, all at a bargain basement price of $568,046.</p>
+<p>A happy ending! 🎉 🎈 🍰</p>
+</div>
+</div>
+<div id="the-for-loop" class="section level2">
+<h2><span class="header-section-number">7.2</span> The <code>for</code> loop</h2>
+<p>The <code>for</code> loop is also pretty simple, though not quite as simple as the <code>while</code> loop. The basic format of this loop goes like this:</p>
+<pre><code>for ( VAR in VECTOR ) {
+  STATEMENT1
+  STATEMENT2
+  ETC 
+}</code></pre>
+<p>In a <code>for</code> loop, R runs a fixed number of iterations. We have a vector which has several elements, each one corresponding to a possible value of the variable <code>var</code>. In the first iteration of the loop, <code>var</code> is given a value corresponding to the first element of vector; in the second iteration of the loop <code>var</code> gets a value corresponding to the second value in vector; and so on. Once we’ve exhausted all of the values in the vector, the loop terminates and the flow of the program continues down the script.</p>
+<div id="multiplication-tables" class="section level3">
+<h3><span class="header-section-number">7.2.1</span> Multiplication tables</h3>
+<p>When I was a kid we used to have multiplication tables hanging on the walls at home, so I’d end up memorising the all the multiples of small numbers. I was okay at this as long as all the numbers were smaller than 10. Anything above that and I got lazy. So as a first example we’ll get R to print out the multiples of 137. Let’s say I want to it to calculate <span class="math inline">\(137 \times 1\)</span>, then <span class="math inline">\(137 \times 2\)</span>, and so on until we reach <span class="math inline">\(137 \times 10\)</span>. In other words what we want to do is calculate <code>137 * value</code> for every <code>value</code> within the range spanned by <code>1:10</code>, and then print the answer to the console. Because we have a <em>fixed</em> range of values that we want to loop over, this situation is well-suited to a <code>for</code> loop. Here’s the code:</p>
+<pre class="r"><code>for(value in 1:10) {
+  answer &lt;- 137 * value
+  print(answer)
+}</code></pre>
+<pre><code>## [1] 137
+## [1] 274
+## [1] 411
+## [1] 548
+## [1] 685
+## [1] 822
+## [1] 959
+## [1] 1096
+## [1] 1233
+## [1] 1370</code></pre>
+<p>The intuition here is that R starts by setting <code>value</code> to 1. It then computes and prints <code>137 * value</code>, then moves back to the top of the loop. When it gets there, it increases <code>value</code> by 1, and then repeats the calculation. It keeps doing this until the <code>value</code> reaches 10 and then it stops. That intuition is essentially correct, but it’s worth unpacking it a bit further using a different example where R loops over something other than a sequence of numbers…</p>
+</div>
+<div id="looping-over-other-vectors" class="section level3">
+<h3><span class="header-section-number">7.2.2</span> Looping over other vectors</h3>
+<p>In the example above, the <code>for</code> loop was defined over the numbers from 1 to 10, specified using the R code <code>1:10</code>. However, it’s worth keeping in mind that as far as R is concerned, <code>1:10</code> is actually a vector:</p>
+<pre class="r"><code>1:10</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<p>So in the previous example, the intuition about the <code>for</code> loop is slightly misleading. When R gets to the top of the loop the action it takes is “<em>assigning</em> <code>value</code> <em>equal to the next element of the vector</em>”. In this case it turns out that this action causes R to “<em>increase</em> <code>value</code> <em>by 1</em>”, but that’s not true in general. To illustrate that, here’s an example in which a <code>for</code> loop iterates over a character vector. First, I’ll create a vector of <code>words</code>:</p>
+<pre class="r"><code>words &lt;- c(&quot;it&quot;, &quot;was&quot;, &quot;the&quot;, &quot;dirty&quot;, &quot;end&quot;, &quot;of&quot;, &quot;winter&quot;)</code></pre>
+<p>Now what I’ll do is create a <code>for</code> loop using this vector. For every word in the vector of <code>words</code> R will do three things:</p>
+<ul>
+<li>Count the number of letters in the word</li>
+<li>Convert the word to upper case</li>
+<li>Print a nice summary to the console</li>
+</ul>
+<p>Here it is:</p>
+<pre class="r"><code>for(this_word in words) {
+  n_letters &lt;- nchar(this_word)
+  block_word &lt;- toupper(this_word)
+  cat(block_word, &quot;has&quot;, n_letters, &quot;letters\n&quot;)
+}</code></pre>
+<pre><code>## IT has 2 letters
+## WAS has 3 letters
+## THE has 3 letters
+## DIRTY has 5 letters
+## END has 3 letters
+## OF has 2 letters
+## WINTER has 6 letters</code></pre>
+<p>From the perspective of the R interpreter this is what the code four the <code>for</code> loop is doing. It’s pretty similar to the <code>while</code> loop, but not quite the same:</p>
+<p><img src="img/loop_for1.png" width="350px"></p>
+</div>
+<div id="vectorised-code" class="section level3">
+<h3><span class="header-section-number">7.2.3</span> Vectorised code?</h3>
+<p>Of course, there are ways of doing this that don’t require you to write the loop manually. Because many functions in R operate naturally on vectors, you can take advantage of this. Code that bypasses the need to write loops is called <em>vectorised</em> code, and there are some good reasons to do this (sometimes) once you’re comfortable working in R. Here’s an example:</p>
+<pre class="r"><code>chars &lt;- nchar(words)
+names(chars) &lt;- toupper(words)
+print(chars)</code></pre>
+<pre><code>##     IT    WAS    THE  DIRTY    END     OF WINTER 
+##      2      3      3      5      3      2      6</code></pre>
+<p>Sometimes vectorised code is easy to write and easy to read. I think the example above is pretty simple, for instance. It’s not always so easy though!</p>
+<p>When you go out into the wider world of R programming you’ll probably encounter a lot of examples of people talking about how to vectorise your code to produce better performance. My advice for novices is not to worry about that right now. Loops are perfectly fine, and it’s often more intuitive to write code using loops than using vectors. Eventually you’ll probably want to think about these topics but it’s something that you can leave for a later date!</p>
+</div>
+<div id="for-the-love-of-turtles" class="section level3">
+<h3><span class="header-section-number">7.2.4</span> For the love of turtles</h3>
+<p>One of the things I used to find annoying about writing notes for programming classes is that programs are fundamentally <em>dynamic</em> things. They do stuff, and if you want to have a good feel for how they work you really do need to see the action happening. In contrast, lecture notes are - traditionally - static things. It’s just a fixed set of words. Except… this is the internet, so I can include animations!</p>
+<p>If you recall, back when I introduced <a href="./packages.html">packages</a> I installed the <strong>TurtleGraphics</strong> package from my GitHub page. Turtle graphics is a classic teaching tool in computer science, originally invented in the 1960s and reimplemnented over and over again in different programming languages. Let’s load that package.</p>
+<pre class="r"><code>library(TurtleGraphics)</code></pre>
+<p>Here’s the idea. You have a turtle, and she lives in a nice warm terrarium:</p>
+<pre class="r"><code>turtle_init()</code></pre>
+<p><img src="loops_files/figure-html/unnamed-chunk-17-1.png" width="456" style="display: block; margin: auto;" /> Your job is to give her instructions, to <em>program</em> her to undertake certain actions. So for example, you can use the <code>turtle_forward</code> command to get her to walk forwards, the <code>turtle_left</code> command to get her to rotate to the left, and so on. For example, if I used this command my turtle would walk forward 10 steps and leave a trail behind her showing the path she took.</p>
+<pre class="r"><code>turtle_forward(distance = 10)</code></pre>
+<p>That seems simple enough, but what if I want my turtle to draw a more complicated shape? Let’s say I want her to draw a hexagon. There are six sides to the hexagon, so the most natural way to write code for this is to write a <code>for</code> loop that loops over the sides! At each iteration within the loop, I’ll have the turtle walk fowards, and then turn 60 degrees to the left. Here’s what happens:</p>
+<pre class="r"><code>turtle_init() </code></pre>
+<pre class="r"><code>for(side in 1:6) {
+  turtle_forward(distance = 10)  
+  turtle_left(angle = 60)        
+}</code></pre>
+<video width="456"  controls loop>
+<source src="loops_files/figure-html/unnamed-chunk-19.webm" />
+</video>
+<p>Yay for turtles! Everybody loves turtles! 🐢🐢🐢🐢🐢🐢</p>
+</div>
+</div>
+<div id="exercises" class="section level2">
+<h2><span class="header-section-number">7.3</span> Exercises</h2>
+<p>To start with, here are some exercises with <code>for</code> loops and turtles:</p>
+<ul>
+<li>Use <strong>TurtleGraphics</strong> to draw a square rather than a hexagon</li>
+<li>Use <strong>TurtleGraphics</strong> to draw a triangle.</li>
+<li>Is there a way in which you can get R to automatically work out the <code>angle</code> rather than you having to manually work it out?</li>
+</ul>
+<p>As an exercise in using a <code>while</code> loop, consider this vector:</p>
+<pre class="r"><code>telegram &lt;- c(&quot;All&quot;,&quot;is&quot;,&quot;well&quot;,&quot;here&quot;,&quot;STOP&quot;,&quot;This&quot;,&quot;is&quot;,&quot;fine&quot;)</code></pre>
+<ul>
+<li>Write a <code>while</code> loop that prints words from <code>telegram</code> until it reaches <code>STOP</code>. When it encounters the word <code>STOP</code>, end the loop. So what you want is output that looks like this.</li>
+</ul>
+<pre><code>## [1] &quot;All&quot;
+## [1] &quot;is&quot;
+## [1] &quot;well&quot;
+## [1] &quot;here&quot;
+## [1] &quot;STOP&quot;</code></pre>
+<p>The solutions for these exercises are <a href="./scripts/solutions_loops.R">here</a>.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>I love that I wrote this when living in a city where $300000 felt like a semi-plausible number, rather than way, way too small. Sydney real estate is absurd.<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

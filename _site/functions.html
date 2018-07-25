@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- ###### start inserted header ##### -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115940772-1');
+</script>
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:title" content="R for Psychological Science">
+<meta property="og:description" content="An introductory resource">
+<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="mystyle.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Psychological Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Core
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="getting-started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li>
+      <a href="scripts.html">Scripts</a>
+    </li>
+    <li>
+      <a href="packages.html">Packages</a>
+    </li>
+    <li>
+      <a href="workspaces.html">Workspaces</a>
+    </li>
+    <li>
+      <a href="vectors.html">Vectors</a>
+    </li>
+    <li>
+      <a href="loops.html">Loops</a>
+    </li>
+    <li>
+      <a href="branches.html">Branches</a>
+    </li>
+    <li>
+      <a href="functions.html">Functions</a>
+    </li>
+    <li>
+      <a href="programming.html">Programming</a>
+    </li>
+    <li>
+      <a href="file-system.html">File system</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="prelude-to-data.html">Prelude</a>
+    </li>
+    <li>
+      <a href="data-types.html">Data types</a>
+    </li>
+    <li>
+      <a href="describing-data.html">Describing data</a>
+    </li>
+    <li>
+      <a href="xx-visualising-data.html">Visualising data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Stats
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-distributions.html">Probability distributions</a>
+    </li>
+    <li>
+      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-shiny.html">Shiny apps</a>
+    </li>
+    <li>
+      <a href="xx-miscellaneous.html">Miscellaneous</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://compcogscisydney.org">compcogscisydney.org</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="9" style="list-style-type: decimal">
+<li>Writing functions</li>
+</ol></h1>
+
+</div>
+
+
+<p>In this section I want to talk about functions again. We’ve been using functions from the beginning, but you’ve learned a lot about R since then, so we can talk about them in more detail. In particular, I want to show you how to create your own. To stick with the same basic framework that I used to describe loops and conditionals, here’s the syntax that you use to create a function:</p>
+<pre><code>FNAME &lt;- function( ARG1, ARG2, ETC ) {
+  STATEMENT1
+  STATEMENT2
+  ETC
+  return( VALUE )
+}</code></pre>
+<p>What this does is create a function with the name <code>fname</code>, which has arguments <code>arg1</code>, <code>arg2</code> and so forth. Whenever the function is called, R executes the statements in the curly braces, and then outputs the contents of value to the user. Note, however, that R does not execute the function commands inside the workspace. Instead, what it does is create a temporary local environment: all the internal statements in the body of the function are executed there, so they remain invisible to the user. Only the final results in the <code>value</code> are returned to the workspace.</p>
+<div id="a-boring-example" class="section level2">
+<h2><span class="header-section-number">9.1</span> A boring example</h2>
+<p>To give a simple example of this, let’s create a function called <code>quadruple</code> which multiplies its inputs by four.</p>
+<pre class="r"><code>quadruple &lt;- function(x) {
+  y &lt;- x * 4
+  return(y)
+}</code></pre>
+<p>When we run this command, nothing happens apart from the fact that a new object appears in the workspace corresponding to the <code>quadruple</code> function. Not surprisingly, if we ask R to tell us what kind of object it is, it tells us that it is a function:</p>
+<pre class="r"><code>class(quadruple)</code></pre>
+<pre><code>## [1] &quot;function&quot;</code></pre>
+<p>And now that we’ve created the <code>quadruple()</code> function, we can call it just like any other function:</p>
+<pre class="r"><code>quadruple(10)</code></pre>
+<pre><code>## [1] 40</code></pre>
+<p>An important thing to recognise here is that the two internal variables that the <code>quadruple</code> function makes use of, <code>x</code> and <code>y</code>, stay internal. At no point do either of these variables get created in the workspace.</p>
+</div>
+<div id="a-fun-example" class="section level2">
+<h2><span class="header-section-number">9.2</span> A fun example</h2>
+<p>First I’ll load the packages I’ll need</p>
+<pre class="r"><code>library(grid)
+library(TurtleGraphics)</code></pre>
+<p>Now I’ll define a function that draws a polygon:</p>
+<pre class="r"><code>turtle_polygon &lt;- function(sides) {
+  for(i in 1:sides) {
+    turtle_forward(distance = 10)  # move 
+    turtle_left(angle = 360/sides) # turn left
+  }
+}</code></pre>
+<p>Now we can have our turtle draw whatever polygon we like:</p>
+<pre class="r"><code>turtle_init()</code></pre>
+<pre class="r"><code>turtle_polygon(sides = 9)</code></pre>
+<video width="456"  controls loop>
+<source src="functions_files/figure-html/unnamed-chunk-7.webm" />
+</video>
+</div>
+<div id="default-arguments" class="section level2">
+<h2><span class="header-section-number">9.3</span> Default arguments</h2>
+<p>Okay, now that we are starting to get a sense for how functions are constructed, let’s have a look at a slightly more complex example. Consider this function:</p>
+<pre class="r"><code>pow &lt;- function(x, y = 1) { 
+  out &lt;- x ^ y  # raise x to the power y 
+  return(out)
+}</code></pre>
+<p>The <code>pow</code> function takes two arguments <code>x</code> and <code>y</code>, and computes the value of <span class="math inline">\(x^y\)</span>. For instance, this command</p>
+<pre class="r"><code>pow(x = 4, y = 2)</code></pre>
+<pre><code>## [1] 16</code></pre>
+<p>computes 4 squared. The interesting thing about this function isn’t what it does, since R already has has perfectly good mechanisms for calculating powers. Rather, notice that when I defined the function, I specified <code>y=1</code> when listing the arguments? That’s the default value for <code>y</code>. So if we enter a command without specifying a value for <code>y</code>, then the function assumes that we want <code>y=1</code>:</p>
+<pre class="r"><code>pow(x = 3)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>However, since I didn’t specify any default value for <code>x</code> when I defined the <code>pow</code> function, the user must input a value for <code>x</code> or else R will spit out an error message.</p>
+</div>
+<div id="unspecified-arguments" class="section level2">
+<h2><span class="header-section-number">9.4</span> Unspecified arguments</h2>
+<p>The other thing I should point out while I’m on this topic is the use of the <code>...</code> argument. The <code>...</code> argument is a special construct in R which is only used within functions. It is used as a way of matching against multiple user inputs: in other words, <code>...</code> is used as a mechanism to allow the user to enter as many inputs as they like. I won’t talk at all about the low-level details of how this works at all, but I will show you a simple example of a function that makes use of it. Consider the following:</p>
+<pre class="r"><code>doubleMax &lt;- function(...) {
+  max.val &lt;- max(...)  # find the largest value in ...
+  out &lt;- 2 * max.val   # double it
+  return(out)
+}</code></pre>
+<p>The <code>doubleMax</code> function doesn’t do anything with the user input(s) other than pass them directly to the <code>max</code> function. You can type in as many inputs as you like: the <code>doubleMax</code> function identifies the largest value in the inputs, by passing all the user inputs to the <code>max</code> function, and then doubles it. For example:</p>
+<pre class="r"><code>doubleMax(1, 2, 5)</code></pre>
+<pre><code>## [1] 10</code></pre>
+</div>
+<div id="more-on-functions" class="section level2">
+<h2><span class="header-section-number">9.5</span> More on functions?</h2>
+<p>There’s a lot of other details to functions that I’ve hidden in my description in this chapter. Experienced programmers will wonder exactly how the <a href="https://bookdown.org/rdpeng/rprogdatascience/scoping-rules-of-r.html">scoping rules</a> work in R, or want to know how to use a function to create variables in other environments, or if function objects can be assigned as elements of a list and probably hundreds of other things besides. However, I don’t want to have this discussion get too cluttered with details, so I think it’s best – at least for the purposes of the current book – to stop here.</p>
+</div>
+<div id="putting-it-together" class="section level2">
+<h2><span class="header-section-number">9.6</span> Putting it together</h2>
+<p>Although the three ideas that we’ve talked about – <a href="./loops.html">loops</a>, <a href="./branches.html">branches</a> and now functions – are fairly simple ideas individually, they become <em>extremely</em> powerful once we start putting them together. To give you an illustration of this, let’s make our turtle draw a more complicated shape. First, we’ll modify the <code>turtle_polygon</code> function to be more flexible:</p>
+<pre class="r"><code>turtle_polygon &lt;- function(sides, size = 10, direction = &quot;left&quot;) {
+  for(i in 1:sides) {
+    turtle_forward(distance = size)  # move 
+    turtle_turn(angle = 360/sides, direction = direction) # turn
+  }
+}</code></pre>
+<p>With this version of the function, we have control over the number of <code>sides</code> in the polygon, the <code>size</code> of each step, and the <code>direction</code> in which the turtle turns when drawing the polygon. Now we can define another function <code>which_way</code> that uses an <code>if</code> statement to determine the direction that the turtle wants to go depending on the number of sides in the polygon:</p>
+<pre class="r"><code>which_way &lt;- function(sides) {
+  if(sides &lt; 6) {
+    direction &lt;- &quot;left&quot;
+  } else {
+    direction &lt;- &quot;right&quot;
+  }
+  return(direction)
+}</code></pre>
+<p>When we put <em>these</em> functions together in a loop, the turtle draws a much more complicated shape:</p>
+<pre class="r"><code>turtle_init()</code></pre>
+<pre class="r"><code>for(s in 3:8) {
+  turtle_polygon(sides = s, direction = which_way(s))
+}</code></pre>
+<video width="456"  controls loop>
+<source src="functions_files/figure-html/unnamed-chunk-15.webm" />
+</video>
+<p>🐢 💃 🎉</p>
+</div>
+<div id="exercises" class="section level2">
+<h2><span class="header-section-number">9.7</span> Exercises</h2>
+<ul>
+<li>Write a function that takes a number <code>x</code> as input, takes the square root (using <code>sqrt</code>), rounds it to the nearest whole number (using <code>round</code>) and then returns the result</li>
+<li>Modify your function so that the user can control the number of <code>digits</code> to which the result is rounded (recall that <code>round</code> has a <code>digits</code> argument)</li>
+<li>Modify the function so that by default <code>digits = 0</code></li>
+</ul>
+<p>The solutions for these exercises are <a href="./scripts/solutions_functions.R">here</a>.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

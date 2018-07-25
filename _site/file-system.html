@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- ###### start inserted header ##### -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115940772-1');
+</script>
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:title" content="R for Psychological Science">
+<meta property="og:description" content="An introductory resource">
+<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="mystyle.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Psychological Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Core
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="getting-started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li>
+      <a href="scripts.html">Scripts</a>
+    </li>
+    <li>
+      <a href="packages.html">Packages</a>
+    </li>
+    <li>
+      <a href="workspaces.html">Workspaces</a>
+    </li>
+    <li>
+      <a href="vectors.html">Vectors</a>
+    </li>
+    <li>
+      <a href="loops.html">Loops</a>
+    </li>
+    <li>
+      <a href="branches.html">Branches</a>
+    </li>
+    <li>
+      <a href="functions.html">Functions</a>
+    </li>
+    <li>
+      <a href="programming.html">Programming</a>
+    </li>
+    <li>
+      <a href="file-system.html">File system</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="prelude-to-data.html">Prelude</a>
+    </li>
+    <li>
+      <a href="data-types.html">Data types</a>
+    </li>
+    <li>
+      <a href="describing-data.html">Describing data</a>
+    </li>
+    <li>
+      <a href="xx-visualising-data.html">Visualising data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Stats
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-distributions.html">Probability distributions</a>
+    </li>
+    <li>
+      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-shiny.html">Shiny apps</a>
+    </li>
+    <li>
+      <a href="xx-miscellaneous.html">Miscellaneous</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://compcogscisydney.org">compcogscisydney.org</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="11" style="list-style-type: decimal">
+<li>The file system</li>
+</ol></h1>
+
+</div>
+
+
+<p>I confess I’ve never found a nice home for this chapter. Understanding how to interact with the file system on your computer is something that no-one finds interesting. It’s not complicated, or profound, but it is fiddly and annoying. Since we’ve finished talking about the introduction to programming, and we’re about to start the next section on working with data, I might as well put it here.</p>
+<p>Prepare to be bored.</p>
+<div id="file-paths" class="section level2">
+<h2><span class="header-section-number">11.1</span> File paths</h2>
+<p>Once upon a time everyone who used computers could safely be assumed to understand how the file system worked, because it was impossible to successfully use a computer if you didn’t! However, modern operating systems are much more user friendly, and as a consequence of this they go to great lengths to hide the file system from users. So these days it’s not at all uncommon for people to have used computers most of their life and not be familiar with the way that computers organise files. If you already know this stuff, skip straight to the next section. Otherwise, read on. I’ll try to give a brief introduction that will be useful for those of you who have never been forced to learn how to navigate around a computer using a DOS or Unix shell.</p>
+<p>In this section I describe the basic idea behind file locations and file paths. Regardless of whether you’re using Window, Mac OS or Linux, every file on the computer is assigned a (fairly) human readable address, and every address has the same basic structure: it describes a <em>path</em> that starts from a root location, through as series of <em>folders</em> (or if you’re an old-school computer user, <em>directories</em>), and finally ends up at the file.</p>
+<p>On a Windows computer the root is the physical drive (well, partition technically) on which the file is stored, and for most home computers the name of the hard drive that stores all your files is <code>C:</code> and therefore most file names on Windows begin with <code>C:</code>. After that comes the folders, and on Windows the folder names are separated by a <code>\</code> symbol. So, the complete path to the <em>Learning Statistics with R</em> book on my Windows computer might be something like this:</p>
+<pre><code>C:\Users\dan\Rbook\LSR.pdf</code></pre>
+<p>and what that means is that the book is called <code>LSR.pdf</code>, and it’s in a folder called <code>Rbook</code> which itself is in a folder called <code>dan</code> which itself is … well, you get the idea. On Linux, Unix and Mac OS systems, the addresses look a little different, but they’re more or less identical in spirit. Instead of using the backslash, folders are separated using a forward slash, and unlike Windows, they don’t treat the physical drive as being the root of the file system. So, the path to the LSR book on my Mac might be something like this:</p>
+<pre><code>/Users/dan/Rbook/LSR.pdf</code></pre>
+<p>So that’s what we mean by the “path” to a file.</p>
+</div>
+<div id="working-directory" class="section level2">
+<h2><span class="header-section-number">11.2</span> Working directory</h2>
+<p>The next concept to grasp is the idea of a working directory and how to change it. For those of you who have used command line interfaces previously, this should be obvious already. But if not, here’s what I mean. The working directory is just “whatever folder I’m currently looking at”. Suppose that I’m currently looking for files in Explorer (if you’re using Windows) or using Finder (on a Mac). The folder I currently have open is my user directory (i.e., <code>C:\Users\dan</code> or <code>/Users/dan</code>). That’s my current working directory.</p>
+<p>The fact that we can imagine that the program is “in” a particular directory means that we can talk about moving from our current location to a new one. What that means is that we might want to specify a new location in relation to our current location. To do so, we need to introduce two new conventions. Regardless of what operating system you’re using, we use <code>.</code> to refer to the current working directory, and <code>..</code> to refer to the directory above it (the parent directory). This allows us to specify a path to a new location in relation to our current location, as the following examples illustrate. Let’s assume that I’m using my Windows computer, and my working directory is <code>C:\Users\dan\Rbook</code>). The table below shows several addresses in relation to my current one:</p>
+<p>The fact that we can imagine that the program is “in” a particular directory means that we can talk about moving <em>from</em> our current location <em>to</em> a new one. What that means is that we might want to specify a new location in relation to our current location. To do so, we need to introduce two new conventions. Regardless of what operating system you’re using, we use <code>.</code> to refer to the current working directory, and <code>..</code> to refer to the directory above it. This allows us to specify a path to a new location in relation to our current location, as the following examples illustrate. Let’s assume that I’m using my Windows computer, and my working directory is <code>C:\Users\dan\Rbook</code>). The table below shows several addresses in relation to my current one:</p>
+<table>
+<thead>
+<tr class="header">
+<th>absolute path</th>
+<th>relative path</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(i.e., from root)</td>
+<td>(i.e. from <code>C:\Users\dan\Rbook</code>)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>C:\Users\dan</code></td>
+<td><code>..</code></td>
+</tr>
+<tr class="even">
+<td><code>C:\Users</code></td>
+<td><code>..\..</code></td>
+</tr>
+<tr class="odd">
+<td><code>C:\Users\dan\Rbook\source</code></td>
+<td><code>.\source</code></td>
+</tr>
+<tr class="even">
+<td><code>C:\Users\dan\nerdstuff</code></td>
+<td><code>..\nerdstuff</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="home-directory" class="section level2">
+<h2><span class="header-section-number">11.3</span> Home directory</h2>
+<p>There’s one last thing I want to call attention to: the <code>~</code> directory. I normally wouldn’t bother, but R makes reference to this concept sometimes. It’s quite common on computers that have multiple users to define <code>~</code> to be the user’s home directory. On my Mac, for instance, the home directory <code>~</code> for the “dan” user is <code>\Users\dan\</code>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> And so, not surprisingly, it is possible to define other directories in terms of their relationship to the home directory. For example, an alternative way to describe the location of the <code>LSR.pdf</code> file on my Mac would be</p>
+<pre><code>~\Rbook\LSR.pdf</code></pre>
+<p>That’s about all you really need to know about file paths. And since this section already feels too long, it’s time to look at how to navigate the file system in R.</p>
+</div>
+<div id="navigating-with-r" class="section level2">
+<h2><span class="header-section-number">11.4</span> Navigating with R</h2>
+<p>In this section I’ll talk about how to navigate this file system from within R itself. It’s not particularly user friendly, and so you’ll probably be happy to know that RStudio provides you with an easier method, and I will describe it in a moment. So in practice, you won’t really need to use the commands that I babble on about in this section, but I do think it helps to see them in operation at least once before forgetting about them forever.</p>
+<p>Okay, let’s get started. When you want to load or save a file in R it’s important to know what the working directory is. You can find out by using the <code>getwd</code> command. For the moment, let’s assume that I’m using Mac OS or Linux, since there’s some subtleties to Windows. Here’s what happens:</p>
+<pre class="r"><code>getwd()</code></pre>
+<pre><code>## [1] &quot;/Users/dan&quot;</code></pre>
+<p>We can change the working directory quite easily using <code>setwd</code>. The <code>setwd</code> function has only the one argument, <code>dir</code>, is a character string specifying a path to a directory, or a path relative to the working directory. Since I’m currently located at <code>/Users/dan</code>, the following two are equivalent:</p>
+<pre class="r"><code>setwd(&quot;/Users/dan/Rbook/data&quot;)
+setwd(&quot;./Rbook/data&quot;)</code></pre>
+<p>Now that we’re here, we can type <code>list.files()</code> to get a list of all the files in that directory. Since this is the directory in which I store all of the data files that I used when writing the LSR book, here’s what we get as the result:</p>
+<pre class="r"><code>list.files()</code></pre>
+<pre><code>## [1] &quot;afl24.Rdata&quot;             &quot;aflsmall.Rdata&quot;        &quot;aflsmall2.Rdata&quot;
+## [4] &quot;agpp.Rdata&quot;              &quot;all.zip&quot;               &quot;annoying.Rdata&quot;
+## [7] &quot;anscombesquartet.Rdata&quot;  &quot;awesome.Rdata&quot;         &quot;awesome2.Rdata&quot;
+BLAH BLAH BLAH </code></pre>
+<p>Not terribly exciting, I’ll admit, but it’s useful to know about.</p>
+<p>In any case, there’s only one more thing I want to make a note of, which is that R also makes use of the home directory <code>~</code>. You can find out what it is by using the <code>path.expand</code> function, like this:</p>
+<pre class="r"><code>path.expand(&quot;~&quot;)</code></pre>
+<pre><code>## [1] &quot;/Users/dan&quot;</code></pre>
+<p>You can change the user directory if you want, but we’re not going to make use of it very much so there’s no reason to. The only reason I’m even bothering to mention it at all is that when you use RStudio to open a file, you’ll see output on screen that defines the path to the file relative to the <code>~</code> directory. You can see this in the image below, where you can see an example of me working at the console on my Mac, and the (barely visible) grey text shows that my current working directory is <code>~/Rbook/data/</code></p>
+<p><img src="img/filesystem_home.png" width=300px></p>
+<p>I’d prefer you not to be confused when you see this, but other than that there’s not much to see here!</p>
+</div>
+<div id="navigating-with-rstudio" class="section level2">
+<h2><span class="header-section-number">11.5</span> Navigating with RStudio</h2>
+<p>Although I think it’s important to understand how all R commands work, in many situations there’s an easier way. For our purposes, the easiest way to navigate the file system is to make use of RStudio’s built in tools. The “files” panel is actually a pretty workable file browser. Not only can you just point and click on the names to move around the file system, you can also use it to set the working directory, and even load files. Here’s what it looks like:</p>
+<p><img src="img/filesystem_filepane.png" width=400></p>
+<p>At the top of the file panel you see some text that says <code>Home &gt; Rbook &gt; data</code>. What that means is that it’s displaying the files that are stored in the <code>~/Rbook/data</code> directory (which for me would be <code>/Users/dan/Rbook/data</code>). It does <em>not</em> mean that this is the R working directory. If you want to change the R working directory, using the file panel, you need to click on the button that reads “More”. This will bring up a little menu, and one of the options will be “Set as Working Directory”. If you select that option, then R really will change the working directory. You can tell that it has done so because this command appears in the console:</p>
+<pre class="r"><code>setwd(&quot;~/Rbook/data&quot;)</code></pre>
+<p>In other words, RStudio sends a command to the R console, exactly as if you’d typed it yourself. The file panel can be used to do other things too. If you want to move “up” to the parent folder (e.g., from <code>~/Rbook/data</code> to <code>~/Rbook</code>) click on the “..” link in the file panel. To move to a subfolder, click on the name of the folder that you want to open. You can open some types of file by clicking on them. You can delete files from your computer using the “delete” button, rename them with the “rename” button, and so on.</p>
+<p>As you can tell, the file panel is a very handy tool for navigating the file system. But it can do more than just navigate. It can be used to open files, rename them, delete, copy or move them, and create new folders. However, since most of that functionality isn’t critical to the core goals here, I’ll let you discover those on your own.</p>
+</div>
+<div id="whats-the-deal-with-windows" class="section level2">
+<h2><span class="header-section-number">11.6</span> What’s the deal with Windows?</h2>
+<p>Let’s suppose I’m on Windows. As before, I can find out what my current working directory is like this:</p>
+<pre class="r"><code>getwd()</code></pre>
+<pre><code>[1] &quot;C:/Users/dan/</code></pre>
+<p>This seems about right, but you might be wondering why R is displaying a Windows path using the wrong type of slash. The answer is slightly complicated, and has to do with the fact that R treats the <code>\</code> character as “special” (I’ll talk about this later when introducing text manipulation). If you’re deeply wedded to the idea of specifying a path using the Windows style slashes, then you need to type <code>\\</code> whenever you mean <code>\</code>. In other words, if you want to specify the working directory on a Windows computer, you need to use one of the following commands:</p>
+<pre class="r"><code>setwd( &quot;C:/Users/dan&quot; )
+setwd( &quot;C:\\Users\\dan&quot; )</code></pre>
+<p>Annoying.</p>
+</div>
+<div id="robust-paths" class="section level2">
+<h2><span class="header-section-number">11.7</span> Robust paths?</h2>
+<p>Okay, you might be asking, what if I’m writing code and I don’t know what machine it will be running on? How do I specify a path that doesn’t require <em>me</em> to know ahead of time what the operating system on that machine uses? I’m so glad you asked. There’s a function called <code>file.path</code> that lets you do exactly that:</p>
+<pre class="r"><code>file.path(&quot;Users&quot;,&quot;dan&quot;,&quot;Rbook&quot;,&quot;LSR.pdf&quot;)</code></pre>
+<pre><code>## [1] &quot;Users/dan/Rbook/LSR.pdf&quot;</code></pre>
+<p>The <code>file.path</code> function works out how to construct the path it needs by inspecting the <code>.Platform</code> variable (try typing that at the console if you want to see what information it stores) that the local R system uses to keep track of information about the operating system. If you use <code>file.path</code> to specify locations, then you don’t have to worry about particulars of the operating system because R will do that for you.</p>
+<p>Now, what you might be thinking is that this only half solves the problem. What if a user downloads all your files to some place on their machine and you don’t know where it has ended up. It’s a bit beyond the scope of this resource to talk about solutions to that problem but I’ll quickly mention the <a href="https://cran.r-project.org/web/packages/here/index.html">here</a> R package that I find really useful. I wrote a blog post about it <a href="http://djnavarro.net/post/2018-05-21-pants-to-the-mast/">here</a>, and at some point I’ll probably fold some of that content into these notes.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>You might notice that my computer is the only person still allowed to <a href="https://en.wiktionary.org/wiki/deadname">deadname</a> me 😀 – the user home directory seems to be tangled with so many things on a computer that I’m afraid to rename this. Not that it bothers me - I think “Dan” is a perfectly sensible nickname for “Danielle” and I’m pretty sure my computer isn’t trying to be mean to me! Well, not about this anyway.<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- ###### start inserted header ##### -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115940772-1');
+</script>
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:title" content="R for Psychological Science">
+<meta property="og:description" content="An introductory resource">
+<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="mystyle.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Psychological Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Core
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="getting-started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li>
+      <a href="scripts.html">Scripts</a>
+    </li>
+    <li>
+      <a href="packages.html">Packages</a>
+    </li>
+    <li>
+      <a href="workspaces.html">Workspaces</a>
+    </li>
+    <li>
+      <a href="vectors.html">Vectors</a>
+    </li>
+    <li>
+      <a href="loops.html">Loops</a>
+    </li>
+    <li>
+      <a href="branches.html">Branches</a>
+    </li>
+    <li>
+      <a href="functions.html">Functions</a>
+    </li>
+    <li>
+      <a href="programming.html">Programming</a>
+    </li>
+    <li>
+      <a href="file-system.html">File system</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="prelude-to-data.html">Prelude</a>
+    </li>
+    <li>
+      <a href="data-types.html">Data types</a>
+    </li>
+    <li>
+      <a href="describing-data.html">Describing data</a>
+    </li>
+    <li>
+      <a href="xx-visualising-data.html">Visualising data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Stats
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-distributions.html">Probability distributions</a>
+    </li>
+    <li>
+      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-shiny.html">Shiny apps</a>
+    </li>
+    <li>
+      <a href="xx-miscellaneous.html">Miscellaneous</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://compcogscisydney.org">compcogscisydney.org</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="5" style="list-style-type: decimal">
+<li>Workspaces</li>
+</ol></h1>
+
+</div>
+
+
+<!--
+> The objective of cleaning is not just to clean, but to feel happiness living within that environment.<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--[Marie Kondo](https://www.brainyquote.com/quotes/marie_kondo_723309)
+-->
+<p>Let’s suppose that you’re reading through these notes, and typing in commands as I’ve been presenting them. During the section on scripts, you might have typed these commands</p>
+<pre class="r"><code>seeker &lt;- 3.1415         
+lover &lt;- 2.7183          
+keeper &lt;- seeker * lover </code></pre>
+<p>In doing so you would have created three variables. These variables are the contents of your <strong>workspace</strong>, also referred to as the “global environment”. The workspace is a key concept in R, so in this section we’ll talk about what it is and how to manage its contents.</p>
+<div id="workspace-contents" class="section level2">
+<h2><span class="header-section-number">5.1</span> Workspace contents</h2>
+<p>The first thing that you need to know how to do is examine the contents of the workspace. If you’re using RStudio, you will probably find that the easiest way to do this is to use the “Environment” panel in the top right hand corner. Click on that, and you’ll see a list that looks very much like the one shown below.</p>
+<p><img src="img/workspace_environmentpane.png" width=300px></p>
+<p>If you’re using the commmand line, then the <code>objects</code> function may come in handy:</p>
+<pre class="r"><code>objects()</code></pre>
+<pre><code>## [1] &quot;keeper&quot; &quot;lover&quot;  &quot;seeker&quot;</code></pre>
+<p>Of course, in the true R tradition, the <code>objects</code> function has a lot of fancy capabilities that I’m glossing over in this example. Moreover there are also several other functions that you can use, including <code>ls</code> which is pretty much identical to <code>objects</code>, and <code>ls.str</code> which you can use to get a fairly detailed description of all the variables in the workspace. As a compromise, the <code>lsr</code> package that I wrote to accompany <em>Learning Statistics with R</em> has a simple function that you can use for this purpose, called <code>who</code>, that loosely mirrors the contents of the environment panel. So let’s load the package</p>
+<pre class="r"><code>library(lsr)</code></pre>
+<p>and now we can use the <code>who</code> function:</p>
+<pre class="r"><code>who()</code></pre>
+<pre><code>##    -- Name --   -- Class --   -- Size --
+##    keeper       numeric       1         
+##    lover        numeric       1         
+##    seeker       numeric       1</code></pre>
+<p>In these notes I use the <code>who</code> function quite a bit, but in real life I almost never bother: I find it easier to look at the RStudio environment panel. But for the purposes of writing thes notes I found it handy to have a nice text based description, just so that I don’t have to take screenshots every time!</p>
+</div>
+<div id="removing-variables" class="section level2">
+<h2><span class="header-section-number">5.2</span> Removing variables</h2>
+<p>Looking over that list of variables, it occurs to me that I really don’t need them any more. I created them originally just to make a point, but they don’t serve any useful purpose anymore, and now I want to get rid of them. I’ll show you how to do this, but first I want to warn you – there’s no “undo” option for variable removal. Once a variable is removed, it’s gone forever unless you save it to disk. I’ll show you how to do that in a moment, but quite clearly we have no need for these variables at all, so we can safely get rid of them.</p>
+<p>In RStudio, the easiest way to remove variables is to use the environment panel. If you switch to “grid view” using the drop down menu in the top right of the panel you’ll see something like this:</p>
+<p><img src="img/workspace_environmentpane2.png" width=400px></p>
+<p>Check the boxes next to the variables that you want to delete, then click on the “Clear” button at the top of the panel (that’s the one that looks like a broom!) When you do this, RStudio will show a dialog box asking you to confirm that you really do want to delete the variables. It’s always worth checking that you really do, because as RStudio is at pains to point out, you can’t undo this. Once a variable is deleted, it’s gone.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> In any case, if you click “yes”, that variable will disappear from the workspace: it will no longer appear in the environment pane, and it won’t show up when you use the <code>who</code> command.</p>
+<p>Suppose you don’t have access to RStudio, and you still want to remove variables. This is where the <em>remove</em> function <code>rm</code> comes in handy. The simplest way to use <code>rm</code> is just to type in a (comma separated) list of all the variables you want to remove. Let’s say I want to get rid of <code>seeker</code> and <code>lover</code>, but I would like to keep <code>keeper</code>. To do this, all I have to do is type:</p>
+<pre class="r"><code>rm(seeker, lover)</code></pre>
+<p>There’s no visible output, but if I now inspect the workspace</p>
+<pre class="r"><code>who()</code></pre>
+<pre><code>##    -- Name --   -- Class --   -- Size --
+##    keeper       numeric       1</code></pre>
+<p>I see that there’s only the <code>keeper</code> variable left. As you can see, <code>rm</code> can be handy for keeping the workspace tidy.</p>
+</div>
+<div id="loading-a-workspace" class="section level2">
+<h2><span class="header-section-number">5.3</span> Loading a workspace</h2>
+<p>There are many different ways in which you might want to save data sets and results in R. One simple method is simply to save the entire contents of your workspace to a file, and to load that workspace file later on. An R workspace file has the <code>.Rdata</code> file extension, and to load one into R we use the <code>load</code> function. To illustrate how it works, I’ll use a workspace that I constructed when writing <em>Learning Statistics in R</em>, based loosely on the kids TV show <a href="https://en.wikipedia.org/wiki/In_the_Night_Garden...">In the Night Garden…</a>. The workspace file is located at <a href="./data/nightgarden.Rdata" class="uri">./data/nightgarden.Rdata</a> (remember, the <code>.</code> refers to the current folder) and so to load it all I have to do is this:</p>
+<pre class="r"><code>load(&quot;./data/nightgarden.Rdata&quot;)</code></pre>
+<p>If I now inspect the workspace, I see that I have two new variables, <code>speaker</code> and <code>utterance</code>:</p>
+<pre class="r"><code>who()</code></pre>
+<pre><code>##    -- Name --   -- Class --   -- Size --
+##    keeper       numeric        1        
+##    speaker      character     10        
+##    utterance    character     10</code></pre>
+<p>Notice that the <code>keeper</code> variable is still there. Loading a new workspace from a file doesn’t remove the variables already present; but it will overwrite any variables if they happen to have the same name. For example, if I had previously had a variable called <code>speaker</code>, it would now have been overwritten using the value from the file.</p>
+<p>There’s a second method I want to mention, using the RStudio file pane? It’s terribly simple. First, use the file pane to find the folder that contains the file you want to load. If you look at the image of the file pane that I showed above, you can see that there are several <code>.Rdata</code> files listed. All I have to do is click on the file I want to open, and RStudio will bring up a dialog box asking me to confirm that I do want to load this file. After clicking yes, RStudio will load the file for you.</p>
+</div>
+<div id="saving-a-workspace" class="section level2">
+<h2><span class="header-section-number">5.4</span> Saving a workspace</h2>
+<p>Not surprisingly, saving data is very similar to loading data. Although RStudio provides a simple way to save files (see below), it’s worth understanding the actual commands involved. There are two commands you can use to do this, <code>save</code> and <code>save.image</code>. If you’re happy to save all of the variables in your workspace into the data file, then you should use <code>save.image</code>. So let’s suppose I want to save the current workspace to a file called <code>myfile.Rdata</code> inside the <code>output</code> folder.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> To do so, here’s the command:</p>
+<pre class="r"><code>save.image(file = &quot;./output/myfile.Rdata&quot;)</code></pre>
+<p>As usual, this file now actually exists at <a href="./output/myfile.Rdata%5D">./output/myfile.Rdata</a>. Suppose, however, I have several variables in my workspace, and I only want to save some of them. For instance, let’s actually take a look at the current state of my workspace at this point in the book:</p>
+<pre class="r"><code>who()</code></pre>
+<pre><code>##    -- Name --   -- Class --   -- Size --
+##    keeper       numeric        1        
+##    speaker      character     10        
+##    utterance    character     10</code></pre>
+<p>There’s a few different things there because I’ve been working on different data sets, and I might not want to save all of them. This is where the <code>save</code> function is useful, because it lets me indicate exactly which variables I want to save. Here is one way I can use the <code>save</code> function to solve my problem:</p>
+<pre class="r"><code>save(keeper, speaker, file = &quot;./output/myfile2.Rdata&quot;)</code></pre>
+<p>This will save only the <code>keeper</code> and <code>speaker</code> variables, which you can confirm if you like by <a href="./output/myfile2.Rdata">downloading the file</a> that I just created 😀</p>
+<p>One important think to note about the <code>save</code> function: you must specify the <em>name</em> of the <code>file</code> argument (i.e., the <code>file =</code> part of the command). The reason is that if you don’t do so, R will think that the text specifying the save location is just one more variable that you want to save, and you’ll get an error message. Finally, I should mention a second way to specify which variables the <code>save</code> function should save, which is to use the list argument. You do so like this:</p>
+<pre class="r"><code>save(
+  list = c(&quot;keeper&quot;, &quot;speaker&quot;),
+  file = &quot;./output/myfile3.Rdata&quot;
+)</code></pre>
+<p>The <code>myfile3.Rdata</code> <a href="./output/myfile3.Rdata">file</a> is the same as the <code>myfile2.Rdata</code> file: these two commands do exactly the same thing.</p>
+<p>Finally, I should mention that RStudio allows you to save the workspace pretty easily. In the environment panel (on the top right) you can see the “save” button. There’s no text, but it’s the same icon that gets used on every computer everywhere: it’s the one that looks like a floppy disk.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> Alternatively, go to the “Session” menu and click on the “Save Workspace As…” option. This will bring up the standard “save” dialog box for your operating system. Type in the name of the file that you want to save it to, and all the variables in your workspace will be saved to disk.</p>
+<p>One word of warning: what you <em>don’t</em> want to do is use the “File” menu to save the workspace. If you look in the “File” menu you <em>will</em> see “Save” and “Save As…” options, but they don’t save the <em>workspace</em>. Those options are used for dealing with <a href="./scripts.html">scripts</a>, and so they’ll produce <code>.R</code> rather than <code>.Rdata</code> files.</p>
+</div>
+<div id="exercises" class="section level2">
+<h2><span class="header-section-number">5.5</span> Exercises</h2>
+<p>For the first exercise, let’s make sure you understand how to load and save workspaces:</p>
+<ul>
+<li>Create a few variables, and save them to a workspace file</li>
+<li>Close RStudio, reopen it, and then reload your workspace file</li>
+</ul>
+<p>For the second exercise, we’ll focus on the housekeeping aspect:</p>
+<ul>
+<li>Use the RStudio environment pane to remove a variables</li>
+<li>Use the <code>rm</code> command to remove a variable</li>
+</ul>
+<p>The solutions for these exercises are <a href="./scripts/solutions_workspace.R">here</a> and a copy of the workspace file it generates is <a href="./output/solutions_workspace.Rdata">here</a>.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Mind you, all that means is that it’s been removed from the workspace. If you’ve got the data saved to file somewhere, then that file is perfectly safe.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>It’s generally a good idea to keep your files nicely organised when working on a project, which is why I’m keeping the <code>data</code> folder separate from any <code>output</code> that I produce.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>You know, those things that haven’t been used in about 20 years.<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

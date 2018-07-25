@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Shiny Web Applications</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- ###### start inserted header ##### -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115940772-1');
+</script>
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:title" content="R for Psychological Science">
+<meta property="og:description" content="An introductory resource">
+<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="mystyle.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Psychological Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Core
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="getting-started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li>
+      <a href="scripts.html">Scripts</a>
+    </li>
+    <li>
+      <a href="packages.html">Packages</a>
+    </li>
+    <li>
+      <a href="workspaces.html">Workspaces</a>
+    </li>
+    <li>
+      <a href="vectors.html">Vectors</a>
+    </li>
+    <li>
+      <a href="loops.html">Loops</a>
+    </li>
+    <li>
+      <a href="branches.html">Branches</a>
+    </li>
+    <li>
+      <a href="functions.html">Functions</a>
+    </li>
+    <li>
+      <a href="programming.html">Programming</a>
+    </li>
+    <li>
+      <a href="file-system.html">File system</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="prelude-to-data.html">Prelude</a>
+    </li>
+    <li>
+      <a href="data-types.html">Data types</a>
+    </li>
+    <li>
+      <a href="describing-data.html">Describing data</a>
+    </li>
+    <li>
+      <a href="xx-visualising-data.html">Visualising data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Stats
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-distributions.html">Probability distributions</a>
+    </li>
+    <li>
+      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-shiny.html">Shiny apps</a>
+    </li>
+    <li>
+      <a href="xx-miscellaneous.html">Miscellaneous</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://compcogscisydney.org">compcogscisydney.org</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Shiny Web Applications</h1>
+
+</div>
+
+
+<blockquote>
+<p>Shiny. <br>       –<em>Firefly</em>, 2002</p>
+</blockquote>
+<p>In this chapter we’ll introduce the idea of a Shiny web application. Shiny apps were primarily designed to be tools for interactive data visualisation, but they’re extremely flexible things and we can use them as tools for psychological experiments. The chapter draws heavily on a variety of other resources. Some good places to look:</p>
+<ul>
+<li>Official <a href="http://shiny.rstudio.com/tutorial/">shiny tutorials</a></li>
+<li>Cloud hosting with <a href="https://www.shinyapps.io">shinyapps.io</a></li>
+<li>The <a href="https://ndphillips.github.io/ShinyPsych.html">ShinyPsych</a> package (early in development)</li>
+</ul>
+<p>In addition to the <code>shiny</code> package itself, the applications we’ll talk about rely to some degree on the <code>shinyjs</code> package and the <code>rdrop2</code> package:</p>
+<ul>
+<li>The <a href="https://deanattali.com/shinyjs/">shinyjs</a> package</li>
+<li>The <a href="https://github.com/karthik/rdrop2">rdrop2</a> package</li>
+</ul>
+<p>Make sure all three packages are installed, using the <code>install.packages</code> function.</p>
+<div id="creating-a-web-application" class="section level2">
+<h2><span class="header-section-number">99.1</span> Creating a web application</h2>
+<p>To get started, let’s just create a web application as quickly as possible, and not worry too much about understanding what’s going on. Follow these steps:</p>
+<ul>
+<li>Go to the RStudio “file” menu and select “new project…”</li>
+<li>When the dialog box comes up, select the option creating a project in a “new directory”</li>
+<li>Select “shiny web application”</li>
+<li>When it asks you to choose a folder, type in something sensible like “myshiny”</li>
+<li>This opens up a new file <code>app.R</code> with a bunch of incomprehensible R code</li>
+<li>Ignore the code, and click on the “run app” button to see what happens…</li>
+</ul>
+<p>A window should open up, and you should be looking at something like this:</p>
+<p><img src="img_shiny/basicshiny.png" width=800></p>
+<p>This application is an interactive histogram where the user can play around with the slider bar on the left, and the application will redraw the histogram on the right, in order to show the effect of changing the number of bins in a histgram. To get a feel for how the applicaton works:</p>
+<ul>
+<li>Try playing around with the slider.</li>
+<li>Click the “open in browser” button to see what it looks like in the browser</li>
+</ul>
+<p>At this point, we have created a web application, albeit one that runs locally on your own computer. And of course we have no idea how it works. But we’ll get to that…</p>
+</div>
+<div id="hosting-the-application" class="section level2">
+<h2><span class="header-section-number">99.2</span> Hosting the application</h2>
+<p>Continuing the trend of “doing things without really knowing what’s going on”, let’s create an account with <a href="https://www.shinyapps.io">shinyapps.io</a> to host the application for us. If you click on the “publish” button, you’ll be prompted to create a shinyapps.io account:</p>
+<p><img src="img_shiny/shinyappiodialog.png" width=300></p>
+<p>Click the “get started here” link and it will take you to their website where you’ll be prompted to sign up for an account and select a username (I’m <code>djnavarro</code>). Once you do that, you’ll need to connect your shinyapps.io account with your computer. The process for that is:</p>
+<ol style="list-style-type: decimal">
+<li>Click on your username (top right in the shinyapps.io account page), then select “tokens”</li>
+<li>Click on “show” to bring up the token information</li>
+<li>Click on “copy to clipboard”, and copy the token information to the clipboard!</li>
+<li>Then, back in RStudio, paste the results into the dialog box.</li>
+</ol>
+<p>Visually, this is what you should be expecting to see at each step…</p>
+<p><img src="img_shiny/shinyappioauth.png" width=600></p>
+<p>Now you’re done. Your computer is linked to your shinyapps.io account. Now, when you click on “publish” for the app, it will bring up a new dialog box. Click “publish”, wait around for a bit while RStudio uploads everything to the web, and then check out your shiny new Shiny app…</p>
+<p><img src="img_shiny/apppublish.png" width=800></p>
+<p>If you look at your dashboard on the shinyapps.io website, you’ll now see that you have a web application running:</p>
+<p><img src="img_shiny/dashboard.png" width=800></p>
+<p>Under the applications menu you’ll see a variety of options, including the ability to delete the application if you don’t want it any more.</p>
+</div>
+<div id="structure-of-a-shiny-app" class="section level2">
+<h2><span class="header-section-number">99.3</span> Structure of a Shiny app</h2>
+<p>When you look at the R code for the default shiny app in <code>app.R</code> you’ll see it has this structure:</p>
+<pre class="r"><code>library(shiny)
+
+ui &lt;- fluidPage(
+  # ... BLAH BLAH BLAH ...
+)
+
+server &lt;- function(input, output) {
+  #... BLAH BLAH BLAH ...
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+<p>This structure reflects the fact that Shiny is designed to produce <em>web</em> applications. Like any web application it is based around the idea that we can divide responsibility between two machines, the <em>server</em> that hosts the application, and the <em>client</em> that interacts with it. For a Shiny app, the server is a machine running R, and uses R (plus some other things) to generate the content. The client does not need to have R installed: as long as it has a modern web browser it will be able to render the page just fine.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> In essense, the server generates content, the client displays it. So the Shiny application needs to specify some rules for the user interface <code>ui</code>, and for the behaviour of the <code>server</code>. This architecture is illustrated below:</p>
+<p><img src="img_shiny/architecture.png" width=550px></p>
+<p>When you run a Shiny app <em>locally</em>, your own machine (e.g., you laptop) plays both roles: your copy of R acts as the server, and your web browser acts as the client. When you push the app to the cloud, a machine somewhere else (e.g., run by shinyapps.io) is the server, and anyone visiting the website can be the client. The R code is pretty much identical in both cases, and as you can see in the figure below, the structure of the application maps on to the structure of the code in <code>app.R</code>:</p>
+<p><img src="img_shiny/mapping.png" width=700px></p>
+</div>
+<div id="building-our-very-own-shiny-app" class="section level2">
+<h2><span class="header-section-number">99.4</span> Building our very own Shiny app</h2>
+<p>To understand how to build a Shiny app, let’s build one to run a very simple psychology experiment. Suppose I’m interested in how people express their uncertainty about a probabilistic event. For instance, it might rain next week. According to meteorologists, there is some probability <span class="math inline">\(p\)</span> that it will rain - they have some uncertainty about whether the event (rain) will actually occur, and it is this uncertainty that the forecast probability <span class="math inline">\(p\)</span> captures. However, I have some additional uncertainty over and above that - I don’t really know what the probability of rain actually is. So from my point of view this could be thought of as an <em>imprecise probability</em>… I might not be willing to make any <em>specific</em> claim about the probability of rain, but I might be able to provide a <em>range</em> of probabilities that seem acceptable. So I might say that the chance of rain is somewhere between 60% and 90%. Okay, so maybe I would like to run a simple web survey asking people to provide interval estimates, and after a bit of thinking I might decide I’d like the survey to look like this:</p>
+<p><img src = "img_shiny/impreciseapp.png", width=800px></p>
+<p>On every trial the participant is presented with some text describing the unknown probability, and their task is to adjust the slider to produce an interval that they are happy with. Once they’ve got the sliders located somewhere they like, they can click the “submit” button and move onto the next trial. How can we build this using Shiny?</p>
+<div id="create-the-project" class="section level3">
+<h3><span class="header-section-number">99.4.1</span> Create the project</h3>
+<p>When starting out, we’ll create a project skeleton consisting of three separate R scripts in an attempt to try to keep ourselves organised. These are:</p>
+<ul>
+<li><code>app.R</code> loads any R packages, sources the other R scripts when needed, and creates the Shiny app from the content that those scripts provides</li>
+<li><code>makeServer.R</code> creates the <code>server</code> for the Shiny app</li>
+<li><code>makeUI.R</code> creates the user interface <code>ui</code> for the Shiny app.</li>
+</ul>
+<p>To do this, the <code>app.R</code> file contains the following code:</p>
+<pre class="r"><code># load packages
+library(shiny)   # the shiny package
+
+# structure of the application
+source(&quot;makeUI.R&quot;)     # construct the user interface
+source(&quot;makeServer.R&quot;) # construct the server function
+
+# create the shiny app
+shinyApp(ui, server)</code></pre>
+<p>The <code>makeServer.R</code> function initially contains a “placeholder” function. It won’t actually do anything yet, it’s just there to make sure that there actually is a <code>server</code> object!</p>
+<pre class="r"><code>server &lt;- function(input, output) {
+  # initially, our server ignores the user
+  # this is just a place holder
+}</code></pre>
+<p>With that in place, we can get started on the <code>makeUI.R</code> function to build the user interface object <code>ui</code>…</p>
+</div>
+<div id="designing-a-user-interface" class="section level3">
+<h3><span class="header-section-number">99.4.2</span> Designing a user interface</h3>
+<p>The vertical layout for our study is pretty typical for psychology experiments. At the top is a <em>content</em> area that displays the stimulus material (i.e., the question), in the middle there is a <em>response</em> area that allows the user to interact with the stimulus (i.e., the slider) and at the bottom there is an <em>action</em> button that allows the user to submit the response and move on to the next trial. There are a few different ways we could create this layout, but let’s do a simple thing and stack everything on top of each other. Conceptually, what we’re going to create is this:</p>
+<p><img src = "img_shiny/uistructure.png", width=500px></p>
+<p>So the first thing we’re going to do when creating the <code>makeUI.R</code> function is set it up with the structure shown above:</p>
+<pre class="r"><code>ui &lt;- fluidPage( 
+  fluidRow( # the page has one row...
+    column( # ... and the row has one column
+      
+      # information about the column
+      # content area
+      # response area
+      # action button
+      
+    )
+  )
+)</code></pre>
+<p>This <code>ui</code> object is created by three nested function calls: there is a call to the <code>column</code> function, and the output is then fed into <code>fluidRow</code>, the row is fed into <code>fluidPage</code>, and then the page is saved as the <code>ui</code> object. Let’s not worry too much about precisely <em>what</em> information is being passed between these functions, and instead think about our content…</p>
+<p>Before doing anything else, we need to say something about the column. Conceptually, the way Shiny apps work is by dividing the horizontal space into 12 numbered “slots”, so we need to tell the <code>column</code> function which slots out column will occupy, and how many slots it occupies. The way I’ll do that is by specifying the mandatory <code>width</code> argument and the optional <code>align</code> argument that tells R how to justify content:</p>
+<pre class="r"><code>ui &lt;- fluidPage( 
+  fluidRow( # the page has one row...
+    column( # ... and the row has one column
+      
+      # information about the column
+      width = 8,        # specify the column width (between 1 and 12)
+      align = &quot;center&quot;  # how to align content inside the column
+      
+      # content area
+      # response area
+      # action button
+      
+    )
+  )
+)</code></pre>
+<p>Okay, now we have the basic structure of the UI, all we have to do is put something in it! However, the specifics of what should go in these different areas could be very different from one study to the next, so it might make a lot of sense to create a separate <code>study.R</code> script define study-specific content. To accomodate this, we’ll edit the <code>makeUI.R</code> script so that it now looks like this:</p>
+<pre class="r"><code>ui &lt;- fluidPage( 
+  fluidRow( # the page has one row...
+    column( # ... and the row has one column
+      
+      # information about the column
+      width = 8,        # specify the column width (between 1 and 12)
+      align = &quot;center&quot;,   # how to align content inside the column
+      
+      # study-specific objects (see the &quot;study.R&quot; file)
+      myContent,  # content area
+      myResponse, # response area
+      myAction    # action button
+
+    )
+  )
+)</code></pre>
+<p>As long as the <code>study.R</code> script defines <code>myContent</code>, <code>myResponse</code> and <code>myAction</code> properly, this code will work fine and create a <code>ui</code> object that is suitable for our Shiny app. The overall structure of our project has altered slightly…</p>
+<ul>
+<li><code>app.R</code> loads R packages, sources R scripts, and creates the Shiny app</li>
+<li><code>study.R</code> creates study-specific objects</li>
+<li><code>makeServer.R</code> creates the <code>server</code> for the Shiny app</li>
+<li><code>makeUI.R</code> creates the user interface <code>ui</code> for the Shiny app.</li>
+</ul>
+<p>… and as a consequence we’ll have to make some minor changes to the <code>app.R</code> file, which now looks lilke this:</p>
+<pre class="r"><code># load packages
+library(shiny)   # the shiny package
+
+# structure of the application
+source(&quot;study.R&quot;)      # create study-specific objects
+source(&quot;makeUI.R&quot;)     # construct the user interface
+source(&quot;makeServer.R&quot;) # construct the server function
+
+# create the shiny app
+shinyApp(ui, server)</code></pre>
+</div>
+<div id="adding-user-interface-objects" class="section level3">
+<h3><span class="header-section-number">99.4.3</span> Adding user interface objects</h3>
+<p>We need to create three user interface objects: <code>myContent</code> displays the question, <code>myResponse</code> specifies the slider, and <code>myAction</code> specifies the “submit” button. The <code>Shiny</code> package supplies a variety of functions that are suitable for this purpose:</p>
+<ul>
+<li><code>textOutput</code> creates a “text output element” capable of receiving text from the server and displaying it to the user. We won’t do anything with this right now: it will be the server’s job to work out what information to send to ths object.</li>
+<li><code>sliderInput</code> creates a customisable “slider widget” that the server can inspect. We’ll set it up so that the server inspects the values of the slider (obviously, we’ll need two values!) at the end pof each trial.</li>
+<li><code>actionButton</code> creates an “action button”, which looks a lot like an ordinary button but has some very nice properties if you want to use it as a “next trial” button. Initially it starts with a “value” (invisible, obviously) of 0, but every time it is clicked this value increases by 1. Very handy for specifying the trial number!</li>
+</ul>
+<p>The first version of our <code>study.R</code> file looks like this:</p>
+<pre class="r"><code># ---- user interface objects for the study ----
+
+myContent &lt;- textOutput( 
+  outputId = &quot;content&quot;
+  )
+
+myResponse &lt;- sliderInput(
+  inputId = &quot;response&quot;, 
+  label = &quot;&quot;, 
+  min = 0, 
+  max = 100, 
+  value = c(40, 60)
+  )
+
+myAction &lt;- actionButton(
+  inputId = &quot;action&quot;, 
+  label = &quot;submit&quot;
+  )</code></pre>
+<p>Hopefully it’s pretty clear what each of the arguments here is doing. For instance, the slider bar ranges from a minimum value of 0 to a maximum of 100, and it is initially set to have values of 40 and 60. The important thing to note is that the <code>myResponse</code> and <code>myAction</code> objects both have an <code>inputId</code> (the user can supply input with these), and the <code>myContent</code> object has an <code>outputId</code> (the server can send output to this), emphasising the different roles they play in the application.</p>
+<p>At this point, we actually have a properly specified Shiny app. To see this, go to the <code>app.R</code> file and click “run app”. You’ll see something like this pop up:</p>
+<p><img src = "img_shiny/blankui.png", width=350px></p>
+<p>It won’t actually do anything though. You can play with the slider and click on the button, but nothing will happen in response because the <code>server</code> isn’t listening to the user input, and there’s no text being displayed because it isn’t generating any output. So the next thing we’ll need to work on the <code>makeServer.R</code> file</p>
+</div>
+<div id="specifying-the-server" class="section level3">
+<h3><span class="header-section-number">99.4.4</span> Specifying the server</h3>
+<p>Currently, the server side of the Shiny application is pretty much empty. All we have is this:</p>
+<pre class="r"><code>server &lt;- function(input, output) {
+  # initially, our server ignores the user
+  # this is just a place holder
+}</code></pre>
+<p>There’s something worth pointing out even with this blank server though. The Shiny framework expects <code>server</code> to be a function with (at least) two arguments. The <code>input</code> argument tells the server what do do with user input, and the <code>output</code> argument tells it how to generate output for the user. Conceptually, there are three different jobs the server needs:</p>
+<ul>
+<li>It needs a representation of the <code>study</code> materials (the questions). That’s a study specific thing, so what we’ll do is assume that <code>study</code> is a list object, with one element per trial, such that <code>study[[1]]</code> contains the relevant information for trial 1. We’ll assume that the <code>study</code> list is produced by a <code>myStimuli</code> function that we’ll have to add to the <code>study.R</code> file.</li>
+<li>It needs to know what to <em>do</em> with the stimulus material. Specifically, it needs to produce some <code>output</code> that will go back to the user interface. The way we designed our UI was that there is object that has an output ID of <code>&quot;content&quot;</code>, so any server output that has to go to that object needs to be assigned to <code>output$content</code>. All the details for this will be handled by two functions <code>processContent</code> and <code>renderContent</code> that we’ll specify in the <code>study.R</code> file.</li>
+<li>Finally, it needs to know how to end the trial when the user clicks the action button. For that, we’ll need to specify and <code>endTrial</code> function.</li>
+</ul>
+<p>To reflect these needs, we’ll modify the <code>makeServer.R</code> file as shown below:</p>
+<pre class="r"><code>server &lt;- function(input, output) {
+  
+  # read the stimulus materials
+  study &lt;- myStimuli()
+  
+  # how to generate a trial? (specifically, the *next* trial)
+  output$content &lt;- renderContent(
+    expr = processContent( study[[input$action+1]] )
+  )
+  
+  # how to handle the end of the current trial?
+  observeEvent(
+    eventExpr = input$action, # when user clicks the action button
+    handlerExpr = endTrial(input, study) # end this trial
+  )
+}
+
+endTrial &lt;- function(input, study) {
+  # placeholder: right now the server doesn&#39;t do anything
+  # special to correspond to the &quot;end of trial&quot; event
+}</code></pre>
+<p>Notice that we’ve added the <code>endTrial</code> function already. We’ll also need to create some placeholder functions in the <code>study.R</code> file, so we’ll add the following to the bottom of that file:</p>
+<pre class="r"><code># ---- server content for the study ----
+
+myStimuli &lt;- function() {
+  # placeholder
+}
+
+processContent &lt;- function() {
+  # placeholder
+}
+
+renderContent &lt;- renderText # the output is text format</code></pre>
+<p>At the moment the <code>myStimuli</code> and <code>processContent</code> functions don’t do anything, but we’ve already specified the <code>renderContent</code> function. It’s deeply uninteresting: the Shiny package contains different “rendering” functions that tell the server how to handle different kinds of output. So there’s a <code>renderText</code> function that you should use if the server is talking to a <code>textOutput</code> user interface object, a <code>renderPlot</code> function that you should use if it’s a <code>plotOutput</code>, etc. Since for this study our <code>content</code> area just displays a piece of text, the rendering function we want is <code>renderText</code></p>
+</div>
+<div id="specifying-processing-stimuli" class="section level3">
+<h3><span class="header-section-number">99.4.5</span> Specifying &amp; processing stimuli</h3>
+<p>What about <code>myStimuli</code> and <code>processContent</code> functions? Our study is actually pretty simple, and each trial can be specified with a single piece of text (the question!), and there’s no processing required to do anything interesting with that text. So we can just specify a list of questions in the <code>myStimuli</code> function, and have a “dummy” function for <code>processContent</code> that just passes the input straight through without doing anything to it.</p>
+<p>So now our <code>study.R</code> script now looks like this:</p>
+<pre class="r"><code># ---- user interface objects for the study ----
+
+myContent &lt;- textOutput( 
+  outputId = &quot;content&quot;
+  )
+
+myResponse &lt;- sliderInput(
+  inputId = &quot;response&quot;, 
+  label = &quot;&quot;, 
+  min = 0, 
+  max = 100, 
+  value = c(40, 60)
+  )
+
+myAction &lt;- actionButton(
+  inputId = &quot;action&quot;, 
+  label = &quot;submit&quot;
+  )
+
+# ---- server content for the study ----
+
+myStimuli &lt;- function() {
+  stimuli &lt;- list(
+    &quot;Probability that it will rain this week&quot;,
+    &quot;Probability that humans will be extinct within 1000 years&quot;,
+    &quot;Probability that you will do honours psychology&quot;,
+    &quot;Probability that the world ends not with a bang, but with a whimper&quot;
+  )
+  return(stimuli)
+}
+
+processContent &lt;- function(stimulus) {
+  return(stimulus)
+}
+
+renderContent &lt;- renderText # the output is text format</code></pre>
+<p>We now have a version of the app that presents the questions to the user one at a time. Every time the user clicks the “submit” button the server notices and changes the display to the next item in the list. Click on the “run app” button and play around with it to see. What you should notice is that we have a few problems still:</p>
+<ul>
+<li>the stimuli are always presented in the same order</li>
+<li>the application it doesn’t reset the slider values at the start of each trial</li>
+<li>the application generates an error when it runs out of stimuli</li>
+<li>the application isn’t recording participant responses</li>
+</ul>
+<p>The first of these is easy to fix. We’ll modify the <code>myStimuli</code> function so that it shuffles the stimulus list into a random order using the <code>sample</code> function. That only requires us to add one line to the function, as shown here:</p>
+<pre class="r"><code>myStimuli &lt;- function() {
+  stimuli &lt;- list(
+    &quot;Probability that it will rain this week&quot;,
+    &quot;Probability that humans will be extinct within 1000 years&quot;,
+    &quot;Probability that you will do honours psychology&quot;,
+    &quot;Probability that the world ends not with a bang, but with a whimper&quot;
+  )
+  stimuli &lt;- sample(stimuli) # randomise order
+  return(stimuli)
+}</code></pre>
+<p>The others require a little more thought. Let’s start by dealing with the “slider reset” problem.</p>
+</div>
+<div id="tweaking-the-ui-with-shinyjs" class="section level3">
+<h3><span class="header-section-number">99.4.6</span> Tweaking the UI with <code>shinyjs</code></h3>
+<p>There are lots of ways that we can deal with the issue of reseting the slider to its initial value at the start of every trial, but the one we’ll rely on uses the <code>shinyjs</code> (short for Shiny javascript) package to have the user interface solve this problem itself using the client machine’s web browser to do the work. Since every modern web browser comes with a full fledged implementation of javascript, it’s more than qualified to do the job. First, we’ll need to modify the <code>app.R</code> script to ensure that the package is loaded:</p>
+<pre class="r"><code># load packages
+library(shiny)   # the shiny package
+library(shinyjs) # shinyjs is handy
+
+# structure of the application
+source(&quot;study.R&quot;)      # create study-specific objects
+source(&quot;makeUI.R&quot;)     # construct the user interface
+source(&quot;makeServer.R&quot;) # construct the server function
+
+# create the shiny app
+shinyApp(ui, server)</code></pre>
+<p>Next, we’ll need to tell the <code>ui</code> that it should be relying on <code>shinyjs</code>, which we can do by sneaking the command into the <code>makeUI.R</code> file like this:</p>
+<pre class="r"><code>ui &lt;- fluidPage( 
+  fluidRow( # the page has one row...
+    column( # ... and the row has one column
+      
+      # information about the column
+      width = 8,         # specify the column width (between 1 and 12)
+      align = &quot;center&quot;,  # how to align content inside the column
+      
+      # study-specific objects (see the &quot;study.R&quot; file)
+      myContent,  # content area
+      myResponse, # response area
+      myAction,   # action button
+      
+      # force the ui to use shinyjs
+      shinyjs::useShinyjs()
+      
+    )
+  )
+)</code></pre>
+<p>Finally, because the reset is something that should occur at the end of each trial, we’ll add this as an instruction to the <code>endTrial</code> function within the <code>makeServer.R</code> script:</p>
+<pre class="r"><code>endTrial &lt;- function(input, study) {
+
+  # before each trial, use shinyjs reset the response object
+  reset(&quot;response&quot;) 
+  
+}</code></pre>
+<p>As usual, test it out using the “run app” button! The current version now presents stimuli in a random order and resets the slider after every response.</p>
+</div>
+<div id="ending-the-experiment" class="section level3">
+<h3><span class="header-section-number">99.4.7</span> Ending the experiment</h3>
+<p>Next on our “to do” list is finding a way to end the experiment that is a little more graceful than showing an angry red error message on the user screen. Once again, we’ll rely on <code>shinyjs</code> to do the work here. First, we’ll make another small modification to the <code>ui</code> by inserting a “hidden” thank you message. At the start of the experiment this is invisible, so from the user perspective nothing changes:</p>
+<pre class="r"><code>ui &lt;- fluidPage( 
+  fluidRow( # the page has one row...
+    column( # ... and the row has one column
+      
+      # information about the column
+      width = 8,         # specify the column width (between 1 and 12)
+      align = &quot;center&quot;,  # how to align content inside the column
+      
+      # study-specific objects (see the &quot;study.R&quot; file)
+      myContent,  # content area
+      myResponse, # response area
+      myAction,   # action button
+      
+      # hidden thank you message
+      hidden(p(id=&quot;thankYou&quot;, &quot;All done! Thanks&quot;)),
+      
+      # force the ui to use shinyjs
+      shinyjs::useShinyjs()
+      
+    )
+  )
+)</code></pre>
+<p>Then, all we need to do on the <code>server</code> side is add some code that will notice when the study is over. To do that, recall from earlier how the action button has a “value” that starts at zero and increments by 1 every time the user presses it? It’s this value that the server has been using to work out which trial it’s up to, so it’s pretty straightforward to use this information as part of the <code>endTrial</code> function:</p>
+<pre class="r"><code>endTrial &lt;- function(input, study) {
+
+  # before each trial, use shinyjs reset the response object
+  reset(&quot;response&quot;) 
+  
+  # trial number
+  trialNum &lt;- input$action
+  
+  # end the experiment if needed
+  if(trialNum == length(study)) {
+    
+    # tidy up
+    hide(&quot;response&quot;)
+    hide(&quot;action&quot;)
+    hide(&quot;content&quot;)
+    show(&quot;thankYou&quot;)
+    
+  }
+}</code></pre>
+<p>So what we have now is a server where at the end of every trial it check the <code>trialNum</code> and if that’s equal to the length of the <code>study</code> itself, it means we’ve reached the end of the experiment. When that happens, it triggers a tidy up action: the three UI objects are all hidden using the <code>hide</code> function in <code>shinyjs</code> and the thank you message is revealed using <code>show</code>.</p>
+<p>Again, check it out: the application should now end after four responses.</p>
+</div>
+<div id="recording-the-trial-data" class="section level3">
+<h3><span class="header-section-number">99.4.8</span> Recording the trial data</h3>
+<p>From the participant experience perspective, the experiment now runs perfectly (or as perfectly as I intend to make it). The stimuli are randomised, the trials reset properly, and the experiment ends when it’s supposed to. The only problem is that it’s not <strong>recording</strong> anything. Without any data our experiment is pretty useless!</p>
+<p>The first thing we need to do is work out what data we’re actually going to store. Since that’s pretty study specific, let’s define a <code>getTrialData</code> function in the <code>study.R</code> file that returns a data frame that consists of a single row, with one column per variable:</p>
+<pre class="r"><code># ---- what data to record? ----
+getTrialData &lt;- function(input, stimulus) {
+
+  trialData &lt;- data.frame(
+    trial = input$action,      # the trial number
+    question = stimulus,       # what question was posed? 
+    lower = input$response[1], # response (lower value)
+    upper = input$response[2]  # response (upper value)
+  )
+  return( trialData )
+}</code></pre>
+<p>In the <code>makeServer.R</code> function we need to do two things. We need to create a data frame called <code>responses</code> that will store all the trial data, and we need to add some code that calls the <code>getTrialData</code> function to obtain data at the e3nd of every trial the trial and then writes it to the <code>responses</code> data frame. That measn we need to modify the <code>endTrial</code> function, and add one extra line at the bottom:<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<pre class="r"><code>endTrial &lt;- function(input, study) {
+
+  # before each trial, use shinyjs reset the response object
+  reset(&quot;response&quot;) 
+  
+  # trial number
+  trialNum &lt;- input$action
+  
+  # get the data for this trial
+  trialData &lt;- getTrialData(input, study[[trialNum]]) 
+  
+  # update data storage
+  if(trialNum == 1) {
+    responses &lt;&lt;- trialData  # yes, the &lt;&lt;- is intentional
+  } else {
+    responses &lt;&lt;- rbind(responses, trialData)
+  }
+  
+  # end the experiment if needed
+  if(trialNum == length(study)) {
+    
+    # tidy up
+    hide(&quot;response&quot;)
+    hide(&quot;action&quot;)
+    hide(&quot;content&quot;)
+    show(&quot;thankYou&quot;)
+    
+  }
+}
+
+responses &lt;- data.frame() # initialise the data set</code></pre>
+<p>At this point we’re almost completely done. The experiment runs, it records the data, the only thing it doesn’t do is <em>save</em> the data anywhere. So that’s our final job, and in order to avoid messiness, we’ll set the application up in such a way that the data get written to your Dropbox account. To do that, we’ll add a few minor change to the application…</p>
+</div>
+<div id="the-almost-complete-app" class="section level3">
+<h3><span class="header-section-number">99.4.9</span> The (almost) complete app</h3>
+<p>Before taking care of our final task, let’s have a look at what our almost-complete application looks like. The final version will have five files, with this structure:</p>
+<ul>
+<li><code>app.R</code> loads R packages, sources R scripts, and creates the Shiny app</li>
+<li><code>study.R</code> creates study-specific objects</li>
+<li><code>makeServer.R</code> creates the <code>server</code> for the Shiny app</li>
+<li><code>makeUI.R</code> creates the user interface <code>ui</code> for the Shiny app.</li>
+<li><code>saveData.R</code> handles saving the data</li>
+</ul>
+<p>With the exception of <code>saveData.R</code> the application is finished. Here’s what the final version of <code>app.R</code> looks like:</p>
+<pre class="r"><code># load packages
+library(shiny)   # the shiny package
+library(shinyjs) # shinyjs is handy
+library(rdrop2)  # needed to save data to dropbox
+
+# structure of the application
+source(&quot;study.R&quot;)      # information specific to the study 
+source(&quot;saveData.R&quot;)   # how should we save the responses?
+source(&quot;makeUI.R&quot;)     # construct the user interface
+source(&quot;makeServer.R&quot;) # construct the server function
+
+# create the shiny app
+shinyApp(ui, server)</code></pre>
+<p>Notice that I’ve added two lines since last time, one to load the <code>rdrop2</code> package that we’ll use to save data, and another to source the <code>saveData.R</code> script that will handle the saving of data.</p>
+<p>The final version of the <code>study.R</code> function looks like this:</p>
+<pre class="r"><code># ---- user interface objects for the study ----
+
+myContent &lt;- textOutput( 
+  outputId = &quot;content&quot;
+  )
+
+myResponse &lt;- sliderInput(
+  inputId = &quot;response&quot;, 
+  label = &quot;&quot;, 
+  min = 0, 
+  max = 100, 
+  value = c(40, 60)
+  )
+
+myAction &lt;- actionButton(
+  inputId = &quot;action&quot;, 
+  label = &quot;submit&quot;
+  )
+
+# ---- server content for the study ----
+
+myStimuli &lt;- function() {
+  stimuli &lt;- list(
+    &quot;Probability that it will rain this week&quot;,
+    &quot;Probability that humans will be extinct within 1000 years&quot;,
+    &quot;Probability that you will do honours psychology&quot;,
+    &quot;Probability that the world ends not with a bang, but with a whimper&quot;
+  )
+  stimuli &lt;- sample(stimuli) # randomise order
+  return(stimuli)
+}
+
+processContent &lt;- function(stimulus) {
+  return(stimulus)
+}
+
+renderContent &lt;- renderText # the output is text format
+
+# ---- what data to record? ----
+
+getTrialData &lt;- function(input, stimulus) {
+
+  trialData &lt;- data.frame(
+    trial = input$action,      # the trial number
+    question = stimulus,       # what question was posed? 
+    lower = input$response[1], # response (lower value)
+    upper = input$response[2]  # response (upper value)
+  )
+  return( trialData )
+}
+
+# ---- information needed for saving data ----
+ 
+saveMethod &lt;- &quot;dropbox&quot;
+saveDir &lt;- &quot;Teaching/2018_interns/shiny_data&quot;</code></pre>
+<p>Notice the last two lines are new. The <code>saveMethod</code> variable indicates that we’ll upload any generated data file to Dropbox, and the <code>saveDir</code> variable specifies the subfolder in my Dropbox account to which files will be uploaded.</p>
+<p>Here’s the final version of <code>makeUI.R</code> which hasn’t changed since last time:</p>
+<pre class="r"><code>ui &lt;- fluidPage( 
+  fluidRow( # the page has one row...
+    column( # ... and the row has one column
+      
+      # information about the column
+      width = 8,         # specify the column width (between 1 and 12)
+      align = &quot;center&quot;,  # how to align content inside the column
+      
+      # study-specific objects (see the &quot;study.R&quot; file)
+      myContent,  # content area
+      myResponse, # response area
+      myAction,   # action button
+      
+      # hidden thank you message
+      hidden(p(id=&quot;thankYou&quot;, &quot;All done! Thanks&quot;)),
+      
+      # force the ui to use shinyjs
+      shinyjs::useShinyjs()
+      
+    )
+  )
+)</code></pre>
+<p>Here’s the final version of <code>makeServer.R</code>:</p>
+<pre class="r"><code>server &lt;- function(input, output) {
+  
+  # read the stimulus materials
+  study &lt;- myStimuli()
+  
+  # how to handle the end of the current trial?
+  observeEvent(
+    eventExpr = input$action, # when user clicks the action button
+    handlerExpr = endTrial(input, study) # end this trial
+  )
+  
+  # how to generate the next trial?
+  output$content &lt;- renderContent(
+    expr = processContent( study[[input$action+1]] )
+  )
+  
+}
+
+endTrial &lt;- function(input, study) {
+
+  # before each trial, use shinyjs reset the response object
+  reset(&quot;response&quot;) 
+  
+  # trial number
+  trialNum &lt;- input$action
+  
+  # get the data for this trial
+  trialData &lt;- getTrialData(input, study[[trialNum]]) 
+  
+  # update data storage
+  if(trialNum == 1) {
+    responses &lt;&lt;- trialData
+  } else {
+    responses &lt;&lt;- rbind(responses, trialData)
+  }
+  
+  # end the experiment if needed
+  if(trialNum == length(study)) {
+    
+    # tidy up
+    hide(&quot;response&quot;)
+    hide(&quot;action&quot;)
+    hide(&quot;content&quot;)
+    show(&quot;thankYou&quot;)
+    
+    # save data 
+    saveData(method = saveMethod)
+    
+  }
+}
+
+responses &lt;- data.frame() # initialise the data set</code></pre>
+<p>Again, there’s one small tweak: at the end of the experiment the server calls the <code>saveData</code> function. So that just leaves the <code>saveData.R</code> script, which we haven’t written yet. To get started, we’ll create a dummy file:</p>
+<pre class="r"><code>saveData &lt;- function(method=&quot;none&quot;) {
+  # content goes here
+}</code></pre>
+</div>
+<div id="the-rdrop2-package" class="section level3">
+<h3><span class="header-section-number">99.4.10</span> The <code>rdrop2</code> package</h3>
+<p>We’ll want to save data on our Shiny app. The simplest way to do that is to link your Dropbox account (assuming you have one) to the Shiny app, which you can do easily with the help of the <code>rdrop2</code> package. After installing the package, you’ll need to authorise the package to make changes to your Dropbox account. This is surprisingly easy:</p>
+<pre class="r"><code>library(rdrop2)
+drop_auth()</code></pre>
+<p>This will then take you to the Dropbox website where you can authorise the package. Having done so, all we’ll need to do is modify our Shiny app so that it saves data to your Dropbox. I’ll show that in the next section.</p>
+</div>
+<div id="saving-the-data" class="section level3">
+<h3><span class="header-section-number">99.4.11</span> Saving the data</h3>
+<p>Here’s the final code for the <code>saveData.R</code> script. The key thing to note is that it has two different ways to save data, a <code>saveDropboxData</code> function that will upload the data to your Dropbox account, and a <code>saveLocalData</code> that will write the data to a location on the server (that would be your laptop if running locally, but could be somewhere else if you’re doing a cloud based deployment). Regardless of which version you use, the file is a CSV file that saves the value of the <code>responses</code> data frame, and the file name is always of the form <code>data-YYYY-MM-DD-HH-MM-SS.csv</code>, where <code>YYYY-MM-DD-HH-MM-SS</code> is a time stamp specifying the year, month, day, hour, minute and second that the server created the file. As long as you don’t have two people completing the task at the same second (usually reasonable, but not always, so you might want to modify this if you’re doing a large online study), the file will be unique.</p>
+<pre class="r"><code>saveData &lt;- function(method=&quot;none&quot;) {
+  if(method == &quot;dropbox&quot;) saveDropboxData(saveDir) 
+  if(method == &quot;local&quot;) saveLocalData(saveDir) 
+}
+
+saveLocalData &lt;- function(outputDir){
+  fileName &lt;- makeFileName()                 # file name
+  filePath &lt;- file.path(outputDir, fileName) # path to file
+  writeData(filePath)                        # write file
+}
+
+saveDropboxData &lt;- function(outputDir) {
+  fileName &lt;- makeFileName()                 # file name
+  filePath &lt;- file.path(tempdir(), fileName) # temporary directory
+  writeData(filePath)                        # write to temp directory
+  drop_upload(filePath, path = outputDir)    # upload to dropbox
+}
+
+makeFileName &lt;- function() {
+  timeStampString &lt;- format(Sys.time(), &quot;%Y-%m-%d-%H-%M-%S&quot;) # get system time
+  fileName &lt;- paste0(&quot;data-&quot;, timeStampString, &quot;.csv&quot;)       # timestamped file name 
+  return(fileName)
+}
+
+writeData &lt;- function(filePath) {
+  write.csv(
+    x = responses,     # the data
+    file=filePath,     # where to write it
+    row.names = FALSE  # don&#39;t add row names to the csv
+  )
+}</code></pre>
+</div>
+<div id="done" class="section level3">
+<h3><span class="header-section-number">99.4.12</span> Done!</h3>
+<p>That’s it. Not only have you built your first Shiny app, you have a reasonably flexible template that you can reuse for a lot of pretty standard psych experiments. All you need to do for a lot of typical studies is edit the <code>study.R</code> file: the rest of it should work fine. If you want to use this template, I’ve put it up on Github here: <a href="https://github.com/djnavarro/blankshiny" class="uri">https://github.com/djnavarro/blankshiny</a></p>
+</div>
+</div>
+<div id="shiny-psych-experiments" class="section level2">
+<h2><span class="header-section-number">99.5</span> Shiny psych experiments</h2>
+<p>At some point I’ll try to put together a mini library of experiments that you can run with this template. But just to give you a sense of it, here’s one where I modified the <code>study.R</code> file so that the task is now to estimate the correlation between some points:</p>
+<pre class="r"><code># ---- user interface objects for the study ----
+
+myContent &lt;- plotOutput(  # the content is a plot
+  outputId = &quot;content&quot;,
+  width = &quot;300px&quot;,        # plot width in pixels
+  height = &quot;300px&quot;        # plot height in pixels
+  )
+
+myResponse &lt;- sliderInput(
+  inputId = &quot;response&quot;, 
+  label = &quot;&quot;, 
+  min = -1,    # minimum response
+  max = 1,     # maximum response
+  step = .01,  # slider increments in steps of .01
+  value = 0    # slider starts at 0
+  )
+
+myAction &lt;- actionButton(  # no changes needed
+  inputId = &quot;action&quot;, 
+  label = &quot;submit&quot;
+  )
+
+# ---- server content for the study ----
+
+myStimuli &lt;- function() {
+  
+  # mvtnorm package lets you sample from a bivariate
+  # normal distribution where correlation may be present
+  # (make sure you have it installed!)
+  library(mvtnorm)  
+  
+  ntrials &lt;- 5  # number of trials
+  npoints &lt;- 50 # how many points in the plot
+
+  stimuli &lt;- list()
+  for(i in 1:ntrials) {
+    r &lt;- runif(1)*2 - 1            # true correlation in the popuation
+    xy &lt;- rmvnorm(                 # sample from a multivariate normal...
+      n=npoints,                   # ... how many points
+      mean=c(0,0),                 # ... population mean
+      sigma=matrix(c(1,r,r,1),2,2) # ... population covariance
+    )
+    stimuli[[i]] &lt;- xy  # store the raw co-ordinates as the &quot;stimulus&quot;
+  }
+  
+  return(stimuli)
+}
+
+processContent &lt;- function(stimulus) {
+  
+  plot(                # to &quot;process&quot; the stimulus we draw a plot
+    x = stimulus[,1],  # x-value
+    y = stimulus[,2],  # y-value
+    axes = FALSE,      # don&#39;t show axes
+    pch=19,            # plot marker is a filled circle
+    main=&quot;Please estimate the correlation&quot;,    # plot title
+    xlab = &quot;&quot;,         # no x-axis label
+    ylab = &quot;&quot;          # no y-axis label
+    )
+}
+
+renderContent &lt;- renderPlot  # content rendering function is now renderPloy
+
+# ---- what data to record? ----
+
+getTrialData &lt;- function(input, stimulus) {
+
+  trialData &lt;- data.frame(
+    trial = input$action,           # the trial number
+    question = cor(stimulus)[1,2],  # what was the *sample* correlation?
+    response = input$response       # participant response
+  )
+  return( trialData )
+}
+
+# ---- information needed for saving data ----
+ 
+saveDir &lt;- &quot;Teaching/2018_interns/shiny2_data&quot;   # save it to this directory
+saveMethod &lt;- &quot;dropbox&quot;</code></pre>
+<p>It produces an experiment that looks like this:</p>
+<p><img src = "img_shiny/correlationapp.png", width=800px></p>
+<p>So that’s nice.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Shiny relies on <a href="https://getbootstrap.com/">bootstrap</a> to do all the fancy web stuff. You don’t need to know anything about bootstrap to make Shiny apps though.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>This uses the <code>&lt;&lt;-</code> operator to ensure that the <code>responses</code> variable is visible to every other function on the server (i.e., global). That’s not ideal programming, but I haven’t worked out a better solution yet!<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

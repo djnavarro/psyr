@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- ###### start inserted header ##### -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115940772-1');
+</script>
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:title" content="R for Psychological Science">
+<meta property="og:description" content="An introductory resource">
+<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="mystyle.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Psychological Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Core
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="getting-started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li>
+      <a href="scripts.html">Scripts</a>
+    </li>
+    <li>
+      <a href="packages.html">Packages</a>
+    </li>
+    <li>
+      <a href="workspaces.html">Workspaces</a>
+    </li>
+    <li>
+      <a href="vectors.html">Vectors</a>
+    </li>
+    <li>
+      <a href="loops.html">Loops</a>
+    </li>
+    <li>
+      <a href="branches.html">Branches</a>
+    </li>
+    <li>
+      <a href="functions.html">Functions</a>
+    </li>
+    <li>
+      <a href="programming.html">Programming</a>
+    </li>
+    <li>
+      <a href="file-system.html">File system</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="prelude-to-data.html">Prelude</a>
+    </li>
+    <li>
+      <a href="data-types.html">Data types</a>
+    </li>
+    <li>
+      <a href="describing-data.html">Describing data</a>
+    </li>
+    <li>
+      <a href="xx-visualising-data.html">Visualising data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Stats
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-distributions.html">Probability distributions</a>
+    </li>
+    <li>
+      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-shiny.html">Shiny apps</a>
+    </li>
+    <li>
+      <a href="xx-miscellaneous.html">Miscellaneous</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://compcogscisydney.org">compcogscisydney.org</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="2" style="list-style-type: decimal">
+<li>Variables</li>
+</ol></h1>
+
+</div>
+
+
+<p>One of the most important things to be able to do in R (or any programming language, for that matter) is to store information in <strong>variables</strong>. At a conceptual level you can think of a variable as label for a certain piece of information, or even several different pieces of information. When doing statistical analysis in R your data are stored as variables in R, but we also create variables to do other things. Before we delve into all the messy details of data sets and statistical analysis, let’s look at the very basics for how we create variables and work with them.</p>
+<div id="numeric-data" class="section level2">
+<h2><span class="header-section-number">2.1</span> Numeric data</h2>
+<p>Since we’ve been working with numbers so far, let’s start by creating variables to store our numbers. The first quantity we might care about is the number of questionnaire items included in our survey, so we’ll create a variable called <code>n_items</code>, and we’ll assign a <strong>value</strong> to that variable . If the survey contains 20 items then that value should be <code>20</code>. We do this by using the <strong>assignment operator</strong>,<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> written as a leftward pointing arrow <code>&lt;-</code>. Note that you cannot insert spaces here: if you type <code>&lt; -</code> R will interpret the command very differently 😬. To create the variable <code>n_items</code>, the command needed is:</p>
+<pre class="r"><code>n_items &lt;- 20</code></pre>
+<p>We sometimes describe this verbally by saying that the variable <em>gets</em> a value of 20.</p>
+<p>The leftwards arrow is a nice visual convention: it tells you that R is taking the value of <code>20</code> and assigning it “to” the variable <code>n_items</code>. This is really nice, because R is also smart enough to let you use a rightward pointing arrow to assign in the other direction, like <code>20 -&gt; n_item</code>. I tend to describe this form of the command by saying that 20 <em>goes to</em> the variable, but I’m not sure anyone else talks that way.</p>
+<p>In any case when you hit enter after typing this command, R doesn’t print out any output. It just gives you another command prompt. However, behind the scenes R has created a variable called <code>items</code> and given it a value of <code>20</code>. You can check that this has happened by asking R to print the variable on screen. And the simplest way to do that is to type the name of the variable and hit enter:</p>
+<pre class="r"><code>n_items</code></pre>
+<pre><code>## [1] 20</code></pre>
+<p>In addition to defining the <code>n_items</code> variable, I can also create a variable called <code>item_time</code>, indicating how many seconds we might expect a person to spend answering an item on average. So now there are two variables we define:</p>
+<pre class="r"><code>n_items &lt;- 20
+item_time &lt;- 15</code></pre>
+<p>The nice thing about variables (in fact, the whole point of having variables) is that we can do anything with a variable that we ought to be able to do with the information that it stores. That is, since R allows me to multiply <code>20</code> by <code>15</code></p>
+<pre class="r"><code>20 * 15</code></pre>
+<pre><code>## [1] 300</code></pre>
+<p>it also allows me to multiply <code>n_items</code> by <code>item_time</code></p>
+<pre class="r"><code>n_items * item_time</code></pre>
+<pre><code>## [1] 300</code></pre>
+<p>As far as R is concerned, the <code>n_items * item_time</code> command is the same as the <code>20 * 15</code> command. Not surprisingly, I can assign the output of this calculation to a new variable, which I’ll call <code>survey_time</code>. When we do this, the new variable gets the value 300. So let’s do that, and then get R to print out the value of <code>survey_time</code> so that we can verify that it’s done what we asked:</p>
+<pre class="r"><code>survey_time &lt;- n_items * item_time
+survey_time</code></pre>
+<pre><code>## [1] 300</code></pre>
+<p>That’s fairly straightforward.</p>
+<p>A slightly more subtle thing we can do is reassign the value of a variable, based on its current value. For instance, if we want to provide a more realistic estimate of how long it will take for people to complete the survey, we will need to account for the fact that it takes people some amount of time to complete the consent form that accompanies the survey. So let’s assume that takes about 100 seconds,</p>
+<pre class="r"><code>consent_time &lt;- 100</code></pre>
+<p>Now what we need to do is <em>update</em> the value of the <code>survey_time</code> variable, which we could do like this:</p>
+<pre class="r"><code>survey_time &lt;- survey_time + consent_time
+survey_time</code></pre>
+<pre><code>## [1] 400</code></pre>
+<p>In this calculation, R has taken the old value of <code>survey_time</code> (i.e., 300) and added the <code>consent_time</code> to that value, producing a value of 400. This new value is now re-assigned to the <code>survey_time</code> variable, overwriting its previous value.</p>
+</div>
+<div id="character-data" class="section level2">
+<h2><span class="header-section-number">2.2</span> Character data</h2>
+<p>A lot of the time your data will be numeric in nature, but not always. Sometimes your data really needs to be described using text, not using numbers. For example, we might want to keep track of what <em>kind</em> of survey we are running. If we were asking people multiple choice questions we might create a variable <code>survey_type</code> that records that information:</p>
+<pre class="r"><code>survey_type &lt;- &quot;multiple choice&quot;</code></pre>
+<p>The quote marks here are used to tell R that the information enclosed within the quotes is one piece of text data, known as a <strong>character string</strong>. You can use single quotes or double quotes for this purpose, so R treats these two commands as identical:</p>
+<pre class="r"><code>survey_type &lt;- &quot;multiple choice&quot;
+survey_type &lt;- &#39;multiple choice&#39;</code></pre>
+<p>If you try to do this without the quote marks, R will get complain and it will “throw” an error message at you, like this:</p>
+<pre class="r"><code>survey_type &lt;- multiple choice</code></pre>
+<pre><code>## Error: &lt;text&gt;:1:25: unexpected symbol
+## 1: survey_type &lt;- multiple choice
+##                             ^</code></pre>
+<p>Eh, fair enough.</p>
+<div id="working-with-text" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Working with text</h3>
+<p>Working with text data is somewhat more complicated than working with numeric data, and I discuss some of the more useful ideas later, but for purposes of the current chapter we only need a bare bones sketch. The only other thing I want to do before moving on is show you an example of a function that can be applied to text data. So far, most of the functions that we have seen (i.e., <code>sqrt</code>, <code>abs</code> and <code>round</code>) only make sense when applied to numeric data - you can’t calculate the square root of <code>&quot;multiple choice&quot;</code>, for instance. So it might be nice to see an example of a function that can be applied to text.</p>
+<p>The function I’m going to introduce you to is called <code>nchar</code>, and what it does is count the number of individual characters that make up a string. The <code>survey_type</code> variable contains the string <code>&quot;multiple choice&quot;</code>. So how many characters are there in this string? Sure, I could count them, but that’s boring, and more to the point it’s a terrible strategy if I want to know the length of <a href="https://en.wikisource.org/wiki/Pride_and_Prejudice">Pride and Prejudice</a>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> That’s where the <code>nchar</code> function is helpful:</p>
+<pre class="r"><code>nchar(survey_type)</code></pre>
+<pre><code>## [1] 15</code></pre>
+<p>Notice that this answer counts the space between words as a character. That is, it’s returning the number of <em>characters</em> not the number of <em>letters</em>. The <code>nchar</code> function can do a bit more than this, and there’s a lot of other functions that you can do to extract more information from text or do all sorts of fancy things. However, the goal here is not to teach any of that! The goal right now is just to see an example of a function that actually does work when applied to text.</p>
+</div>
+</div>
+<div id="logical-data" class="section level2">
+<h2><span class="header-section-number">2.3</span> Logical data</h2>
+<p>Time to move onto a third kind of data. A key concept in that a lot of R relies on is the idea of a <strong>logical value</strong>. A logical value is an assertion about whether something is true or false. This is implemented in R in a pretty straightforward way. There are two logical values, namely <code>TRUE</code> and <code>FALSE</code>. Despite the simplicity, a logical values are very useful things. For example, to return to the survey we are designing, I might want to define a variable <code>consent_given</code> that indicates whether a person has in fact consented to participate in the study, like so:<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<pre class="r"><code>consent_given &lt;- TRUE</code></pre>
+<p>Because <code>TRUE</code> and <code>FALSE</code> are logical valiues that pertain to… well… truth and falseness, there are a number of special rules that they follow.</p>
+<div id="truth-values" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Truth values</h3>
+<p>In George Orwell’s classic book <a href="https://en.wikipedia.org/wiki/Nineteen_Eighty-Four">1984</a>, one of the slogans used by the totalitarian Party was “two plus two equals five”, the idea being that the political domination of human freedom becomes complete when it is possible to subvert even the most basic of truths. It’s a terrifying thought, especially when the protagonist Winston Smith finally breaks down under torture and agrees to the proposition. According to the book, humans are “infinitely malleable”, and can be made to believe whatever is required of us. Regardless of what might be true of humans, R is <em>not</em> infinitely malleable. It has rather firm opinions on the topic of what is and isn’t true, at least as regards basic mathematics. If I ask it to calculate <code>2 + 2</code>, it always gives the same answer…</p>
+<pre class="r"><code>2 + 2</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p>… and of course that answer is never <code>5</code>. That being said, there’s something to notice here. In this command, R is just doing the calculations. I haven’t asked it to explicitly <em>test</em> whether <code>2 + 2 = 4</code> is a true statement. If I want R to make an explicit judgement on that topic, I can use a command like this:</p>
+<pre class="r"><code>2 + 2 == 4</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>What I’ve done here is use the <strong>equality operator</strong>, <code>==</code>, to force R to make a “true or false” judgement. Note that the use of the double equals <code>==</code> is important here. If we tried to do this with a single equals sign, R won’t do what we want it to<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> Okay, let’s see what R thinks of the Party slogan:</p>
+<pre class="r"><code>2 + 2 == 5</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>Yay! Freedom and ponies for all! 🦄</p>
+</div>
+<div id="equal-and-not-equal" class="section level3">
+<h3><span class="header-section-number">2.3.2</span> Equal (and not equal)</h3>
+<p>Working with logical data is mostly a matter of common sense. For instance, in the previous section we talked about the <em>equals to</em> operator <code>==</code> which checks to see if two things are the same as one another:</p>
+<pre class="r"><code>2 + 2 == 4</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>2 + 2 == 5</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>It also provides the <em>not equals</em> operator <code>!=</code>, which tests to see if two things are different to each other:</p>
+<pre class="r"><code>2 + 2 != 4</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>2 + 2 != 5</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>It’s worth noting that you can also apply equality operations to text. R understands that a <code>cat</code> is a <code>cat</code> so you get this:</p>
+<pre class="r"><code>&quot;cat&quot; == &quot;cat&quot;</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>However, R is very particular about what counts as equality. For two pieces of text to be equal, they must be precisely the same, so all of the following return <code>FALSE</code>:</p>
+<pre class="r"><code>&quot;cat&quot; == &quot;CAT&quot;
+&quot;cat&quot; == &quot;c a t&quot;
+&quot;cat&quot; == &quot;cat &quot;</code></pre>
+<pre><code>## [1] FALSE
+## [1] FALSE
+## [1] FALSE</code></pre>
+</div>
+<div id="less-than-and-greater-than" class="section level3">
+<h3><span class="header-section-number">2.3.3</span> Less than (and greater than)</h3>
+<p>This idea extends naturally to other basic mathematical ideas. The <em>less than</em> operator <code>&lt;</code> can be used to test whether one number is smaller than another number:</p>
+<pre class="r"><code>2 &lt; 5</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>That makes sense. One thing that is worth noting, however, is that <code>2 &lt; 2</code> returns <code>FALSE</code>, since these two numbers are the <em>same</em>. Neither one is less than or greater than the other. If we want to test whether something is <em>less than or equal to</em>, then we can use the <code>&lt;=</code> operator. The behaviour of this operator is illustrated below:</p>
+<pre class="r"><code>2 &lt;= 5</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>2 &lt;= 2</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>As you might imagine, there are two more operators along these lines: <code>&gt;</code> is the <em>greater than</em> operator, and <code>&gt;=</code> is the <em>greater than or equal to</em> operator, and their behaviour is exactly what you’d expect.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+</div>
+<div id="not" class="section level3">
+<h3><span class="header-section-number">2.3.4</span> “Not”</h3>
+<p>There are three more logical operators I want to introduce now. The first of these is <code>!</code>, and it behaves like the word <em>“not”</em> in everyday language. If a fact is “not true” then it must be “false”. We can express this idea in R like this:</p>
+<pre class="r"><code>!TRUE</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>To return to our running example of the survey, if we were sending the survey to school children, we would need to make sure that a parent or other responsible adult has provided consent for them to participate, let’s suppose that we have a variable called <code>age</code></p>
+<pre class="r"><code>age &lt;- 12</code></pre>
+<p>We can use that to determine whether the participant is an <code>adult</code></p>
+<pre class="r"><code>adult &lt;- age &gt;= 18</code></pre>
+<p>In the code snippet above, what we’ve done is constructed a test of whether the participant is 18 or older (i.e. <code>age &gt;= 18</code>). So this will be a logical value (i.e., <code>TRUE</code> or <code>FALSE</code>), and this result is the value that gets assigned to the <code>adult</code> variable. However, in our scenario, the only time where we will want to seek parental consent is when the participant is <em>not</em> an adult, so what we want to know is this:</p>
+<pre class="r"><code>!adult</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Not surprisingly, since the participant is only twelve, it is of course <code>TRUE</code> that we’ll need to check with a parent or legal guardian in order to have them participate in the survey.</p>
+</div>
+<div id="or" class="section level3">
+<h3><span class="header-section-number">2.3.5</span> “Or”</h3>
+<p>Okay, let’s extend this logic a little further. Suppose we wanted to create a variable that checks whether we need to obtain consent from a legal guardian. As per the example above, one reason why this might be necessary is if the participant is a minor. However, there are other possible reasons. For instance, intellectual disability may in some cases require a legal guardian to provide consent on the participant’s behalf. In such situations, we might need to check to see whether the participant is a minor, <em>or</em> has an intellectual disability:</p>
+<pre class="r"><code>minor &lt;- FALSE
+disability &lt;- TRUE</code></pre>
+<p>If one or both of these variables is <code>TRUE</code> then we need to obtain guardian consent, which we would express in R as follows:</p>
+<pre class="r"><code>guardian_consent_needed &lt;- minor | disability
+guardian_consent_needed</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="and" class="section level3">
+<h3><span class="header-section-number">2.3.6</span> “And”</h3>
+<p>The last operator to introduce is <code>&amp;</code> which has a meaning simlar to the word <em>“and”</em>. A logical expression <code>x &amp; y</code> is true only if <em>both</em> <code>x</code> and <code>y</code> are true. In our survey example, for example, a survey might only be counted as valid data if we have properly obtained consent (i.e. <code>consent_given</code> is <code>TRUE</code>) and if the survey has been corectly filled out (i.e., <code>survey_complete</code> is <code>TRUE</code>). If a participant has provided consent but not filled out the survey properly, we might have these variables:</p>
+<pre class="r"><code>consent_given &lt;- TRUE
+survey_complete &lt;- FALSE</code></pre>
+<p>So do we have a <code>valid_response</code> in this case?</p>
+<pre class="r"><code>valid_response &lt;- consent_given &amp; survey_complete
+valid_response</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+</div>
+<div id="naming-your-variables" class="section level2">
+<h2><span class="header-section-number">2.4</span> Naming your variables</h2>
+<p>What should you call your variables? R allows some flexibility in this regard, but there are some limitations, as the following list of rules<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> illustrates:</p>
+<ul>
+<li>Names can only use the upper case alphabetic characters <code>A-Z</code> as well as the lower case characters <code>a-z</code>. You can also include numeric characters <code>0-9</code> in the variable name, as well as the period <code>.</code> or underscore <code>_</code> character. In other words, <code>SuR.v_eY</code> is a valid (but stupid) variable name, while <code>survey?</code> is not.</li>
+<li>Names cannot include spaces: <code>survey_time</code> is valid, but <code>survey time</code> is not.</li>
+<li>Names are case sensitive: <code>survey</code> and <code>Survey</code> are different variable names.</li>
+<li>Names must start with a letter or a period. You can’t use something like <code>_survey</code> or <code>1survey</code> as a variable name. Technically, you can use <code>.survey</code> as a variable name, but it’s not usually a good idea. By convention, variables starting with a <code>.</code> are used for special purposes, and best avoided in everyday usage.</li>
+<li>Names cannot be one of the reserved keywords. These are special words that R needs to keep “safe” from us mere users, so you can’t use them as the names of variables. The keywords are: <code>if</code>, <code>else</code>, <code>repeat</code>, <code>while</code>, <code>function</code>, <code>for</code>, <code>in</code>, <code>next</code>, <code>break</code>, <code>TRUE</code>, <code>FALSE</code>, <code>NULL</code>, <code>Inf</code>, <code>NaN</code>, <code>NA</code>, <code>NA_integer_</code>, <code>NA_real_</code>, <code>NA_complex_</code>, and finally, <code>NA_character_</code>. Don’t bother memorising these: if you make a mistake and try to use one of the keywords as a variable name, R will complain about it like a whiny little robot 🤖</li>
+</ul>
+<p>In addition to those rules that R enforces, there are some informal conventions that people tend to follow when naming variables. You aren’t obliged to follow these conventions, and there are many situations in which it’s advisable to ignore them, but it’s generally a good idea to follow them when you can:</p>
+<ul>
+<li><em>Be informative</em>. As a general rule, using meaningful names like <code>n_items</code> and <code>item_time</code> is preferred over arbitrary ones like <code>x</code> and <code>y</code>. Otherwise it’s very hard to remember what the contents of different variables are, and it becomes hard to understand what your commands actually do.</li>
+<li><em>Be brief</em>. Typing is a pain and no-one likes doing it. So we usually prefer to use a name like <code>n_items</code> over a name like <code>number_of_survey_items</code>. Obviously there’s a bit of a tension between using informative names (which tend to be long) and using short names (which tend to be meaningless), so use a bit of common sense when trading off these two conventions.</li>
+<li><em>Be consistent</em>. Pick a variable naming style and stick with it. I’ll use “snake case” throughout, in which we use the underscore character to separate words (as in <code>item_time</code>). There are other styles that you’ll see in R. When I first started writing these notes I was using <code>.</code> to separate words (as in <code>item.time</code>) but for various reasons I’ve decided that’s less than ideal and as I go through these notes to revise them I’m switching everything to underscores. Other people like “camel case”, which uses capitalisation to separate words (e.g.,<code>ItemTime</code>). It’s largely a matter of personal style.</li>
+</ul>
+</div>
+<div id="special-values" class="section level2">
+<h2><span class="header-section-number">2.5</span> Special values</h2>
+<p>A final thing I want to mention in this context are some of the “special” values that you might see R produce. Most likely you’ll see them in situations where you were expecting a number, but there are quite a few other ways you can encounter them. These values are <code>Inf</code>, <code>NaN</code>, <code>NA</code> and <code>NULL</code>. These values can crop up in various different places, and so it’s important to understand what they mean.</p>
+<p><strong>Infinity</strong> (<code>Inf</code>). The easiest of the special values to explain is <code>Inf</code>, since it corresponds to a value that is infinitely large. You can also have <code>-Inf</code>. The easiest way to get <code>Inf</code> is to divide a positive number by 0:</p>
+<pre class="r"><code>1/0</code></pre>
+<pre><code>## [1] Inf</code></pre>
+<p>In most real world data analysis situations, if you’re ending up with infinite numbers in your data, then something has gone awry. Hopefully you’ll never have to see them.</p>
+<p><strong>Not a Number</strong> (<code>NaN</code>). The special value of <code>NaN</code> is short for “not a number”, and it’s basically a reserved keyword that means “there isn’t a mathematically defined number for this”. If you can remember your high school maths, remember that it is conventional to say that <code>0/0</code> doesn’t have a proper answer: mathematicians would say that <code>0/0</code> is <em>undefined</em>. R says that it’s not a number:</p>
+<pre class="r"><code>0/0</code></pre>
+<pre><code>## [1] NaN</code></pre>
+<p>Nevertheless, it’s still treated as a “numeric” value. To oversimplify, <code>NaN</code> corresponds to cases where you asked a proper numerical question that genuinely has no meaningful answer.</p>
+<p><strong>Not available</strong> (<code>NA</code>). <code>NA</code> indicates that the value that is “supposed” to be stored here is missing. To understand what this means, it helps to recognise that the <code>NA</code> value is something that you’re most likely to see when analysing data from real world experiments. Sometimes you get equipment failures, or you lose some of the data, or whatever. The point is that some of the information that you were “expecting” to get from your study is just plain missing. Note the difference between <code>NA</code> and <code>NaN</code>. For <code>NaN</code>, we really do know what’s supposed to be stored; it’s just that it happens to correspond to something like <code>0/0</code> that doesn’t make any sense at all. In contrast, <code>NA</code> indicates that we actually don’t know what was supposed to be there. The information is missing.</p>
+<p><strong>No value</strong> (<code>NULL</code>). The <code>NULL</code> value takes this “absence” concept even further. It asserts that the variable genuinely has no value whatsoever, or does not even exist. This is quite different to both <code>NaN</code> and <code>NA</code>. For <code>NaN</code> we actually know what the value is, because it’s something insane like <code>0/0</code>. For <code>NA</code>, we believe that there is <em>supposed</em> to be a value “out there” in some sense, but a dog ate our homework and so we don’t quite know what it is. But for <code>NULL</code> we strongly believe that there is no value at all.</p>
+</div>
+<div id="exercises" class="section level2">
+<h2><span class="header-section-number">2.6</span> Exercises</h2>
+<p><strong>Numeric data.</strong></p>
+<p>In the example above, there are three variables that we use to estimate how long the survey will take to complete:</p>
+<ul>
+<li><code>n_items</code> is the number of items in our survey</li>
+<li><code>item_time</code> is the time it takes to complete an item</li>
+<li><code>consent_time</code> is the time it takes to fill out the consent form</li>
+</ul>
+<p>Suppose we are creating a new survey that will consist of 30 items that that 25 seconds each, and the consent form takes 120 seconds:</p>
+<ul>
+<li>Create a variable <code>new_survey_time</code> that calculates how long this new survey will take.</li>
+</ul>
+<p><strong>Character data.</strong></p>
+<p>In our new survey, the reason that the questions take a little longer to answer is that people are being asked to provide <em>free response</em> data. Create a variable called <code>new_survey_type</code> that records this information.</p>
+<ul>
+<li><p>R has a function called <code>toupper</code> that converts text from lower case to upper case. Try typing <code>toupper(&quot;multiple choice&quot;)</code> at the console and see what happens.</p></li>
+<li><p>R also has a function called <code>tolower</code>. What does it do?</p></li>
+</ul>
+<p><strong>Logical data.</strong></p>
+<p>Suppose we have now finished collecting the data, and we have responses from one participant indicating that they identify as non-binary but were assigned female gender at birth.</p>
+<pre class="r"><code>assigned_gender &lt;- &quot;female&quot;
+identified_gender &lt;- &quot;non-binary&quot;</code></pre>
+<ul>
+<li><p>Create a variable <code>transgender</code> that is <code>TRUE</code> if <code>assigned_gender</code> is different to <code>identified_gender</code>.</p></li>
+<li><p>As a second exercise, suppose that the survey allows people to specify their marital status as <code>&quot;single&quot;</code>, <code>&quot;widowed&quot;</code>, <code>&quot;married&quot;</code> or <code>&quot;de facto&quot;</code>. For the purposes of some analyses we might want to collapse this to a binary variable <code>has_spouse</code> that is <code>TRUE</code> if the participant is married or in a de facto relationship, but <code>FALSE</code> otherwise. How would we do this in R?</p></li>
+</ul>
+<p>The solutions for these exercises are <a href="./scripts/solutions_variables.R">here</a>.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Actually, in keeping with the R tradition of providing you with a billion different screwdrivers when you’re actually looking for a hammer, this isn’t the only way to do it. In addition to the <code>&lt;-</code> operator, we can also use <code>-&gt;</code> and <code>=</code>. There’s also the <code>assign()</code> function, and the <code>&lt;&lt;-</code> and <code>-&gt;&gt;</code> operators, all of which have slightly different behaviour. I won’t talk much about any of those here.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>For no reason I want to mention that there is an R package called <strong>janeaustenr</strong> that does nothing other than contain the entire text to all of Jane Austen’s novels and it is the best thing in all the world.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>It’s kind of tedious to type <code>TRUE</code> or <code>FALSE</code> over and over again, so R provides you with a shortcut. You can use <code>T</code> and <code>F</code> instead. However, it is not a good idea to do this. The values <code>TRUE</code> and <code>FALSE</code> are <em>reserved keywords</em> in R and so R won’t let you define a variable called <code>TRUE</code>. This is for a good reason - it protects you from accidentally redefining the meaning of “true” and “false”. There is no such protection for <code>T</code> and <code>F</code>. It’s better to type the full word<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>In this context <code>x == 4</code> is interpreted as a test of whether <code>x</code> is equal to <code>4</code>, whereas <code>x = 4</code> will be treated as an assignment operation, exactly as if you’d typed <code>x &lt;- 4</code><a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>As an aside, R does allow you to compare text using the <code>&lt;</code> operator, and it provides a test of which text comes first in the alphabet (e.g. try <code>&quot;cat&quot; &lt; &quot;dog&quot;</code>). However, it’s not an amazingly useful thing to do, and it doesn’t always behave the way you might expect.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>Actually, you can override a lot of these rules if you want to, and quite easily. All you have to do is add quote marks or backticks around your non-standard variable name. For instance <code>') my annoyance&gt;' &lt;- 350</code> would work just fine, but it’s almost never a good idea to do this.<a href="#fnref6">↩</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
