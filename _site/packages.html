@@ -466,11 +466,6 @@ div.tocify {
 <h2><span class="header-section-number">4.4</span> Dependencies</h2>
 <p>There’s a couple of other details that I want to draw your attention to. A concrete example is the best way to illustrate. One of the other packages that you already have installed on your computer is the <strong>Matrix</strong> package, so let’s load that one and see what happens:</p>
 <pre class="r"><code>library(Matrix)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;Matrix&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
-## 
-##     expand</code></pre>
 <p>This is slightly more complex than the output that we got last time, but it’s not too complicated. The <strong>Matrix</strong> package makes use of some of the tools in the <strong>lattice</strong> package, and R has kept track of this dependency. So when you try to load the <strong>Matrix</strong> package, R recognises that you’re also going to need to have the <strong>lattice</strong> package loaded too. As a consequence, both packages get loaded, and R prints out a helpful little note on screen to tell you that it’s done so.</p>
 <p>R is pretty aggressive about enforcing these dependencies. Suppose, for example, I try to unload <strong>lattice</strong> while <strong>Matrix</strong> is still loaded. This is easy enough to try: all I have to do is uncheck the box next to <strong>lattice</strong> in the packages pane. But if I try this, here’s what happens:</p>
 <pre class="r"><code>detach(&quot;package:lattice&quot;, unload=TRUE)</code></pre>

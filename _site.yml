@@ -1,4 +1,8 @@
 name: R for Psychological Science
+output_dir: _site
+exclude: 
+  - "header.html"
+  - "README.*"
 navbar:
   title: R for Psychological Science
   left:
@@ -26,7 +30,6 @@ navbar:
       href: programming.html   
     - text: File system
       href: file-system.html        
-
   - text: Data
     menu:
     - text: Prelude
@@ -52,9 +55,7 @@ navbar:
   right:
   - text: compcogscisydney.org
     href: https://compcogscisydney.org
-output_dir: _site
 output:
   html_document:
     lib_dir: site_libs
     self_contained: no
-
