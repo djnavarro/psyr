@@ -81,7 +81,7 @@ Yep. All good.
 ## Unloading a package
 
 Sometimes, especially after a long session of working with R, you may find yourself wanting to get rid of some of those packages that you’ve loaded. The RStudio package pane makes this exactly as easy as loading the package in the first place. Find the entry corresponding to the package you want to unload, and uncheck the box. When you do that for the **foreign** package, you’ll see this command appear on screen:
-```{r}
+```{r,warning=FALSE}
 detach("package:foreign", unload=TRUE)
 ```
 And the package is unloaded. We can verify this by seeing if the `read.spss` function still `exists`:
@@ -90,32 +90,25 @@ exists("read.spss")
 ```
 Nope. Definitely gone.
 
-
-## Dependencies
-
-There’s a couple of other details that I want to draw your attention to. A concrete example is the best way to illustrate. One of the other packages that you already have installed on your computer is the **Matrix** package, so let’s load that one and see what happens:
-
-```{r}
-library(Matrix)
-```
-
-This is slightly more complex than the output that we got last time, but it’s not too complicated. The **Matrix** package makes use of some of the tools in the **lattice** package, and R has kept track of this dependency. So when you try to load the **Matrix** package, R recognises that you’re also going to need to have the **lattice** package loaded too. As a consequence, both packages get loaded, and R prints out a helpful little note on screen to tell you that it’s done so. 
-
-R is pretty aggressive about enforcing these dependencies. Suppose, for example, I try to unload  **lattice** while  **Matrix** is still loaded. This is easy enough to try: all I have to do is uncheck the box next to **lattice** in the packages pane. But if I try this, here’s what happens:
-
-```{r, error=TRUE}
-detach("package:lattice", unload=TRUE)
-```
-
-R refuses to do it. This can be quite useful, since it stops you from accidentally removing something that you still need. So, if I want to remove both **Matrix** and **lattice**, I need to do it in the correct order.
-
 ## Conflicts
 
 Something else you should be aware of. Sometimes you’ll attempt to load a package, and R will print out a message on screen telling you that something or other has been “masked”. This will be confusing to you if I don’t explain it now, and it actually ties very closely to the whole reason why R forces you to load packages separately from installing them. Here’s an example. Two package that I use a lot are called **car** and **psych**. The **car** package is short for [Companion to Applied Regression](https://us.sagepub.com/en-us/nam/an-r-companion-to-applied-regression/book233899) (an excellent book, I’ll add), and it has a number of tools that I’m quite fond of. For the most part, **car** and **psych** are unrelated to each other. They do different things, so not surprisingly almost all of the function names are different. But... there’s one exception to that. The **car** package and the **psych** package both contain a function called `logit`.^[The logit function a simple mathematical function that happens not to have been included in the basic R distribution.] This creates a naming conflict. If I load both packages into R, an ambiguity is created. If the user types in `logit(100)`, should R use the `logit` function in the **car** package, or the one in the **psych** package? The answer is: R uses whichever package you loaded most recently, and it tells you this very explicitly. Here’s what happens when I load the **car** package, and then afterwards load the **psych** package:
 
-```{r}
+```{r,eval=FALSE}
 library(car)
+```
+```
+## Loading required package: carData
+```
+```{r,eval=FALSE}
 library(psych)
+```
+```
+## 
+## Attaching package: 'psych'
+## The following object is masked from 'package:car':
+## 
+##     logit
 ```
 
 The output here is telling you that the `logit` object (i.e., function) in the **car** package is no longer accessible to you. It’s been hidden (or “masked”) from you by the one in the **psych** package^[Tip for advanced users. You can get R to use the one from the car package by using `car::logit` as your command rather than `logit`, since the `car::` part tells R explicitly which package to use. See also `:::` if you’re especially keen to force R to use functions it otherwise wouldn’t, but take care, since `:::` can be dangerous.]
@@ -153,12 +146,27 @@ install_github("djnavarro/TurtleGraphics")
 
 Just like we saw before, R responds by printing out a lot of unintelligible garbage, but in the end it works and we have a shiny new **TurtleGraphics** package to play with! And just to verify that it did work properly, let's load the package and draw a turtle:
 
-```{r,message=FALSE}
+```{r}
 library(TurtleGraphics)
 turtle_init()
 ```
 
 Yay! A turtle! We'll talk more about the turtle later.
+
+## Dependencies
+
+There’s a couple of other details that I want to draw your attention to. Notice that when we loaded the **TurtleGraphics** package it also automatically loaded the **grid** package. This reflects a *dependency*: **TurtleGraphics** is reliant on the graphics tools provided by `grid` and  R has kept track of this dependency. 
+
+R is pretty aggressive about enforcing these dependencies. Suppose, for example, I try to unload  **grid** while  **TurtleGraphics** is still loaded. This is easy enough to try: all I have to do is uncheck the box next to **grid** in the packages pane. If I do this though, R will complain about it! 
+
+```{r,eval=FALSE}
+> detach("package:grid", unload=TRUE)
+```
+```
+Error: package ‘grid’ is required by ‘TurtleGraphics’ so will not be detached
+```
+
+This can be quite useful, since it stops you from accidentally removing something that you still need. So, if I want to remove both packages I need to do it in the correct order.
 
 ## Updating packages
 

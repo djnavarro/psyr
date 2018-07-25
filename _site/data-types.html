@@ -801,7 +801,7 @@ arr[8]
 </div>
 <div id="array-names" class="section level3">
 <h3><span class="header-section-number">13.4.2</span> Array names</h3>
-<p>As with other data structures, arrays can have names for specific elements. In fact, we can assign names to each of the <em>dimensions</em> too. For instance, suppose we have another array – that we affectionately call <code>cubie</code> 📦 – it is also a three dimensional array, but that has the shape that it does because it represents a (3 genders) <span class="math inline">\(\times\)</span> (4 seasons) <span class="math inline">\(\times\)</span> (2 times) structure. We could specify the dimension names for <code>cubie</code> like this:</p>
+<p>As with other data structures, arrays can have names for specific elements. In fact, we can assign names to each of the <em>dimensions</em> too. For instance, suppose we have another array – that we affectionately call <code>cubie</code> 🍱 – it is also a three dimensional array, but that has the shape that it does because it represents a (3 genders) <span class="math inline">\(\times\)</span> (4 seasons) <span class="math inline">\(\times\)</span> (2 times) structure. We could specify the dimension names for <code>cubie</code> like this:</p>
 <pre class="r"><code>cubie &lt;- array(
   data = 1:24, 
   dim = c(3,4,2), 
@@ -957,7 +957,7 @@ class(x)
 <pre class="r"><code>x &lt;- c(&quot;15&quot;,&quot;19&quot;)  # the variable
 class(x)           # what class is it?</code></pre>
 <pre><code>## [1] &quot;character&quot;</code></pre>
-<p>Obviously, if I want to do mathematical calculations using <code>x</code> in its current state R wil get very sad 😿. It thinks <code>x</code> is text and it won’t allow me to do mathematics with text! To coerce <code>x</code> from “character” to “numeric”, we use the <code>as.numeric</code> function:</p>
+<p>Obviously, if I want to do mathematical calculations using <code>x</code> in its current state R wil get very sad 😭. It thinks <code>x</code> is text and it won’t allow me to do mathematics with text! To coerce <code>x</code> from “character” to “numeric”, we use the <code>as.numeric</code> function:</p>
 <pre class="r"><code>x &lt;- as.numeric(x)  # coerce the variable
 class(x)            # what class is it?</code></pre>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>

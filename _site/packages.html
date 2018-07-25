@@ -455,32 +455,26 @@ div.tocify {
 <h2><span class="header-section-number">4.3</span> Unloading a package</h2>
 <p>Sometimes, especially after a long session of working with R, you may find yourself wanting to get rid of some of those packages that you’ve loaded. The RStudio package pane makes this exactly as easy as loading the package in the first place. Find the entry corresponding to the package you want to unload, and uncheck the box. When you do that for the <strong>foreign</strong> package, you’ll see this command appear on screen:</p>
 <pre class="r"><code>detach(&quot;package:foreign&quot;, unload=TRUE)</code></pre>
-<pre><code>## Warning: &#39;foreign&#39; namespace cannot be unloaded:
-##   namespace &#39;foreign&#39; is imported by &#39;rio&#39;, &#39;psych&#39; so cannot be unloaded</code></pre>
 <p>And the package is unloaded. We can verify this by seeing if the <code>read.spss</code> function still <code>exists</code>:</p>
 <pre class="r"><code>exists(&quot;read.spss&quot;)</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <p>Nope. Definitely gone.</p>
 </div>
-<div id="dependencies" class="section level2">
-<h2><span class="header-section-number">4.4</span> Dependencies</h2>
-<p>There’s a couple of other details that I want to draw your attention to. A concrete example is the best way to illustrate. One of the other packages that you already have installed on your computer is the <strong>Matrix</strong> package, so let’s load that one and see what happens:</p>
-<pre class="r"><code>library(Matrix)</code></pre>
-<p>This is slightly more complex than the output that we got last time, but it’s not too complicated. The <strong>Matrix</strong> package makes use of some of the tools in the <strong>lattice</strong> package, and R has kept track of this dependency. So when you try to load the <strong>Matrix</strong> package, R recognises that you’re also going to need to have the <strong>lattice</strong> package loaded too. As a consequence, both packages get loaded, and R prints out a helpful little note on screen to tell you that it’s done so.</p>
-<p>R is pretty aggressive about enforcing these dependencies. Suppose, for example, I try to unload <strong>lattice</strong> while <strong>Matrix</strong> is still loaded. This is easy enough to try: all I have to do is uncheck the box next to <strong>lattice</strong> in the packages pane. But if I try this, here’s what happens:</p>
-<pre class="r"><code>detach(&quot;package:lattice&quot;, unload=TRUE)</code></pre>
-<pre><code>## Error in detach(&quot;package:lattice&quot;, unload = TRUE): invalid &#39;name&#39; argument</code></pre>
-<p>R refuses to do it. This can be quite useful, since it stops you from accidentally removing something that you still need. So, if I want to remove both <strong>Matrix</strong> and <strong>lattice</strong>, I need to do it in the correct order.</p>
-</div>
 <div id="conflicts" class="section level2">
-<h2><span class="header-section-number">4.5</span> Conflicts</h2>
+<h2><span class="header-section-number">4.4</span> Conflicts</h2>
 <p>Something else you should be aware of. Sometimes you’ll attempt to load a package, and R will print out a message on screen telling you that something or other has been “masked”. This will be confusing to you if I don’t explain it now, and it actually ties very closely to the whole reason why R forces you to load packages separately from installing them. Here’s an example. Two package that I use a lot are called <strong>car</strong> and <strong>psych</strong>. The <strong>car</strong> package is short for <a href="https://us.sagepub.com/en-us/nam/an-r-companion-to-applied-regression/book233899">Companion to Applied Regression</a> (an excellent book, I’ll add), and it has a number of tools that I’m quite fond of. For the most part, <strong>car</strong> and <strong>psych</strong> are unrelated to each other. They do different things, so not surprisingly almost all of the function names are different. But… there’s one exception to that. The <strong>car</strong> package and the <strong>psych</strong> package both contain a function called <code>logit</code>.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> This creates a naming conflict. If I load both packages into R, an ambiguity is created. If the user types in <code>logit(100)</code>, should R use the <code>logit</code> function in the <strong>car</strong> package, or the one in the <strong>psych</strong> package? The answer is: R uses whichever package you loaded most recently, and it tells you this very explicitly. Here’s what happens when I load the <strong>car</strong> package, and then afterwards load the <strong>psych</strong> package:</p>
-<pre class="r"><code>library(car)
-library(psych)</code></pre>
+<pre class="r"><code>library(car)</code></pre>
+<pre><code>## Loading required package: carData</code></pre>
+<pre class="r"><code>library(psych)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;psych&#39;
+## The following object is masked from &#39;package:car&#39;:
+## 
+##     logit</code></pre>
 <p>The output here is telling you that the <code>logit</code> object (i.e., function) in the <strong>car</strong> package is no longer accessible to you. It’s been hidden (or “masked”) from you by the one in the <strong>psych</strong> package<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
 </div>
 <div id="installing-packages" class="section level2">
-<h2><span class="header-section-number">4.6</span> Installing packages</h2>
+<h2><span class="header-section-number">4.5</span> Installing packages</h2>
 <p>One of the main selling points for R is that there are thousands of packages that have been written for it, and these are all available online. So whereabouts online are these packages to be found, and how do we download and install them? There is a big repository of packages called the <a href="https://cran.r-project.org/">Comprehensive R Archive Network</a> (CRAN), and the easiest way of getting and installing a new package is from one of the many CRAN mirror sites. Conveniently for us, R provides a function called <code>install.packages</code> that you can use to do this. Even more conveniently, the Rstudio team runs its own CRAN mirror and Rstudio has a clean interface that lets you install packages without having to learn how to use the <code>install.packages</code> command.</p>
 <p>Using the Rstudio tools is, again, dead simple. In the top left hand corner of the packages panel you’ll see a button called “Install Packages”. If you click on that, it will bring up a window like the one shown below. There are a few different buttons and boxes you can play with. Ignore most of them. Just go to the line that says “Packages” and start typing the name of the package that you want. As you type, you’ll see a dropdown menu appear, listing names of packages that start with the letters that you’ve typed so far:</p>
 <p><img src="img/packages_install.png" width=400px></p>
@@ -488,7 +482,7 @@ library(psych)</code></pre>
 <pre class="r"><code>install.packages(&quot;psych&quot;)</code></pre>
 <p>This is the R command that does all the work. R then goes off to the internet, has a conversation with CRAN, downloads some stuff, and installs it on your computer. You probably don’t care about all the details of R’s little adventure on the web, but the <code>install.packages</code> function is rather chatty, so it reports a bunch of gibberish that you really aren’t all that interested in. Despite the long and tedious response, all it really means is “I’ve installed the psych package”. I find it best to humour the talkative little automaton. I don’t actually read any of this garbage, I just politely say “thanks” and go back to whatever I was doing.</p>
 <div id="more-than-just-cran" class="section level3">
-<h3><span class="header-section-number">4.6.1</span> More than just CRAN</h3>
+<h3><span class="header-section-number">4.5.1</span> More than just CRAN</h3>
 <p>There’s a little more I should say about installing packages. Most of the time the packages that you’ll want to install have been made available on CRAN, so the <code>install.packages</code> function is what you’d want to use. However, that’s not always true. Sometimes people write fun packages that they don’t bother to submit to CRAN, and sometimes you might want to try out a package that is currently under development. In these situations, people who write packages will often make them available on sites like <a href="https://github.com/">GitHub</a>, <a href="https://bitbucket.org/">Bitbucket</a> or <a href="https://about.gitlab.com/">Gitlab</a>. It’s perfectly possible to install packages directly from those sites, using the <strong>devtools</strong> package.</p>
 <p>The first thing you’ll need to do is install <strong>devtools</strong>, which is easy because that package is available on CRAN.</p>
 <pre class="r"><code>install.packages(&quot;devtools&quot;)</code></pre>
@@ -498,9 +492,17 @@ install_github(&quot;djnavarro/TurtleGraphics&quot;)</code></pre>
 <p>Just like we saw before, R responds by printing out a lot of unintelligible garbage, but in the end it works and we have a shiny new <strong>TurtleGraphics</strong> package to play with! And just to verify that it did work properly, let’s load the package and draw a turtle:</p>
 <pre class="r"><code>library(TurtleGraphics)
 turtle_init()</code></pre>
-<p><img src="packages_files/figure-html/unnamed-chunk-14-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p><img src="packages_files/figure-html/unnamed-chunk-13-1.png" width="456" style="display: block; margin: auto;" /></p>
 <p>Yay! A turtle! We’ll talk more about the turtle later.</p>
 </div>
+</div>
+<div id="dependencies" class="section level2">
+<h2><span class="header-section-number">4.6</span> Dependencies</h2>
+<p>There’s a couple of other details that I want to draw your attention to. Notice that when we loaded the <strong>TurtleGraphics</strong> package it also automatically loaded the <strong>grid</strong> package. This reflects a <em>dependency</em>: <strong>TurtleGraphics</strong> is reliant on the graphics tools provided by <code>grid</code> and R has kept track of this dependency.</p>
+<p>R is pretty aggressive about enforcing these dependencies. Suppose, for example, I try to unload <strong>grid</strong> while <strong>TurtleGraphics</strong> is still loaded. This is easy enough to try: all I have to do is uncheck the box next to <strong>grid</strong> in the packages pane. If I do this though, R will complain about it!</p>
+<pre class="r"><code>&gt; detach(&quot;package:grid&quot;, unload=TRUE)</code></pre>
+<pre><code>Error: package ‘grid’ is required by ‘TurtleGraphics’ so will not be detached</code></pre>
+<p>This can be quite useful, since it stops you from accidentally removing something that you still need. So, if I want to remove both packages I need to do it in the correct order.</p>
 </div>
 <div id="updating-packages" class="section level2">
 <h2><span class="header-section-number">4.7</span> Updating packages</h2>
