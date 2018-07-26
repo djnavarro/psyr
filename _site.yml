@@ -39,7 +39,7 @@ navbar:
     - text: Describing data
       href: describing-data.html      
     - text: Visualising data
-      href: xx-visualising-data.html
+      href: visualising-data.html
   - text: Stats
     menu:
     - text: Probability distributions

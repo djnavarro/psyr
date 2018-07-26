@@ -50,7 +50,7 @@ Everything from here onwards is *very much* a work in progress!
 - [Prelude to data](./prelude-to-data.html)
 - [Data types](./data-types.html)
 - [Describing data](./describing-data.html) <span style="color:#cccccc">(to be updated)</span><!-- skimr, group_by, summarise -->
-- [Visualising data](./xx-visualising-data.html)  <span style="color:#cccccc">(to be updated)</span><!-- add ggplot -->
+- [Visualising data](./visualising-data.html)  <span style="color:#cccccc">(to be updated)</span><!-- add ggplot -->
 - <span style="color:#cccccc">Data manipulation (to be added)</span> <!-- gather/spread, etc -->
 - <span style="color:#cccccc">Working with text (to be added)</span>  <!-- stringr -->
 - <span style="color:#cccccc">Additional tricks (to be added)</span>  <!-- dates -->
