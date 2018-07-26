@@ -33,7 +33,17 @@ h3{
 }
 ```
 
+> Out of every hundred people,<br>
+> those who always know better:<br>
+> fifty-two.<br>
+> <br>
+> Unsure of every step:<br>
+> almost all the rest.<br>
+> <br>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Wislawa Szymborska, [A Word on Statistics](https://www.theatlantic.com/past/docs/unbound/poetry/antholog/szymbors/stats.htm) (translated from the Polish by Joanna Trzeciak)
 
+
+<!--
 > Out of every hundred people,
 > those who always know better:
 > fifty-two.
@@ -97,307 +107,194 @@ h3{
 > ninety-nine.
 > <br>
 > Mortal:
-> one hundred out of one hundred -- 
+> one hundred out of one hundred -- ## 
 > a figure that has never varied yet.<br>
 > <br>
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Wislawa Szymborska, [A Word on Statistics](https://www.theatlantic.com/past/docs/unbound/poetry/antholog/szymbors/stats.htm) (translated from the Polish by Joanna Trzeciak)
 
-In this chapter I'm going to provide a quick overview of how to perform common data analysis jobs using R. It's essentially a brief coverage of descriptive statistics and a few standard inferential statistics ($t$-tests, etc). I won't explain the logic of *how* the statistical tests work: there are lots of great stats textbooks out there for that. If you're really desperate you can check out the [Learning Statistics with R](http://www.compcogscisydney.com/learning-statistics-with-r.html) book that I wrote for teaching my intro stats class. 
+-->
 
-When writing my first ever set of statistics lectures back in 2011, I scraped a set of data from the web that contained some basic information about every Australian Football League (AFL) game played during the years 1987 to 2010. The data is stored in the `afl` data frame and saved in the `afl24.Rdata` file. We'll use that data set throughout this chapter, so here it is:
+In this section I'm going to discuss a few methods for computing different kinds of descriptive statistics in R. I won't talk about data visualisation at all until the next section. In the [prelude to data](./prelude-to-data.html) section I referred to the AFL data set that contains some information about every game played in the Australian Rules Football (AFL) league between 1987 and 2010, available in the [afl.csv](./data/afl.csv) file. As usual, I have **tidyverse** loaded, so I'll use `readr::read_csv`^[A quick explanation if you're unfamiliar with the `::` operator. It's a tool you can use to referring to a function inside a package regardless of whether that package is loaded. So `readr::read_csv` means "use the `read_csv` function in the **readr** package". In this instance **readr** is loaded via **tidyverse** so my actual command doesn't use `::`. However, what you see a lot of people doing in textbooks or online is use this notation as a shorthand way to tell people *where* the function is located. The further we go into these notes the more likely I am to start doing that. It's a pretty convenient way of talking about these things!] to import the data:
 
-```{r} 
-load("./data/afl24.Rdata") # load data
-head(afl)                  # show the first few rows
+```{r, message = FALSE, warning = FALSE, fig.width=7}
+afl <- read_csv("./data/afl.csv")
+afl
 ```
 
-I'm also going to make use of a couple of different packages in this chapter, so I'll load them now:
+This data frame has 4296 cases and 12 variables, so I definitely don't want to be summarising anything manually! 
+
+## Simple summaries
+
+When summarising a variable, there are a variety of different measures that one might want to calculate. Means, medians, standard deviations, skewness, etc. There are so many of these functions out there that I'd never be able to capture all of them briefly, even restricting ourselves to numeric variables. Here is a quick overview of the most common statistics:
+
+- `mean()` calculates the arithmetic mean. If you want a trimmed mean it has an optional `trim` argument
+- `median()` calculates the median; more generally, the `quantile()` function computes arbitrary quantiles, specified with the `probs` argument
+- `min()` and `max()` are the minimum and maximum; `IQR()` returns the interquartile range and `range()` returns the range
+- `sd()` calculates the standard deviation (and `var()` computes the variance)
+- `psych::skew()` and `psych::kurtosi()` compute skewness and kurtosis respectively
+
+For example, to return the mean and standard deviations for the `home_score` variable I would use these commands:
 
 ```{r}
-library(psych) # William Revelle's psychometrics package
-library(lsr)   # my "learning statistics with R" package (badly in need of some updating!)
-library(car)   # nicer Anova function than the base packages
+mean(afl$home_score)
+sd(afl$home_score)
 ```
 
-## Descriptive statistics
-
-### Using `summary`
-
-Let's suppose all we want to do is get a quick overview of all the variables in the data frame. The `summary` function^[Note: like `print` and `plot`, `summary` is a generic function and does rather different things depending on what kind of input you give it] provides a very handy way of doing that, as you can see here:
-```{r}
-summary(afl)
-```
-The output here is giving a sensible summary of each of the variables. To look at any one of these in a little more detail, let's start by considering the "weekday" variable, `afl$weekday`. This is a categorical variable (i.e., a *factor* in R) and so when we summarise that variable on its own, the output is a frequency table:
-```{r}
-summary( afl$weekday )
-```
-So there were a total of `r sum(afl$weekday=="Mon")` games played on a Monday over this time period, `r sum(afl$weekday=="Tue")` games played on a Tuesday, and so on. If we feed it a *numeric* variable, like `afl$attendance` we get a set of numbers describing the overall distribution:^[Just FYI: If we summarise a logical variable using a command like `summary(afl$is.final)` we get something very much like a frequency table. For a character variable the `summary` function doesn't work very well, so you'd need to explicitly tell R to treat the variable as a factor using a command like `summary(as.factor(myvariable))`]
-```{r}
-summary( afl$attendance )
-```
-So the output here gives you the range: minimum attendance was `r (min(afl$attendance)) %f% "int"` and the maximum was `r (max(afl$attendance)) %f% "int"`. The mean attendance at an AFL game was `r (mean(afl$attendance)) %f% "int"`, whereas the median was a little smaller at `r (median(afl$attendance)) %f% "int"`. Finally, it also gives you the interquartile range, which runs from  `r (quantile(afl$attendance,.25)) %f% "int"` to `r (quantile(afl$attendance,.75)) %f% "int"`. A more detailed view could be generated using the `hist` function to draw a histogram, as discussed in the graphics chapter:
-```{r, echo=FALSE}
-hist(
-  x = afl$attendance,
-  col = "lightblue",
-  xlab = "Official Attendance",
-  ylab = "Frequency",
-  main = "",
-  axes = FALSE
-)
-axis(
-  side = 1,
-  at = seq(0, 120000, 30000),
-  labels = seq(0, 120000, 30000) %f% "char"
-)
-axis(
-  side = 2
-)
-```
-
-
-### Using `describe`
-
-The `psych` package contains a handy function called `describe` that provides some additional summary statistics that are commonly reported in psychology. However, the measures that it reports are only really sensible for numeric variables (e.g., what exactly would the "mean" of `afl$venue` be?) so the output looks a little weird when the data set contains non-numeric variables. So to produce a tidy output, it's handy to do something like this:
+It's worth noting that many of these functions have an `na.rm` argument (or similar) that specifies how R will handle missing data (i.e., `NA` values). Quite often, the default is to set `na.rm = FALSE` meaning that R will not remove missing cases. That can be useful as a way of discovering that your data has missing values: if one of the values is missing then by definition the mean of all your values must also be missing!
 
 ```{r}
-numeric.vars <- sapply(afl, is.numeric)  # I'll explain "sapply" later!
-describe( afl[,numeric.vars] )           # only "describe" the numeric vars...
+age <- c(21, 19, 39, NA, 56)
+mean(age)
 ```
 
-The package also contains a `describeBy` function that allows you to report the descriptive statistics by group. So, for instance let's suppose I wanted to calculate statistics separately for home and away games (i.e., `afl$is.final == FALSE`) and finals cames (i.e, `afl$is.final == TRUE`) we could use this command:
+In practice though it's often more an annoyance than an aid, so you'll often want to calculate the mean like this:
 
 ```{r}
-describeBy(
-  x =  afl[,numeric.vars], 
-  group = afl$is.final 
-)
+mean(age, na.rm = TRUE)
 ```
-This provides handy information: the average attendance for a home and away game was `r mean(afl$attendance[afl$is.final==FALSE]) %f% "int"` whereas for a finals match the average attendance was  `r mean(afl$attendance[afl$is.final==TRUE]) %f% "int"`.
 
 
-### Mean and median
+## Correlations
 
-Introductory stats textbooks usually suggest that we describe the **central tendency** of a variable in terms of its arithmetic *mean* (i.e., the average value), the *median* (i.e., the middle value) or sometimes the *mode* (i.e., the most frequently occurring value). The mean and median are usually applied to numeric variables, whereas the mode is generally more appropriate for categorical variables. I'll talk about the mode later.
-
-To calculate the mean or median of a variable, R supplies the `mean` and `median` functions. It's also worth noting that you can calculate the trimmed mean (e.g., 10\% trimmed mean is the mean value after removing the highest 10\% and lowest values 10\% of the data) by specifying the `trim` argument to the `mean` function. Here's a few examples:
+For a pair of numeric variables, we often want to report the strength and direction of correlations. The `cor` function does this, and by default it reports the Pearson correlation:
 
 ```{r}
-mean( afl$home.score ) # mean score by the home team
-mean( afl$home.score, trim = 0.1 )  # 10% trimmed mean
-mean( afl$home.score, trim = 0.5 )  # 50% trimmed mean...
-median( afl$home.score ) # ...  median *is* the 50% trimmed mean
+cor(afl$home_score, afl$away_score)
 ```
 
-### Standard deviation and quantiles
+As an aside, I don't like writing the name of the data frame twice within the same command. It's a visual distraction and (in my opinion!) it makes the code harder to read. The **magrittr** package solves this for us. In addition to being the origin of the standard R pipe `%>%`, it contains the `%$%` operator that "exposes" the names of the variables inside a data frame to another function. So lets load the package:
 
-To calculate the **spread** of a variable we often describe the *standard deviation* or report various *quantiles* of a distribution. The `sd` function will compute standard deviations for you...
+```{r, message=FALSE, warning=FALSE}
+library(magrittr)
+```
+
+Now here's how I would compute the same correlation using `%$%`:
 
 ```{r}
-sd( afl$home.score )  # standard deviation
-var( afl$home.score ) # variance, just in case you need this!
+afl %$% cor(home_score, away_score)
 ```
 
-For quantiles, there are a number of specific functions that calculate "special" quantiles (e.g., the interquartile range is `IQR` and the range is `range`), but for the most part I think it makes sense to work with the `quantile` function that can compute any quantiles you like. Here are some examples:
+In one sense the difference is purely aesthetic, but aesthetics really do matter when analysing data. In the piped version, I have the name of the data set on the left, and the thing that I'm calculating from it on the right. That feels intuitive and "normal" to me. The original command mixes everything together and I find myself struggling to read it properly. 
+
+Regardless of which version you prefer, you'll be pleased to know that the `cor` function has a `method` argument that lets you specify whether to calculate the `pearson` correlation (the default), the `spearman` rank-sum correlation, or the `kendall` tau measure. For instance:
 
 ```{r}
-quantile(
-  x = afl$home.score,
-  probs = c(.25, .75) # interquartile range
-)
-quantile(
-    x = afl$home.score,
-    probs = c(0, 1)   # the range
-)
-quantile(
-  x = afl$home.score,
-  probs = c(.5)       # the median
-)
+afl %$% cor(home_score, away_score, method = "spearman")
 ```
-Conventiently, the default value of `probs` is to compute all five of those quantiles so the default behaviour is very sensible:
+
+A couple of other things to mention about correlations. 
+
+- The `cor.test` function allows you to conduct a hypothesis test for whether a correlation is statistically significant.
+- The `cor` function can take a matrix or data frame as input, but it will produce an error if any of the variables are non-numeric. I've used the `lsr::correlate` function to make my life a little easier in this respect, so if I want a correlation matrix that only considers the numeric variables `lsr::correlate(afl)` works
+- The `cor` function doesn't handle situations where one or more variables are categorical. The **psych** package has a variety of tools that will solve this for you. It includes functions `tetrachoric`, `polychoric`, `biserial` and `polyserial` to handle those situations. I won't describe those here - I just want to mention them in case you need them later! 
+
+## Frequency tables
+
+For categorical variables, where you usually want a table of frequencies that tallies the number of times each value appears, the `table` function is your friend:^[Note that in this output the weekdays are printed alphabetically rather than in a sensible order. That's because I imported the data straight from a CSV file and I haven't taken the time to convery `weekday` to a factor (see the [data types](./data-types.html) section). You can reorder the levels of a factor however you like. I wrote my own function `lsr::permuteLevels` that does this; there's also the `forcats::fct_relevel` function and the simpler `relevel` function in base R that helps with this. I'll talk more about this later.]
 
 ```{r}
-quantile( afl$home.score )
+afl %$% table(weekday)
 ```
 
-### Missing data
+Not surprisingly, most football games are played on the weekend. The `table` function is quite flexible, and allows you to compute cross-tabulations between two, three, or more variables simply by adding more variable names. As an example, here is the cross tabulation of `year` by `weekday`:
 
-Something to note is that the `mean` function (and most of the other functions used for descriptive statistics) is a little fragile when given missing data. If you want to *ignore* missing values in a data set, you have to explicitly tell these functions to do so. Most of the time the name of the argument to do this is `na.rm`. For example:
+```{r, output.lines=c(1:10)}
+afl %$% table(year, weekday)
+```
+
+## Summarising by group
+
+Back in the dark pre-**tidyverse** era it was surprisingly difficult to compute descriptive statistics separately for each group. There is a function in base R called `aggregate()` that lets you do this, but it's a little cumbersome. The way I usually do this now is with the **dplyr** functions `group_by()` and `summarise()`. Let's suppose I want to compute the mean attendance at AFL games broken down by who was playing. Conceptually, what I want to do is *"group by"* two variables namely `home_team` and `away_team`, and *"then"* for all unique combinations of those variables *"summarise"* the data by computing the mean `attendance`. That sounds like a job for `%>%`...
 
 ```{r}
-age <- c(30, 22, 24, NA)  # eek, one person didn't give their age
-mean(age)                 # this doesn't produce an answer!
-mean(age, na.rm = TRUE)   # ignore the missing value & average the others
+match_popularity <- afl %>%
+  group_by(home_team, away_team) %>%
+  summarise(attend = mean(attendance))
 ```
 
-
-### Tabulating data
-
-When dealing with categorical variables, it's convenient to construct a frequency table. The `table` function^[see also the `xtabs` function] will do this nicely for us. For instance:
+The call to `group_by()` creates a "grouped data frame" which doesn't look any different to the original *other* than that R now knows what grouping you want! When this grouped data is piped to `summarise()`, R knows that it is supposed to provide results broken down by the relevant grouping variables. So this is what the command above returns:
 
 ```{r}
-table( afl$home.team )
+match_popularity
+```
+  
+In the first row, we see that the average attendance at a match between Adelaide and Brisbane over this period was about 39,000 people. 
+
+## Arranging data
+
+The output from our previous command organised the output alphabetically, which is less than ideal. It is usually more helpful to sort the data set in a more meaningful way using `dplyr::arrange`. To  sort the `match_popularity` table in order of increasing attendance, we  do this:
+```{r}
+match_popularity %>%
+  arrange(attend)
+```
+Clearly, Fitzroy was not a popular team, which would be the reason they were merged with Brisbane in 1996. To sort in descending order we can do this:
+```{r}
+match_popularity %>%
+  arrange(-attend)
+```
+Sigh. Collingwood. It's always Collingwood. Moving on.
+
+## Filtering cases
+
+How bad was the situation for Fitzroy? Suppose I just want to look at `match_popularity` for Fitzroy home games. The `dplyr::filter` command lets you do this:
+```{r}
+match_popularity %>%
+  filter(home_team == "Fitzroy")
 ```
 
-The output of this function, incidentally is an R table object, an we can calculate the sample *mode* by finding the largest value in this table. Just to make this a little prettier for us, let's define a custom function:
+The `filter` function can handle more complex logical expressions too. To capture all matches where Fitzroy were playing, regardless of whether they were home or away, a command like this will work: 
+
+```{r, eval = FALSE}
+match_popularity %>%
+  filter(home_team=="Fitzroy" | away_team =="Fitzroy")
+```
+
+However, because this will return a table with 30 rows, R will truncate the output by default. That's mildly annoying in this situation. I'd like to see all the results, preferably sorted in a sensible fashion. To sort the outout we pipe the results to `arrange`, exactly as we did previously, and to ensure that all the rows are printed we can pipe that to an explicit call to `print` that specifies the number of rows to show. Here's the output:
 
 ```{r}
-modal <- function(x) {
-  f <- table(x)    # the frequency table
-  m <- f == max(f) # which cases are equal to the maximum frequency
-  modes <- f[m]    # return all these cases
-  return(modes)
-}
+match_popularity %>%
+  filter(home_team=="Fitzroy" | away_team =="Fitzroy") %>%
+  arrange(attend) %>%
+  print(n = 30)
 ```
 
-Here's what happens when we apply that to the `afl$home.team` variable:
+Poor Fitzroy `r emo::ji("sad")`
+
+## Selecting variables
+
+Many data analysis situations present you with a *lot* of variables to work with, and you might need to `select` a few variables to look at. It's not such a big deal for the AFL data as there are only 12 variables in the raw data, but even there when we print out the tibble it doesn't show us all the cases. Let's suppose we have simple problem where what we want to do is extract the fixture for round 1 of the 1994 season. That is, the only thing we want is the name of the teams playing, the venue and the weekday:
 
 ```{r}
-modal( afl$home.team )
+afl %>%
+  filter(year == 1994 & round == 1) %>%
+  select(home_team, away_team, venue, weekday)
 ```
 
-So Essendon played more home games than anyone else over this time frame. One reason that it can be useful to use a function like the `modal` one we just wrote is that it's robust in the face of ties:
+Well that was easy!
+
+
+## New variables with mutate
+
+Very often the raw data you are given doesn't contain the actual quantity of iteres, and you might need to compute it from the other variables. The `mutate` function allows you to create new variables within a data frame:
 
 ```{r}
-eyes <- c("blue","blue","brown", "brown", "green") # this has two modes!
-modal(eyes) # this gives a sensible answer
+afl %>%
+  mutate(margin = abs(home_score - away_score)) %>%
+  select(home_score, away_score, margin)
 ```
 
-### Cross tabulations
+where the `select` command is just for visual clarity in the output! 
+As always, remember that if you want to store the new variable you need to assign the result to a variable. 
 
-Sometimes it is useful to cross tabulate two categorical variables. This is very easy to do with the `table` function, simply by feeding two categorical variables as the input! Let's suppose I wanted to count the number of times each team played a *home game* on each day of the week. Here's how I would do that:
+<!--
+## "Skimming" a data set
+
+
 
 ```{r}
-table(afl$home.team, afl$weekday)
-```
-
-Note that you can add tables to one another. So if I wasn't interested in home games specifically, I could do this:
-
-```{r}
-home.day <- table(afl$home.team, afl$weekday)
-away.day <- table(afl$away.team, afl$weekday)
-print( home.day + away.day ) 
-```
-
-Finally, you can construct three way tables or even higher order tables simply by passing more variable to the `table` function, though the output rapidly becomes hard to read! 
-
-
-### Aggregating by group
-
-A common task in data analysis is to compute (say) the average value of `attendance` by year. I mentioned one way to do this earlier with the `describeBy` function, but another rather more flexible way is to use `aggregate`. Here's how it works:
-
-```{r}
-att.by.year <- aggregate(
-  formula = attendance ~ year, # we want to look at "attendance" broken down by "year" 
-  data = afl,                  # the data are stored in the afl data frame
-  FUN = mean                   # the thing we want to compute is the mean
-)
-att.by.year
-
-```
-
-That does look like quite the upward trend, which becomes more obvious when we plot the data:
-```{r}
-plot(
-  x = att.by.year$year,
-  y = att.by.year$attendance,
-  xlab = "Year",
-  ylab = "Average Attendance",
-  type = "h",
-  lwd = 5,
-  ylim = c(0,40000),
-  main = ""
-)
-```
-
-### Correlations
-
-The `cor` function in R is a flexible tool for calculating correlations between numeric variables. If I want to calculate the correlation between the score of the home team and the score of the away team, for instance, all I do is pass both variables to the `cor` function:
-```{r}
-cor( afl$home.score, afl$away.score )
-```
-
-There's not much of a relationship between them, as this scatterplot illustrates:
-
-```{r, echo=FALSE}
-plot(
-  x = afl$home.score,
-  y = afl$away.score,
-  xlab = "Home Team Score",
-  ylab = "Away Team Score",
-  main = "",
-  pch = 19,
-  cex = .8
-)
-```
-
-By default, the `cor` function computes the Pearson correlation between variables (i.e., default `method = "pearson"), but it's straightforward to compute Spearman rank order correlations:
-
-```{r}
-cor( 
-  x = afl$home.score, 
-  y = afl$away.score,
-  method = "spearman"
-)
-```
-
-The `cor` function can compute pairwise correlations between all variables in a data frame, but it only works if all the variables are numeric. Because the `afl` data has many non-numeric variables, this doesn't work:
-
-```{r,error=TRUE}
-cor(afl)
-```
-
-However, if you recall from earlier we computed a `numeric.vars` vector that indicates which ones are numeric, this version does work:
-
-```{r}
-cor(afl[,numeric.vars])
-```
-
-As an aside, if you don't like seeing so many digits in the output, you can print out a nicer summary like this:
-
-```{r}
-correlations <- cor(afl[,numeric.vars])
-print(correlations, digits = 2)
-```
-
-### Computing new variables
-
-Finally, one thing to note is that you can make your analysis more flexible by adding new variables to your data frame. For instance, suppose I'm not actually interested in the correlation between home team and away team, but rather want to look at the correlation between the winning score and the losing score (i.e., is there such a thing as a "high scoring game"?). This is where it can be *very* handy to have a good grasp of the data manipulation tools in R. Here's how we might compute the winning and losing scores using the `apply` function:
-
-```{r}
-afl$winning.score <- apply( 
-  X = afl[, c("home.score","away.score")], # the home and away scores
-  MARGIN = 1,                              # "retain" the first dimension
-  FUN = max                                #  max along the other dimension
-)
-
-afl$losing.score <- apply( 
-  X = afl[, c("home.score","away.score")], # the home and away scores
-  MARGIN = 1,                              # "retain" the first dimension
-  FUN = min                                #  min along the other dimension
-)
-
-head(afl)
-```
-
-There are a lot of really nice data manipulation functions in R, particularly in the various packages that make up the `tidyverse` (see [here](https://www.tidyverse.org/) for information). In the meantime, let's correlate our new variables:
-
-```{r}
-cor(afl$winning.score, afl$losing.score)
+library(skimr)
+skim(afl)
 ```
 
 
-So there *is* a relationship between the two, but it's only modest. Here's the scatterplot:
-
-```{r, echo=FALSE}
-plot(
-  x = afl$winning.score,
-  y = afl$losing.score,
-  xlab = "Winning Team Score",
-  ylab = "Losing Team Score",
-  main = "",
-  pch = 19,
-  cex = .8
-)
-```
-
+-->

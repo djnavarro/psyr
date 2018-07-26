@@ -427,431 +427,385 @@ h3{
 }
 </style>
 <blockquote>
-<p>Out of every hundred people, those who always know better: fifty-two. <br> Unsure of every step: almost all the rest. <br> Ready to help, if it doesn’t take long: forty-nine. <br> Always good, because they cannot be otherwise: four – well, maybe five. <br> Able to admire without envy: eighteen. <br> Led to error by youth (which passes): sixty, plus or minus. <br> Those not to be messed with: four-and-forty. <br> Living in constant fear of someone or something: seventy-seven. <br> Capable of happiness: twenty-some-odd at most. <br> Harmless alone, turning savage in crowds: more than half, for sure. <br> Cruel when forced by circumstances: it’s better not to know, not even approximately. <br> Wise in hindsight: not many more than wise in foresight. <br> Getting nothing out of life except things: thirty (though I would like to be wrong). <br> Balled up in pain and without a flashlight in the dark: eighty-three, sooner or later. <br> Those who are just: quite a few, thirty-five. <br> But if it takes effort to understand: three. <br> Worthy of empathy: ninety-nine. <br> Mortal: one hundred out of one hundred – a figure that has never varied yet.<br> <br>       - Wislawa Szymborska, <a href="https://www.theatlantic.com/past/docs/unbound/poetry/antholog/szymbors/stats.htm">A Word on Statistics</a> (translated from the Polish by Joanna Trzeciak)</p>
+<p>Out of every hundred people,<br> those who always know better:<br> fifty-two.<br> <br> Unsure of every step:<br> almost all the rest.<br> <br>       - Wislawa Szymborska, <a href="https://www.theatlantic.com/past/docs/unbound/poetry/antholog/szymbors/stats.htm">A Word on Statistics</a> (translated from the Polish by Joanna Trzeciak)</p>
 </blockquote>
-<p>In this chapter I’m going to provide a quick overview of how to perform common data analysis jobs using R. It’s essentially a brief coverage of descriptive statistics and a few standard inferential statistics (<span class="math inline">\(t\)</span>-tests, etc). I won’t explain the logic of <em>how</em> the statistical tests work: there are lots of great stats textbooks out there for that. If you’re really desperate you can check out the <a href="http://www.compcogscisydney.com/learning-statistics-with-r.html">Learning Statistics with R</a> book that I wrote for teaching my intro stats class.</p>
-<p>When writing my first ever set of statistics lectures back in 2011, I scraped a set of data from the web that contained some basic information about every Australian Football League (AFL) game played during the years 1987 to 2010. The data is stored in the <code>afl</code> data frame and saved in the <code>afl24.Rdata</code> file. We’ll use that data set throughout this chapter, so here it is:</p>
-<pre class="r"><code>load(&quot;./data/afl24.Rdata&quot;) # load data
-head(afl)                  # show the first few rows</code></pre>
-<pre><code>##          home.team away.team home.score away.score year round weekday day
-## 1  North Melbourne  Brisbane        104        137 1987     1     Fri  27
-## 2 Western Bulldogs  Essendon         62        121 1987     1     Sat  28
-## 3          Carlton  Hawthorn        104        149 1987     1     Sat  28
-## 4      Collingwood    Sydney         74        165 1987     1     Sat  28
-## 5        Melbourne   Fitzroy        128         89 1987     1     Sat  28
-## 6         St Kilda   Geelong        101        102 1987     1     Sat  28
-##   month is.final              venue attendance
-## 1     3    FALSE                MCG      14096
-## 2     3    FALSE      Waverley Park      22550
-## 3     3    FALSE       Princes Park      19967
-## 4     3    FALSE      Victoria Park      17129
-## 5     3    FALSE                MCG      18012
-## 6     3    FALSE Gold Coast Stadium      15867</code></pre>
-<p>I’m also going to make use of a couple of different packages in this chapter, so I’ll load them now:</p>
-<pre class="r"><code>library(psych) # William Revelle&#39;s psychometrics package</code></pre>
-<pre><code>## 
-## Attaching package: &#39;psych&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:ggplot2&#39;:
-## 
-##     %+%, alpha</code></pre>
-<pre class="r"><code>library(lsr)   # my &quot;learning statistics with R&quot; package (badly in need of some updating!)
-library(car)   # nicer Anova function than the base packages</code></pre>
-<pre><code>## Loading required package: carData</code></pre>
-<pre><code>## 
-## Attaching package: &#39;car&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:psych&#39;:
-## 
-##     logit</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     recode</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     some</code></pre>
-<div id="descriptive-statistics" class="section level2">
-<h2><span class="header-section-number">14.1</span> Descriptive statistics</h2>
-<div id="using-summary" class="section level3">
-<h3><span class="header-section-number">14.1.1</span> Using <code>summary</code></h3>
-<p>Let’s suppose all we want to do is get a quick overview of all the variables in the data frame. The <code>summary</code> function<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> provides a very handy way of doing that, as you can see here:</p>
-<pre class="r"><code>summary(afl)</code></pre>
-<pre><code>##            home.team               away.team      home.score   
-##  Essendon       : 289   Western Bulldogs: 293   Min.   : 14.0  
-##  Collingwood    : 286   Carlton         : 289   1st Qu.: 80.0  
-##  Geelong        : 285   Geelong         : 283   Median : 99.0  
-##  North Melbourne: 285   West Coast      : 282   Mean   :101.5  
-##  West Coast     : 284   Melbourne       : 279   3rd Qu.:120.0  
-##  Brisbane       : 282   Hawthorn        : 278   Max.   :236.0  
-##  (Other)        :2585   (Other)         :2592                  
-##    away.score          year          round      weekday         day       
-##  Min.   : 13.00   Min.   :1987   Min.   : 1.0   Mon:  98   Min.   : 1.00  
-##  1st Qu.: 71.00   1st Qu.:1993   1st Qu.: 6.0   Tue:   6   1st Qu.: 8.00  
-##  Median : 89.00   Median :1999   Median :12.0   Wed:   6   Median :16.00  
-##  Mean   : 91.12   Mean   :1999   Mean   :12.2   Thu:  25   Mean   :15.86  
-##  3rd Qu.:108.00   3rd Qu.:2005   3rd Qu.:18.0   Fri: 514   3rd Qu.:24.00  
-##  Max.   :239.00   Max.   :2010   Max.   :25.0   Sat:2226   Max.   :31.00  
-##                                                 Sun:1421                  
-##      month         is.final                     venue     
-##  Min.   : 3.000   Mode :logical   MCG              :1144  
-##  1st Qu.: 5.000   FALSE:4096      Etihad Stadium   : 512  
-##  Median : 6.000   TRUE :200       AAMI Stadium     : 391  
-##  Mean   : 6.056                   Patersons Stadium: 382  
-##  3rd Qu.: 7.000                   Waverley Park    : 341  
-##  Max.   :10.000                   Princes Park     : 316  
-##                                   (Other)          :1210  
-##    attendance    
-##  Min.   :  3059  
-##  1st Qu.: 20401  
-##  Median : 29210  
-##  Mean   : 32095  
-##  3rd Qu.: 40265  
-##  Max.   :100016  
-## </code></pre>
-<p>The output here is giving a sensible summary of each of the variables. To look at any one of these in a little more detail, let’s start by considering the “weekday” variable, <code>afl$weekday</code>. This is a categorical variable (i.e., a <em>factor</em> in R) and so when we summarise that variable on its own, the output is a frequency table:</p>
-<pre class="r"><code>summary( afl$weekday )</code></pre>
-<pre><code>##  Mon  Tue  Wed  Thu  Fri  Sat  Sun 
-##   98    6    6   25  514 2226 1421</code></pre>
-<p>So there were a total of 98 games played on a Monday over this time period, 6 games played on a Tuesday, and so on. If we feed it a <em>numeric</em> variable, like <code>afl$attendance</code> we get a set of numbers describing the overall distribution:<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
-<pre class="r"><code>summary( afl$attendance )</code></pre>
-<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##    3059   20401   29210   32095   40265  100016</code></pre>
-<p>So the output here gives you the range: minimum attendance was 3059 and the maximum was 100016. The mean attendance at an AFL game was 32095, whereas the median was a little smaller at 29209. Finally, it also gives you the interquartile range, which runs from 20400 to 40265. A more detailed view could be generated using the <code>hist</code> function to draw a histogram, as discussed in the graphics chapter: <img src="describing-data_files/figure-html/unnamed-chunk-8-1.png" width="456" style="display: block; margin: auto;" /></p>
-</div>
-<div id="using-describe" class="section level3">
-<h3><span class="header-section-number">14.1.2</span> Using <code>describe</code></h3>
-<p>The <code>psych</code> package contains a handy function called <code>describe</code> that provides some additional summary statistics that are commonly reported in psychology. However, the measures that it reports are only really sensible for numeric variables (e.g., what exactly would the “mean” of <code>afl$venue</code> be?) so the output looks a little weird when the data set contains non-numeric variables. So to produce a tidy output, it’s handy to do something like this:</p>
-<pre class="r"><code>numeric.vars &lt;- sapply(afl, is.numeric)  # I&#39;ll explain &quot;sapply&quot; later!
-describe( afl[,numeric.vars] )           # only &quot;describe&quot; the numeric vars...</code></pre>
-<pre><code>##            vars    n     mean       sd  median  trimmed      mad  min
-## home.score    1 4296   101.51    29.66    99.0   100.27    29.65   14
-## away.score    2 4296    91.12    29.03    89.0    89.60    28.17   13
-## year          3 4296  1998.77     6.87  1999.0  1998.83     8.90 1987
-## round         4 4296    12.20     6.72    12.0    12.19     8.90    1
-## day           5 4296    15.86     9.02    16.0    15.87    11.86    1
-## month         6 4296     6.06     1.66     6.0     6.05     1.48    3
-## attendance    7 4296 32095.22 16645.75 29209.5 30224.59 14669.59 3059
-##               max range  skew kurtosis     se
-## home.score    236   222  0.41     0.22   0.45
-## away.score    239   226  0.57     0.67   0.44
-## year         2010    23 -0.05    -1.17   0.10
-## round          25    24  0.00    -1.19   0.10
-## day            31    30  0.01    -1.23   0.14
-## month          10     7  0.00    -1.09   0.03
-## attendance 100016 96957  1.16     1.70 253.96</code></pre>
-<p>The package also contains a <code>describeBy</code> function that allows you to report the descriptive statistics by group. So, for instance let’s suppose I wanted to calculate statistics separately for home and away games (i.e., <code>afl$is.final == FALSE</code>) and finals cames (i.e, <code>afl$is.final == TRUE</code>) we could use this command:</p>
-<pre class="r"><code>describeBy(
-  x =  afl[,numeric.vars], 
-  group = afl$is.final 
-)</code></pre>
-<pre><code>## 
-##  Descriptive statistics by group 
-## group: FALSE
-##            vars    n     mean       sd  median  trimmed      mad  min
-## home.score    1 4096   101.21    29.73    99.0    99.95    29.65   14
-## away.score    2 4096    91.86    29.20    89.0    90.40    28.17   13
-## year          3 4096  1998.75     6.88  1999.0  1998.80     8.90 1987
-## round         4 4096    11.66     6.41    12.0    11.65     8.90    1
-## day           5 4096    15.99     9.07    16.0    16.02    11.86    1
-## month         6 4096     5.91     1.56     6.0     5.93     1.48    3
-## attendance    7 4096 30681.18 15044.02 28355.5 29278.76 13957.20 3059
-##              max range  skew kurtosis     se
-## home.score   236   222  0.42     0.24   0.46
-## away.score   239   226  0.55     0.64   0.46
-## year        2010    23 -0.05    -1.18   0.11
-## round         24    23  0.00    -1.19   0.10
-## day           31    30 -0.02    -1.24   0.14
-## month          9     6 -0.04    -1.15   0.02
-## attendance 94825 91766  1.03     1.48 235.06
-## -------------------------------------------------------- 
-## group: TRUE
-##            vars   n     mean       sd  median  trimmed      mad   min
-## home.score    1 200   107.69    27.42   108.5   106.59    28.91    56
-## away.score    2 200    75.99    20.04    73.0    75.16    19.27    34
-## year          3 200  1999.31     6.71  1999.5  1999.43     8.15  1987
-## round         4 200    23.23     0.64    23.0    23.04     0.00    23
-## day           5 200    13.24     7.61    12.0    12.73     8.90     1
-## month         6 200     8.97     0.23     9.0     9.00     0.00     8
-## attendance    7 200 61054.95 20950.88 61106.5 60682.86 25517.03 19127
-##               max range  skew kurtosis      se
-## home.score    198   142  0.32    -0.28    1.94
-## away.score    164   130  0.69     1.38    1.42
-## year         2010    23 -0.11    -1.12    0.47
-## round          25     2  2.40     3.76    0.05
-## day            30    29  0.48    -0.89    0.54
-## month          10     2 -1.64    14.65    0.02
-## attendance 100016 80889  0.12    -1.04 1481.45</code></pre>
-<p>This provides handy information: the average attendance for a home and away game was 30681 whereas for a finals match the average attendance was 61054.</p>
-</div>
-<div id="mean-and-median" class="section level3">
-<h3><span class="header-section-number">14.1.3</span> Mean and median</h3>
-<p>Introductory stats textbooks usually suggest that we describe the <strong>central tendency</strong> of a variable in terms of its arithmetic <em>mean</em> (i.e., the average value), the <em>median</em> (i.e., the middle value) or sometimes the <em>mode</em> (i.e., the most frequently occurring value). The mean and median are usually applied to numeric variables, whereas the mode is generally more appropriate for categorical variables. I’ll talk about the mode later.</p>
-<p>To calculate the mean or median of a variable, R supplies the <code>mean</code> and <code>median</code> functions. It’s also worth noting that you can calculate the trimmed mean (e.g., 10% trimmed mean is the mean value after removing the highest 10% and lowest values 10% of the data) by specifying the <code>trim</code> argument to the <code>mean</code> function. Here’s a few examples:</p>
-<pre class="r"><code>mean( afl$home.score ) # mean score by the home team</code></pre>
+<!--
+> Out of every hundred people,
+> those who always know better:
+> fifty-two.
+> <br>
+> Unsure of every step:
+> almost all the rest.
+> <br>
+> Ready to help,
+> if it doesn't take long:
+> forty-nine.
+> <br>
+> Always good,
+> because they cannot be otherwise:
+> four -- well, maybe five.
+> <br>
+> Able to admire without envy:
+> eighteen.
+> <br>
+> Led to error
+> by youth (which passes):
+> sixty, plus or minus.
+> <br>
+> Those not to be messed with:
+> four-and-forty.
+> <br>
+> Living in constant fear
+> of someone or something:
+> seventy-seven.
+> <br>
+> Capable of happiness:
+> twenty-some-odd at most.
+> <br>
+> Harmless alone,
+> turning savage in crowds:
+> more than half, for sure.
+> <br>
+> Cruel
+> when forced by circumstances:
+> it's better not to know,
+> not even approximately.
+> <br>
+> Wise in hindsight:
+> not many more
+> than wise in foresight.
+> <br>
+> Getting nothing out of life except things:
+> thirty
+> (though I would like to be wrong).
+> <br>
+> Balled up in pain
+> and without a flashlight in the dark:
+> eighty-three, sooner or later.
+> <br>
+> Those who are just:
+> quite a few, thirty-five.
+> <br>
+> But if it takes effort to understand:
+> three.
+> <br>
+> Worthy of empathy:
+> ninety-nine.
+> <br>
+> Mortal:
+> one hundred out of one hundred -- ## 
+> a figure that has never varied yet.<br>
+> <br>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Wislawa Szymborska, [A Word on Statistics](https://www.theatlantic.com/past/docs/unbound/poetry/antholog/szymbors/stats.htm) (translated from the Polish by Joanna Trzeciak)
+
+-->
+<p>In this section I’m going to discuss a few methods for computing different kinds of descriptive statistics in R. I won’t talk about data visualisation at all until the next section. In the <a href="./prelude-to-data.html">prelude to data</a> section I referred to the AFL data set that contains some information about every game played in the Australian Rules Football (AFL) league between 1987 and 2010, available in the <a href="./data/afl.csv">afl.csv</a> file. As usual, I have <strong>tidyverse</strong> loaded, so I’ll use <code>readr::read_csv</code><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> to import the data:</p>
+<pre class="r"><code>afl &lt;- read_csv(&quot;./data/afl.csv&quot;)
+afl</code></pre>
+<pre><code>## # A tibble: 4,296 x 12
+##    home_team away_team home_score away_score  year round weekday   day
+##    &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;      &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;int&gt;
+##  1 North Me… Brisbane         104        137  1987     1 Fri        27
+##  2 Western … Essendon          62        121  1987     1 Sat        28
+##  3 Carlton   Hawthorn         104        149  1987     1 Sat        28
+##  4 Collingw… Sydney            74        165  1987     1 Sat        28
+##  5 Melbourne Fitzroy          128         89  1987     1 Sat        28
+##  6 St Kilda  Geelong          101        102  1987     1 Sat        28
+##  7 West Coa… Richmond         133        119  1987     1 Sun        29
+##  8 North Me… Melbourne         92         59  1987     2 Fri         3
+##  9 Geelong   Brisbane         131        150  1987     2 Sat         4
+## 10 Collingw… Carlton          107        114  1987     2 Sat         4
+## # ... with 4,286 more rows, and 4 more variables: month &lt;int&gt;,
+## #   game_type &lt;chr&gt;, venue &lt;chr&gt;, attendance &lt;int&gt;</code></pre>
+<p>This data frame has 4296 cases and 12 variables, so I definitely don’t want to be summarising anything manually!</p>
+<div id="simple-summaries" class="section level2">
+<h2><span class="header-section-number">14.1</span> Simple summaries</h2>
+<p>When summarising a variable, there are a variety of different measures that one might want to calculate. Means, medians, standard deviations, skewness, etc. There are so many of these functions out there that I’d never be able to capture all of them briefly, even restricting ourselves to numeric variables. Here is a quick overview of the most common statistics:</p>
+<ul>
+<li><code>mean()</code> calculates the arithmetic mean. If you want a trimmed mean it has an optional <code>trim</code> argument</li>
+<li><code>median()</code> calculates the median; more generally, the <code>quantile()</code> function computes arbitrary quantiles, specified with the <code>probs</code> argument</li>
+<li><code>min()</code> and <code>max()</code> are the minimum and maximum; <code>IQR()</code> returns the interquartile range and <code>range()</code> returns the range</li>
+<li><code>sd()</code> calculates the standard deviation (and <code>var()</code> computes the variance)</li>
+<li><code>psych::skew()</code> and <code>psych::kurtosi()</code> compute skewness and kurtosis respectively</li>
+</ul>
+<p>For example, to return the mean and standard deviations for the <code>home_score</code> variable I would use these commands:</p>
+<pre class="r"><code>mean(afl$home_score)</code></pre>
 <pre><code>## [1] 101.5084</code></pre>
-<pre class="r"><code>mean( afl$home.score, trim = 0.1 )  # 10% trimmed mean</code></pre>
-<pre><code>## [1] 100.2714</code></pre>
-<pre class="r"><code>mean( afl$home.score, trim = 0.5 )  # 50% trimmed mean...</code></pre>
-<pre><code>## [1] 99</code></pre>
-<pre class="r"><code>median( afl$home.score ) # ...  median *is* the 50% trimmed mean</code></pre>
-<pre><code>## [1] 99</code></pre>
-</div>
-<div id="standard-deviation-and-quantiles" class="section level3">
-<h3><span class="header-section-number">14.1.4</span> Standard deviation and quantiles</h3>
-<p>To calculate the <strong>spread</strong> of a variable we often describe the <em>standard deviation</em> or report various <em>quantiles</em> of a distribution. The <code>sd</code> function will compute standard deviations for you…</p>
-<pre class="r"><code>sd( afl$home.score )  # standard deviation</code></pre>
+<pre class="r"><code>sd(afl$home_score)</code></pre>
 <pre><code>## [1] 29.65969</code></pre>
-<pre class="r"><code>var( afl$home.score ) # variance, just in case you need this!</code></pre>
-<pre><code>## [1] 879.6973</code></pre>
-<p>For quantiles, there are a number of specific functions that calculate “special” quantiles (e.g., the interquartile range is <code>IQR</code> and the range is <code>range</code>), but for the most part I think it makes sense to work with the <code>quantile</code> function that can compute any quantiles you like. Here are some examples:</p>
-<pre class="r"><code>quantile(
-  x = afl$home.score,
-  probs = c(.25, .75) # interquartile range
-)</code></pre>
-<pre><code>## 25% 75% 
-##  80 120</code></pre>
-<pre class="r"><code>quantile(
-    x = afl$home.score,
-    probs = c(0, 1)   # the range
-)</code></pre>
-<pre><code>##   0% 100% 
-##   14  236</code></pre>
-<pre class="r"><code>quantile(
-  x = afl$home.score,
-  probs = c(.5)       # the median
-)</code></pre>
-<pre><code>## 50% 
-##  99</code></pre>
-<p>Conventiently, the default value of <code>probs</code> is to compute all five of those quantiles so the default behaviour is very sensible:</p>
-<pre class="r"><code>quantile( afl$home.score )</code></pre>
-<pre><code>##   0%  25%  50%  75% 100% 
-##   14   80   99  120  236</code></pre>
-</div>
-<div id="missing-data" class="section level3">
-<h3><span class="header-section-number">14.1.5</span> Missing data</h3>
-<p>Something to note is that the <code>mean</code> function (and most of the other functions used for descriptive statistics) is a little fragile when given missing data. If you want to <em>ignore</em> missing values in a data set, you have to explicitly tell these functions to do so. Most of the time the name of the argument to do this is <code>na.rm</code>. For example:</p>
-<pre class="r"><code>age &lt;- c(30, 22, 24, NA)  # eek, one person didn&#39;t give their age
-mean(age)                 # this doesn&#39;t produce an answer!</code></pre>
+<p>It’s worth noting that many of these functions have an <code>na.rm</code> argument (or similar) that specifies how R will handle missing data (i.e., <code>NA</code> values). Quite often, the default is to set <code>na.rm = FALSE</code> meaning that R will not remove missing cases. That can be useful as a way of discovering that your data has missing values: if one of the values is missing then by definition the mean of all your values must also be missing!</p>
+<pre class="r"><code>age &lt;- c(21, 19, 39, NA, 56)
+mean(age)</code></pre>
 <pre><code>## [1] NA</code></pre>
-<pre class="r"><code>mean(age, na.rm = TRUE)   # ignore the missing value &amp; average the others</code></pre>
-<pre><code>## [1] 25.33333</code></pre>
+<p>In practice though it’s often more an annoyance than an aid, so you’ll often want to calculate the mean like this:</p>
+<pre class="r"><code>mean(age, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 33.75</code></pre>
 </div>
-<div id="tabulating-data" class="section level3">
-<h3><span class="header-section-number">14.1.6</span> Tabulating data</h3>
-<p>When dealing with categorical variables, it’s convenient to construct a frequency table. The <code>table</code> function<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> will do this nicely for us. For instance:</p>
-<pre class="r"><code>table( afl$home.team )</code></pre>
-<pre><code>## 
-##         Adelaide         Brisbane          Carlton      Collingwood 
-##              235              282              266              286 
-##         Essendon          Fitzroy        Fremantle          Geelong 
-##              289              100              179              285 
-##         Hawthorn        Melbourne  North Melbourne    Port Adelaide 
-##              279              278              285              164 
-##         Richmond         St Kilda           Sydney       West Coast 
-##              267              279              277              284 
-## Western Bulldogs 
-##              261</code></pre>
-<p>The output of this function, incidentally is an R table object, an we can calculate the sample <em>mode</em> by finding the largest value in this table. Just to make this a little prettier for us, let’s define a custom function:</p>
-<pre class="r"><code>modal &lt;- function(x) {
-  f &lt;- table(x)    # the frequency table
-  m &lt;- f == max(f) # which cases are equal to the maximum frequency
-  modes &lt;- f[m]    # return all these cases
-  return(modes)
-}</code></pre>
-<p>Here’s what happens when we apply that to the <code>afl$home.team</code> variable:</p>
-<pre class="r"><code>modal( afl$home.team )</code></pre>
-<pre><code>## Essendon 
-##      289</code></pre>
-<p>So Essendon played more home games than anyone else over this time frame. One reason that it can be useful to use a function like the <code>modal</code> one we just wrote is that it’s robust in the face of ties:</p>
-<pre class="r"><code>eyes &lt;- c(&quot;blue&quot;,&quot;blue&quot;,&quot;brown&quot;, &quot;brown&quot;, &quot;green&quot;) # this has two modes!
-modal(eyes) # this gives a sensible answer</code></pre>
-<pre><code>## x
-##  blue brown 
-##     2     2</code></pre>
-</div>
-<div id="cross-tabulations" class="section level3">
-<h3><span class="header-section-number">14.1.7</span> Cross tabulations</h3>
-<p>Sometimes it is useful to cross tabulate two categorical variables. This is very easy to do with the <code>table</code> function, simply by feeding two categorical variables as the input! Let’s suppose I wanted to count the number of times each team played a <em>home game</em> on each day of the week. Here’s how I would do that:</p>
-<pre class="r"><code>table(afl$home.team, afl$weekday)</code></pre>
-<pre><code>##                   
-##                    Mon Tue Wed Thu Fri Sat Sun
-##   Adelaide           1   0   0   0  26  94 114
-##   Brisbane           2   0   0   5  12 132 131
-##   Carlton            4   1   1   3  16 179  62
-##   Collingwood       12   3   0   3  46 167  55
-##   Essendon           6   0   3   4  52 158  66
-##   Fitzroy            4   0   0   0   2  84  10
-##   Fremantle          1   1   0   0  19  66  92
-##   Geelong            7   0   0   1  13 185  79
-##   Hawthorn          11   0   0   0  16 189  63
-##   Melbourne         22   0   1   0  28 140  87
-##   North Melbourne    6   0   0   3  84 123  69
-##   Port Adelaide      1   0   0   1  15  78  69
-##   Richmond           8   1   1   3  48 138  68
-##   St Kilda           7   0   0   1  29 174  68
-##   Sydney             0   0   0   0  31  85 161
-##   West Coast         1   0   0   1  51  93 138
-##   Western Bulldogs   5   0   0   0  26 141  89</code></pre>
-<p>Note that you can add tables to one another. So if I wasn’t interested in home games specifically, I could do this:</p>
-<pre class="r"><code>home.day &lt;- table(afl$home.team, afl$weekday)
-away.day &lt;- table(afl$away.team, afl$weekday)
-print( home.day + away.day ) </code></pre>
-<pre><code>##                   
-##                    Mon Tue Wed Thu Fri Sat Sun
-##   Adelaide           4   0   0   0  54 209 197
-##   Brisbane           5   1   0   7  37 309 194
-##   Carlton           14   1   1   8  54 314 163
-##   Collingwood       35   3   2   8  94 292 122
-##   Essendon          15   4   3   7 110 285 136
-##   Fitzroy            5   0   1   0  18 151  45
-##   Fremantle          3   1   0   0  29 154 171
-##   Geelong           13   0   1   2  57 325 170
-##   Hawthorn          13   1   0   0  53 335 155
-##   Melbourne         30   0   1   2  55 275 194
-##   North Melbourne   10   0   0   3 114 268 163
-##   Port Adelaide      1   0   0   2  22 154 146
-##   Richmond          17   1   2   5  80 270 159
-##   St Kilda          13   0   0   4  68 314 155
-##   Sydney             6   0   0   1  44 260 242
-##   West Coast         4   0   0   1  79 248 234
-##   Western Bulldogs   8   0   1   0  60 289 196</code></pre>
-<p>Finally, you can construct three way tables or even higher order tables simply by passing more variable to the <code>table</code> function, though the output rapidly becomes hard to read!</p>
-</div>
-<div id="aggregating-by-group" class="section level3">
-<h3><span class="header-section-number">14.1.8</span> Aggregating by group</h3>
-<p>A common task in data analysis is to compute (say) the average value of <code>attendance</code> by year. I mentioned one way to do this earlier with the <code>describeBy</code> function, but another rather more flexible way is to use <code>aggregate</code>. Here’s how it works:</p>
-<pre class="r"><code>att.by.year &lt;- aggregate(
-  formula = attendance ~ year, # we want to look at &quot;attendance&quot; broken down by &quot;year&quot; 
-  data = afl,                  # the data are stored in the afl data frame
-  FUN = mean                   # the thing we want to compute is the mean
-)
-att.by.year</code></pre>
-<pre><code>##    year attendance
-## 1  1987   20876.48
-## 2  1988   22055.49
-## 3  1989   22386.39
-## 4  1990   25238.42
-## 5  1991   24295.84
-## 6  1992   27989.91
-## 7  1993   29665.54
-## 8  1994   30099.99
-## 9  1995   30879.42
-## 10 1996   30783.36
-## 11 1997   34610.79
-## 12 1998   36172.42
-## 13 1999   33749.11
-## 14 2000   34093.91
-## 15 2001   34851.68
-## 16 2002   32935.06
-## 17 2003   34333.27
-## 18 2004   34423.23
-## 19 2005   36561.36
-## 20 2006   36412.08
-## 21 2007   38113.22
-## 22 2008   38286.21
-## 23 2009   37776.42
-## 24 2010   38416.60</code></pre>
-<p>That does look like quite the upward trend, which becomes more obvious when we plot the data:</p>
-<pre class="r"><code>plot(
-  x = att.by.year$year,
-  y = att.by.year$attendance,
-  xlab = &quot;Year&quot;,
-  ylab = &quot;Average Attendance&quot;,
-  type = &quot;h&quot;,
-  lwd = 5,
-  ylim = c(0,40000),
-  main = &quot;&quot;
-)</code></pre>
-<p><img src="describing-data_files/figure-html/unnamed-chunk-23-1.png" width="456" style="display: block; margin: auto;" /></p>
-</div>
-<div id="correlations" class="section level3">
-<h3><span class="header-section-number">14.1.9</span> Correlations</h3>
-<p>The <code>cor</code> function in R is a flexible tool for calculating correlations between numeric variables. If I want to calculate the correlation between the score of the home team and the score of the away team, for instance, all I do is pass both variables to the <code>cor</code> function:</p>
-<pre class="r"><code>cor( afl$home.score, afl$away.score )</code></pre>
+<div id="correlations" class="section level2">
+<h2><span class="header-section-number">14.2</span> Correlations</h2>
+<p>For a pair of numeric variables, we often want to report the strength and direction of correlations. The <code>cor</code> function does this, and by default it reports the Pearson correlation:</p>
+<pre class="r"><code>cor(afl$home_score, afl$away_score)</code></pre>
 <pre><code>## [1] -0.1413139</code></pre>
-<p>There’s not much of a relationship between them, as this scatterplot illustrates:</p>
-<p><img src="describing-data_files/figure-html/unnamed-chunk-25-1.png" width="456" style="display: block; margin: auto;" /></p>
-<p>By default, the <code>cor</code> function computes the Pearson correlation between variables (i.e., default `method = “pearson”), but it’s straightforward to compute Spearman rank order correlations:</p>
-<pre class="r"><code>cor( 
-  x = afl$home.score, 
-  y = afl$away.score,
-  method = &quot;spearman&quot;
-)</code></pre>
+<p>As an aside, I don’t like writing the name of the data frame twice within the same command. It’s a visual distraction and (in my opinion!) it makes the code harder to read. The <strong>magrittr</strong> package solves this for us. In addition to being the origin of the standard R pipe <code>%&gt;%</code>, it contains the <code>%$%</code> operator that “exposes” the names of the variables inside a data frame to another function. So lets load the package:</p>
+<pre class="r"><code>library(magrittr)</code></pre>
+<p>Now here’s how I would compute the same correlation using <code>%$%</code>:</p>
+<pre class="r"><code>afl %$% cor(home_score, away_score)</code></pre>
+<pre><code>## [1] -0.1413139</code></pre>
+<p>In one sense the difference is purely aesthetic, but aesthetics really do matter when analysing data. In the piped version, I have the name of the data set on the left, and the thing that I’m calculating from it on the right. That feels intuitive and “normal” to me. The original command mixes everything together and I find myself struggling to read it properly.</p>
+<p>Regardless of which version you prefer, you’ll be pleased to know that the <code>cor</code> function has a <code>method</code> argument that lets you specify whether to calculate the <code>pearson</code> correlation (the default), the <code>spearman</code> rank-sum correlation, or the <code>kendall</code> tau measure. For instance:</p>
+<pre class="r"><code>afl %$% cor(home_score, away_score, method = &quot;spearman&quot;)</code></pre>
 <pre><code>## [1] -0.1406248</code></pre>
-<p>The <code>cor</code> function can compute pairwise correlations between all variables in a data frame, but it only works if all the variables are numeric. Because the <code>afl</code> data has many non-numeric variables, this doesn’t work:</p>
-<pre class="r"><code>cor(afl)</code></pre>
-<pre><code>## Error in cor(afl): &#39;x&#39; must be numeric</code></pre>
-<p>However, if you recall from earlier we computed a <code>numeric.vars</code> vector that indicates which ones are numeric, this version does work:</p>
-<pre class="r"><code>cor(afl[,numeric.vars])</code></pre>
-<pre><code>##              home.score   away.score         year       round          day
-## home.score  1.000000000 -0.141313940 -0.104550513  0.01010089 -0.013457444
-## away.score -0.141313940  1.000000000 -0.067866080 -0.06933484  0.004972815
-## year       -0.104550513 -0.067866080  1.000000000 -0.01920264 -0.005481860
-## round       0.010100891 -0.069334835 -0.019202639  1.00000000  0.039020639
-## day        -0.013457444  0.004972815 -0.005481860  0.03902064  1.000000000
-## month       0.005953638 -0.078376198 -0.007751945  0.97659948 -0.137472441
-## attendance -0.025008919 -0.025772821  0.296775676  0.10612028  0.014380434
-##                   month  attendance
-## home.score  0.005953638 -0.02500892
-## away.score -0.078376198 -0.02577282
-## year       -0.007751945  0.29677568
-## round       0.976599482  0.10612028
-## day        -0.137472441  0.01438043
-## month       1.000000000  0.11568915
-## attendance  0.115689152  1.00000000</code></pre>
-<p>As an aside, if you don’t like seeing so many digits in the output, you can print out a nicer summary like this:</p>
-<pre class="r"><code>correlations &lt;- cor(afl[,numeric.vars])
-print(correlations, digits = 2)</code></pre>
-<pre><code>##            home.score away.score    year  round     day   month attendance
-## home.score      1.000     -0.141 -0.1046  0.010 -0.0135  0.0060     -0.025
-## away.score     -0.141      1.000 -0.0679 -0.069  0.0050 -0.0784     -0.026
-## year           -0.105     -0.068  1.0000 -0.019 -0.0055 -0.0078      0.297
-## round           0.010     -0.069 -0.0192  1.000  0.0390  0.9766      0.106
-## day            -0.013      0.005 -0.0055  0.039  1.0000 -0.1375      0.014
-## month           0.006     -0.078 -0.0078  0.977 -0.1375  1.0000      0.116
-## attendance     -0.025     -0.026  0.2968  0.106  0.0144  0.1157      1.000</code></pre>
+<p>A couple of other things to mention about correlations.</p>
+<ul>
+<li>The <code>cor.test</code> function allows you to conduct a hypothesis test for whether a correlation is statistically significant.</li>
+<li>The <code>cor</code> function can take a matrix or data frame as input, but it will produce an error if any of the variables are non-numeric. I’ve used the <code>lsr::correlate</code> function to make my life a little easier in this respect, so if I want a correlation matrix that only considers the numeric variables <code>lsr::correlate(afl)</code> works</li>
+<li>The <code>cor</code> function doesn’t handle situations where one or more variables are categorical. The <strong>psych</strong> package has a variety of tools that will solve this for you. It includes functions <code>tetrachoric</code>, <code>polychoric</code>, <code>biserial</code> and <code>polyserial</code> to handle those situations. I won’t describe those here - I just want to mention them in case you need them later!</li>
+</ul>
 </div>
-<div id="computing-new-variables" class="section level3">
-<h3><span class="header-section-number">14.1.10</span> Computing new variables</h3>
-<p>Finally, one thing to note is that you can make your analysis more flexible by adding new variables to your data frame. For instance, suppose I’m not actually interested in the correlation between home team and away team, but rather want to look at the correlation between the winning score and the losing score (i.e., is there such a thing as a “high scoring game”?). This is where it can be <em>very</em> handy to have a good grasp of the data manipulation tools in R. Here’s how we might compute the winning and losing scores using the <code>apply</code> function:</p>
-<pre class="r"><code>afl$winning.score &lt;- apply( 
-  X = afl[, c(&quot;home.score&quot;,&quot;away.score&quot;)], # the home and away scores
-  MARGIN = 1,                              # &quot;retain&quot; the first dimension
-  FUN = max                                #  max along the other dimension
-)
-
-afl$losing.score &lt;- apply( 
-  X = afl[, c(&quot;home.score&quot;,&quot;away.score&quot;)], # the home and away scores
-  MARGIN = 1,                              # &quot;retain&quot; the first dimension
-  FUN = min                                #  min along the other dimension
-)
-
-head(afl)</code></pre>
-<pre><code>##          home.team away.team home.score away.score year round weekday day
-## 1  North Melbourne  Brisbane        104        137 1987     1     Fri  27
-## 2 Western Bulldogs  Essendon         62        121 1987     1     Sat  28
-## 3          Carlton  Hawthorn        104        149 1987     1     Sat  28
-## 4      Collingwood    Sydney         74        165 1987     1     Sat  28
-## 5        Melbourne   Fitzroy        128         89 1987     1     Sat  28
-## 6         St Kilda   Geelong        101        102 1987     1     Sat  28
-##   month is.final              venue attendance winning.score losing.score
-## 1     3    FALSE                MCG      14096           137          104
-## 2     3    FALSE      Waverley Park      22550           121           62
-## 3     3    FALSE       Princes Park      19967           149          104
-## 4     3    FALSE      Victoria Park      17129           165           74
-## 5     3    FALSE                MCG      18012           128           89
-## 6     3    FALSE Gold Coast Stadium      15867           102          101</code></pre>
-<p>There are a lot of really nice data manipulation functions in R, particularly in the various packages that make up the <code>tidyverse</code> (see <a href="https://www.tidyverse.org/">here</a> for information). In the meantime, let’s correlate our new variables:</p>
-<pre class="r"><code>cor(afl$winning.score, afl$losing.score)</code></pre>
-<pre><code>## [1] 0.3313516</code></pre>
-<p>So there <em>is</em> a relationship between the two, but it’s only modest. Here’s the scatterplot:</p>
-<p><img src="describing-data_files/figure-html/unnamed-chunk-32-1.png" width="456" style="display: block; margin: auto;" /></p>
+<div id="frequency-tables" class="section level2">
+<h2><span class="header-section-number">14.3</span> Frequency tables</h2>
+<p>For categorical variables, where you usually want a table of frequencies that tallies the number of times each value appears, the <code>table</code> function is your friend:<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<pre class="r"><code>afl %$% table(weekday)</code></pre>
+<pre><code>## weekday
+##  Fri  Mon  Sat  Sun  Thu  Tue  Wed 
+##  514   98 2226 1421   25    6    6</code></pre>
+<p>Not surprisingly, most football games are played on the weekend. The <code>table</code> function is quite flexible, and allows you to compute cross-tabulations between two, three, or more variables simply by adding more variable names. As an example, here is the cross tabulation of <code>year</code> by <code>weekday</code>:</p>
+<pre class="r"><code>afl %$% table(year, weekday)</code></pre>
+<pre><code>##       weekday
+## year   Fri Mon Sat Sun Thu Tue Wed
+##   1987  18   7 120  34   0   0   0
+##   1988  18   8  99  35   0   0   0
+##   1989  15   2 103  38   0   2   0
+##   1990  13   6 103  37   0   0   2
+##   1991  14   6 101  49   2   0   0
+##   1992  15   4  94  58   1   0   0
+##   1993  19   5  83  50   0   0   0
+##   1994  15   5  90  64   0   0   0
+BLAH BLAH BLAH</code></pre>
 </div>
+<div id="summarising-by-group" class="section level2">
+<h2><span class="header-section-number">14.4</span> Summarising by group</h2>
+<p>Back in the dark pre-<strong>tidyverse</strong> era it was surprisingly difficult to compute descriptive statistics separately for each group. There is a function in base R called <code>aggregate()</code> that lets you do this, but it’s a little cumbersome. The way I usually do this now is with the <strong>dplyr</strong> functions <code>group_by()</code> and <code>summarise()</code>. Let’s suppose I want to compute the mean attendance at AFL games broken down by who was playing. Conceptually, what I want to do is <em>“group by”</em> two variables namely <code>home_team</code> and <code>away_team</code>, and <em>“then”</em> for all unique combinations of those variables <em>“summarise”</em> the data by computing the mean <code>attendance</code>. That sounds like a job for <code>%&gt;%</code>…</p>
+<pre class="r"><code>match_popularity &lt;- afl %&gt;%
+  group_by(home_team, away_team) %&gt;%
+  summarise(attend = mean(attendance))</code></pre>
+<p>The call to <code>group_by()</code> creates a “grouped data frame” which doesn’t look any different to the original <em>other</em> than that R now knows what grouping you want! When this grouped data is piped to <code>summarise()</code>, R knows that it is supposed to provide results broken down by the relevant grouping variables. So this is what the command above returns:</p>
+<pre class="r"><code>match_popularity</code></pre>
+<pre><code>## # A tibble: 270 x 3
+## # Groups:   home_team [?]
+##    home_team away_team       attend
+##    &lt;chr&gt;     &lt;chr&gt;            &lt;dbl&gt;
+##  1 Adelaide  Brisbane        38638.
+##  2 Adelaide  Carlton         42256.
+##  3 Adelaide  Collingwood     42205.
+##  4 Adelaide  Essendon        42570.
+##  5 Adelaide  Fitzroy         36204 
+##  6 Adelaide  Fremantle       40030.
+##  7 Adelaide  Geelong         42588.
+##  8 Adelaide  Hawthorn        41932.
+##  9 Adelaide  Melbourne       40050.
+## 10 Adelaide  North Melbourne 42553.
+## # ... with 260 more rows</code></pre>
+<p>In the first row, we see that the average attendance at a match between Adelaide and Brisbane over this period was about 39,000 people.</p>
+</div>
+<div id="arranging-data" class="section level2">
+<h2><span class="header-section-number">14.5</span> Arranging data</h2>
+<p>The output from our previous command organised the output alphabetically, which is less than ideal. It is usually more helpful to sort the data set in a more meaningful way using <code>dplyr::arrange</code>. To sort the <code>match_popularity</code> table in order of increasing attendance, we do this:</p>
+<pre class="r"><code>match_popularity %&gt;%
+  arrange(attend)</code></pre>
+<pre><code>## # A tibble: 270 x 3
+## # Groups:   home_team [17]
+##    home_team away_team       attend
+##    &lt;chr&gt;     &lt;chr&gt;            &lt;dbl&gt;
+##  1 Fitzroy   Fremantle        6322 
+##  2 Fitzroy   Brisbane         6787.
+##  3 Fitzroy   West Coast       7139 
+##  4 Fitzroy   Adelaide         8491 
+##  5 Brisbane  Fitzroy          9426.
+##  6 Fitzroy   Sydney           9681.
+##  7 Fitzroy   North Melbourne 10352 
+##  8 Sydney    Fitzroy         10710.
+##  9 Fitzroy   Melbourne       10890 
+## 10 Fitzroy   Geelong         10951.
+## # ... with 260 more rows</code></pre>
+<p>Clearly, Fitzroy was not a popular team, which would be the reason they were merged with Brisbane in 1996. To sort in descending order we can do this:</p>
+<pre class="r"><code>match_popularity %&gt;%
+  arrange(-attend)</code></pre>
+<pre><code>## # A tibble: 270 x 3
+## # Groups:   home_team [17]
+##    home_team   away_team   attend
+##    &lt;chr&gt;       &lt;chr&gt;        &lt;dbl&gt;
+##  1 Collingwood Essendon    73243.
+##  2 Collingwood Carlton     68955.
+##  3 Essendon    Collingwood 66756 
+##  4 Carlton     Collingwood 64162.
+##  5 Melbourne   Collingwood 60705.
+##  6 Essendon    Carlton     58752.
+##  7 Carlton     Essendon    55901.
+##  8 Collingwood Geelong     55818.
+##  9 Richmond    Collingwood 55218.
+## 10 Richmond    Essendon    54450.
+## # ... with 260 more rows</code></pre>
+<p>Sigh. Collingwood. It’s always Collingwood. Moving on.</p>
+</div>
+<div id="filtering-cases" class="section level2">
+<h2><span class="header-section-number">14.6</span> Filtering cases</h2>
+<p>How bad was the situation for Fitzroy? Suppose I just want to look at <code>match_popularity</code> for Fitzroy home games. The <code>dplyr::filter</code> command lets you do this:</p>
+<pre class="r"><code>match_popularity %&gt;%
+  filter(home_team == &quot;Fitzroy&quot;)</code></pre>
+<pre><code>## # A tibble: 15 x 3
+## # Groups:   home_team [1]
+##    home_team away_team        attend
+##    &lt;chr&gt;     &lt;chr&gt;             &lt;dbl&gt;
+##  1 Fitzroy   Adelaide          8491 
+##  2 Fitzroy   Brisbane          6787.
+##  3 Fitzroy   Carlton          17811 
+##  4 Fitzroy   Collingwood      21677.
+##  5 Fitzroy   Essendon         16550.
+##  6 Fitzroy   Fremantle         6322 
+##  7 Fitzroy   Geelong          10951.
+##  8 Fitzroy   Hawthorn         13399.
+##  9 Fitzroy   Melbourne        10890 
+## 10 Fitzroy   North Melbourne  10352 
+## 11 Fitzroy   Richmond         11187.
+## 12 Fitzroy   St Kilda         13565 
+## 13 Fitzroy   Sydney            9681.
+## 14 Fitzroy   West Coast        7139 
+## 15 Fitzroy   Western Bulldogs 13287.</code></pre>
+<p>The <code>filter</code> function can handle more complex logical expressions too. To capture all matches where Fitzroy were playing, regardless of whether they were home or away, a command like this will work:</p>
+<pre class="r"><code>match_popularity %&gt;%
+  filter(home_team==&quot;Fitzroy&quot; | away_team ==&quot;Fitzroy&quot;)</code></pre>
+<p>However, because this will return a table with 30 rows, R will truncate the output by default. That’s mildly annoying in this situation. I’d like to see all the results, preferably sorted in a sensible fashion. To sort the outout we pipe the results to <code>arrange</code>, exactly as we did previously, and to ensure that all the rows are printed we can pipe that to an explicit call to <code>print</code> that specifies the number of rows to show. Here’s the output:</p>
+<pre class="r"><code>match_popularity %&gt;%
+  filter(home_team==&quot;Fitzroy&quot; | away_team ==&quot;Fitzroy&quot;) %&gt;%
+  arrange(attend) %&gt;%
+  print(n = 30)</code></pre>
+<pre><code>## # A tibble: 30 x 3
+## # Groups:   home_team [16]
+##    home_team        away_team        attend
+##    &lt;chr&gt;            &lt;chr&gt;             &lt;dbl&gt;
+##  1 Fitzroy          Fremantle         6322 
+##  2 Fitzroy          Brisbane          6787.
+##  3 Fitzroy          West Coast        7139 
+##  4 Fitzroy          Adelaide          8491 
+##  5 Brisbane         Fitzroy           9426.
+##  6 Fitzroy          Sydney            9681.
+##  7 Fitzroy          North Melbourne  10352 
+##  8 Sydney           Fitzroy          10710.
+##  9 Fitzroy          Melbourne        10890 
+## 10 Fitzroy          Geelong          10951.
+## 11 Fitzroy          Richmond         11187.
+## 12 Western Bulldogs Fitzroy          12935.
+## 13 Fitzroy          Western Bulldogs 13287.
+## 14 Fitzroy          Hawthorn         13399.
+## 15 Fitzroy          St Kilda         13565 
+## 16 North Melbourne  Fitzroy          15861.
+## 17 Hawthorn         Fitzroy          15871.
+## 18 Fitzroy          Essendon         16550.
+## 19 Fitzroy          Carlton          17811 
+## 20 Geelong          Fitzroy          18256.
+## 21 St Kilda         Fitzroy          18263.
+## 22 Carlton          Fitzroy          19742.
+## 23 Melbourne        Fitzroy          20073 
+## 24 West Coast       Fitzroy          20738.
+## 25 Fremantle        Fitzroy          21324.
+## 26 Fitzroy          Collingwood      21677.
+## 27 Essendon         Fitzroy          22906.
+## 28 Collingwood      Fitzroy          22911.
+## 29 Richmond         Fitzroy          23007.
+## 30 Adelaide         Fitzroy          36204</code></pre>
+<p>Poor Fitzroy 😞</p>
+</div>
+<div id="selecting-variables" class="section level2">
+<h2><span class="header-section-number">14.7</span> Selecting variables</h2>
+<p>Many data analysis situations present you with a <em>lot</em> of variables to work with, and you might need to <code>select</code> a few variables to look at. It’s not such a big deal for the AFL data as there are only 12 variables in the raw data, but even there when we print out the tibble it doesn’t show us all the cases. Let’s suppose we have simple problem where what we want to do is extract the fixture for round 1 of the 1994 season. That is, the only thing we want is the name of the teams playing, the venue and the weekday:</p>
+<pre class="r"><code>afl %&gt;%
+  filter(year == 1994 &amp; round == 1) %&gt;%
+  select(home_team, away_team, venue, weekday)</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##   home_team        away_team  venue         weekday
+##   &lt;chr&gt;            &lt;chr&gt;      &lt;chr&gt;         &lt;chr&gt;  
+## 1 Western Bulldogs Richmond   Western Oval  Sat    
+## 2 Essendon         West Coast MCG           Sat    
+## 3 Collingwood      Fitzroy    Victoria Park Sat    
+## 4 St Kilda         Hawthorn   Waverley Park Sat    
+## 5 Brisbane         Sydney     Gabba         Sun    
+## 6 Adelaide         Carlton    AAMI Stadium  Sun    
+## 7 Melbourne        Geelong    MCG           Sun</code></pre>
+<p>Well that was easy!</p>
+</div>
+<div id="new-variables-with-mutate" class="section level2">
+<h2><span class="header-section-number">14.8</span> New variables with mutate</h2>
+<p>Very often the raw data you are given doesn’t contain the actual quantity of iteres, and you might need to compute it from the other variables. The <code>mutate</code> function allows you to create new variables within a data frame:</p>
+<pre class="r"><code>afl %&gt;%
+  mutate(margin = abs(home_score - away_score)) %&gt;%
+  select(home_score, away_score, margin)</code></pre>
+<pre><code>## # A tibble: 4,296 x 3
+##    home_score away_score margin
+##         &lt;int&gt;      &lt;int&gt;  &lt;int&gt;
+##  1        104        137     33
+##  2         62        121     59
+##  3        104        149     45
+##  4         74        165     91
+##  5        128         89     39
+##  6        101        102      1
+##  7        133        119     14
+##  8         92         59     33
+##  9        131        150     19
+## 10        107        114      7
+## # ... with 4,286 more rows</code></pre>
+<p>where the <code>select</code> command is just for visual clarity in the output! As always, remember that if you want to store the new variable you need to assign the result to a variable.</p>
+<!--
+## "Skimming" a data set
+
+
+
+
+```r
+library(skimr)
+skim(afl)
+```
+
+```
+## Skim summary statistics
+##  n obs: 4296 
+##  n variables: 12 
+## 
+## ── Variable type:character ────────────────────────────────────
+##   variable missing complete    n min max empty n_unique
+##  away_team       0     4296 4296   6  16     0       17
+##  game_type       0     4296 4296   6   7     0        2
+##  home_team       0     4296 4296   6  16     0       17
+##      venue       0     4296 4296   3  18     0       20
+##    weekday       0     4296 4296   3   3     0        7
+## 
+## ── Variable type:integer ──────────────────────────────────────
+##    variable missing complete    n     mean       sd   p0      p25     p50
+##  attendance       0     4296 4296 32095.22 16645.75 3059 20400.75 29209.5
+##  away_score       0     4296 4296    91.12    29.03   13    71       89  
+##         day       0     4296 4296    15.86     9.02    1     8       16  
+##  home_score       0     4296 4296   101.51    29.66   14    80       99  
+##       month       0     4296 4296     6.06     1.66    3     5        6  
+##       round       0     4296 4296    12.2      6.72    1     6       12  
+##        year       0     4296 4296  1998.77     6.87 1987  1993     1999  
+##       p75  p100     hist
+##  40265.25 1e+05 ▃▇▇▅▁▁▁▁
+##    108      239 ▁▅▇▆▂▁▁▁
+##     24       31 ▇▇▇▇▆▇▇▇
+##    120      236 ▁▃▇▇▃▁▁▁
+##      7       10 ▂▇▇▇▇▇▂▁
+##     18       25 ▇▆▆▆▆▆▆▂
+##   2005     2010 ▇▇▇▇▇▇▇▇
+```
+
+
+-->
 </div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Note: like <code>print</code> and <code>plot</code>, <code>summary</code> is a generic function and does rather different things depending on what kind of input you give it<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>Just FYI: If we summarise a logical variable using a command like <code>summary(afl$is.final)</code> we get something very much like a frequency table. For a character variable the <code>summary</code> function doesn’t work very well, so you’d need to explicitly tell R to treat the variable as a factor using a command like <code>summary(as.factor(myvariable))</code><a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>see also the <code>xtabs</code> function<a href="#fnref3">↩</a></p></li>
+<li id="fn1"><p>A quick explanation if you’re unfamiliar with the <code>::</code> operator. It’s a tool you can use to referring to a function inside a package regardless of whether that package is loaded. So <code>readr::read_csv</code> means “use the <code>read_csv</code> function in the <strong>readr</strong> package”. In this instance <strong>readr</strong> is loaded via <strong>tidyverse</strong> so my actual command doesn’t use <code>::</code>. However, what you see a lot of people doing in textbooks or online is use this notation as a shorthand way to tell people <em>where</em> the function is located. The further we go into these notes the more likely I am to start doing that. It’s a pretty convenient way of talking about these things!<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Note that in this output the weekdays are printed alphabetically rather than in a sensible order. That’s because I imported the data straight from a CSV file and I haven’t taken the time to convery <code>weekday</code> to a factor (see the <a href="./data-types.html">data types</a> section). You can reorder the levels of a factor however you like. I wrote my own function <code>lsr::permuteLevels</code> that does this; there’s also the <code>forcats::fct_relevel</code> function and the simpler <code>relevel</code> function in base R that helps with this. I’ll talk more about this later.<a href="#fnref2">↩</a></p></li>
 </ol>
 </div>
 
