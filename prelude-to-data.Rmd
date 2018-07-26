@@ -78,7 +78,7 @@ If you are interested in learning more about the tidyverse and the role it plays
 
 (You'll see exactly this image used in a lot of tidyverse related documents)
 
-A typical approach to data analysis involves importing data from an external source, tidying the data and cleaning up any problems with the data set, transforming it in a fashion that extracts the relevant information, visualising the key insights, and so on. Even in the brief analysis I presented above you can see some of this process play out.
+A typical approach to data analysis involves importing data from an external source, tidying the data and cleaning up any problems with the data set, transforming it in a fashion that extracts the relevant information, visualising the key insights, and so on. Even in the brief analysis I presented above you can see some of this process play out. The tidyverse packages are designed around the goal of making it easy for users to manipulate, summarise and visualise data. Because those are the main goals of this section of the notes I'm going to rely heavily on packages that are in or based on **tidyverse**. 
 
 
 ## Importing a CSV file
@@ -87,7 +87,7 @@ After loading the tidyverse, the next thing I did in my analysis was import the 
 
 <img src="./img/csv_afl.png" width=800px>
 
-To import this data into a nice formay that R can work with, I used the `read_csv` function. The `read_csv` function comes from the **readr** package that is automatically loaded as part of the tidyverse (there is a very similar `read.csv` function that is comes with "base" R, but I've come to prefer the tidyverse version). Here's the line of code again:
+To import this data into a nice format that R can work with, I used the `read_csv` function. The `read_csv` function comes from the **readr** package that is automatically loaded as part of the tidyverse (there is a very similar `read.csv` function that is comes with "base" R, but I've come to prefer the tidyverse version). Here's the line of code again:
 
 ```{r, eval=FALSE}
 afl <- read_csv("./data/afl.csv")

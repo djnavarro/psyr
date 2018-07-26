@@ -481,13 +481,13 @@ plot(pic) </code></pre>
 <p>If you are interested in learning more about the tidyverse and the role it plays in the R data science community, an excellent place to start is with Hadley Wickham and Garrett Grolemund’s book <a href="http://r4ds.had.co.nz/">R for Data Science</a>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> The tidyverse emphasises an approach to data exploration illustrated below:</p>
 <p><img src="img/prelude_explore.png" width=600px></p>
 <p>(You’ll see exactly this image used in a lot of tidyverse related documents)</p>
-<p>A typical approach to data analysis involves importing data from an external source, tidying the data and cleaning up any problems with the data set, transforming it in a fashion that extracts the relevant information, visualising the key insights, and so on. Even in the brief analysis I presented above you can see some of this process play out.</p>
+<p>A typical approach to data analysis involves importing data from an external source, tidying the data and cleaning up any problems with the data set, transforming it in a fashion that extracts the relevant information, visualising the key insights, and so on. Even in the brief analysis I presented above you can see some of this process play out. The tidyverse packages are designed around the goal of making it easy for users to manipulate, summarise and visualise data. Because those are the main goals of this section of the notes I’m going to rely heavily on packages that are in or based on <strong>tidyverse</strong>.</p>
 </div>
 <div id="importing-a-csv-file" class="section level2">
 <h2><span class="header-section-number">12.3</span> Importing a CSV file</h2>
 <p>After loading the tidyverse, the next thing I did in my analysis was import the data into R. The raw data itself is stored as a <em>comma separated value</em> (CSV) file, a plain text file in which each row represents a single game, with values separated by commas. Here is what the raw data file looks like in a text editor:</p>
 <p><img src="img/csv_afl.png" width=800px></p>
-<p>To import this data into a nice formay that R can work with, I used the <code>read_csv</code> function. The <code>read_csv</code> function comes from the <strong>readr</strong> package that is automatically loaded as part of the tidyverse (there is a very similar <code>read.csv</code> function that is comes with “base” R, but I’ve come to prefer the tidyverse version). Here’s the line of code again:</p>
+<p>To import this data into a nice format that R can work with, I used the <code>read_csv</code> function. The <code>read_csv</code> function comes from the <strong>readr</strong> package that is automatically loaded as part of the tidyverse (there is a very similar <code>read.csv</code> function that is comes with “base” R, but I’ve come to prefer the tidyverse version). Here’s the line of code again:</p>
 <pre class="r"><code>afl &lt;- read_csv(&quot;./data/afl.csv&quot;)</code></pre>
 <p>What this does is import the data from the text file shown in the screen shot, assign it to a variable called <code>afl</code>. The format of the <code>afl</code> variable looks rather like a table. More precisely, it is an example of an R data format called as a <strong>tibble</strong>. Later we’ll talk more about tibbles, and the closely related <strong>data frame</strong>. For now, let’s just be happy that we imported the data and that it looks about right.</p>
 <p>One thing I will mention is that RStudio provides a nice point-and-click method for importing CSV data. Go to the environment pane, select the “import data set” and then choose “from text (readr)”:</p>
@@ -612,7 +612,6 @@ print( my.formula )             # print it the normal way
 
 ```
 ## blah ~ blah.blah
-## <environment: 0x1135d7780>
 ```
 
 So far, there’s nothing very surprising here. But there’s actually a lot going on behind the scenes here. When I type `print(my.formula)`, what actually happens is the `print` function checks the class of the `my.formula` variable. When the function discovers that the variable it’s been given is a formula, it goes looking for a function called `print.formula`, and then delegates the whole business of printing out the variable to the `print.formula` function.^[For readers with a programming background: R has three separate systems for object oriented programming. The earliest system was S3, and it was very informal: generic functions as described here are part of the S3 system. Later on S4 was introduced as a more formal way of doing things. I confess I never learned S4 because it looked tedious. More recently R introduced Reference Classes, which look kind of neat and I should probably learn about them. Discussed [here](http://adv-r.had.co.nz/R5.html) if you're interested.] For what it’s worth, the name for a “dedicated” function like `print.formula` that exists only to be a special case of a generic function like `print` is a **method**, and the name for the process in which the generic function passes off all the hard work onto a method is called **method dispatch**. You won’t need to understand the details at all for this book, but you do need to know the gist of it; if only because a lot of the functions we’ll use are actually generics.
@@ -629,7 +628,7 @@ print.default( my.formula ) # do something silly by using the wrong method
 ## attr(,"class")
 ## [1] "formula"
 ## attr(,".Environment")
-## <environment: 0x1135d7780>
+## <environment: R_GlobalEnv>
 ```
 
 Hm. You can kind of see that it is trying to print out the same formula, but there’s a bunch of ugly low-level details that have also turned up on screen. This is because the `print.default` method doesn’t know anything about formulas, and doesn’t know that it’s supposed to be hiding the obnoxious internal gibberish that R produces sometimes. 
