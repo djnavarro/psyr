@@ -208,26 +208,81 @@ frames_small %>%
 ```
 
 
-## Facetting
+## Facetted plots
+
+A common task in data visualisation is to construct facet plots that display an existing plot separately for each group. We've seen this twice already, once in the histogram at the start of this section and previously in the [prelude](./prelude-to-data.html). In both cases I used `facet_wrap()` to do the work, using the `~` operator to specify a one-sided formula (e.g., `~condition`). This function splits the plot by the levels of a factor, and then "wraps" them around to keep the plot tidy. For example, if there were 16 levels of the `condition` variable then `facet_wrap()` would probably give us a 4x4 grid.
+
+If you want more precise control over the faceting, an alternative approach is to use `facet_grid()`. For instance, let's suppose I want to draw separate boxplots for the `response` variable for every possible `test_item`, broken down by `condition` and `sample_size`. That's going to give us 42 boxplots, so some degree of care is required here! Here's my first attempt: 
 
 ```{r}
-frames %>%
-  ggplot(aes(x = factor(test_item), y = response)) + 
-  geom_boxplot() +
-  facet_grid(sample_size ~ condition)
+frames %>%                               # start with the full data set!
+  ggplot(aes(
+    x = factor(test_item),               # treat "test_item" as categorical
+    y = response)) +                     # y variable is "response"
+  facet_grid(sample_size ~ condition) +  # add faceting
+  geom_boxplot()                         # oh, right... add the boxplots :-)
+```
+
+That's not bad as a first pass. There's a few things I'd like to do to tidy it though:
+
+- Flip the grid by changing the formula to `condition ~ sample_size`
+- Reorder the sample size facets by changing `sample_size` to a factor
+- Adding nicer axis labels using `xlab()` and `ylab()`
+- Make the "outliers" less obtrusive using transparency
+
+This is what we get:
+
+```{r, fig.width=6, fig.height=4}
+# edit the sample_size variable within the data frame  
+frames <- frames %>%
+  mutate(sample_size = factor(sample_size, levels = c("small","medium","large")))
+
+# draw the plot
+frames %>%                               
+  ggplot(aes(
+    x = factor(test_item),               
+    y = response)) +                     
+  facet_grid(condition ~ sample_size) +  # reversed faceting
+  geom_boxplot(outlier.alpha = 0.1) +    # alpha sets the transparency
+  xlab("Location of Test Stimulus") +
+  ylab("Response")
 ```
 
 
-## Counts
+## Bubble plots
 
+One difficulty with box plots is that they only work as distributional summaries when the data are unimodal. If most people respond with extreme values, the box plot ends up being a little misleading. Violin plots are often better at capturing multimodality, but they're designed to work for continuous variables and often behave poorly when applied to data that fall in a small number of ordered categories. Psychological data from questionnaires or -- as in the `frames` data set - other ordinal response methods often have exactly this characteristic. Neither bo plots nor violin plots are ideally suited to this situation. Fortunately the humble bubble plot can help out here. This takes the form of a scatter plot, but instead of plotting every data point as a unique dot, we plot dots at every location whose size (area) is proportional to the number of cases at that location. To do this with **ggplot2** all we need to do is use the `geom_count()` function. When applied to the `frames` data, we get this:
 
-```{r}
+```{r, fig.width=6, fig.height=4}
 frames %>%
   ggplot(aes(x = test_item, y = response)) + 
-  geom_count() +
-  facet_grid(sample_size ~ condition)
+  facet_grid(condition ~ sample_size) +
+  geom_count()
 ```
 
+This version of the plot highlights a failure of the box plot version. Compare the distribution of responses to test item 7 in the category sampling condition (top row). In the `small` sample size, the modal response is 4, with most people using the middle category, whereas for the `large` sample size most people are using the extremes, responding with either 0 or 9. However, both cases have the same median and very similar inter-quartile ranges, so the box plots look almost the same!
+
+On the other hand, this plot is a little hard to read. We've added a lot of new detail about the low frequency responses and in doing so learned more about the overall distribution of responding, but that's come at the cost of making it harder to see what the most typical responses are! A compromise that I am often fond of is using shading to slightly de-emphasize the low frequency cases. Larger bubbles should stand out (dark colour), but low frequency responses should fade into the light grey background. It's actually pretty easy to do that: `geom_count()` keeps track of the number of observations in each cell, and so we can add a new aesthetic to the `geom_count()` layer, simply by specifying `colour = ..n..`:
+
+```{r, fig.width=6, fig.height=4}
+frames %>%
+  ggplot(aes(x = test_item, y = response)) + 
+  facet_grid(condition ~ sample_size) +
+  geom_count(aes(colour = ..n..))
+```
+
+That's a little nicer, but in this case I don't want or need the pretty blue colouring. What I want to do is specify my own grey scale, where larger dots are coloured closer to black (e.g., upper bound is `"grey20"`) and the smaller dots are coloured in a light grey (e.g., lower bound is `"grey80"`). Then all I have to do is this:
+
+
+```{r, fig.width=6, fig.height=4}
+frames %>%
+  ggplot(aes(x = test_item, y = response)) + 
+  facet_grid(condition ~ sample_size) +
+  geom_count(aes(colour = ..n..)) + 
+  scale_colour_gradient(low = "grey80", high = "grey20")
+```
+
+To my mind that's much more readable! It captures the multimodality of the responding without overwhelming the viewer with too much detail. There are still some issues that you might want to care about in real life -- the figure is a little too low contrast for people with less than perfect vision, for instance. But it comes a lot closer to what we need. 
 
 ## Line graphs
 
@@ -243,36 +298,12 @@ frames_cond <- frames %>%
   )
 frames_cond
 
-frames_cond %>%
-  ggplot(aes(x=test_item,y=mean_response,colour=condition)) +
-  geom_point() +
-  geom_line() +
-  facet_wrap(~ sample_size)
-```
-
-
-## Reordering facets
-
-```{r, fig.width=6, fig.height=4}
-frames_cond <- frames_cond %>% 
-  ungroup() %>%
-  mutate(
-    sample_size = factor(
-      x = sample_size,
-      levels = c("small", "medium", "large")
-    )
-  )
-
 my_pic <- frames_cond %>%
   ggplot(aes(x=test_item,y=mean_response,colour=condition)) +
   geom_point() +
   geom_line() +
   facet_wrap(~ sample_size)
-```
 
-Now when we plot this:
-
-```{r}
 plot(my_pic)
 ```
 

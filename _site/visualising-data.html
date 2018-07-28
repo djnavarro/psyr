@@ -527,21 +527,63 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
   geom_violin()</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-14-1.png" width="456" style="display: block; margin: auto;" /></p>
 </div>
-<div id="facetting" class="section level2">
-<h2><span class="header-section-number">15.7</span> Facetting</h2>
-<pre class="r"><code>frames %&gt;%
-  ggplot(aes(x = factor(test_item), y = response)) + 
-  geom_boxplot() +
-  facet_grid(sample_size ~ condition)</code></pre>
+<div id="facetted-plots" class="section level2">
+<h2><span class="header-section-number">15.7</span> Facetted plots</h2>
+<p>A common task in data visualisation is to construct facet plots that display an existing plot separately for each group. We’ve seen this twice already, once in the histogram at the start of this section and previously in the <a href="./prelude-to-data.html">prelude</a>. In both cases I used <code>facet_wrap()</code> to do the work, using the <code>~</code> operator to specify a one-sided formula (e.g., <code>~condition</code>). This function splits the plot by the levels of a factor, and then “wraps” them around to keep the plot tidy. For example, if there were 16 levels of the <code>condition</code> variable then <code>facet_wrap()</code> would probably give us a 4x4 grid.</p>
+<p>If you want more precise control over the faceting, an alternative approach is to use <code>facet_grid()</code>. For instance, let’s suppose I want to draw separate boxplots for the <code>response</code> variable for every possible <code>test_item</code>, broken down by <code>condition</code> and <code>sample_size</code>. That’s going to give us 42 boxplots, so some degree of care is required here! Here’s my first attempt:</p>
+<pre class="r"><code>frames %&gt;%                               # start with the full data set!
+  ggplot(aes(
+    x = factor(test_item),               # treat &quot;test_item&quot; as categorical
+    y = response)) +                     # y variable is &quot;response&quot;
+  facet_grid(sample_size ~ condition) +  # add faceting
+  geom_boxplot()                         # oh, right... add the boxplots :-)</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-15-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>That’s not bad as a first pass. There’s a few things I’d like to do to tidy it though:</p>
+<ul>
+<li>Flip the grid by changing the formula to <code>condition ~ sample_size</code></li>
+<li>Reorder the sample size facets by changing <code>sample_size</code> to a factor</li>
+<li>Adding nicer axis labels using <code>xlab()</code> and <code>ylab()</code></li>
+<li>Make the “outliers” less obtrusive using transparency</li>
+</ul>
+<p>This is what we get:</p>
+<pre class="r"><code># edit the sample_size variable within the data frame  
+frames &lt;- frames %&gt;%
+  mutate(sample_size = factor(sample_size, levels = c(&quot;small&quot;,&quot;medium&quot;,&quot;large&quot;)))
+
+# draw the plot
+frames %&gt;%                               
+  ggplot(aes(
+    x = factor(test_item),               
+    y = response)) +                     
+  facet_grid(condition ~ sample_size) +  # reversed faceting
+  geom_boxplot(outlier.alpha = 0.1) +    # alpha sets the transparency
+  xlab(&quot;Location of Test Stimulus&quot;) +
+  ylab(&quot;Response&quot;)</code></pre>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-16-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
-<div id="counts" class="section level2">
-<h2><span class="header-section-number">15.8</span> Counts</h2>
+<div id="bubble-plots" class="section level2">
+<h2><span class="header-section-number">15.8</span> Bubble plots</h2>
+<p>One difficulty with box plots is that they only work as distributional summaries when the data are unimodal. If most people respond with extreme values, the box plot ends up being a little misleading. Violin plots are often better at capturing multimodality, but they’re designed to work for continuous variables and often behave poorly when applied to data that fall in a small number of ordered categories. Psychological data from questionnaires or – as in the <code>frames</code> data set - other ordinal response methods often have exactly this characteristic. Neither bo plots nor violin plots are ideally suited to this situation. Fortunately the humble bubble plot can help out here. This takes the form of a scatter plot, but instead of plotting every data point as a unique dot, we plot dots at every location whose size (area) is proportional to the number of cases at that location. To do this with <strong>ggplot2</strong> all we need to do is use the <code>geom_count()</code> function. When applied to the <code>frames</code> data, we get this:</p>
 <pre class="r"><code>frames %&gt;%
   ggplot(aes(x = test_item, y = response)) + 
-  geom_count() +
-  facet_grid(sample_size ~ condition)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-16-1.png" width="456" style="display: block; margin: auto;" /></p>
+  facet_grid(condition ~ sample_size) +
+  geom_count()</code></pre>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>This version of the plot highlights a failure of the box plot version. Compare the distribution of responses to test item 7 in the category sampling condition (top row). In the <code>small</code> sample size, the modal response is 4, with most people using the middle category, whereas for the <code>large</code> sample size most people are using the extremes, responding with either 0 or 9. However, both cases have the same median and very similar inter-quartile ranges, so the box plots look almost the same!</p>
+<p>On the other hand, this plot is a little hard to read. We’ve added a lot of new detail about the low frequency responses and in doing so learned more about the overall distribution of responding, but that’s come at the cost of making it harder to see what the most typical responses are! A compromise that I am often fond of is using shading to slightly de-emphasize the low frequency cases. Larger bubbles should stand out (dark colour), but low frequency responses should fade into the light grey background. It’s actually pretty easy to do that: <code>geom_count()</code> keeps track of the number of observations in each cell, and so we can add a new aesthetic to the <code>geom_count()</code> layer, simply by specifying <code>colour = ..n..</code>:</p>
+<pre class="r"><code>frames %&gt;%
+  ggplot(aes(x = test_item, y = response)) + 
+  facet_grid(condition ~ sample_size) +
+  geom_count(aes(colour = ..n..))</code></pre>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-18-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>That’s a little nicer, but in this case I don’t want or need the pretty blue colouring. What I want to do is specify my own grey scale, where larger dots are coloured closer to black (e.g., upper bound is <code>&quot;grey20&quot;</code>) and the smaller dots are coloured in a light grey (e.g., lower bound is <code>&quot;grey80&quot;</code>). Then all I have to do is this:</p>
+<pre class="r"><code>frames %&gt;%
+  ggplot(aes(x = test_item, y = response)) + 
+  facet_grid(condition ~ sample_size) +
+  geom_count(aes(colour = ..n..)) + 
+  scale_colour_gradient(low = &quot;grey80&quot;, high = &quot;grey20&quot;)</code></pre>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-19-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>To my mind that’s much more readable! It captures the multimodality of the responding without overwhelming the viewer with too much detail.</p>
 </div>
 <div id="line-graphs" class="section level2">
 <h2><span class="header-section-number">15.9</span> Line graphs</h2>
@@ -557,47 +599,29 @@ frames_cond</code></pre>
 <pre><code>## # A tibble: 42 x 6
 ## # Groups:   condition, sample_size [?]
 ##    condition sample_size test_item mean_response lower upper
-##    &lt;chr&gt;     &lt;chr&gt;           &lt;int&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 category  large               1          7.60  7.16  8.04
-##  2 category  large               2          7.51  7.14  7.88
-##  3 category  large               3          6.39  5.95  6.84
-##  4 category  large               4          5.39  4.86  5.93
-##  5 category  large               5          4.72  4.13  5.30
-##  6 category  large               6          4.43  3.79  5.07
-##  7 category  large               7          4.18  3.53  4.82
+##    &lt;chr&gt;     &lt;fct&gt;           &lt;int&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 category  small               1          6.07  5.55  6.59
+##  2 category  small               2          6.26  5.84  6.69
+##  3 category  small               3          5.87  5.50  6.24
+##  4 category  small               4          5.11  4.74  5.49
+##  5 category  small               5          4.55  4.12  4.99
+##  6 category  small               6          4.16  3.69  4.63
+##  7 category  small               7          3.98  3.44  4.52
 ##  8 category  medium              1          7.32  6.85  7.78
 ##  9 category  medium              2          7.17  6.80  7.54
 ## 10 category  medium              3          5.98  5.54  6.42
 ## # ... with 32 more rows</code></pre>
-<pre class="r"><code>frames_cond %&gt;%
+<pre class="r"><code>my_pic &lt;- frames_cond %&gt;%
   ggplot(aes(x=test_item,y=mean_response,colour=condition)) +
   geom_point() +
   geom_line() +
-  facet_wrap(~ sample_size)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="reordering-facets" class="section level2">
-<h2><span class="header-section-number">15.10</span> Reordering facets</h2>
-<pre class="r"><code>frames_cond &lt;- frames_cond %&gt;% 
-  ungroup() %&gt;%
-  mutate(
-    sample_size = factor(
-      x = sample_size,
-      levels = c(&quot;small&quot;, &quot;medium&quot;, &quot;large&quot;)
-    )
-  )
+  facet_wrap(~ sample_size)
 
-my_pic &lt;- frames_cond %&gt;%
-  ggplot(aes(x=test_item,y=mean_response,colour=condition)) +
-  geom_point() +
-  geom_line() +
-  facet_wrap(~ sample_size)</code></pre>
-<p>Now when we plot this:</p>
-<pre class="r"><code>plot(my_pic)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-19-1.png" width="456" style="display: block; margin: auto;" /></p>
+plot(my_pic)</code></pre>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-20-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="saving-images" class="section level2">
-<h2><span class="header-section-number">15.11</span> Saving images</h2>
+<h2><span class="header-section-number">15.10</span> Saving images</h2>
 <pre class="r"><code>ggsave(
   filename = &quot;./output/frame_pic.png&quot;,
   plot = my_pic,
@@ -608,13 +632,13 @@ my_pic &lt;- frames_cond %&gt;%
 <p>That creates <a href="./output/frame_pic.png">this image file</a>.</p>
 </div>
 <div id="adding-error-bars" class="section level2">
-<h2><span class="header-section-number">15.12</span> Adding error bars</h2>
+<h2><span class="header-section-number">15.11</span> Adding error bars</h2>
 <pre class="r"><code>my_pic + 
   geom_errorbar(aes(ymin=lower, ymax=upper))</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-21-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-22-1.png" width="456" style="display: block; margin: auto;" /></p>
 </div>
 <div id="contour-plots" class="section level2">
-<h2><span class="header-section-number">15.13</span> Contour plots</h2>
+<h2><span class="header-section-number">15.12</span> Contour plots</h2>
 <pre class="r"><code>frames_small %&gt;% 
   ggplot(mapping = aes(x = age, y = response, colour = condition)) +
   geom_point() + 
@@ -622,20 +646,20 @@ my_pic &lt;- frames_cond %&gt;%
   geom_density_2d() +
   facet_wrap(~condition) +
   ylim(0,9)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-22-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-23-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="smoothing" class="section level2">
-<h2><span class="header-section-number">15.14</span> Smoothing</h2>
+<h2><span class="header-section-number">15.13</span> Smoothing</h2>
 <pre class="r"><code>frames_small %&gt;% 
   ggplot(mapping = aes(x = age, y = response, colour = condition)) +
   geom_point() + 
   geom_smooth(method = &quot;lm&quot;) +
   facet_wrap(~condition) +
   ylim(0,9)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-23-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-24-1.png" width="456" style="display: block; margin: auto;" /></p>
 </div>
 <div id="customising" class="section level2">
-<h2><span class="header-section-number">15.15</span> Customising</h2>
+<h2><span class="header-section-number">15.14</span> Customising</h2>
 <p>Plots are remarkably customisable. We could switch to a dark theme and customise the axis labels with this command…</p>
 <pre class="r"><code>my_pic + 
   theme_dark() +
@@ -644,7 +668,7 @@ my_pic &lt;- frames_cond %&gt;%
   geom_vline(xintercept = 2.5, colour = &quot;white&quot;, lty = &quot;dotted&quot;) +
   xlab(&quot;Location of Test Stimulus&quot;) +
   ylab(&quot;Mean Response&quot;)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-24-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-25-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div class="footnotes">
 <hr />
