@@ -284,52 +284,48 @@ frames %>%
 
 To my mind that's much more readable! It captures the multimodality of the responding without overwhelming the viewer with too much detail. There are still some issues that you might want to care about in real life -- the figure is a little too low contrast for people with less than perfect vision, for instance. But it comes a lot closer to what we need. 
 
-## Line graphs
+## Error bars
 
-The box plots here are a little busy. Let's simplify this by plotting the mean response
+As much as I love the bubble plot above, academic journals often expect a more compressed representation of the data, especially when the manuscript you're submitting involves a large number of experiments. It's often the case that we want to summarise the data from a single condition using a "mean plus error bar" style plot. A common format is to plot the mean for every experimental condition and have error bars plotting the 95% confidence interval for the mean. To do that for the `frames` data, let's begin by constructing a summary data set
+
 
 ```{r, fig.width=6, fig.height=4}
-frames_cond <- frames %>%
+frames_mean <- frames %>%
   group_by(condition,sample_size,test_item) %>%
   summarise(
     mean_response = mean(response),
     lower = lsr::ciMean(response)[1],
     upper = lsr::ciMean(response)[2]
   )
-frames_cond
+frames_mean
+```
 
-my_pic <- frames_cond %>%
+Now we can create the plot:
+
+```{r}
+my_pic <- frames_mean %>%
   ggplot(aes(x=test_item,y=mean_response,colour=condition)) +
   geom_point() +
-  geom_line() +
+  geom_errorbar(aes(ymin=lower, ymax=upper)) +
   facet_wrap(~ sample_size)
-
-plot(my_pic)
 ```
 
-## Saving images
+Finally, we can draw it:
 
-```{r}
-ggsave(
-  filename = "./output/frame_pic.png",
-  plot = my_pic,
-  width = 16,
-  height = 8,
-  units = "cm"
-)
+```{r, fig.width=6, fig.height=4}
+my_pic
 ```
 
-That creates [this image file](./output/frame_pic.png).
+In this case, because the test items vary along a continuous scale, it's appropriate to connect the points with lines. I can do this in a straightforward way simply by adding `geom_line()` to the plot:
 
-## Adding error bars
-
-```{r}
-my_pic + 
-  geom_errorbar(aes(ymin=lower, ymax=upper))
+```{r, fig.width=6, fig.height=4}
+my_pic + geom_line()
 ```
 
+## Other possibilities
 
-## Contour plots
+The **ggplot2** package provides many more plotting tools than I've described so far, and it was designed to be extensible so there are many other packages that extend it in interesting ways. Even without looking at other packages, there are various neat possibilities. For example, if I want to add contouring to a scatter plot, I can do this using the `geom_density_2d()` function:
+
 
 ```{r, fig.width=6, fig.height=4}
 frames_small %>% 
@@ -341,7 +337,7 @@ frames_small %>%
   ylim(0,9)
 ```
 
-## Smoothing
+Alternatively, if I want to add a regression line I can use `geom_smooth()`. By default the `geom_smooth()` function applies a non-linear method (loess regression), which we saw previously in the [prelude](./prelude-to-data.html). This is also customisable. If I want to use a simpler linear model to provide my regression line, all I need to do is specify `method = "lm"` and I get a plot like this:
 
 ```{r}
 frames_small %>% 
@@ -352,20 +348,40 @@ frames_small %>%
   ylim(0,9)
 ```
 
-
-## Customising
-
-Plots are remarkably customisable. We could switch to a dark theme and customise the axis labels with this command...
+Similarly, the plots are remarkably customisable in other ways. We can use `theme_dark()` to switch to a dark theme or `theme_bw()` to switch to a black and white scheme. We can add horizontal lines to plots with `geom_hline()`, vertical lines with `geom_vline()` and diagonal lines with `geom_abline()`. The colour palette can be adapted in arbitrary ways (e.g. with `scale_color_brewer`). We can control the axis scales with `xlim()` and `ylim()`. We can add text to a plot with `geom_text()`. Here's an example showing some of those customisation:
 
 ```{r, fig.width=6, fig.height=4}
-my_pic + 
+my_new_pic <- my_pic + 
   theme_dark() +
   scale_color_brewer(palette = "Pastel2") +
   ylim(0, 9) + 
   geom_vline(xintercept = 2.5, colour = "white", lty = "dotted") +
   xlab("Location of Test Stimulus") +
   ylab("Mean Response")
+
+my_new_pic
 ```
+
+
+## Saving images
+
+The last topic I want to cover here is how to save your plot to an image file. Suppose I want to take `my_new_plot` and save it to a PNG file that is 16cm wide and 8cm high. The `ggsave()` function allows me to do that, and the command is pretty intuitive:
+
+```{r}
+ggsave(
+  filename = "./output/frame_pic.png",
+  plot = my_new_pic,
+  width = 16,
+  height = 8,
+  units = "cm"
+)
+```
+
+The function is smart enough to guess from the `filename` argument what kind of image file to create (e.g., PNG, JPG, etc), and so as long as the filename specifies a file extension that `ggsave()` can handle it will automatically create the right kind of image. The result in this case is [this image file](./output/frame_pic.png).
+
+## More resources?
+
+This section is really just a beginning. 
 
 
 

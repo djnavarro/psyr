@@ -583,19 +583,19 @@ frames %&gt;%
   geom_count(aes(colour = ..n..)) + 
   scale_colour_gradient(low = &quot;grey80&quot;, high = &quot;grey20&quot;)</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-19-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>To my mind that’s much more readable! It captures the multimodality of the responding without overwhelming the viewer with too much detail.</p>
+<p>To my mind that’s much more readable! It captures the multimodality of the responding without overwhelming the viewer with too much detail. There are still some issues that you might want to care about in real life – the figure is a little too low contrast for people with less than perfect vision, for instance. But it comes a lot closer to what we need.</p>
 </div>
-<div id="line-graphs" class="section level2">
-<h2><span class="header-section-number">15.9</span> Line graphs</h2>
-<p>The box plots here are a little busy. Let’s simplify this by plotting the mean response</p>
-<pre class="r"><code>frames_cond &lt;- frames %&gt;%
+<div id="error-bars" class="section level2">
+<h2><span class="header-section-number">15.9</span> Error bars</h2>
+<p>As much as I love the bubble plot above, academic journals often expect a more compressed representation of the data, especially when the manuscript you’re submitting involves a large number of experiments. It’s often the case that we want to summarise the data from a single condition using a “mean plus error bar” style plot. A common format is to plot the mean for every experimental condition and have error bars plotting the 95% confidence interval for the mean. To do that for the <code>frames</code> data, let’s begin by constructing a summary data set</p>
+<pre class="r"><code>frames_mean &lt;- frames %&gt;%
   group_by(condition,sample_size,test_item) %&gt;%
   summarise(
     mean_response = mean(response),
     lower = lsr::ciMean(response)[1],
     upper = lsr::ciMean(response)[2]
   )
-frames_cond</code></pre>
+frames_mean</code></pre>
 <pre><code>## # A tibble: 42 x 6
 ## # Groups:   condition, sample_size [?]
 ##    condition sample_size test_item mean_response lower upper
@@ -611,34 +611,22 @@ frames_cond</code></pre>
 ##  9 category  medium              2          7.17  6.80  7.54
 ## 10 category  medium              3          5.98  5.54  6.42
 ## # ... with 32 more rows</code></pre>
-<pre class="r"><code>my_pic &lt;- frames_cond %&gt;%
+<p>Now we can create the plot:</p>
+<pre class="r"><code>my_pic &lt;- frames_mean %&gt;%
   ggplot(aes(x=test_item,y=mean_response,colour=condition)) +
   geom_point() +
-  geom_line() +
-  facet_wrap(~ sample_size)
-
-plot(my_pic)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-20-1.png" width="576" style="display: block; margin: auto;" /></p>
+  geom_errorbar(aes(ymin=lower, ymax=upper)) +
+  facet_wrap(~ sample_size)</code></pre>
+<p>Finally, we can draw it:</p>
+<pre class="r"><code>my_pic</code></pre>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-22-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>In this case, because the test items vary along a continuous scale, it’s appropriate to connect the points with lines. I can do this in a straightforward way simply by adding <code>geom_line()</code> to the plot:</p>
+<pre class="r"><code>my_pic + geom_line()</code></pre>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-23-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
-<div id="saving-images" class="section level2">
-<h2><span class="header-section-number">15.10</span> Saving images</h2>
-<pre class="r"><code>ggsave(
-  filename = &quot;./output/frame_pic.png&quot;,
-  plot = my_pic,
-  width = 16,
-  height = 8,
-  units = &quot;cm&quot;
-)</code></pre>
-<p>That creates <a href="./output/frame_pic.png">this image file</a>.</p>
-</div>
-<div id="adding-error-bars" class="section level2">
-<h2><span class="header-section-number">15.11</span> Adding error bars</h2>
-<pre class="r"><code>my_pic + 
-  geom_errorbar(aes(ymin=lower, ymax=upper))</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-22-1.png" width="456" style="display: block; margin: auto;" /></p>
-</div>
-<div id="contour-plots" class="section level2">
-<h2><span class="header-section-number">15.12</span> Contour plots</h2>
+<div id="other-possibilities" class="section level2">
+<h2><span class="header-section-number">15.10</span> Other possibilities</h2>
+<p>The <strong>ggplot2</strong> package provides many more plotting tools than I’ve described so far, and it was designed to be extensible so there are many other packages that extend it in interesting ways. Even without looking at other packages, there are various neat possibilities. For example, if I want to add contouring to a scatter plot, I can do this using the <code>geom_density_2d()</code> function:</p>
 <pre class="r"><code>frames_small %&gt;% 
   ggplot(mapping = aes(x = age, y = response, colour = condition)) +
   geom_point() + 
@@ -646,29 +634,42 @@ plot(my_pic)</code></pre>
   geom_density_2d() +
   facet_wrap(~condition) +
   ylim(0,9)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-23-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="smoothing" class="section level2">
-<h2><span class="header-section-number">15.13</span> Smoothing</h2>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-24-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>Alternatively, if I want to add a regression line I can use <code>geom_smooth()</code>. By default the <code>geom_smooth()</code> function applies a non-linear method (loess regression), which we saw previously in the <a href="./prelude-to-data.html">prelude</a>. This is also customisable. If I want to use a simpler linear model to provide my regression line, all I need to do is specify <code>method = &quot;lm&quot;</code> and I get a plot like this:</p>
 <pre class="r"><code>frames_small %&gt;% 
   ggplot(mapping = aes(x = age, y = response, colour = condition)) +
   geom_point() + 
   geom_smooth(method = &quot;lm&quot;) +
   facet_wrap(~condition) +
   ylim(0,9)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-24-1.png" width="456" style="display: block; margin: auto;" /></p>
-</div>
-<div id="customising" class="section level2">
-<h2><span class="header-section-number">15.14</span> Customising</h2>
-<p>Plots are remarkably customisable. We could switch to a dark theme and customise the axis labels with this command…</p>
-<pre class="r"><code>my_pic + 
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-25-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>Similarly, the plots are remarkably customisable in other ways. We can use <code>theme_dark()</code> to switch to a dark theme or <code>theme_bw()</code> to switch to a black and white scheme. We can add horizontal lines to plots with <code>geom_hline()</code>, vertical lines with <code>geom_vline()</code> and diagonal lines with <code>geom_abline()</code>. The colour palette can be adapted in arbitrary ways (e.g. with <code>scale_color_brewer</code>). We can control the axis scales with <code>xlim()</code> and <code>ylim()</code>. We can add text to a plot with <code>geom_text()</code>. Here’s an example showing some of those customisation:</p>
+<pre class="r"><code>my_new_pic &lt;- my_pic + 
   theme_dark() +
   scale_color_brewer(palette = &quot;Pastel2&quot;) +
   ylim(0, 9) + 
   geom_vline(xintercept = 2.5, colour = &quot;white&quot;, lty = &quot;dotted&quot;) +
   xlab(&quot;Location of Test Stimulus&quot;) +
-  ylab(&quot;Mean Response&quot;)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-25-1.png" width="576" style="display: block; margin: auto;" /></p>
+  ylab(&quot;Mean Response&quot;)
+
+my_new_pic</code></pre>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-26-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="saving-images" class="section level2">
+<h2><span class="header-section-number">15.11</span> Saving images</h2>
+<p>The last topic I want to cover here is how to save your plot to an image file. Suppose I want to take <code>my_new_plot</code> and save it to a PNG file that is 16cm wide and 8cm high. The <code>ggsave()</code> function allows me to do that, and the command is pretty intuitive:</p>
+<pre class="r"><code>ggsave(
+  filename = &quot;./output/frame_pic.png&quot;,
+  plot = my_new_pic,
+  width = 16,
+  height = 8,
+  units = &quot;cm&quot;
+)</code></pre>
+<p>The function is smart enough to guess from the <code>filename</code> argument what kind of image file to create (e.g., PNG, JPG, etc), and so as long as the filename specifies a file extension that <code>ggsave()</code> can handle it will automatically create the right kind of image. The result in this case is <a href="./output/frame_pic.png">this image file</a>.</p>
+</div>
+<div id="more-resources" class="section level2">
+<h2><span class="header-section-number">15.12</span> More resources?</h2>
+<p>This section is really just a beginning.</p>
 </div>
 <div class="footnotes">
 <hr />
