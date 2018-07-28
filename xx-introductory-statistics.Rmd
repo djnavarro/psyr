@@ -19,6 +19,7 @@ output:
 rm(list=objects()) # start with a clean workspace
 source("knitr_tweaks.R")
 library(tidyverse,quietly = TRUE)
+library(car)
 ```
 
 
