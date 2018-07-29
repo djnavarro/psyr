@@ -104,7 +104,13 @@ Reduced to its simplest form, you can think of R graphics like a painting. You s
 
 We can extend the painting metaphor a little. If you want to paint a picture, you need to paint it on something. In real life, you can paint on lots of different things. Painting onto canvas isn’t the same as painting onto paper, and neither  is the same as painting on a wall. In R, the thing that you paint onto is called a **graphics device**. In RStudio, the default graphics device is `RStudioGD` and it corresponds to the "plot" pane. If you were using the basic R program for Windows (i.e., `R.exe`) the default device is `windows`, on the Mac application (`R.app`) it’s called `quartz`, etc.  However, from the computer's perspective there’s nothing terribly special about drawing pictures on screen, and so R is quite happy to paint pictures directly into a file. R can paint several different types of image files: `jpeg`, `png`, `pdf`, `postscript`, `tiff` and `bmp` files are all available as graphics devices and you can write plots directly to those using those^[If you are interested, take a look at the various `dev` functions for working with graphics devces, such as `dev.new`, `dev.print`, `dev.off` etc. I won't talk about those here because I'm focusing on **tidyverse** but they're handy in other situations]
 
-Secondly, when you paint a picture you need to paint it with something. Maybe you want to do an oil painting, but maybe you want to use watercolour. And, generally speaking, you pretty much have to pick one or the other. The analog to this in R is a “graphics system”. A graphics system defines a collection of graphics commands about what to draw and where to draw it. Something that surprises most new R users is the discovery that R actually has several mutually incompatible graphics systems. The two of most interest to us are the **base graphics** system that comes with R and the **ggplot2** system^[It's worth acknowledging that **ggplot2** and builds off the **grid** graphics system that we very briefly encountered when using **TurtleGraphics**] that forms part of **tidyverse**. There's quite a difference of opinion among R users about the relative merits of these two systems. You can get started in base graphics really easily. To see just how easy it is, let's load a new data set and try to draw a picture. The [frames](./data/frames_ex2.csv) data set comes from a simple experiment I ran a little while ago, and over the course of this section I'll try to explain what the experiment was all about, using data visualisations drawn using R to tell the story. Here's the data
+Secondly, when you paint a picture you need to paint it with something. Maybe you want to do an oil painting, but maybe you want to use watercolour. And, generally speaking, you pretty much have to pick one or the other. The analog to this in R is a “graphics system”. A graphics system defines a collection of graphics commands about what to draw and where to draw it. Something that surprises most new R users is the discovery that R actually has several mutually incompatible graphics systems. The two of most interest to us are the **base graphics** system that comes with R and the **ggplot2** system^[It's worth acknowledging that **ggplot2** and builds off the **grid** graphics system that we very briefly encountered when using **TurtleGraphics**] that forms part of **tidyverse**. There's quite a difference of opinion among R users about the relative merits of these two systems. You can get started in base graphics really easily. To see just how easy it is, let's load a new data set and try to draw a picture. 
+
+## The data set
+
+The [frames](./data/frames_ex2.csv) data set comes from a simple experiment I ran a little while ago (it's experiment two from [this paper](https://psyarxiv.com/2m83v/)). What we were interested in was understanding how people use statistical information to guide inductive inferences. For example, suppose you observe a sample of "robins" that have "plaxium blood" (whatever that is). How likely is it that "sparrows" will possess plaxium blood? Or "cows"? Does it matter how many robins you have seen? Does it matter whether you specifically selected robins and they turned out to have plaxium blood (category sampling) as opposed to detecting animals with plaxium blood that then turned out to all be robins (property sampling)? In that paper we had a computational model of inductive reasoning that made specific predictions about how the sample size (number of robins) and sampling method (property or category) would inflence people's judgments. 
+
+In this particular experiment we didn't show people animals (though we have done those too!) we just showed them small "alien rocks" called "sodor spheres", and asked people to make guesses about new rocks of different sizes: `test_loc` values of 1 and 2 were very similar to the items they were shown during training, whereas value 7 was quite dissimilar. The number of training observations ranged from 2 (`sample_size = "small"`) to 12 (`sample_size = "large"`) and was varied within-subject. So everyone saw two observations, made some generalization judgments (`response` on a scale from 0 to 9), then saw more training observations and so on. Participants were randomly assigned to a `"property"` sampling `condition` or to a category sampling one. We also recorded `age`, `gender`, and assigned each person a unique `id`. So here's the data
 
 ```{r,message=FALSE}
 frames <- read_csv("./data/frames_ex2.csv")
@@ -120,9 +126,15 @@ frames_small <- frames %>%
 frames_small
 ```
 
+Let's see if we can understand what's going on with this data set by drawing pictures, and also learn about R graphics in the process.
+
 ## Histograms
 
-Let's give ourselves the task of drawing a histogram of the `age` variable in this data frame. We don't need to make it pretty, we just want to plot the frequency distribution for the number of points scored by the home team. The function to do this in base graphics is called `hist` and here it is:
+When analysing the data from this kind of experiment, one of the first things I check is that the `age` and `gender` variables are actually irrelevant. Honestly, I only bother to measure them at all because people seem to expect it in the literature but for the kind of questions I care about there's never any effects of age or gender. Still, you have to check just to make sure nothing weird is goind on. 
+
+With that in mind, let's give ourselves the task of drawing a histogram of the `age` variable in this data frame. We don't need to make it pretty, we just want to plot the frequency distribution for the number of points scored by the home team. As I mentioned earlier, we could do this using base graphics or we could do it the tidyverse way. Let's see how it plays out both ways.  
+
+The function to do this in base graphics is called `hist` and here it is:
 ```{r}
 hist(frames_small$age)
 ```
@@ -206,7 +218,17 @@ frames_small %>%
   geom_rug()
 ```
 
-Overall, there's nothing that immediately suggests and differential patterns of responding as a function of age but there is a hint that responses are lower in the property sampling condition (blue) than in the category sampling condition (red).
+Notice the style here. A pretty typical way to build a visualisation is to construct it in layers, *adding* new geoms, aesthetics and other plot customisations as you go. So you'll often end up with code structured like this:^[There is a little bit of weirdness to this. Once you've gotten accustomed to using the pipe operator `%>%` it starts to feel like we should be writing code like `data %>% ggplot() %>% geom() %>% etc` rather than `data %>% (ggplot() + geom() + etc)`. This is purely for historical reasons: **ggplot2** predates the pipe operator and so unlike everything else in **tidyverse** it's not very compatible with `%>%`.]
+
+```
+DATA %>%
+  ggplot(aes( LIST_OF_AESTHETICS )) +
+  A_GEOM +
+  ANOTHER_GEOM +
+  ETC
+```
+
+In any case, looking at these scatter plots there's nothing that immediately suggests and differential patterns of responding as a function of age but there is a hint that responses are lower in the property sampling condition (blue) than in the category sampling condition (red).
 
 
 ## Bar graphs

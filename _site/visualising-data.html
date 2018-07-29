@@ -427,7 +427,12 @@ div.tocify {
 <h2><span class="header-section-number">15.1</span> R graphics</h2>
 <p>Reduced to its simplest form, you can think of R graphics like a painting. You start out with an empty canvas. Every time you use a graphics function, it paints some new things onto your canvas. Later you can paint more things over the top if you want, layering new information over the old. This way of thinking about plotting data is referred to as the <strong>painter’s model</strong> - the key thing to keep in mind is because the plot is constructed sequentially, the order in which you do things matters.</p>
 <p>We can extend the painting metaphor a little. If you want to paint a picture, you need to paint it on something. In real life, you can paint on lots of different things. Painting onto canvas isn’t the same as painting onto paper, and neither is the same as painting on a wall. In R, the thing that you paint onto is called a <strong>graphics device</strong>. In RStudio, the default graphics device is <code>RStudioGD</code> and it corresponds to the “plot” pane. If you were using the basic R program for Windows (i.e., <code>R.exe</code>) the default device is <code>windows</code>, on the Mac application (<code>R.app</code>) it’s called <code>quartz</code>, etc. However, from the computer’s perspective there’s nothing terribly special about drawing pictures on screen, and so R is quite happy to paint pictures directly into a file. R can paint several different types of image files: <code>jpeg</code>, <code>png</code>, <code>pdf</code>, <code>postscript</code>, <code>tiff</code> and <code>bmp</code> files are all available as graphics devices and you can write plots directly to those using those<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
-<p>Secondly, when you paint a picture you need to paint it with something. Maybe you want to do an oil painting, but maybe you want to use watercolour. And, generally speaking, you pretty much have to pick one or the other. The analog to this in R is a “graphics system”. A graphics system defines a collection of graphics commands about what to draw and where to draw it. Something that surprises most new R users is the discovery that R actually has several mutually incompatible graphics systems. The two of most interest to us are the <strong>base graphics</strong> system that comes with R and the <strong>ggplot2</strong> system<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> that forms part of <strong>tidyverse</strong>. There’s quite a difference of opinion among R users about the relative merits of these two systems. You can get started in base graphics really easily. To see just how easy it is, let’s load a new data set and try to draw a picture. The <a href="./data/frames_ex2.csv">frames</a> data set comes from a simple experiment I ran a little while ago, and over the course of this section I’ll try to explain what the experiment was all about, using data visualisations drawn using R to tell the story. Here’s the data</p>
+<p>Secondly, when you paint a picture you need to paint it with something. Maybe you want to do an oil painting, but maybe you want to use watercolour. And, generally speaking, you pretty much have to pick one or the other. The analog to this in R is a “graphics system”. A graphics system defines a collection of graphics commands about what to draw and where to draw it. Something that surprises most new R users is the discovery that R actually has several mutually incompatible graphics systems. The two of most interest to us are the <strong>base graphics</strong> system that comes with R and the <strong>ggplot2</strong> system<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> that forms part of <strong>tidyverse</strong>. There’s quite a difference of opinion among R users about the relative merits of these two systems. You can get started in base graphics really easily. To see just how easy it is, let’s load a new data set and try to draw a picture.</p>
+</div>
+<div id="the-data-set" class="section level2">
+<h2><span class="header-section-number">15.2</span> The data set</h2>
+<p>The <a href="./data/frames_ex2.csv">frames</a> data set comes from a simple experiment I ran a little while ago (it’s experiment two from <a href="https://psyarxiv.com/2m83v/">this paper</a>). What we were interested in was understanding how people use statistical information to guide inductive inferences. For example, suppose you observe a sample of “robins” that have “plaxium blood” (whatever that is). How likely is it that “sparrows” will possess plaxium blood? Or “cows”? Does it matter how many robins you have seen? Does it matter whether you specifically selected robins and they turned out to have plaxium blood (category sampling) as opposed to detecting animals with plaxium blood that then turned out to all be robins (property sampling)? In that paper we had a computational model of inductive reasoning that made specific predictions about how the sample size (number of robins) and sampling method (property or category) would inflence people’s judgments.</p>
+<p>In this particular experiment we didn’t show people animals (though we have done those too!) we just showed them small “alien rocks” called “sodor spheres”, and asked people to make guesses about new rocks of different sizes: <code>test_loc</code> values of 1 and 2 were very similar to the items they were shown during training, whereas value 7 was quite dissimilar. The number of training observations ranged from 2 (<code>sample_size = &quot;small&quot;</code>) to 12 (<code>sample_size = &quot;large&quot;</code>) and was varied within-subject. So everyone saw two observations, made some generalization judgments (<code>response</code> on a scale from 0 to 9), then saw more training observations and so on. Participants were randomly assigned to a <code>&quot;property&quot;</code> sampling <code>condition</code> or to a category sampling one. We also recorded <code>age</code>, <code>gender</code>, and assigned each person a unique <code>id</code>. So here’s the data</p>
 <pre class="r"><code>frames &lt;- read_csv(&quot;./data/frames_ex2.csv&quot;)
 frames</code></pre>
 <pre><code>## # A tibble: 4,725 x 8
@@ -464,10 +469,13 @@ frames_small</code></pre>
 ##  9     9 female    37 category      3.38
 ## 10    10 female    46 category      5.86
 ## # ... with 215 more rows</code></pre>
+<p>Let’s see if we can understand what’s going on with this data set by drawing pictures, and also learn about R graphics in the process.</p>
 </div>
 <div id="histograms" class="section level2">
-<h2><span class="header-section-number">15.2</span> Histograms</h2>
-<p>Let’s give ourselves the task of drawing a histogram of the <code>age</code> variable in this data frame. We don’t need to make it pretty, we just want to plot the frequency distribution for the number of points scored by the home team. The function to do this in base graphics is called <code>hist</code> and here it is:</p>
+<h2><span class="header-section-number">15.3</span> Histograms</h2>
+<p>When analysing the data from this kind of experiment, one of the first things I check is that the <code>age</code> and <code>gender</code> variables are actually irrelevant. Honestly, I only bother to measure them at all because people seem to expect it in the literature but for the kind of questions I care about there’s never any effects of age or gender. Still, you have to check just to make sure nothing weird is goind on.</p>
+<p>With that in mind, let’s give ourselves the task of drawing a histogram of the <code>age</code> variable in this data frame. We don’t need to make it pretty, we just want to plot the frequency distribution for the number of points scored by the home team. As I mentioned earlier, we could do this using base graphics or we could do it the tidyverse way. Let’s see how it plays out both ways.</p>
+<p>The function to do this in base graphics is called <code>hist</code> and here it is:</p>
 <pre class="r"><code>hist(frames_small$age)</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-5-1.png" width="456" style="display: block; margin: auto;" /> It’s not exactly pretty – though it’s way nicer than the default plots that I remember seeing when I was younger – but it gets the job done.</p>
 <p>Okay, how do I create a histogram the tidyverse way? Much like base graphics, <strong>ggplot2</strong> recognises that histograms are such a fundamentally useful thing that there exists a “geom” (a term I’ll explain in a moment) for them, but there’s no way to draw a plot without going through a somewhat more convoluted process:</p>
@@ -491,7 +499,7 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
 <p>As far as what the data visualisation is telling us: the distribution of ages was mostly in the 20-40 age range with a modest positive skew. That’s pretty typical of these studies. More importantly, it’s pretty clear from inspection that there’s not much of a difference in the age distribition across conditions, which is what I’d hope to see given that people were assigned randomly.</p>
 </div>
 <div id="scatter-plot" class="section level2">
-<h2><span class="header-section-number">15.3</span> Scatter plot</h2>
+<h2><span class="header-section-number">15.4</span> Scatter plot</h2>
 <p>The second kind of plot I’ll talk about is a scatter plot, in which each observation is drawn as a point, and the graph shows the values on one variable against the values on another. It’s such a simply plot that I’ll use it as a mechanism to illustrate the key ideas in <strong>ggplot2</strong>.</p>
 <p>Lets build our plot piece by piece. The data we want to use here come from <code>frames_small</code>, so the first thing we’ll do is pipe this data set to the <code>ggplot()</code> function and see what it produces:</p>
 <pre class="r"><code>frames_small %&gt;% 
@@ -518,11 +526,17 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
   geom_point() + 
   geom_rug()</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-13-1.png" width="480" style="display: block; margin: auto;" /></p>
-<p>Overall, there’s nothing that immediately suggests and differential patterns of responding as a function of age but there is a hint that responses are lower in the property sampling condition (blue) than in the category sampling condition (red).</p>
+<p>Notice the style here. A pretty typical way to build a visualisation is to construct it in layers, <em>adding</em> new geoms, aesthetics and other plot customisations as you go. So you’ll often end up with code structured like this:<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<pre><code>DATA %&gt;%
+  ggplot(aes( LIST_OF_AESTHETICS )) +
+  A_GEOM +
+  ANOTHER_GEOM +
+  ETC</code></pre>
+<p>In any case, looking at these scatter plots there’s nothing that immediately suggests and differential patterns of responding as a function of age but there is a hint that responses are lower in the property sampling condition (blue) than in the category sampling condition (red).</p>
 </div>
 <div id="bar-graphs" class="section level2">
-<h2><span class="header-section-number">15.4</span> Bar graphs</h2>
-<p>The humble bar graph is a staple in the scientific literature, and can be rendered by <strong>ggplot2</strong> with the assistance of the <code>geom_bar()</code> function. Suppose I want to check that the gender distribution for this study was relatively even across conditions.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> To do that, I’ll set up my mapping with <code>gender</code> on the x-axis (using <code>ggplot</code> to initialise the plot and <code>aes</code> to specify the aesthetics), create separate panels for each <code>condition</code> (using <code>facet_wrap</code> which I’ll explain in more detail below), and then use <code>geom_bar()</code> to draw the plot:</p>
+<h2><span class="header-section-number">15.5</span> Bar graphs</h2>
+<p>The humble bar graph is a staple in the scientific literature, and can be rendered by <strong>ggplot2</strong> with the assistance of the <code>geom_bar()</code> function. Suppose I want to check that the gender distribution for this study was relatively even across conditions.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> To do that, I’ll set up my mapping with <code>gender</code> on the x-axis (using <code>ggplot</code> to initialise the plot and <code>aes</code> to specify the aesthetics), create separate panels for each <code>condition</code> (using <code>facet_wrap</code> which I’ll explain in more detail below), and then use <code>geom_bar()</code> to draw the plot:</p>
 <pre class="r"><code>frames_small %&gt;%
   ggplot(aes(x = gender)) +  # set up the mapping
   facet_wrap(~condition) +   # split it into plots
@@ -531,7 +545,7 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
 <p>As one would expect for random assignment there’s a little unevenness but not very much. That looks totally fine to me.</p>
 </div>
 <div id="box-plots" class="section level2">
-<h2><span class="header-section-number">15.5</span> Box plots</h2>
+<h2><span class="header-section-number">15.6</span> Box plots</h2>
 <p>Another classic data visualisation used in psychology is the box plot (due to John Tukey), which presents a schematic representation of the distribution of responses. Box plots can be drawn in many different forms, but the most conventional version the median value (50th percentile) as a thick horizontal line, contained within a box that spans the range from 25th percentile to the 75th percentile. Above and below the box are the “whiskers” which extend to cover the full range of the data (after excluding outliers). Outliers are plotted as individual dots. Note that in this context an outlier is conventionally defined as a point that lies more than 1.5 times the interquartile range from the median: this is often a convenient heuristic to use but it’s not magical. Don’t read too much into the fact that a data set includes outliers!</p>
 <p>To construct a boxplot using <strong>ggplot2</strong> all we need to do is add a <code>geom_boxplot()</code> to the graph. So if I want to plot the distribution of responses across participants (averaged across test items) separately for the two conditions, I could do this:</p>
 <pre class="r"><code>frames_small %&gt;%
@@ -541,14 +555,14 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
 <p>This does suggest that people are less willing to make inductive generalisation in the property sampling condition than in the category sampling condition!</p>
 </div>
 <div id="violin-plots" class="section level2">
-<h2><span class="header-section-number">15.6</span> Violin plots</h2>
+<h2><span class="header-section-number">15.7</span> Violin plots</h2>
 <p>Although the box plot is an old method for visualising the key characteristics of distribution it’s a very good one. It’s visually simple, meaning that you can put a lot of box plots in a single graph without causing too much clutter, yet it still conveys a lot of information about the distribution. So there are many situations in which they are worth including (we’ll see a good example in a moment)</p>
 <p>On the other hand, for the specific situation here where there are only two disributions to be displayed, it does seem like we could do better. With the state of computing having advanced quite dramatically over recent decades, it is extremely easy to construct more complicated <em>kernel density estimates</em> of the shape of the population from which the sample is drawn. The <em>violin plot</em> provides a method for visually displaying a kernel density estimate. If we switch from <code>geom_boxplot()</code> to <code>geom_violin()</code> the resulting plot looks like this:</p>
 <pre class="r"><code>frames_small %&gt;%
   ggplot(aes(x = condition, y = response)) + 
   geom_violin()</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-16-1.png" width="456" style="display: block; margin: auto;" /></p>
-<p>It’s intuitively obvious what this plot is doing: the “width” of the violin<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> at each point shows the estimated “density” of the population distribution at that point. To make it a little clearer what this is showing, let’s overlay the raw data on the plot, using the <code>geom_jitter()</code> method to make it a little easier to see:</p>
+<p>It’s intuitively obvious what this plot is doing: the “width” of the violin<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> at each point shows the estimated “density” of the population distribution at that point. To make it a little clearer what this is showing, let’s overlay the raw data on the plot, using the <code>geom_jitter()</code> method to make it a little easier to see:</p>
 <pre class="r"><code>frames_small %&gt;%
   ggplot(aes(x = condition, y = response)) + 
   geom_violin() +
@@ -557,7 +571,7 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
 <p>As you can see, in the property sampling condition the data are concentrated pretty tightly around 4.5, whereas in the category sampling condition the data are shifted upwards and spread out. That’s what produces the different shapes in the violin plots.</p>
 </div>
 <div id="facetted-plots" class="section level2">
-<h2><span class="header-section-number">15.7</span> Facetted plots</h2>
+<h2><span class="header-section-number">15.8</span> Facetted plots</h2>
 <p>A common task in data visualisation is to construct facet plots that display an existing plot separately for each group. We’ve seen this twice already, once in the histogram at the start of this section and previously in the <a href="./prelude-to-data.html">prelude</a>. In both cases I used <code>facet_wrap()</code> to do the work, using the <code>~</code> operator to specify a one-sided formula (e.g., <code>~condition</code>). This function splits the plot by the levels of a factor, and then “wraps” them around to keep the plot tidy. For example, if there were 16 levels of the <code>condition</code> variable then <code>facet_wrap()</code> would probably give us a 4x4 grid.</p>
 <p>If you want more precise control over the faceting, an alternative approach is to use <code>facet_grid()</code>. For instance, let’s suppose I want to draw separate boxplots for the <code>response</code> variable for every possible <code>test_item</code>, broken down by <code>condition</code> and <code>sample_size</code>. That’s going to give us 42 boxplots, so some degree of care is required here! Here’s my first attempt:</p>
 <pre class="r"><code>frames %&gt;%                               # start with the full data set!
@@ -591,7 +605,7 @@ frames %&gt;%
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-19-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="bubble-plots" class="section level2">
-<h2><span class="header-section-number">15.8</span> Bubble plots</h2>
+<h2><span class="header-section-number">15.9</span> Bubble plots</h2>
 <p>One difficulty with box plots is that they only work as distributional summaries when the data are unimodal. If most people respond with extreme values, the box plot ends up being a little misleading. Violin plots are often better at capturing multimodality, but they’re designed to work for continuous variables and often behave poorly when applied to data that fall in a small number of ordered categories. Psychological data from questionnaires or – as in the <code>frames</code> data set - other ordinal response methods often have exactly this characteristic. Neither bo plots nor violin plots are ideally suited to this situation. Fortunately the humble bubble plot can help out here. This takes the form of a scatter plot, but instead of plotting every data point as a unique dot, we plot dots at every location whose size (area) is proportional to the number of cases at that location. To do this with <strong>ggplot2</strong> all we need to do is use the <code>geom_count()</code> function. When applied to the <code>frames</code> data, we get this:</p>
 <pre class="r"><code>frames %&gt;%
   ggplot(aes(x = test_item, y = response)) + 
@@ -605,7 +619,7 @@ frames %&gt;%
   facet_grid(condition ~ sample_size) +
   geom_count(aes(colour = ..n..))</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-21-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>That’s a little nicer, but in this case I don’t want or need the pretty blue colouring. What I want to do is specify my own grey scale, where larger dots are coloured closer to black (e.g., upper bound is <code>&quot;grey20&quot;</code>) and the smaller dots are coloured in a light grey (e.g., lower bound is <code>&quot;grey80&quot;</code>).<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> Then all I have to do is this:</p>
+<p>That’s a little nicer, but in this case I don’t want or need the pretty blue colouring. What I want to do is specify my own grey scale, where larger dots are coloured closer to black (e.g., upper bound is <code>&quot;grey20&quot;</code>) and the smaller dots are coloured in a light grey (e.g., lower bound is <code>&quot;grey80&quot;</code>).<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> Then all I have to do is this:</p>
 <pre class="r"><code>frames %&gt;%
   ggplot(aes(x = test_item, y = response)) + 
   facet_grid(condition ~ sample_size) +
@@ -615,7 +629,7 @@ frames %&gt;%
 <p>To my mind that’s much more readable! It captures the multimodality of the responding without overwhelming the viewer with too much detail. There are still some issues that you might want to care about in real life – the figure is a little too low contrast for people with less than perfect vision, for instance. But it comes a lot closer to what we need.</p>
 </div>
 <div id="error-bars" class="section level2">
-<h2><span class="header-section-number">15.9</span> Error bars</h2>
+<h2><span class="header-section-number">15.10</span> Error bars</h2>
 <p>As much as I love the bubble plot above, academic journals often expect a more compressed representation of the data, especially when the manuscript you’re submitting involves a large number of experiments. It’s often the case that we want to summarise the data from a single condition using a “mean plus error bar” style plot. A common format is to plot the mean for every experimental condition and have error bars plotting the 95% confidence interval for the mean. To do that for the <code>frames</code> data, let’s begin by constructing a summary data set</p>
 <pre class="r"><code>frames_mean &lt;- frames %&gt;%
   group_by(condition,sample_size,test_item) %&gt;%
@@ -644,7 +658,7 @@ frames_mean</code></pre>
 <pre class="r"><code>fake_iq &lt;- rnorm(n = 20, mean = 100, sd = 15)  # normally distributed data
 lsr::ciMean(fake_iq)                           # 95% confidence interval </code></pre>
 <pre><code>##             2.5%    97.5%
-## fake_iq 85.08613 100.3872</code></pre>
+## fake_iq 94.16764 109.3938</code></pre>
 <p>So the <code>lower</code> variable in <code>frames_mean</code> is the lower bound on the 95% confidence interval, and <code>upper</code> is the upper bound. In any case, now that we have data in an appropriate format we can create the plot. This time around, however, I’ll assign the results of my plotting function to a new variable <code>my_pic</code></p>
 <pre class="r"><code>my_pic &lt;- frames_mean %&gt;%
   ggplot(aes(x = test_item, y = mean_response, colour = condition)) +
@@ -660,7 +674,7 @@ lsr::ciMean(fake_iq)                           # 95% confidence interval </code>
 <p>Notice that I can add <code>geom_line()</code> directly to <code>my_pic</code>. That can be extremely handy if you’ve worked out what the core features of your plot will be and want to play around with a few possible additions to the plot.</p>
 </div>
 <div id="other-possibilities" class="section level2">
-<h2><span class="header-section-number">15.10</span> Other possibilities</h2>
+<h2><span class="header-section-number">15.11</span> Other possibilities</h2>
 <p>The <strong>ggplot2</strong> package provides many more plotting tools than I’ve described so far, and it was designed to be extensible so there are many other packages that extend it in interesting ways. Even without looking at other packages, there are various neat possibilities. For example, if I want to add contouring to a scatter plot, I can do this using the <code>geom_density_2d()</code> function:</p>
 <pre class="r"><code>frames_small %&gt;% 
   ggplot(mapping = aes(x = age, y = response, colour = condition)) +
@@ -691,7 +705,7 @@ my_new_pic</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-30-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="saving-images" class="section level2">
-<h2><span class="header-section-number">15.11</span> Saving images</h2>
+<h2><span class="header-section-number">15.12</span> Saving images</h2>
 <p>The last topic I want to cover here is how to save your plot to an image file. Suppose I want to take <code>my_new_plot</code> and save it to a PNG file that is 16cm wide and 8cm high. The <code>ggsave()</code> function allows me to do that, and the command is pretty intuitive:</p>
 <pre class="r"><code>ggsave(
   filename = &quot;./output/frame_pic.png&quot;,
@@ -707,9 +721,10 @@ my_new_pic</code></pre>
 <ol>
 <li id="fn1"><p>If you are interested, take a look at the various <code>dev</code> functions for working with graphics devces, such as <code>dev.new</code>, <code>dev.print</code>, <code>dev.off</code> etc. I won’t talk about those here because I’m focusing on <strong>tidyverse</strong> but they’re handy in other situations<a href="#fnref1">↩</a></p></li>
 <li id="fn2"><p>It’s worth acknowledging that <strong>ggplot2</strong> and builds off the <strong>grid</strong> graphics system that we very briefly encountered when using <strong>TurtleGraphics</strong><a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>In this study I asked people to respond with a three value questionnaire, with options for “male”, “female” and “other” as possible gender identities. I’m not entirely satisfied with this as a measurement method though, and the question wasn’t compulsory to answer.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>Yeah, they never actually look like violins. We should just give up and call them blob plots<a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p>R is quite flexible in how it handles colours. For most purposes you can use an English colour word and R will have a rough idea what you mean. Type <code>colours()</code> at the console to see a list of the colour names it knows: there are a lot! Alternatively you can specify a hexadecimal string like <code>#88398A</code>, or use a function like <code>rgb()</code> or <code>hsv()</code> to construct the colour you want.<a href="#fnref5">↩</a></p></li>
+<li id="fn3"><p>There is a little bit of weirdness to this. Once you’ve gotten accustomed to using the pipe operator <code>%&gt;%</code> it starts to feel like we should be writing code like <code>data %&gt;% ggplot() %&gt;% geom() %&gt;% etc</code> rather than <code>data %&gt;% (ggplot() + geom() + etc)</code>. This is purely for historical reasons: <strong>ggplot2</strong> predates the pipe operator and so unlike everything else in <strong>tidyverse</strong> it’s not very compatible with <code>%&gt;%</code>.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>In this study I asked people to respond with a three value questionnaire, with options for “male”, “female” and “other” as possible gender identities. I’m not entirely satisfied with this as a measurement method though, and the question wasn’t compulsory to answer.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Yeah, they never actually look like violins. We should just give up and call them blob plots<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>R is quite flexible in how it handles colours. For most purposes you can use an English colour word and R will have a rough idea what you mean. Type <code>colours()</code> at the console to see a list of the colour names it knows: there are a lot! Alternatively you can specify a hexadecimal string like <code>#88398A</code>, or use a function like <code>rgb()</code> or <code>hsv()</code> to construct the colour you want.<a href="#fnref6">↩</a></p></li>
 </ol>
 </div>
 
