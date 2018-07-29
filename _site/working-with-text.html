@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- ###### start inserted header ##### -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115940772-1');
+</script>
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:title" content="R for Psychological Science">
+<meta property="og:description" content="An introductory resource">
+<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="mystyle.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Psychological Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Core
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="getting-started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li>
+      <a href="scripts.html">Scripts</a>
+    </li>
+    <li>
+      <a href="packages.html">Packages</a>
+    </li>
+    <li>
+      <a href="workspaces.html">Workspaces</a>
+    </li>
+    <li>
+      <a href="vectors.html">Vectors</a>
+    </li>
+    <li>
+      <a href="loops.html">Loops</a>
+    </li>
+    <li>
+      <a href="branches.html">Branches</a>
+    </li>
+    <li>
+      <a href="functions.html">Functions</a>
+    </li>
+    <li>
+      <a href="programming.html">Programming</a>
+    </li>
+    <li>
+      <a href="file-system.html">File system</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="prelude-to-data.html">Prelude</a>
+    </li>
+    <li>
+      <a href="data-types.html">Data types</a>
+    </li>
+    <li>
+      <a href="describing-data.html">Describing data</a>
+    </li>
+    <li>
+      <a href="visualising-data.html">Visualising data</a>
+    </li>
+    <li>
+      <a href="manipulating-data.html">Manipulating data</a>
+    </li>
+    <li>
+      <a href="working-with-text.html">Text data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Stats
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-distributions.html">Probability distributions</a>
+    </li>
+    <li>
+      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-shiny.html">Shiny apps</a>
+    </li>
+    <li>
+      <a href="xx-miscellaneous.html">Miscellaneous</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://compcogscisydney.org">compcogscisydney.org</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="17" style="list-style-type: decimal">
+<li>Working with text</li>
+</ol></h1>
+
+</div>
+
+
+<style type="text/css">
+h1{
+  line-height: 100px;
+}
+h2{
+  line-height: 80px;
+}
+h3{
+  line-height: 60px;
+}
+</style>
+<p>Yay! Now I have something nerdy to do that is fun … I will play around with the text of <em>Pride and Prejudice</em> while (finally!) taking a look at <code>stringr</code>. So, let’s do this! First, I’ll need one Jane Austen novel please!</p>
+<pre class="r"><code>pp &lt;- janeaustenr::prideprejudice
+pp[1:11]</code></pre>
+<pre><code>##  [1] &quot;PRIDE AND PREJUDICE&quot;                                                    
+##  [2] &quot;&quot;                                                                       
+##  [3] &quot;By Jane Austen&quot;                                                         
+##  [4] &quot;&quot;                                                                       
+##  [5] &quot;&quot;                                                                       
+##  [6] &quot;&quot;                                                                       
+##  [7] &quot;Chapter 1&quot;                                                              
+##  [8] &quot;&quot;                                                                       
+##  [9] &quot;&quot;                                                                       
+## [10] &quot;It is a truth universally acknowledged, that a single man in possession&quot;
+## [11] &quot;of a good fortune, must be in want of a wife.&quot;</code></pre>
+<p>Check ✅ Next, I’ll need one text manipulation package:</p>
+<pre class="r"><code>library(stringr)</code></pre>
+<p>That’s another check! ✅ ✅ Yay!!!!</p>
+<div id="getting-started" class="section level2">
+<h2><span class="header-section-number">17.1</span> Getting started</h2>
+<p>I’m really happy upon looking at the documentation 📚. It’s really nicely structured. To quote straight from the package vignette:</p>
+<blockquote>
+<p>There are four main families of functions in stringr:</p>
+<ul>
+<li>Character manipulation: these functions allow you to manipulate individual characters within the strings in character vectors.</li>
+<li>Whitespace tools to add, remove, and manipulate whitespace.</li>
+<li>Locale sensitive operations whose operations will vary from locale to locale.</li>
+<li>Pattern matching functions. These recognise four engines of pattern description. The most common is regular expressions, but there are three other tools.</li>
+</ul>
+</blockquote>
+<p>… that’s promising! I guess I’ll just follow the <a href="https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html">vignette</a> then 😸 and try out each category one at a time.</p>
+</div>
+<div id="character-manipulation" class="section level2">
+<h2><span class="header-section-number">17.2</span> Character manipulation</h2>
+<p>I feel like there’s an obvious joke to be made here about manipulative Jane Austen characters, but nothing is coming to mind, a sure sign that the viral infection has crossed the blood-brain barrier and I’m losing my mind. Neverthelesss…</p>
+<p>As one might expect, the <code>str_length</code> function returns the length of a string, much like <code>nchar</code> in the base packages:</p>
+<pre class="r"><code>titletext &lt;- c(&quot;Pride and Prejudice&quot;, &quot;by Jane Austen&quot;)
+str_length(string = titletext)</code></pre>
+<pre><code>## [1] 19 14</code></pre>
+<p>The <code>str_sub</code> function is used to extract substrings from the string, and replace them with new values. In this function the substring is defined by the <code>start</code> and <code>end</code> of the substring:</p>
+<pre class="r"><code>str_sub(string = titletext, start = 4, end = 12)</code></pre>
+<pre><code>## [1] &quot;de and Pr&quot; &quot;Jane Aust&quot;</code></pre>
+<p>So far, nothing too surprising. No wait, I tell a lie … you can use negative indices to define a position relative to the right edge of the string. So this would let me grab the last 8 characters of the string:</p>
+<pre class="r"><code>str_sub(string = titletext, start = -8, end = -1)</code></pre>
+<pre><code>## [1] &quot;rejudice&quot; &quot;e Austen&quot;</code></pre>
+<p>Ooh that is very nice. You can also replace text using <code>str_sub</code>. So in this instance I can truncate the strings at 5 characters and then append <code>&quot;...&quot;</code></p>
+<pre class="r"><code>str_sub(string = titletext, start = 6) &lt;- &quot;...&quot;
+titletext</code></pre>
+<pre><code>## [1] &quot;Pride...&quot; &quot;by Ja...&quot;</code></pre>
+<p>Finally, the <code>str_dup</code> function lets you replicate the content within a string. So either of these works:</p>
+<pre class="r"><code>str_dup(string = titletext, times = 2)
+str_dup(string = titletext, times = c(2,4))</code></pre>
+<pre><code>## [1] &quot;Pride...Pride...&quot; &quot;by Ja...by Ja...&quot;
+## [1] &quot;Pride...Pride...&quot;                 &quot;by Ja...by Ja...by Ja...by Ja...&quot;</code></pre>
+<p>Very nice.</p>
+<div id="whitespace-manipulation" class="section level3">
+<h3><span class="header-section-number">17.2.1</span> Whitespace manipulation</h3>
+<p>… and we’re back! The <code>str_pad</code> function adds whitespace padding to ensure that the string reaches a particular length:</p>
+<pre class="r"><code>str_pad(string = titletext, width = 20)
+str_pad(string = titletext, width = 20, side = &quot;right&quot;)
+str_pad(string = titletext, width = 20, side = &quot;both&quot;)
+str_pad(string = titletext, width = 20, side = &quot;both&quot;, pad = &quot;-&quot;)</code></pre>
+<pre><code>## [1] &quot;            Pride...&quot; &quot;            by Ja...&quot;
+## [1] &quot;Pride...            &quot; &quot;by Ja...            &quot;
+## [1] &quot;      Pride...      &quot; &quot;      by Ja...      &quot;
+## [1] &quot;------Pride...------&quot; &quot;------by Ja...------&quot;</code></pre>
+<p>Combining <code>str_pad</code> and <code>str_trunc</code> means that you can force strings to be exactly a desired length, but padding one and truncating the other. Similarly, you can use <code>str_trim</code> to remove padding from one or both sides. For me favourite of these functions, it’s a toss up between (a) <code>str_squish</code>, which removes <em>all</em> excess white space, whether it be leading, middle or trailing…</p>
+<pre class="r"><code>titletext &lt;- &quot;   Pride      and Prejudice
+
+             by Jane    Austen      &quot;
+str_squish(titletext)</code></pre>
+<pre><code>## [1] &quot;Pride and Prejudice by Jane Austen&quot;</code></pre>
+<p>or (b) <code>str_wrap</code>, which tries to modify the white space to ensure that every line is approximately the same width:</p>
+<pre class="r"><code>ppstart &lt;- &quot;Pride and Prejudice by Jane Austen. It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.&quot;
+cat(str_wrap(string = ppstart, width = 20))</code></pre>
+<pre><code>## Pride and Prejudice
+## by Jane Austen.
+## It is a truth
+## universally
+## acknowledged, that
+## a single man in
+## possession of a good
+## fortune, must be in
+## want of a wife.</code></pre>
+<p>It even lets you specify the <code>indent</code> and <code>exdent</code> of the output string, so you can have margins!</p>
+</div>
+</div>
+<div id="locale-sensitive-functions" class="section level2">
+<h2><span class="header-section-number">17.3</span> Locale sensitive functions</h2>
+<p>Okay, reading through the vignette further, the <code>str_to_upper</code>, <code>str_to_lower</code> and <code>str_to_title</code> functions do exactly what they say on the tin, but the package documentation is at pains to point out that they will give you different answers depending on where you are, as will sorting functions like <code>str_order</code> and <code>str_sort</code>. Makes perfect sense: alphabets and the ordering of characters within the alphabets vary from place to place, so it’s really nice that these are locale-sensitive. Natural language is messy.</p>
+</div>
+<div id="pattern-matching" class="section level2">
+<h2><span class="header-section-number">17.4</span> Pattern matching!</h2>
+<p>Okay, pattern matching time. My nightmares about <code>grep</code> have mostly settled down in my old age, and it’s refreshing to read something pertaining to regular expressions without bursting into tears! And I really like the way the pattern matching functions are organised in <code>stringr</code>. We have functions that specify <em>tasks</em>.</p>
+<p>For the sake of helping my own learning, I’ll type out what they do:</p>
+<ul>
+<li><code>str_detect</code> finds all strings that match the pattern and returns a logical vector indicating whether they match</li>
+<li><code>str_subset</code> is similar, but it returns the subset of matching strings</li>
+<li><code>str_count</code> returns a numeric vector containing the <em>number</em> of times each string matches the pattern</li>
+<li><code>str_locate</code> returns the positions within the string of the first match, and <code>str_locate_all</code> returns the positions of all matches string</li>
+<li><code>str_extract</code> returns the matches themselves (first match within a string) and <code>str_extract_all</code> returns all of the matches.</li>
+<li><code>str_match</code> and <code>str_match_all</code> are similar, but they return the matches split by the groups. (see the vignette for the examples!)</li>
+<li><code>str_replace</code> and <code>str_replace_all</code> allow you to manipulate the matches, very much the same way that <code>sub</code> and <code>gsub</code> do.</li>
+<li><code>str_split</code> breaks a string by a separating character; and there’s also the <code>str_split_fixed</code> function that breaks it into a fixed number of chunks.</li>
+</ul>
+<p>Okay, a lot of that feels very familiar, and it’ll probably take a bit of getting used to, but I like the overall structure here. I think after a bit of playing it will be really natural.</p>
+<p>The thing I really like, though, is the fact that the <em>engine</em> that defines what counts as a pattern is broken up into convenience functions:</p>
+<ul>
+<li>A <code>fixed</code> pattern matches the exact pattern (sequence of bytes)</li>
+<li>A <code>coll</code> pattern is a little more flexible, and recognises that the same character (in human reading terms) can be represented in different ways, which is useful if you’re using non-English characters</li>
+<li>A <code>boundary</code> pattern can match the breaks between words, lines, characters, or sentences. Where by convention <code>&quot;&quot;</code> is treated as meaning <code>boundary(&quot;character&quot;)</code></li>
+<li>A <code>regex</code> (the default) is a regular expression</li>
+</ul>
+<p>That feels much cleaner than what I’m used to.</p>
+</div>
+<div id="trying-out-the-pattern-matching" class="section level2">
+<h2><span class="header-section-number">17.5</span> Trying out the pattern matching?</h2>
+<p>Okay so let’s see if I understand this. Suppose I want to take the start of <em>Pride and Prejudice</em>, as per the <code>ppstart</code> string, and split it up by word, character, or sentence:</p>
+<pre class="r"><code>str_split(string = ppstart, pattern = boundary(&quot;word&quot;))
+str_split(string = ppstart, pattern = boundary(&quot;character&quot;))
+str_split(string = ppstart, pattern = boundary(&quot;sentence&quot;))</code></pre>
+<pre><code>## [[1]]
+##  [1] &quot;Pride&quot;        &quot;and&quot;          &quot;Prejudice&quot;    &quot;by&quot;          
+##  [5] &quot;Jane&quot;         &quot;Austen&quot;       &quot;It&quot;           &quot;is&quot;          
+##  [9] &quot;a&quot;            &quot;truth&quot;        &quot;universally&quot;  &quot;acknowledged&quot;
+## [13] &quot;that&quot;         &quot;a&quot;            &quot;single&quot;       &quot;man&quot;         
+## [17] &quot;in&quot;           &quot;possession&quot;   &quot;of&quot;           &quot;a&quot;           
+## [21] &quot;good&quot;         &quot;fortune&quot;      &quot;must&quot;         &quot;be&quot;          
+## [25] &quot;in&quot;           &quot;want&quot;         &quot;of&quot;           &quot;a&quot;           
+## [29] &quot;wife&quot;        
+## 
+## [[1]]
+##   [1] &quot;P&quot; &quot;r&quot; &quot;i&quot; &quot;d&quot; &quot;e&quot; &quot; &quot; &quot;a&quot; &quot;n&quot; &quot;d&quot; &quot; &quot; &quot;P&quot; &quot;r&quot; &quot;e&quot; &quot;j&quot; &quot;u&quot; &quot;d&quot; &quot;i&quot;
+##  [18] &quot;c&quot; &quot;e&quot; &quot; &quot; &quot;b&quot; &quot;y&quot; &quot; &quot; &quot;J&quot; &quot;a&quot; &quot;n&quot; &quot;e&quot; &quot; &quot; &quot;A&quot; &quot;u&quot; &quot;s&quot; &quot;t&quot; &quot;e&quot; &quot;n&quot;
+##  [35] &quot;.&quot; &quot; &quot; &quot;I&quot; &quot;t&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;t&quot; &quot;r&quot; &quot;u&quot; &quot;t&quot; &quot;h&quot; &quot; &quot; &quot;u&quot;
+##  [52] &quot;n&quot; &quot;i&quot; &quot;v&quot; &quot;e&quot; &quot;r&quot; &quot;s&quot; &quot;a&quot; &quot;l&quot; &quot;l&quot; &quot;y&quot; &quot; &quot; &quot;a&quot; &quot;c&quot; &quot;k&quot; &quot;n&quot; &quot;o&quot; &quot;w&quot;
+##  [69] &quot;l&quot; &quot;e&quot; &quot;d&quot; &quot;g&quot; &quot;e&quot; &quot;d&quot; &quot;,&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;a&quot; &quot;t&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;s&quot; &quot;i&quot;
+##  [86] &quot;n&quot; &quot;g&quot; &quot;l&quot; &quot;e&quot; &quot; &quot; &quot;m&quot; &quot;a&quot; &quot;n&quot; &quot; &quot; &quot;i&quot; &quot;n&quot; &quot; &quot; &quot;p&quot; &quot;o&quot; &quot;s&quot; &quot;s&quot; &quot;e&quot;
+## [103] &quot;s&quot; &quot;s&quot; &quot;i&quot; &quot;o&quot; &quot;n&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;g&quot; &quot;o&quot; &quot;o&quot; &quot;d&quot; &quot; &quot; &quot;f&quot;
+## [120] &quot;o&quot; &quot;r&quot; &quot;t&quot; &quot;u&quot; &quot;n&quot; &quot;e&quot; &quot;,&quot; &quot; &quot; &quot;m&quot; &quot;u&quot; &quot;s&quot; &quot;t&quot; &quot; &quot; &quot;b&quot; &quot;e&quot; &quot; &quot; &quot;i&quot;
+## [137] &quot;n&quot; &quot; &quot; &quot;w&quot; &quot;a&quot; &quot;n&quot; &quot;t&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;w&quot; &quot;i&quot; &quot;f&quot; &quot;e&quot; &quot;.&quot;
+## 
+## [[1]]
+## [1] &quot;Pride and Prejudice by Jane Austen. &quot;                                                                                 
+## [2] &quot;It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.&quot;</code></pre>
+<p>If I wanted to break it up by vowels, I could define a regular expression to do the job:</p>
+<pre class="r"><code>ppstart %&gt;%
+  str_split(pattern = regex(&quot;[aeiouAEIOU]&quot;)) %&gt;%
+  str_wrap(width = 80) %&gt;%
+  cat</code></pre>
+<pre><code>## Warning in stri_split_lines(str): argument is not an atomic vector;
+## coercing</code></pre>
+<pre><code>## c(&quot;Pr&quot;, &quot;d&quot;, &quot; &quot;, &quot;nd Pr&quot;, &quot;j&quot;, &quot;d&quot;, &quot;c&quot;, &quot; by J&quot;, &quot;n&quot;, &quot; &quot;, &quot;&quot;, &quot;st&quot;, &quot;n. &quot;,
+## &quot;t &quot;, &quot;s &quot;, &quot; tr&quot;, &quot;th &quot;, &quot;n&quot;, &quot;v&quot;, &quot;rs&quot;, &quot;lly &quot;, &quot;ckn&quot;, &quot;wl&quot;, &quot;dg&quot;, &quot;d, th&quot;, &quot;t
+## &quot;, &quot; s&quot;, &quot;ngl&quot;, &quot; m&quot;, &quot;n &quot;, &quot;n p&quot;, &quot;ss&quot;, &quot;ss&quot;, &quot;&quot;, &quot;n &quot;, &quot;f &quot;, &quot; g&quot;, &quot;&quot;, &quot;d f&quot;,
+## &quot;rt&quot;, &quot;n&quot;, &quot;, m&quot;, &quot;st b&quot;, &quot; &quot;, &quot;n w&quot;, &quot;nt &quot;, &quot;f &quot;, &quot; w&quot;, &quot;f&quot;, &quot;.&quot;)</code></pre>
+<p>where the calls to <code>str_wrap</code> and <code>cat</code> are there solely to make the output fit on the blog page, and the call to <code>regex</code> is redundant since the <code>stringr</code> package assumes by default that the pattern is a regular expression.</p>
+<p>If I wanted to disemvowel Jane Austen, it looks like I can use <code>str_remove</code> as a handy alias for <code>str_replace</code> with <code>replace = &quot;&quot;</code>. If I want to get rid of all the vowels rather than just one…</p>
+<pre class="r"><code>ppstart %&gt;%
+  str_remove_all(pattern = &quot;[aeiouAEIOU]&quot;) %&gt;%
+  str_squish %&gt;%
+  str_wrap(width = 80) %&gt;%
+  cat</code></pre>
+<pre><code>## Prd nd Prjdc by Jn stn. t s trth nvrslly cknwldgd, tht sngl mn n pssssn f gd
+## frtn, mst b n wnt f wf.</code></pre>
+</div>
+<div id="playing-with-pride-and-prejudice" class="section level2">
+<h2><span class="header-section-number">17.6</span> Playing with Pride and Prejudice</h2>
+<p>Okay, so now I should be able to do neat things with the whole novel. Let’s start by gluing the <code>pp</code> vector into one long string, since the line breaks don’t seem to appear at any interesting locations</p>
+<pre class="r"><code>library(glue)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;glue&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     collapse</code></pre>
+<pre class="r"><code>pp %&lt;&gt;%
+  glue_collapse(sep=&quot; &quot;) %&gt;%
+  str_squish
+pp %&gt;%
+  str_sub(start = 1, end = 500) %&gt;%
+  str_wrap(width = 80) %&gt;%
+  cat</code></pre>
+<pre><code>## PRIDE AND PREJUDICE By Jane Austen Chapter 1 It is a truth universally
+## acknowledged, that a single man in possession of a good fortune, must be in want
+## of a wife. However little known the feelings or views of such a man may be on
+## his first entering a neighbourhood, this truth is so well fixed in the minds of
+## the surrounding families, that he is considered the rightful property of some
+## one or other of their daughters. &quot;My dear Mr. Bennet,&quot; said his lady to him one
+## day, &quot;have you heard that Nether</code></pre>
+<p>Okay, so now I want to give myself something to <em>do</em> with this. I’m tired and sick and I can’t think of anything clever, so I’ll just try and locate every appearance of the words <code>&quot;Elizabeth&quot;</code>, <code>&quot;Darcy&quot;</code> and <code>&quot;Wickham&quot;</code> in the text:</p>
+<pre class="r"><code>elizabeth &lt;- str_locate_all(pp, fixed(&quot;Elizabeth&quot;))[[1]][,1]
+darcy &lt;- str_locate_all(pp, fixed(&quot;Darcy&quot;))[[1]][,1]
+wickham &lt;- str_locate_all(pp, fixed(&quot;Wickham&quot;))[[1]][,1]</code></pre>
+<p>And now I will defy all sense (and offend my own sensibilities) by drawing a graph of this using some extraordinarily unsatisfying code:</p>
+<pre class="r"><code>plot(elizabeth, 1:length(elizabeth), xlab=&quot;Position&quot;,
+  ylab=&quot;Number of Appearances&quot;, xlim=c(0,str_length(pp)), lwd=2,
+  col=&quot;red&quot;, type=&quot;s&quot;)
+lines(darcy, 1:length(darcy), col=&quot;blue&quot;, lwd=2, type=&quot;s&quot;)
+lines(wickham, 1:length(wickham), col=&quot;green&quot;, lwd=2, type=&quot;s&quot;)
+legend(x = &quot;topleft&quot;, legend = c(&quot;Elizabeth&quot;, &quot;Darcy&quot;, &quot;Wickham&quot;),
+  col = c(&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;), lwd=2)</code></pre>
+<p><img src="working-with-text_files/figure-html/unnamed-chunk-18-1.png" width="456" style="display: block; margin: auto;" /> No surprises there: <code>Elizabeth</code> occurs most frequently, and at the most uniform rate. At the start of the book <code>Darcy</code> appears just as often, but then there are sections of the book that don’t concern him and the function flatlines for a while. <code>Wickham</code> is absent more often than not.</p>
+</div>
+<div id="more-resources" class="section level2">
+<h2><span class="header-section-number">17.7</span> More resources</h2>
+<ul>
+<li>The <a href="https://stringr.tidyverse.org/">stringr</a> package homepage</li>
+<li><a href="https://www.tidytextmining.com/">Text Mining with R</a> by Julia Silge and David Robinson</li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

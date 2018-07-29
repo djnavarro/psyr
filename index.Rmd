@@ -51,8 +51,8 @@ Everything from here onwards is *very much* a work in progress!
 - [Data types](./data-types.html)
 - [Describing data](./describing-data.html)
 - [Visualising data](./visualising-data.html)
-- [Manipulating data](./manipulating-data.html) <span style="color:#cccccc">(to be updated)</span>
-- <span style="color:#cccccc">Working with text (to be added)</span>  <!-- stringr (link to tidytext) -->
+- [Manipulating data](./manipulating-data.html) <span style="color:#cccccc">(draft)</span>
+- [Working with text](./working-with-text.html) <span style="color:#cccccc">(draft)</span>
 - <span style="color:#cccccc">Import and export (to be added)</span>  <!-- data formats -->
 
 ## Part 3: Statistical inference

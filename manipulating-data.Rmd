@@ -119,7 +119,7 @@ What should we do with the `sample_size` variable?
 
 ```{r}
 long_frames <- long_frames %>%
-  mutate(sample_size = recode(
+  mutate(sample_size = dplyr::recode(
     sample_size, 
     "SS2" = "small", 
     "SS6" = "medium", 

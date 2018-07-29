@@ -365,6 +365,9 @@ div.tocify {
     <li>
       <a href="manipulating-data.html">Manipulating data</a>
     </li>
+    <li>
+      <a href="working-with-text.html">Text data</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -582,7 +585,7 @@ long_frames</code></pre>
 <h3><span class="header-section-number">16.4.1</span> Using <code>recode()</code></h3>
 <p>What should we do with the <code>sample_size</code> variable?</p>
 <pre class="r"><code>long_frames &lt;- long_frames %&gt;%
-  mutate(sample_size = recode(
+  mutate(sample_size = dplyr::recode(
     sample_size, 
     &quot;SS2&quot; = &quot;small&quot;, 
     &quot;SS6&quot; = &quot;medium&quot;, 
