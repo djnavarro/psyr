@@ -67,7 +67,7 @@ In this file, the data are stored in *wide form*. The data frame contains only o
 
 Once upon a time this used to be a difficult task, so much so that I wrote my own (not very good) functions that would solve this problem in a way that didn't expose my students to some of the more frustrating aspects of data manipulation. Thankfully, this has changed. There is a little package distributed with the tidyverse called **tidyr** and it is remarkably effective at solving a range of reshaping problems in a (fairly) intuitive way. 
 
-## Gather and spread
+## Reshaping a data frame
 
 ```{r}
 long_frames <- wide_frames %>% 
@@ -137,5 +137,70 @@ long_frames
 
 ## Working with dates
 
+Empirical data sets often include date fields. Sometimes these dates are nicely formatted and are easy to work with. Most of the time they are not. Even if they were, dates are inherently painful: a year isn't a perfect multiple of days, so a solar calendar needs leap years and other corrections. The year doesn't divide easily into 12 months so months have a variable number of days and doing "addition" with months is really weird. The week days don't distribute themelves cleanly across months or years, so those are a headache too `r emo::ji("face_with_head_bandage")`. It's not purely an issue of nomenclature. We organise our lives around seasons, weekdays/weekends, day/night and various other cycles that don't always play nicely with one another. The weirdness of dates reflects the structure of the world and our lives, and data analysts can't pretend that this complexity isn't there. To make things more annoying there are cultural and lingustic variations even within the English speaking world, so that is an additional source of ambiguity. Does 9/11 refer to September 11 or November 9? It depends on where you live. `r emo::ji("shrug")`. Because of all this, date specification is hard. The `Date` class in R provides a relatively decent way to handle this kind of data, and the **lubridate** package (another tidyverse one!) provides a very helpful tool to make it easier. It doesn't load automatically so lets do that now:
 
+```{r}
+library(lubridate)
+```
+
+### Getting started
+
+Date information is often specified in terms of "year", "month" and "day", though not always in that order. **lubridate** provides a collection of functions `ymd`, `mdy`, etc that are fairly smart and able to parse information in many different formats. As long as you know the order of the information, these functions work really well: 
+
+```{r, results="hold"}
+ymd(20101215)
+ymd("2010/12/15")
+ymd("2010 December 15")
+```
+
+Despite the variations in formatting the function is able to work out that these all correspond to the same date and returns an variable of class `Date`. This gives you quite a bit of flexibility:
+
+```{r}
+ymd(20101215) == mdy("12/15/10")
+```
+Nice! The functions are smart enough to handle strings and numbers as input, and if the year is indeterminate it assumes a 21st century date. That said, they do rely on you knowing the correct order. The same numeric input, formatted differently...
+
+```{r}
+dmy(20101215)
+```
+
+... might indeed correspond to 20th October 1215. This might be plausible if the data set somehow pertained to the Magna Carta, but probably not for most settings of interest to psychologists!
+
+### A real world example
+
+To give you a sense of how annoying working with dates can be, the following is a real example. I asked my partner -- who in real life is a statistics consultant among other things -- to send me a data set she'd been sent with poorly formatted date information. This is what she sent me:
+
+```{r}
+oddball <- readLines("./data/oddballdate2.csv")
+oddball
+```
+
+To keep this example minimal, I've used `readLines()` to import the data as a single character vector. As you can see this pretty inconsistent, and my partner's face when I turned to her in horror can only be described with emoji: `r emo::ji("smiling_imp")` 
+
+A brief look at this suggests that *most* of the data have a time stamp as well as date information, which suggests that the `dmy_hm` function should be able to parse them. Others are date only, suggesting that `dmy` should work. If I try these individually this is what happens: 
+
+```{r}
+dmy(oddball)
+dmy_hm(oddball)
+```
+
+Each function converts the dates it can, inserts `NA` for the dates it can't, and loudly complain that something is amiss. That's pretty reasonable. 
+
+```{r, warning=FALSE}
+d1 <- oddball %>% dmy_hm() %>% date()
+d2 <- oddball %>% dmy() 
+clean_dates <- case_when(
+  is.na(d1) ~ d2, 
+  TRUE ~ d1
+  )
+clean_dates
+```
+
+Well that *almost* worked. What's the one `NA` value?
+
+```{r}
+oddball[is.na(clean_dates)]
+```
+
+Sigh. Looking at all the other dates, every single one is in April or May... but this last one is ostensibly on the 5th day of the 13th month? Obviously we have *one* entry formatted in a `mdy()` form. I will leave it as an exercise to the reader to work out how to fix that one `r emo::ji("grinning")`
 
