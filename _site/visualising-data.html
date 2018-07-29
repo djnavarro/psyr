@@ -611,18 +611,24 @@ frames_mean</code></pre>
 ##  9 category  medium              2          7.17  6.80  7.54
 ## 10 category  medium              3          5.98  5.54  6.42
 ## # ... with 32 more rows</code></pre>
-<p>Now we can create the plot:</p>
+<p>In this case I’m using the <code>ciMean()</code> function from the <strong>lsr</strong> package to compute the 95% confidence intervals. Just so that you can see how this function works – without all the additional complications from calling it within the <code>summarise()</code> operation – here’s a simple example. I’ll generate 20 numbers from a normal distribution with true mean 100 and true standard deviation 15 (following the convention used for IQ scores), and then use the <code>ciMean()</code> function to calculate a 95% confidence interval:</p>
+<pre class="r"><code>fake_iq &lt;- rnorm(n = 20, mean = 100, sd = 15)  # normally distributed data
+lsr::ciMean(fake_iq)                           # 95% confidence interval </code></pre>
+<pre><code>##             2.5%    97.5%
+## fake_iq 88.56974 100.2814</code></pre>
+<p>So the <code>lower</code> variable in <code>frames_mean</code> is the lower bound on the 95% confidence interval, and <code>upper</code> is the upper bound. In any case, now that we have data in an appropriate format we can create the plot. This time around, however, I’ll assign the results of my plotting function to a new variable <code>my_pic</code></p>
 <pre class="r"><code>my_pic &lt;- frames_mean %&gt;%
-  ggplot(aes(x=test_item,y=mean_response,colour=condition)) +
+  ggplot(aes(x = test_item, y = mean_response, colour = condition)) +
   geom_point() +
-  geom_errorbar(aes(ymin=lower, ymax=upper)) +
-  facet_wrap(~ sample_size)</code></pre>
-<p>Finally, we can draw it:</p>
+  geom_errorbar(aes(ymin = lower, ymax = upper)) +
+  facet_wrap(~sample_size)</code></pre>
+<p>Notice that this <em>doesn’t</em> draw a plot. All the information about the plot is stored in the <code>my_pic</code> variable, but if we want to see it, we need to print or plot that variable (either on works). So to see what <code>my_pic</code> looks like, I do this:</p>
 <pre class="r"><code>my_pic</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-22-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-23-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>In this case, because the test items vary along a continuous scale, it’s appropriate to connect the points with lines. I can do this in a straightforward way simply by adding <code>geom_line()</code> to the plot:</p>
 <pre class="r"><code>my_pic + geom_line()</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-23-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-24-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>Notice that I can add <code>geom_line()</code> directly to <code>my_pic</code>. That can be extremely handy if you’ve worked out what the core features of your plot will be and want to play around with a few possible additions to the plot.</p>
 </div>
 <div id="other-possibilities" class="section level2">
 <h2><span class="header-section-number">15.10</span> Other possibilities</h2>
@@ -634,7 +640,7 @@ frames_mean</code></pre>
   geom_density_2d() +
   facet_wrap(~condition) +
   ylim(0,9)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-24-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-25-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Alternatively, if I want to add a regression line I can use <code>geom_smooth()</code>. By default the <code>geom_smooth()</code> function applies a non-linear method (loess regression), which we saw previously in the <a href="./prelude-to-data.html">prelude</a>. This is also customisable. If I want to use a simpler linear model to provide my regression line, all I need to do is specify <code>method = &quot;lm&quot;</code> and I get a plot like this:</p>
 <pre class="r"><code>frames_small %&gt;% 
   ggplot(mapping = aes(x = age, y = response, colour = condition)) +
@@ -642,8 +648,8 @@ frames_mean</code></pre>
   geom_smooth(method = &quot;lm&quot;) +
   facet_wrap(~condition) +
   ylim(0,9)</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-25-1.png" width="456" style="display: block; margin: auto;" /></p>
-<p>Similarly, the plots are remarkably customisable in other ways. We can use <code>theme_dark()</code> to switch to a dark theme or <code>theme_bw()</code> to switch to a black and white scheme. We can add horizontal lines to plots with <code>geom_hline()</code>, vertical lines with <code>geom_vline()</code> and diagonal lines with <code>geom_abline()</code>. The colour palette can be adapted in arbitrary ways (e.g. with <code>scale_color_brewer</code>). We can control the axis scales with <code>xlim()</code> and <code>ylim()</code>. We can add text to a plot with <code>geom_text()</code>. Here’s an example showing some of those customisation:</p>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-26-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>Similarly, plots are remarkably customisable in other ways. We can use <code>theme_dark()</code> to switch to a dark theme or <code>theme_bw()</code> to switch to a black and white scheme. We can add horizontal lines to plots with <code>geom_hline()</code>, vertical lines with <code>geom_vline()</code> and diagonal lines with <code>geom_abline()</code>. The colour palette can be adapted in arbitrary ways (e.g. with <code>scale_color_brewer</code>). We can control the axis scales with <code>xlim()</code> and <code>ylim()</code>. We can add text to a plot with <code>geom_text()</code>. Here’s an example showing some of those customisation:</p>
 <pre class="r"><code>my_new_pic &lt;- my_pic + 
   theme_dark() +
   scale_color_brewer(palette = &quot;Pastel2&quot;) +
@@ -653,7 +659,7 @@ frames_mean</code></pre>
   ylab(&quot;Mean Response&quot;)
 
 my_new_pic</code></pre>
-<p><img src="visualising-data_files/figure-html/unnamed-chunk-26-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="visualising-data_files/figure-html/unnamed-chunk-27-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="saving-images" class="section level2">
 <h2><span class="header-section-number">15.11</span> Saving images</h2>
@@ -666,10 +672,6 @@ my_new_pic</code></pre>
   units = &quot;cm&quot;
 )</code></pre>
 <p>The function is smart enough to guess from the <code>filename</code> argument what kind of image file to create (e.g., PNG, JPG, etc), and so as long as the filename specifies a file extension that <code>ggsave()</code> can handle it will automatically create the right kind of image. The result in this case is <a href="./output/frame_pic.png">this image file</a>.</p>
-</div>
-<div id="more-resources" class="section level2">
-<h2><span class="header-section-number">15.12</span> More resources?</h2>
-<p>This section is really just a beginning.</p>
 </div>
 <div class="footnotes">
 <hr />
