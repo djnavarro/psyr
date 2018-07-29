@@ -480,14 +480,15 @@ frames_small</code></pre>
 hist(frames_small$age[frames$condition == &quot;category&quot;])
 hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-7-1.png" width="456" style="display: block; margin: auto;" /></p>
-<p>I need a lot more code as I did for the original version and I’ve ended up with a pretty ugly plot – base graphics absolutely does allow me to do a much better job than this, but clearly it’s going to take a lot of effort to make this nice.</p>
-<p>In contrast, using <strong>ggplot2</strong> to do the work all I need is one extra line, and the result is actually kind of nice:</p>
+<p>I need a lot more code as I did for the original version and I’ve ended up with an ugly plot. Of course, base graphics absolutely does allow me to do a better job than this, but I hope you can see that it will take quite a bit of effort to turn this into something readable.</p>
+<p>What about the <strong>ggplot2</strong> version? It turns out that it’s extremely easy. Splitting an existing plot into “facets” is a basic operation within <strong>ggplot2</strong> so all I need to do is add one line of code that specifies which variable to use to make the facets! The result is actually kind of nice:</p>
 <pre class="r"><code>frames_small %&gt;%
   ggplot(aes(x = age)) +
   geom_histogram() +
   facet_wrap(~condition)</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-8-1.png" width="456" style="display: block; margin: auto;" /></p>
 <p>For me at least, this is the big advantage to the <strong>ggplot2</strong> approach. There’s a certain amount of effort required to construct the basic plot, but once that is done, you can modify or manipulate that plot in an extremely flexible fashion with very little effort indeed. What I’ve found in practice is that the low-effort to making changes makes me much more willing to “play around” with different ways of visualising the data. So, while I’ll admit that there are some situations where I resort to using base graphics (mostly when I have a very unconventional graph to draw), I tend to find the tidyverse approach works better in the majority of cases.</p>
+<p>As far as what the data visualisation is telling us: the distribution of ages was mostly in the 20-40 age range with a modest positive skew. That’s pretty typical of these studies. More importantly, it’s pretty clear from inspection that there’s not much of a difference in the age distribition across conditions, which is what I’d hope to see given that people were assigned randomly.</p>
 </div>
 <div id="scatter-plot" class="section level2">
 <h2><span class="header-section-number">15.3</span> Scatter plot</h2>
@@ -629,7 +630,7 @@ frames_mean</code></pre>
 <pre class="r"><code>fake_iq &lt;- rnorm(n = 20, mean = 100, sd = 15)  # normally distributed data
 lsr::ciMean(fake_iq)                           # 95% confidence interval </code></pre>
 <pre><code>##             2.5%    97.5%
-## fake_iq 92.77903 107.8887</code></pre>
+## fake_iq 91.39617 101.2709</code></pre>
 <p>So the <code>lower</code> variable in <code>frames_mean</code> is the lower bound on the 95% confidence interval, and <code>upper</code> is the upper bound. In any case, now that we have data in an appropriate format we can create the plot. This time around, however, I’ll assign the results of my plotting function to a new variable <code>my_pic</code></p>
 <pre class="r"><code>my_pic &lt;- frames_mean %&gt;%
   ggplot(aes(x = test_item, y = mean_response, colour = condition)) +

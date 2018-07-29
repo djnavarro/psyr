@@ -144,9 +144,10 @@ hist(frames_small$age[frames$condition == "category"])
 hist(frames_small$age[frames$condition == "property"])
 ```
 
-I need a lot more code as I did for the original version and I've ended up with a pretty ugly plot -- base graphics absolutely does allow me to do a much better job than this, but clearly it's going to take a lot of effort to make this nice. 
+I need a lot more code as I did for the original version and I've ended up with an ugly plot. Of course, base graphics absolutely does allow me to do a better job than this, but I hope you can see that it will take quite a bit of effort to turn this into something readable.
 
-In contrast, using **ggplot2** to do the work all I need is one extra line, and the result is actually kind of nice:
+What about the **ggplot2** version? It turns out that it's extremely easy. Splitting an existing plot into "facets" is a basic operation within **ggplot2** so all I need to do is add one line of code that specifies which variable to use to make the facets! 
+The result is actually kind of nice:
 
 ```{r,message=FALSE}
 frames_small %>%
@@ -155,7 +156,10 @@ frames_small %>%
   facet_wrap(~condition)
 ```
 
+
 For me at least, this is the big advantage to the **ggplot2** approach. There's a certain amount of effort required to construct the basic plot, but once that is done, you can modify or manipulate that plot in an extremely flexible fashion with very little effort indeed. What I've found in practice is that the low-effort to making changes makes me much more willing to "play around" with different ways of visualising the data. So, while I'll admit that there are some situations where I resort to using base graphics (mostly when I have a very unconventional graph to draw), I tend to find the tidyverse approach works better in the majority of cases. 
+
+As far as what the data visualisation is telling us: the distribution of ages was mostly in the 20-40 age range with a modest positive skew. That's pretty typical of these studies. More importantly, it's pretty clear from inspection that there's not much of a difference in the age distribition across conditions, which is what I'd hope to see given that people were assigned randomly.
 
 ## Scatter plot
 
