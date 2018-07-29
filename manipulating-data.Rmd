@@ -113,33 +113,42 @@ long_frames
 
 ## Recoding variables
 
-What should we do with the `sample_size` variable? 
+### Using `recode()`
+
+What should we do with the `sample_size` variable?
 
 ```{r}
 long_frames <- long_frames %>%
-  mutate(sample_size = case_when(
-    sample_size == "SS2" ~ "small",
-    sample_size == "SS6" ~ "medium",
-    sample_size == "SS12" ~ "large"
+  mutate(sample_size = recode(
+    sample_size, 
+    "SS2" = "small", 
+    "SS6" = "medium", 
+    "SS12" = "large")
+  )
+long_frames
+```
+
+### Using `case_when()`
+
+An alternative method is to use `case_when()`. 
+
+```{r}
+long_frames <- long_frames %>%
+  mutate(n_obs = case_when(
+    sample_size == "small" ~ 2,
+    sample_size == "medium" ~ 6,
+    sample_size == "large" ~ 12
   ))
 long_frames
 ```
 
-Now all we have to do is rename the variables...
+Now we have a data frame that is almost identical to the one we imported in the previous section. Apart from some cosmetic changes to variable names and order, the job is complete!
 
-```{r}
-names(long_frames) <- tolower(names(long_frames))
-names(long_frames)[4] <- "condition"
-long_frames
-```
-
-...and we have a data frame that is almost identical to the one we imported in the previous section. The only thing missing is the `n_obs` variable: a numeric variable that records the actual sample sizes (2, 6 and 12) for the three `sample_size` conditions. As an exercise: how would you add this variable to `long_frames` using `case_when`?
-
-## Working with dates
+## Processing dates
 
 Empirical data sets often include date fields. Sometimes these dates are nicely formatted and are easy to work with. Most of the time they are not. Even if they were, dates are inherently painful: a year isn't a perfect multiple of days, so a solar calendar needs leap years and other corrections. The year doesn't divide easily into 12 months so months have a variable number of days and doing "addition" with months is really weird. The week days don't distribute themelves cleanly across months or years, so those are a headache too `r emo::ji("face_with_head_bandage")`. It's not purely an issue of nomenclature. We organise our lives around seasons, weekdays/weekends, day/night and various other cycles that don't always play nicely with one another. The weirdness of dates reflects the structure of the world and our lives, and data analysts can't pretend that this complexity isn't there. To make things more annoying there are cultural and lingustic variations even within the English speaking world, so that is an additional source of ambiguity. Does 9/11 refer to September 11 or November 9? It depends on where you live. `r emo::ji("shrug")`. Because of all this, date specification is hard. The `Date` class in R provides a relatively decent way to handle this kind of data, and the **lubridate** package (another tidyverse one!) provides a very helpful tool to make it easier. It doesn't load automatically so lets do that now:
 
-```{r}
+```{r,warning=FALSE,message=FALSE}
 library(lubridate)
 ```
 
@@ -204,3 +213,74 @@ oddball[is.na(clean_dates)]
 
 Sigh. Looking at all the other dates, every single one is in April or May... but this last one is ostensibly on the 5th day of the 13th month? Obviously we have *one* entry formatted in a `mdy()` form. I will leave it as an exercise to the reader to work out how to fix that one `r emo::ji("grinning")`
 
+## Combining data frames
+
+Another common data manipulation problem arises when we need to combine multiple data frames. Two versions of this problem are worth talking about, namely *binding* and *joining*
+
+### Binding
+
+Binding data frames is simple. Suppose we have multiple data frames that have the same variables, and we want to concatenate them. For instance, here are three small data frames:
+
+```{r,message=FALSE}
+nightgarden_top <- read_csv("./data/nightgarden_top.csv")
+nightgarden_middle <- read_csv("./data/nightgarden_middle.csv")
+nightgarden_bottom <- read_csv("./data/nightgarden_bottom.csv")
+```
+
+Each of these contains a subset of the rows we need:
+
+```{r}
+nightgarden_middle
+```
+
+We can use `dplyr::bind_rows()` to concatenate these data frames vertically:
+
+```{r}
+bind_rows(nightgarden_top, nightgarden_middle, nightgarden_bottom)
+```
+
+There is an analogous function `dplyr::bind_columns()` that concatenates horizontally.
+
+
+### Joining
+
+More complicated situations arise when each data frame potentially contains information about the same cases and variables, but not necessarily all the same ones. A common situation in which this arises in real research is when participants complete two different tasks (e.g. a questionnaire and an experimental task) and the data are stored separately from each tasks. Ideally we might hope to have data from every participant for do both versions, but that does not always occur. As a toy example, suppose we collected some `demographics` for major characters from Terry Pratchett's *Discworld* novels:
+
+```{r,message=FALSE}
+demographics <- read_csv("./data/discworld_demographics.csv")
+demographics
+```
+
+Only some of the characters completed this questionnaire however. We might also have obtained `responses` from Discworld characters to some experimental task, and again we have partial data:
+
+```{r,message=FALSE}
+responses <- read_csv("./data/discworld_responses.csv")
+responses
+```
+
+How should we *join* these two data frames together? In general there is no right or wrong answer to this question, merely different possibilities that will be of use in different situations:
+
+- An inner join contains only those rows that appear in both data frames
+- A full join contains every row that appears in at least one data frame
+- A left join contains every row that appears in the first data frame
+- A right join contains every row that appears in the second data frame
+
+In order to work out which rows are matched in the different data frames, the default is to use any variable name that appears in both data sets (though this can be customised). For the *Discworld* data, the only two characters that appear in both the `demographics` data set and the `reponses` data are Vimes and Granny, so when we construct an inner join, we end up with a data frame that includes only those two characters:
+
+```{r}
+inner_join(demographics, responses)
+```
+
+By contrast, if we construct a full join, every character is included in the result, with `NA` values inserted for all the missing cases:
+
+```{r}
+full_join(demographics, responses)
+```
+
+Suppose we want to retain data only for those characters that completed the `demographics` survey. A left join is what we need here:
+
+```{r}
+left_join(demographics, responses)
+```
+
+By analogy, if we wanted to retain data only for those characters that provided `responses`, we would use the `right_join()` function. It's also worth noting that there also `semi_join()` and `anti_join()` functions that can handle other kinds of situations, but I won't go into those here.

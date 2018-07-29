@@ -578,13 +578,16 @@ long_frames</code></pre>
 </div>
 <div id="recoding-variables" class="section level2">
 <h2><span class="header-section-number">16.4</span> Recoding variables</h2>
+<div id="using-recode" class="section level3">
+<h3><span class="header-section-number">16.4.1</span> Using <code>recode()</code></h3>
 <p>What should we do with the <code>sample_size</code> variable?</p>
 <pre class="r"><code>long_frames &lt;- long_frames %&gt;%
-  mutate(sample_size = case_when(
-    sample_size == &quot;SS2&quot; ~ &quot;small&quot;,
-    sample_size == &quot;SS6&quot; ~ &quot;medium&quot;,
-    sample_size == &quot;SS12&quot; ~ &quot;large&quot;
-  ))
+  mutate(sample_size = recode(
+    sample_size, 
+    &quot;SS2&quot; = &quot;small&quot;, 
+    &quot;SS6&quot; = &quot;medium&quot;, 
+    &quot;SS12&quot; = &quot;large&quot;)
+  )
 long_frames</code></pre>
 <pre><code>## # A tibble: 4,725 x 7
 ##       ID Gender   Age Sampling sample_size test_item response
@@ -600,35 +603,38 @@ long_frames</code></pre>
 ##  9     9 female    37 category small               1        9
 ## 10    10 female    46 category small               1        8
 ## # ... with 4,715 more rows</code></pre>
-<p>Now all we have to do is rename the variables…</p>
-<pre class="r"><code>names(long_frames) &lt;- tolower(names(long_frames))
-names(long_frames)[4] &lt;- &quot;condition&quot;
-long_frames</code></pre>
-<pre><code>## # A tibble: 4,725 x 7
-##       id gender   age condition sample_size test_item response
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;           &lt;dbl&gt;    &lt;int&gt;
-##  1     1 male      36 category  small               1        8
-##  2     2 male      46 category  small               1        7
-##  3     3 female    33 property  small               1        8
-##  4     4 female    71 property  small               1        6
-##  5     5 female    23 property  small               1        9
-##  6     6 female    31 category  small               1        7
-##  7     7 male      23 property  small               1        6
-##  8     8 female    31 property  small               1        4
-##  9     9 female    37 category  small               1        9
-## 10    10 female    46 category  small               1        8
-## # ... with 4,715 more rows</code></pre>
-<p>…and we have a data frame that is almost identical to the one we imported in the previous section. The only thing missing is the <code>n_obs</code> variable: a numeric variable that records the actual sample sizes (2, 6 and 12) for the three <code>sample_size</code> conditions. As an exercise: how would you add this variable to <code>long_frames</code> using <code>case_when</code>?</p>
 </div>
-<div id="working-with-dates" class="section level2">
-<h2><span class="header-section-number">16.5</span> Working with dates</h2>
+<div id="using-case_when" class="section level3">
+<h3><span class="header-section-number">16.4.2</span> Using <code>case_when()</code></h3>
+<p>An alternative method is to use <code>case_when()</code>.</p>
+<pre class="r"><code>long_frames &lt;- long_frames %&gt;%
+  mutate(n_obs = case_when(
+    sample_size == &quot;small&quot; ~ 2,
+    sample_size == &quot;medium&quot; ~ 6,
+    sample_size == &quot;large&quot; ~ 12
+  ))
+long_frames</code></pre>
+<pre><code>## # A tibble: 4,725 x 8
+##       ID Gender   Age Sampling sample_size test_item response n_obs
+##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt;    &lt;int&gt; &lt;dbl&gt;
+##  1     1 male      36 category small               1        8     2
+##  2     2 male      46 category small               1        7     2
+##  3     3 female    33 property small               1        8     2
+##  4     4 female    71 property small               1        6     2
+##  5     5 female    23 property small               1        9     2
+##  6     6 female    31 category small               1        7     2
+##  7     7 male      23 property small               1        6     2
+##  8     8 female    31 property small               1        4     2
+##  9     9 female    37 category small               1        9     2
+## 10    10 female    46 category small               1        8     2
+## # ... with 4,715 more rows</code></pre>
+<p>Now we have a data frame that is almost identical to the one we imported in the previous section. Apart from some cosmetic changes to variable names and order, the job is complete!</p>
+</div>
+</div>
+<div id="processing-dates" class="section level2">
+<h2><span class="header-section-number">16.5</span> Processing dates</h2>
 <p>Empirical data sets often include date fields. Sometimes these dates are nicely formatted and are easy to work with. Most of the time they are not. Even if they were, dates are inherently painful: a year isn’t a perfect multiple of days, so a solar calendar needs leap years and other corrections. The year doesn’t divide easily into 12 months so months have a variable number of days and doing “addition” with months is really weird. The week days don’t distribute themelves cleanly across months or years, so those are a headache too 🤕. It’s not purely an issue of nomenclature. We organise our lives around seasons, weekdays/weekends, day/night and various other cycles that don’t always play nicely with one another. The weirdness of dates reflects the structure of the world and our lives, and data analysts can’t pretend that this complexity isn’t there. To make things more annoying there are cultural and lingustic variations even within the English speaking world, so that is an additional source of ambiguity. Does 9/11 refer to September 11 or November 9? It depends on where you live. 🤷. Because of all this, date specification is hard. The <code>Date</code> class in R provides a relatively decent way to handle this kind of data, and the <strong>lubridate</strong> package (another tidyverse one!) provides a very helpful tool to make it easier. It doesn’t load automatically so lets do that now:</p>
 <pre class="r"><code>library(lubridate)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;lubridate&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:base&#39;:
-## 
-##     date</code></pre>
 <div id="getting-started" class="section level3">
 <h3><span class="header-section-number">16.5.1</span> Getting started</h3>
 <p>Date information is often specified in terms of “year”, “month” and “day”, though not always in that order. <strong>lubridate</strong> provides a collection of functions <code>ymd</code>, <code>mdy</code>, etc that are fairly smart and able to parse information in many different formats. As long as you know the order of the information, these functions work really well:</p>
@@ -714,6 +720,99 @@ clean_dates</code></pre>
 <pre class="r"><code>oddball[is.na(clean_dates)]</code></pre>
 <pre><code>## [1] &quot;5/13/16&quot;</code></pre>
 <p>Sigh. Looking at all the other dates, every single one is in April or May… but this last one is ostensibly on the 5th day of the 13th month? Obviously we have <em>one</em> entry formatted in a <code>mdy()</code> form. I will leave it as an exercise to the reader to work out how to fix that one 😀</p>
+</div>
+</div>
+<div id="combining-data-frames" class="section level2">
+<h2><span class="header-section-number">16.6</span> Combining data frames</h2>
+<p>Another common data manipulation problem arises when we need to combine multiple data frames. Two versions of this problem are worth talking about, namely <em>binding</em> and <em>joining</em></p>
+<div id="binding" class="section level3">
+<h3><span class="header-section-number">16.6.1</span> Binding</h3>
+<p>Binding data frames is simple. Suppose we have multiple data frames that have the same variables, and we want to concatenate them. For instance, here are three small data frames:</p>
+<pre class="r"><code>nightgarden_top &lt;- read_csv(&quot;./data/nightgarden_top.csv&quot;)
+nightgarden_middle &lt;- read_csv(&quot;./data/nightgarden_middle.csv&quot;)
+nightgarden_bottom &lt;- read_csv(&quot;./data/nightgarden_bottom.csv&quot;)</code></pre>
+<p>Each of these contains a subset of the rows we need:</p>
+<pre class="r"><code>nightgarden_middle</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##    line speaker     utterance
+##   &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;    
+## 1     6 tombliboo   oo       
+## 2     7 makka-pakka pip</code></pre>
+<p>We can use <code>dplyr::bind_rows()</code> to concatenate these data frames vertically:</p>
+<pre class="r"><code>bind_rows(nightgarden_top, nightgarden_middle, nightgarden_bottom)</code></pre>
+<pre><code>## # A tibble: 10 x 3
+##     line speaker     utterance
+##    &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;    
+##  1     1 upsy-daisy  pip      
+##  2     2 upsy-daisy  pip      
+##  3     3 upsy-daisy  onk      
+##  4     4 upsy-daisy  onk      
+##  5     5 tombliboo   ee       
+##  6     6 tombliboo   oo       
+##  7     7 makka-pakka pip      
+##  8     8 makka-pakka pip      
+##  9     9 makka-pakka onk      
+## 10    10 makka-pakka onk</code></pre>
+<p>There is an analogous function <code>dplyr::bind_columns()</code> that concatenates horizontally.</p>
+</div>
+<div id="joining" class="section level3">
+<h3><span class="header-section-number">16.6.2</span> Joining</h3>
+<p>More complicated situations arise when each data frame potentially contains information about the same cases and variables, but not necessarily all the same ones. A common situation in which this arises in real research is when participants complete two different tasks (e.g. a questionnaire and an experimental task) and the data are stored separately from each tasks. Ideally we might hope to have data from every participant for do both versions, but that does not always occur. As a toy example, suppose we collected some <code>demographics</code> for major characters from Terry Pratchett’s <em>Discworld</em> novels:</p>
+<pre class="r"><code>demographics &lt;- read_csv(&quot;./data/discworld_demographics.csv&quot;)
+demographics</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   id        gender residence   
+##   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;       
+## 1 rincewind male   ankh-morpork
+## 2 vimes     male   ankh-morpork
+## 3 granny    female lancre      
+## 4 death     other  other</code></pre>
+<p>Only some of the characters completed this questionnaire however. We might also have obtained <code>responses</code> from Discworld characters to some experimental task, and again we have partial data:</p>
+<pre class="r"><code>responses &lt;- read_csv(&quot;./data/discworld_responses.csv&quot;)
+responses</code></pre>
+<pre><code>## # A tibble: 3 x 4
+##   id     answer1 answer2 answer3
+##   &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
+## 1 vimes  yes     no      no     
+## 2 granny no      no      no     
+## 3 brutha maybe   maybe   yes</code></pre>
+<p>How should we <em>join</em> these two data frames together? In general there is no right or wrong answer to this question, merely different possibilities that will be of use in different situations:</p>
+<ul>
+<li>An inner join contains only those rows that appear in both data frames</li>
+<li>A full join contains every row that appears in at least one data frame</li>
+<li>A left join contains every row that appears in the first data frame</li>
+<li>A right join contains every row that appears in the second data frame</li>
+</ul>
+<p>In order to work out which rows are matched in the different data frames, the default is to use any variable name that appears in both data sets (though this can be customised). For the <em>Discworld</em> data, the only two characters that appear in both the <code>demographics</code> data set and the <code>reponses</code> data are Vimes and Granny, so when we construct an inner join, we end up with a data frame that includes only those two characters:</p>
+<pre class="r"><code>inner_join(demographics, responses)</code></pre>
+<pre><code>## Joining, by = &quot;id&quot;</code></pre>
+<pre><code>## # A tibble: 2 x 6
+##   id     gender residence    answer1 answer2 answer3
+##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
+## 1 vimes  male   ankh-morpork yes     no      no     
+## 2 granny female lancre       no      no      no</code></pre>
+<p>By contrast, if we construct a full join, every character is included in the result, with <code>NA</code> values inserted for all the missing cases:</p>
+<pre class="r"><code>full_join(demographics, responses)</code></pre>
+<pre><code>## Joining, by = &quot;id&quot;</code></pre>
+<pre><code>## # A tibble: 5 x 6
+##   id        gender residence    answer1 answer2 answer3
+##   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
+## 1 rincewind male   ankh-morpork &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+## 2 vimes     male   ankh-morpork yes     no      no     
+## 3 granny    female lancre       no      no      no     
+## 4 death     other  other        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+## 5 brutha    &lt;NA&gt;   &lt;NA&gt;         maybe   maybe   yes</code></pre>
+<p>Suppose we want to retain data only for those characters that completed the <code>demographics</code> survey. A left join is what we need here:</p>
+<pre class="r"><code>left_join(demographics, responses)</code></pre>
+<pre><code>## Joining, by = &quot;id&quot;</code></pre>
+<pre><code>## # A tibble: 4 x 6
+##   id        gender residence    answer1 answer2 answer3
+##   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
+## 1 rincewind male   ankh-morpork &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+## 2 vimes     male   ankh-morpork yes     no      no     
+## 3 granny    female lancre       no      no      no     
+## 4 death     other  other        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;</code></pre>
+<p>By analogy, if we wanted to retain data only for those characters that provided <code>responses</code>, we would use the <code>right_join()</code> function. It’s also worth noting that there also <code>semi_join()</code> and <code>anti_join()</code> functions that can handle other kinds of situations, but I won’t go into those here.</p>
 </div>
 </div>
 
