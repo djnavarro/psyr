@@ -184,12 +184,16 @@ frames_small %>%
 
 ## Bar graphs
 
+The humble bar graph is a staple in the scientific literature, and can be rendered by **ggplot2** with the assistance of the `geom_bar()` function. Suppose I want to check that the gender distribution for this study was relatively even across conditions.^[In this study I asked people to respond with a three value questionnaire, with options for "male", "female" and "other" as possible gender identities. I'm not entirely satisfied with this as a measurement method though, and the question wasn't compulsory to answer.] To do that, I'll set up my mapping with `gender` on the x-axis, create separate panels for each `condition`, and then use `geom_bar()` to draw the plot:
+
 ```{r}
 frames_small %>%
-  ggplot(mapping = aes(x = gender)) +
-  geom_bar() + 
-  facet_wrap(~condition)
+  ggplot(aes(x = gender)) +  # set up the mapping
+  facet_wrap(~condition) +   # split it into plots
+  geom_bar()                 # add the bars!
 ```
+
+As one would expect for random assignment there's a little unevenness but not very much. That looks totally fine to me.
 
 ## Box plots
 

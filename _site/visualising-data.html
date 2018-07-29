@@ -507,11 +507,13 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
 </div>
 <div id="bar-graphs" class="section level2">
 <h2><span class="header-section-number">15.4</span> Bar graphs</h2>
+<p>The humble bar graph is a staple in the scientific literature, and can be rendered by <strong>ggplot2</strong> with the assistance of the <code>geom_bar()</code> function. Suppose I want to check that the gender distribution for this study was relatively even across conditions.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> To do that, I’ll set up my mapping with <code>gender</code> on the x-axis, create separate panels for each <code>condition</code>, and then use <code>geom_bar()</code> to draw the plot:</p>
 <pre class="r"><code>frames_small %&gt;%
-  ggplot(mapping = aes(x = gender)) +
-  geom_bar() + 
-  facet_wrap(~condition)</code></pre>
+  ggplot(aes(x = gender)) +  # set up the mapping
+  facet_wrap(~condition) +   # split it into plots
+  geom_bar()                 # add the bars!</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-12-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>As one would expect for random assignment there’s a little unevenness but not very much. That looks totally fine to me.</p>
 </div>
 <div id="box-plots" class="section level2">
 <h2><span class="header-section-number">15.5</span> Box plots</h2>
@@ -615,7 +617,7 @@ frames_mean</code></pre>
 <pre class="r"><code>fake_iq &lt;- rnorm(n = 20, mean = 100, sd = 15)  # normally distributed data
 lsr::ciMean(fake_iq)                           # 95% confidence interval </code></pre>
 <pre><code>##             2.5%    97.5%
-## fake_iq 88.56974 100.2814</code></pre>
+## fake_iq 93.42785 109.4871</code></pre>
 <p>So the <code>lower</code> variable in <code>frames_mean</code> is the lower bound on the 95% confidence interval, and <code>upper</code> is the upper bound. In any case, now that we have data in an appropriate format we can create the plot. This time around, however, I’ll assign the results of my plotting function to a new variable <code>my_pic</code></p>
 <pre class="r"><code>my_pic &lt;- frames_mean %&gt;%
   ggplot(aes(x = test_item, y = mean_response, colour = condition)) +
@@ -678,6 +680,7 @@ my_new_pic</code></pre>
 <ol>
 <li id="fn1"><p>If you are interested, take a look at the various <code>dev</code> functions for working with graphics devces, such as <code>dev.new</code>, <code>dev.print</code>, <code>dev.off</code> etc. I won’t talk about those here because I’m focusing on <strong>tidyverse</strong> but they’re handy in other situations<a href="#fnref1">↩</a></p></li>
 <li id="fn2"><p>It’s worth acknowledging that <strong>ggplot2</strong> and builds off the <strong>grid</strong> graphics system that we very briefly encountered when using <strong>TurtleGraphics</strong><a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>In this study I asked people to respond with a three value questionnaire, with options for “male”, “female” and “other” as possible gender identities. I’m not entirely satisfied with this as a measurement method though, and the question wasn’t compulsory to answer.<a href="#fnref3">↩</a></p></li>
 </ol>
 </div>
 
