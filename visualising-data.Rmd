@@ -163,27 +163,50 @@ As far as what the data visualisation is telling us: the distribution of ages wa
 
 ## Scatter plot
 
-Start out by taking the data and passing it to `ggplot` without giving anything else to work with, and we get a blank canvas as the result
+The second kind of plot I'll talk about is a scatter plot, in which each observation is drawn as a point, and the graph shows the values on one variable against the values on another. It's such a simply plot that I'll use it as a mechanism to illustrate the key ideas in **ggplot2**.
 
-```{r}
+Lets build our plot piece by piece. The data we want to use here come from `frames_small`, so the first thing we'll do is pipe this data set to the `ggplot()` function and see what it produces:
+
+```{r, fig.width=4, fig.height=4}
 frames_small %>% 
   ggplot()
 ```
 
-The next step is to add some *aesthetics* so that the plot knows what we're expecting to see.
+In retrospect that's unsurprising. Although we've passed the data to `ggplot()`, we haven't told R what it ought to *do* with these data, so the output is simply a blank canvas! To make some progress, the next step is to specify a `mapping` for the plot that will tell R something about what roles the different variables play. In **ggplot2** these mappings are described as a set of "*aesthetics*", defined using the `aes()` function. There are many different aesthetics that can be used, but for a scatter plot the only things we really *need* to specify as aesthetics are the variable on the `x` axis and the variable on the `y` axis. So if we wanted to plot `y = response` against `x = age`, this is the mapping we would need:
+
+```{r, fig.width=4, fig.height=4}
+frames_small %>% 
+  ggplot(mapping = aes(x = age, y = response))
+```
+
+Hm. That's clearly some progress. The canvas now has the axis labels and gridlines reflecting the fact that R now knows which variables we're hoping to ploy. However, we still don't have any data, because we haven't told R what it should *do* to render the data. This is the role played by *geoms*, which specify different ways in which data can be displayed. Since we're trying to draw a scatter plot, I'm going to use the simplest possible *geom* function, namely `geom_point()`. All it does is draw a dot for each data point:
 
 ```{r}
 frames_small %>% 
-  ggplot(mapping = aes(x = age, y = response, group = condition))
+  ggplot(mapping = aes(x = age, y = response)) +
+  geom_point()
 ```
 
-Now, we need to add some *geoms*, abstract ideas about what kind of things we could plot on the canvas. Since we're trying to draw a scatter plot, I'm going to use `geom_point`
+Now we have our scatter plot! From visual inspection there doesn't seem to be any strong relationship between the `age` of a participant and the `response` they give. Again, that's not surprising, but useful to check.
 
-```{r}
+It's worth highlighting the different roles played by aesthetics and geoms. For instance, I could have expanded the list of aesthetics to include `colour = condition`, which would indicate that the colour of each dot should indicated which condition the participant in question was assigned to:
+
+```{r, fig.width=5, fig.height=4}
 frames_small %>% 
   ggplot(mapping = aes(x = age, y = response, colour = condition)) +
   geom_point()
 ```
+
+However, I can also add new geoms that will draw new layers to the plot. For example, `geom_rug` adds a visual representation of the marginal distribution of the data on both axes, like this:
+
+```{r, fig.width=5, fig.height=4}
+frames_small %>% 
+  ggplot(mapping = aes(x = age, y = response, colour = condition)) +
+  geom_point() + 
+  geom_rug()
+```
+
+Overall, there's nothing that immediately suggests and differential patterns of responding as a function of age but there is a hint that responses are lower in the property sampling condition (blue) than in the category sampling condition (red).
 
 
 ## Bar graphs
