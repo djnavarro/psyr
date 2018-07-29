@@ -14,6 +14,11 @@ psyr_commit <- function(message) {
   system(cmd)
 }
 
+# git log from R console
+psyr_log <- function() {
+  system(here("_shell","git_log.sh"))
+}
+
 # git push from R console
 psyr_push <- function() {
   system(here("_shell","git_push.sh"))

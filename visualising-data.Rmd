@@ -324,7 +324,7 @@ frames %>%
   geom_count(aes(colour = ..n..))
 ```
 
-That's a little nicer, but in this case I don't want or need the pretty blue colouring. What I want to do is specify my own grey scale, where larger dots are coloured closer to black (e.g., upper bound is `"grey20"`) and the smaller dots are coloured in a light grey (e.g., lower bound is `"grey80"`). Then all I have to do is this:
+That's a little nicer, but in this case I don't want or need the pretty blue colouring. What I want to do is specify my own grey scale, where larger dots are coloured closer to black (e.g., upper bound is `"grey20"`) and the smaller dots are coloured in a light grey (e.g., lower bound is `"grey80"`).^[R is quite flexible in how it handles colours. For most purposes you can use an English colour word and R will have a rough idea what you mean. Type `colours()` at the console to see a list of the colour names it knows: there are a lot! Alternatively you can specify a hexadecimal string like `#88398A`, or use a function like `rgb()` or `hsv()` to construct the colour you want.] Then all I have to do is this:
 
 
 ```{r, fig.width=6, fig.height=4}
