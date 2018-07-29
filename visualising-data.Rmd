@@ -184,7 +184,7 @@ frames_small %>%
 
 ## Bar graphs
 
-The humble bar graph is a staple in the scientific literature, and can be rendered by **ggplot2** with the assistance of the `geom_bar()` function. Suppose I want to check that the gender distribution for this study was relatively even across conditions.^[In this study I asked people to respond with a three value questionnaire, with options for "male", "female" and "other" as possible gender identities. I'm not entirely satisfied with this as a measurement method though, and the question wasn't compulsory to answer.] To do that, I'll set up my mapping with `gender` on the x-axis, create separate panels for each `condition`, and then use `geom_bar()` to draw the plot:
+The humble bar graph is a staple in the scientific literature, and can be rendered by **ggplot2** with the assistance of the `geom_bar()` function. Suppose I want to check that the gender distribution for this study was relatively even across conditions.^[In this study I asked people to respond with a three value questionnaire, with options for "male", "female" and "other" as possible gender identities. I'm not entirely satisfied with this as a measurement method though, and the question wasn't compulsory to answer.] To do that, I'll set up my mapping with `gender` on the x-axis (using `ggplot` to initialise the plot and `aes` to specify the aesthetics), create separate panels for each `condition` (using `facet_wrap` which I'll explain in more detail below), and then use `geom_bar()` to draw the plot:
 
 ```{r}
 frames_small %>%
@@ -197,13 +197,22 @@ As one would expect for random assignment there's a little unevenness but not ve
 
 ## Box plots
 
+Another classic data visualisation used in psychology is the box plot (due to John Tukey), which presents a schematic representation of the distribution of responses. Box plots can be drawn in many different forms, but the most conventional version the median value (50th percentile) as a thick horizontal line, contained within a box that spans the range from 25th percentile to the 75th percentile. Above and below the box are the "whiskers" which extend to cover the full range of the data (after excluding outliers).
+Outliers are plotted as individual dots. Note that in this context an outlier is conventionally defined as a point that lies more than 1.5 times the interquartile range from the median: this is often a convenient heuristic to use but it's not magical. Don't read too much into the fact that a data set includes outliers! 
+
+To construct a boxplot using **ggplot2** all we need to do is add a `geom_boxplot()` to the graph. So if I want to plot the distribution of responses across participants (averaged across test items) separately for the two conditions, I could do this:
+
 ```{r}
 frames_small %>%
   ggplot(aes(x = condition, y = response)) + 
   geom_boxplot()
 ```
 
+This does suggest that people are less willing to make inductive generalisation in the property sampling condition than in the category sampling condition!
+
+
 ## Violin plots
+
 
 ```{r}
 frames_small %>%
