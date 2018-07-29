@@ -1,0 +1,141 @@
+---
+title: "16. Manipulating data"
+output:
+  html_document:
+    includes:
+      in_header: header.html    
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: textmate
+    css: mystyle.css
+    number_sections: true
+    pandoc_args: [
+      "--number-offset", 16
+    ]
+---
+
+```{r,echo=FALSE,message = FALSE, warning = FALSE}
+rm(list=objects()) # start with a clean workspace
+source("knitr_tweaks.R")
+library(tidyverse,quietly = TRUE)
+```
+
+```{css,echo=FALSE}
+h1{
+  line-height: 100px;
+}
+h2{
+  line-height: 80px;
+}
+h3{
+  line-height: 60px;
+}
+```
+
+Data manipulation isn't a particularly well defined topic. I take it to cover a few topics:
+
+- Importing and exporting data
+- Cleaning up errors in data
+- Reorganising data
+
+Earlier sections of the notes covered variations of this:
+
+- Reading and writing from CSV files and .RData files
+- Creating data frames, tibbles and factors from other input
+- Using filter and select to extract subsets of a data frame
+- Using mutate to create or alter columns in a data frame
+- Using arrange to sort a data frame
+
+## An illustrative problem
+
+In the [data visualisation](./visualising-data.html) we used a data set looking at inductive reasoning stored in the [frames_ex2.csv](./data/frames_ex2.csv) file. Here it is again:
+
+```{r, message=FALSE}
+frames <- read_csv("./data/frames_ex2.csv")
+frames
+```
+
+In this file the data are stored in *long form*, in which there is one row for every trial in the experiment and thus the data from each participant are spread across several rows. I stored the data in that format because it was handy for drawing pictures, but as it happen this isn't how the data set was stored when I extracted it from the [OSF repository](https://osf.io/j4dxm/) in which I'd deposited it only a few months earlier! Here's what it looked like when I found it:
+
+```{r, message=FALSE}
+wide_frames <- read_csv("./data/frames_ex2_wide.csv")
+wide_frames
+```
+
+In this file, the data are stored in *wide form*. The data frame contains only one row per person, and each judgment they make is stored as a separate variable. Wide and long form data are useful for a number of purposes. How do we switch between them, "reshaping" the data to the form we need? 
+
+Once upon a time this used to be a difficult task, so much so that I wrote my own (not very good) functions that would solve this problem in a way that didn't expose my students to some of the more frustrating aspects of data manipulation. Thankfully, this has changed. There is a little package distributed with the tidyverse called **tidyr** and it is remarkably effective at solving a range of reshaping problems in a (fairly) intuitive way. 
+
+## Gather and spread
+
+```{r}
+long_frames <- wide_frames %>% 
+  gather(key = "query", value="response",
+         "SS2-R1", "SS2-R2","SS2-R3","SS2-R4","SS2-R5","SS2-R6","SS2-R7",
+         "SS6-R1","SS6-R2","SS6-R3","SS6-R4","SS6-R5","SS6-R6","SS6-R7", 
+         "SS12-R1","SS12-R2","SS12-R3","SS12-R4","SS12-R5","SS12-R6","SS12-R7")
+long_frames
+```
+
+To go back the other way, we could do this:
+
+```{r}
+long_frames %>% spread(key = "query", value = "response")
+```
+
+
+## Splitting a variable
+
+The `long_frames` data frame we created is close to what we need, but the `query` variable isn't quite right. A value of `"SS2-R1"` corresponds to a trial on which the sample size was 2 and the test item was 1. This should properly be two variables, one specifying the `sample_size` and the other specifying the value of the `test_item`. 
+
+```{r}
+long_frames %>% 
+  separate(
+    col = query, 
+    into = c("sample_size","test_item"), 
+    sep = "-R"
+  )
+```
+
+Getting closer. Note that there is a `unite()` function that reverses this operation, so if you ever need to collapse multiple columns into a single variable that would be the way to do it. It's also worth noting that the two new variables aren't quite in the format we want them to be. For instance, the `test_item` variable should be numeric rather than character, so lets `mutate` that and store the results:
+
+```{r}
+long_frames <- long_frames %>% 
+  separate(
+    col = query, 
+    into = c("sample_size","test_item"), 
+    sep = "-R"
+  ) %>%
+  mutate(test_item = as.numeric(test_item))
+long_frames
+```
+
+## Recoding variables
+
+What should we do with the `sample_size` variable? 
+
+```{r}
+long_frames <- long_frames %>%
+  mutate(sample_size = case_when(
+    sample_size == "SS2" ~ "small",
+    sample_size == "SS6" ~ "medium",
+    sample_size == "SS12" ~ "large"
+  ))
+long_frames
+```
+
+Now all we have to do is rename the variables...
+
+```{r}
+names(long_frames) <- tolower(names(long_frames))
+names(long_frames)[4] <- "condition"
+long_frames
+```
+
+...and we have a data frame that is almost identical to the one we imported in the previous section. The only thing missing is the `n_obs` variable: a numeric variable that records the actual sample sizes (2, 6 and 12) for the three `sample_size` conditions. As an exercise: how would you add this variable to `long_frames` using `case_when`?
+
+## Working with dates
+
+
+

@@ -40,6 +40,8 @@ navbar:
       href: describing-data.html      
     - text: Visualising data
       href: visualising-data.html
+    - text: Manipulating data
+      href: manipulating-data.html      
   - text: Stats
     menu:
     - text: Probability distributions

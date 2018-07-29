@@ -362,6 +362,9 @@ div.tocify {
     <li>
       <a href="visualising-data.html">Visualising data</a>
     </li>
+    <li>
+      <a href="manipulating-data.html">Manipulating data</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -666,8 +669,8 @@ frames_mean</code></pre>
 <p>In this case I’m using the <code>ciMean()</code> function from the <strong>lsr</strong> package to compute the 95% confidence intervals. Just so that you can see how this function works – without all the additional complications from calling it within the <code>summarise()</code> operation – here’s a simple example. I’ll generate 20 numbers from a normal distribution with true mean 100 and true standard deviation 15 (following the convention used for IQ scores), and then use the <code>ciMean()</code> function to calculate a 95% confidence interval:</p>
 <pre class="r"><code>fake_iq &lt;- rnorm(n = 20, mean = 100, sd = 15)  # normally distributed data
 lsr::ciMean(fake_iq)                           # 95% confidence interval </code></pre>
-<pre><code>##             2.5%    97.5%
-## fake_iq 91.52261 105.0792</code></pre>
+<pre><code>##             2.5%   97.5%
+## fake_iq 94.97005 105.901</code></pre>
 <p>So the <code>lower</code> variable in <code>frames_mean</code> is the lower bound on the 95% confidence interval, and <code>upper</code> is the upper bound. In any case, now that we have data in an appropriate format we can create the plot.</p>
 <p>To add error bars is no more difficult than anything else in <strong>ggplot2</strong>. There is a geom called <code>geom_errorbar()</code> that will draw those for us. However, it does need some new information. In our previous graphs we’ve specifed three aesthetics at the beginning of our graphing exercise, namely <code>x = test_item</code>, <code>y = mean_response</code> and <code>colour = condition</code>. That works fine for <code>geom_point()</code> because doesn’t need anything else, but <code>geom_errorbar()</code> also needs to know which variables specify the <code>ymin</code> and <code>ymax</code> values that will be displayed in the error bars. If I wanted to, I could could include these aesthetics within the original call to <code>ggplot()</code> but I’ll do something a little different this time. Individual geoms can have their own unique aesthetics, so I can insert a new call to <code>aes()</code> within the <code>geom_errorbar()</code> call. Conceptually I find this neater, because it makes clear that <code>ymin</code> and <code>ymax</code> are aesthetics that apply to the error bars, but not to other geoms in the plot. Anyway here’s the command:</p>
 <pre class="r"><code>my_pic &lt;- frames_mean %&gt;%
