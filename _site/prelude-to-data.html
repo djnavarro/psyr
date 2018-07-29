@@ -612,7 +612,7 @@ print( my.formula )             # print it the normal way
 
 ```
 ## blah ~ blah.blah
-## <environment: 0x10d30ec70>
+## <environment: 0x1131292a8>
 ```
 
 So far, there’s nothing very surprising here. But there’s actually a lot going on behind the scenes here. When I type `print(my.formula)`, what actually happens is the `print` function checks the class of the `my.formula` variable. When the function discovers that the variable it’s been given is a formula, it goes looking for a function called `print.formula`, and then delegates the whole business of printing out the variable to the `print.formula` function.^[For readers with a programming background: R has three separate systems for object oriented programming. The earliest system was S3, and it was very informal: generic functions as described here are part of the S3 system. Later on S4 was introduced as a more formal way of doing things. I confess I never learned S4 because it looked tedious. More recently R introduced Reference Classes, which look kind of neat and I should probably learn about them. Discussed [here](http://adv-r.had.co.nz/R5.html) if you're interested.] For what it’s worth, the name for a “dedicated” function like `print.formula` that exists only to be a special case of a generic function like `print` is a **method**, and the name for the process in which the generic function passes off all the hard work onto a method is called **method dispatch**. You won’t need to understand the details at all for this book, but you do need to know the gist of it; if only because a lot of the functions we’ll use are actually generics.
@@ -629,7 +629,7 @@ print.default( my.formula ) # do something silly by using the wrong method
 ## attr(,"class")
 ## [1] "formula"
 ## attr(,".Environment")
-## <environment: 0x10d30ec70>
+## <environment: 0x1131292a8>
 ```
 
 Hm. You can kind of see that it is trying to print out the same formula, but there’s a bunch of ugly low-level details that have also turned up on screen. This is because the `print.default` method doesn’t know anything about formulas, and doesn’t know that it’s supposed to be hiding the obnoxious internal gibberish that R produces sometimes. 
