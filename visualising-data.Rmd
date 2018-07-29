@@ -213,6 +213,9 @@ This does suggest that people are less willing to make inductive generalisation 
 
 ## Violin plots
 
+Although the box plot is an old method for visualising the key characteristics of distribution it's a very good one. It's visually simple, meaning that you can put a lot of box plots in a single graph without causing too much clutter, yet it still conveys a lot of information about the distribution. So there are many situations in which they are worth including (we'll see a good example in a moment)
+
+On the other hand, for the specific situation here where there are only two disributions to be displayed, it does seem like we could do better. With the state of computing having advanced quite dramatically over recent decades, it is extremely easy to construct more complicated *kernel density estimates* of the shape of the population from which the sample is drawn. The *violin plot* provides a method for visually displaying a kernel density estimate. If we switch from `geom_boxplot()` to `geom_violin()` the resulting plot looks like this:
 
 ```{r}
 frames_small %>%
@@ -220,6 +223,16 @@ frames_small %>%
   geom_violin()
 ```
 
+It's intuitively obvious what this plot is doing: the "width" of the violin^[Yeah, they never actually look like violins. We should just give up and call them blob plots] at each point shows the estimated "density" of the population distribution at that point. To make it a little clearer what this is showing, let's overlay the raw data on the plot, using the `geom_jitter()` method to make it a little easier to see:
+
+```{r}
+frames_small %>%
+  ggplot(aes(x = condition, y = response)) + 
+  geom_violin() +
+  geom_jitter()
+```
+
+As you can see, in the property sampling condition the data are concentrated pretty tightly around 4.5, whereas in the category sampling condition the data are shifted upwards and spread out. That's what produces the different shapes in the violin plots.
 
 ## Facetted plots
 
