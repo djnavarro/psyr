@@ -438,18 +438,14 @@ h3{
 <ul>
 <li><code>print</code></li>
 <li><code>cat</code></li>
+<li>escaping</li>
 </ul>
 </div>
 <div id="getting-started" class="section level2">
 <h2><span class="header-section-number">17.2</span> Getting started</h2>
 <p>The data come from Experiment 1 in a <a href="https://doi.org/10.1073/pnas.0707835105">very cool paper</a> by Simon Kirby, Hannah Cornish, and Kenny Smith.</p>
-<pre class="r"><code>chains &lt;- read_csv(&quot;./data/kirbyetal2008_exp1_wide.csv&quot;)</code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   .default = col_character()
-## )</code></pre>
-<pre><code>## See spec(...) for full column specifications.</code></pre>
-<pre class="r"><code>chain_3 &lt;- chains %&gt;% 
+<pre class="r"><code>chains &lt;- read_csv(&quot;./data/kirbyetal2008_exp1_wide.csv&quot;)
+chain_3 &lt;- chains %&gt;% 
   filter(version == &quot;chain3&quot;) %&gt;%
   select(color,shape,motion,starts_with(&quot;name&quot;)) 
 print(chain_3)</code></pre>
@@ -470,17 +466,7 @@ print(chain_3)</code></pre>
 ## #   name_9 &lt;chr&gt;, name_10 &lt;chr&gt;</code></pre>
 <pre class="r"><code>input &lt;- chain_3$name_0
 output &lt;- chain_3$name_10</code></pre>
-<p>Excellent! I have a data set ✅ Next, I’ll need a string manipulation package. <strong>stringr</strong> is loaded automatically with <strong>tidyverse</strong> so that’s another ✅. Time to get started! The easiest way to approach this is to take a look at the package documentation for <strong>stringr</strong>. As with most tidyverse packages it’s clear and thorough, so a large part of what I’m doing here is providing an introduction to their work. To quote straight from the package <a href="https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html">vignette</a></p>
-<blockquote>
-<p>There are four main families of functions in stringr:</p>
-<ul>
-<li>Character manipulation: these functions allow you to manipulate individual characters within the strings in character vectors.</li>
-<li>Whitespace tools to add, remove, and manipulate whitespace.</li>
-<li>Locale sensitive operations whose operations will vary from locale to locale.</li>
-<li>Pattern matching functions. These recognise four engines of pattern description. The most common is regular expressions, but there are three other tools.</li>
-</ul>
-</blockquote>
-<p>In my experience, the first three of these are relatively straightforward and are sufficient to cover a wide range of applied problems. The <em>pattern maching</em> functions are a little more challenging, at least when regular expressions are involved, but even there you can achieve a lot with only a modest knowledge (which is lucky for me because regular expressions are painful)</p>
+<p>Excellent! I have a data set ✅ Next, I’ll need a string manipulation package. <strong>stringr</strong> is loaded automatically with <strong>tidyverse</strong> so that’s another ✅. Time to get started!</p>
 </div>
 <div id="flatten-strings" class="section level2">
 <h2><span class="header-section-number">17.3</span> Flatten strings</h2>
@@ -511,8 +497,8 @@ output &lt;- chain_3$name_10</code></pre>
 ## [12] &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;
 ## [23] &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;</code></pre>
 </div>
-<div id="string-duplication" class="section level2">
-<h2><span class="header-section-number">17.6</span> String duplication</h2>
+<div id="duplication" class="section level2">
+<h2><span class="header-section-number">17.6</span> Duplication</h2>
 <p>I’m not sure why I would want it in this context, but we can duplicate strings using <code>str_dup()</code></p>
 <pre class="r"><code>output %&gt;% str_dup(times = 3)</code></pre>
 <pre><code>##  [1] &quot;minikuminikuminiku&quot; &quot;minikuminikuminiku&quot; &quot;minikuminikuminiku&quot;
@@ -525,8 +511,8 @@ output &lt;- chain_3$name_10</code></pre>
 ## [22] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;          &quot;poipoipoi&quot;         
 ## [25] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;          &quot;poipoipoi&quot;</code></pre>
 </div>
-<div id="string-truncation-and-padding" class="section level2">
-<h2><span class="header-section-number">17.7</span> String truncation and padding</h2>
+<div id="truncation-and-padding" class="section level2">
+<h2><span class="header-section-number">17.7</span> Truncation and padding</h2>
 <p>Sometimes it is useful to ensure that every string has the same length. Again, this can be quite useful when labelling data. For longer strings we might need to truncate it using <code>str_trunc()</code> and for shorter strings we might need to pad it with whitespace (or other characters) using <code>str_pad()</code>. To give a sense of this:</p>
 <pre class="r"><code>str_pad(string = &quot;Danielle&quot;, width = 20)
 str_pad(string = &quot;Danielle&quot;, width = 20, side = &quot;right&quot;)
@@ -553,8 +539,8 @@ str_trunc(string = &quot;Danielle&quot;, width = 7, ellipsis = &quot;+++&quot;)<
 ## [15] &quot;gepi...&quot; &quot;wikima &quot; &quot;nipi...&quot; &quot;hema   &quot; &quot;piku...&quot; &quot;kimaki &quot; &quot;pimi...&quot;
 ## [22] &quot;gepi...&quot; &quot;kunige &quot; &quot;miki   &quot; &quot;mihe   &quot; &quot;winige &quot; &quot;kini...&quot;</code></pre>
 </div>
-<div id="removing-white-space" class="section level2">
-<h2><span class="header-section-number">17.8</span> Removing white space</h2>
+<div id="removing-whitespace" class="section level2">
+<h2><span class="header-section-number">17.8</span> Removing whitespace</h2>
 <p>A common problem when dealing with text is white space that appears in the wrong place. For example, suppose someone intended to type the words <em>tupim</em>, <em>tupin</em> and <em>poi</em> as part of the experiment but ended up with additional spaces, leading to this as the raw data:</p>
 <pre class="r"><code>raw &lt;- &quot;  tupim   tupin    poi    &quot;</code></pre>
 <p>The <code>str_trim()</code> function removes all leading and trailing whitespace; <code>str_squish()</code> does the same but also compresses any internal whitespace to a single character. Thus:</p>
@@ -565,8 +551,8 @@ raw %&gt;% str_squish()</code></pre>
 ## [1] &quot;tupim   tupin    poi&quot;
 ## [1] &quot;tupim tupin poi&quot;</code></pre>
 </div>
-<div id="wrapping-a-string" class="section level2">
-<h2><span class="header-section-number">17.9</span> Wrapping a string</h2>
+<div id="wrapping-strings" class="section level2">
+<h2><span class="header-section-number">17.9</span> Wrapping strings</h2>
 <pre class="r"><code>input %&gt;% 
   str_flatten(&quot;, &quot;) %&gt;% 
   str_wrap(width = 30, indent = 5, exdent = 3) %&gt;% 
@@ -581,178 +567,188 @@ raw %&gt;% str_squish()</code></pre>
 ##    kunige, miki, mihe, winige,
 ##    kinimage</code></pre>
 </div>
-<div id="whitespace-manipulation" class="section level2">
-<h2><span class="header-section-number">17.10</span> Whitespace manipulation</h2>
-<ul>
-<li><code>str_pad</code></li>
-<li><code>str_trim</code></li>
-<li><code>str_wrap</code></li>
-<li><code>str_squish</code></li>
-</ul>
-<pre class="r"><code>pp &lt;- janeaustenr::prideprejudice
-titletext &lt;- &quot;dfdfgsesdfefasesdfsefsadfsefedå&quot;</code></pre>
-<p>… and we’re back! The <code>str_pad</code> function adds whitespace padding to ensure that the string reaches a particular length:</p>
-<pre class="r"><code>str_pad(string = titletext, width = 20)
-str_pad(string = titletext, width = 20, side = &quot;right&quot;)
-str_pad(string = titletext, width = 20, side = &quot;both&quot;)
-str_pad(string = titletext, width = 20, side = &quot;both&quot;, pad = &quot;-&quot;)</code></pre>
-<pre><code>## [1] &quot;dfdfgsesdfefasesdfsefsadfsefedå&quot;
-## [1] &quot;dfdfgsesdfefasesdfsefsadfsefedå&quot;
-## [1] &quot;dfdfgsesdfefasesdfsefsadfsefedå&quot;
-## [1] &quot;dfdfgsesdfefasesdfsefsadfsefedå&quot;</code></pre>
-<p>Combining <code>str_pad</code> and <code>str_trunc</code> means that you can force strings to be exactly a desired length, but padding one and truncating the other. Similarly, you can use <code>str_trim</code> to remove padding from one or both sides. For me favourite of these functions, it’s a toss up between (a) <code>str_squish</code>, which removes <em>all</em> excess white space, whether it be leading, middle or trailing…</p>
-<pre class="r"><code>titletext &lt;- &quot;   Pride      and Prejudice
-
-             by Jane    Austen      &quot;
-str_squish(titletext)</code></pre>
-<pre><code>## [1] &quot;Pride and Prejudice by Jane Austen&quot;</code></pre>
-<p>or (b) <code>str_wrap</code>, which tries to modify the white space to ensure that every line is approximately the same width:</p>
-<pre class="r"><code>ppstart &lt;- &quot;Pride and Prejudice by Jane Austen. It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.&quot;
-cat(str_wrap(string = ppstart, width = 20))</code></pre>
-<pre><code>## Pride and Prejudice
-## by Jane Austen.
-## It is a truth
-## universally
-## acknowledged, that
-## a single man in
-## possession of a good
-## fortune, must be in
-## want of a wife.</code></pre>
-<p>It even lets you specify the <code>indent</code> and <code>exdent</code> of the output string, so you can have margins!</p>
+<div id="sorting-strings" class="section level2">
+<h2><span class="header-section-number">17.10</span> Sorting strings</h2>
+<p>There are a collection of functions that manipulate properties of text that vary from one language to the next. The order in which letters appear in the alphabet isn’t always the same, for example. These functions all have a <code>locale</code> value that is set to <code>&quot;en&quot;</code> by default.</p>
+<pre class="r"><code>letters %&gt;% str_sort(locale = &quot;en&quot;) %&gt;% str_flatten()
+letters %&gt;% str_sort(locale = &quot;haw&quot;) %&gt;% str_flatten()</code></pre>
+<pre><code>## [1] &quot;abcdefghijklmnopqrstuvwxyz&quot;
+## [1] &quot;aeioubcdfghjklmnpqrstvwxyz&quot;</code></pre>
+<p>There is also a <code>str_order()</code> function that returns a numeric vector indicating the order in which the original input should be shuffled to produce a sorted output.</p>
 </div>
-<div id="locale-sensitive-functions" class="section level2">
-<h2><span class="header-section-number">17.11</span> Locale sensitive functions</h2>
-<ul>
-<li><code>str_to_upper</code></li>
-<li><code>str_to_lower</code></li>
-<li><code>str_to_title</code></li>
-<li><code>str_order</code></li>
-<li><code>str_sort</code></li>
-</ul>
-<p>Okay, reading through the vignette further, the <code>str_to_upper</code>, <code>str_to_lower</code> and <code>str_to_title</code> functions do exactly what they say on the tin, but the package documentation is at pains to point out that they will give you different answers depending on where you are, as will sorting functions like <code>str_order</code> and <code>str_sort</code>. Makes perfect sense: alphabets and the ordering of characters within the alphabets vary from place to place, so it’s really nice that these are locale-sensitive. Natural language is messy.</p>
+<div id="changing-case" class="section level2">
+<h2><span class="header-section-number">17.11</span> Changing case</h2>
+<p>For dealing with upper and lower case:</p>
+<pre class="r"><code>&quot;DANIELLE navarro&quot; %&gt;% str_to_lower()
+&quot;DANIELLE navarro&quot; %&gt;% str_to_upper()
+&quot;DANIELLE navarro&quot; %&gt;% str_to_title()</code></pre>
+<pre><code>## [1] &quot;danielle navarro&quot;
+## [1] &quot;DANIELLE NAVARRO&quot;
+## [1] &quot;Danielle Navarro&quot;</code></pre>
+<p>Note that these are also locale sensitive: the precise mappings that determine what counts as upper and lower case aren’t the same in different languages.</p>
 </div>
-<div id="pattern-matching-tasks" class="section level2">
-<h2><span class="header-section-number">17.12</span> Pattern matching tasks</h2>
-<p>Okay, pattern matching time. My nightmares about <code>grep</code> have mostly settled down in my old age, and it’s refreshing to read something pertaining to regular expressions without bursting into tears! And I really like the way the pattern matching functions are organised in <code>stringr</code>. We have functions that specify <em>tasks</em>.</p>
-<p>For the sake of helping my own learning, I’ll type out what they do:</p>
+<div id="pattern-matching" class="section level2">
+<h2><span class="header-section-number">17.12</span> Pattern matching</h2>
+<p>Many text processing tasks require us to solve <em>pattern matching</em> problems. This might be something simple like finding every instance of the word <code>&quot;hello&quot;</code> or something more complicated like extracting every email address from a messy web page. The approach taken in <strong>stringr</strong> is to make a conceptual distinction between functions that allow you to perform <em>tasks</em>, and functions that specify pattern matching <em>engines</em>.</p>
+<div id="tasks" class="section level3">
+<h3><span class="header-section-number">17.12.1</span> Tasks</h3>
+<p>There are many different tasks that you can solve using pattern matching methods and as a result there are many different pattern matching functions. This isn’t a complete listing of the functions in <strong>stringr</strong> that you can use for this, but it covers most of the main ones:</p>
 <ul>
-<li><code>str_detect</code> finds all strings that match the pattern and returns a logical vector indicating whether they match</li>
-<li><code>str_subset</code> is similar, but it returns the subset of matching strings</li>
-<li><code>str_count</code> returns a numeric vector containing the <em>number</em> of times each string matches the pattern</li>
-<li><code>str_locate</code> returns the positions within the string of the first match, and <code>str_locate_all</code> returns the positions of all matches string</li>
-<li><code>str_extract</code> returns the matches themselves (first match within a string) and <code>str_extract_all</code> returns all of the matches.</li>
-<li><code>str_match</code> and <code>str_match_all</code> are similar, but they return the matches split by the groups. (see the vignette for the examples!)</li>
-<li><code>str_replace</code> and <code>str_replace_all</code> allow you to manipulate the matches, very much the same way that <code>sub</code> and <code>gsub</code> do.</li>
-<li><code>str_split</code> breaks a string by a separating character; and there’s also the <code>str_split_fixed</code> function that breaks it into a fixed number of chunks.</li>
+<li><code>str_split</code> breaks a string by a separating character</li>
+<li><code>str_count</code> counts the number of times a string matches a pattern</li>
+<li><code>str_detect</code> and <code>str_subset</code> finds strings that match a pattern</li>
+<li><code>str_locate</code> finds the position of the first pattern match in a string</li>
+<li><code>str_locate_all</code> finds the positions of all matches</li>
+<li><code>str_extract</code> returns the first match in a string (see also <code>str_match</code>)</li>
+<li><code>str_extract_all</code> returns all matches in a string (see also <code>str_match_all</code>)</li>
+<li><code>str_remove</code> deletes the first part of a string that matches a pattern</li>
+<li><code>str_remove_all</code> deletes all parts of a string that match a pattern</li>
+<li><code>str_replace</code> and <code>str_replace_all</code> allow you to make substitutions</li>
 </ul>
-<p>Okay, a lot of that feels very familiar, and it’ll probably take a bit of getting used to, but I like the overall structure here. I think after a bit of playing it will be really natural.</p>
+<p>I’ll go into a little more detail on these shortly.</p>
 </div>
-<div id="pattern-matching-engines" class="section level2">
-<h2><span class="header-section-number">17.13</span> Pattern matching engines</h2>
+<div id="engines" class="section level3">
+<h3><span class="header-section-number">17.12.2</span> Engines</h3>
 <p>The thing I really like, though, is the fact that the <em>engine</em> that defines what counts as a pattern is broken up into convenience functions:</p>
 <ul>
-<li>A <code>fixed</code> pattern matches the exact pattern (sequence of bytes)</li>
-<li>A <code>coll</code> pattern is a little more flexible, and recognises that the same character (in human reading terms) can be represented in different ways, which is useful if you’re using non-English characters</li>
-<li>A <code>boundary</code> pattern can match the breaks between words, lines, characters, or sentences. Where by convention <code>&quot;&quot;</code> is treated as meaning <code>boundary(&quot;character&quot;)</code></li>
-<li>A <code>regex</code> (the default) is a regular expression</li>
+<li>A <code>fixed</code> pattern is the simplest type: it matches an exact pattern</li>
+<li>A <code>coll</code> pattern is similar, but recognises that the same character can be represented in different ways (especially useful if you’re using non-English characters)</li>
+<li>A <code>boundary</code> pattern can match the breaks between words, lines, characters, or sentences. By convention <code>&quot;&quot;</code> is used as shorthand for <code>boundary(&quot;character&quot;)</code></li>
+<li>A <code>regex</code> (the default throughout <strong>stringr</strong>) is a regular expression</li>
 </ul>
-<p>That feels much cleaner than what I’m used to.</p>
+<p>I’ll start out giving an example that uses <code>boundary</code>, but for the most part I’ll use <code>fixed</code> expressions. I’ll leave regular expressions for the very end - they’re easily the most powerful tool but also the most complicated.</p>
 </div>
-<div id="trying-out-the-pattern-matching" class="section level2">
-<h2><span class="header-section-number">17.14</span> Trying out the pattern matching?</h2>
-<p>Okay so let’s see if I understand this. Suppose I want to take the start of <em>Pride and Prejudice</em>, as per the <code>ppstart</code> string, and split it up by word, character, or sentence:</p>
-<pre class="r"><code>str_split(string = ppstart, pattern = boundary(&quot;word&quot;))
-str_split(string = ppstart, pattern = boundary(&quot;character&quot;))
-str_split(string = ppstart, pattern = boundary(&quot;sentence&quot;))</code></pre>
+</div>
+<div id="splitting-strings" class="section level2">
+<h2><span class="header-section-number">17.13</span> Splitting strings</h2>
+<p>To give a sense of how we might want to use <code>str_split()</code> to break up strings, let suppose I want to take the start of <em>Pride and Prejudice</em> and split it up by word, character, or sentence. First, I’ll need to define it:</p>
+<pre class="r"><code>truth &lt;- &quot;It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered the rightful property of some one or other of their daughters.&quot;</code></pre>
+<p>Now, if I want to break this up, the <em>task</em> I need to solve is governed by the <code>str_split()</code> function, but the three goals I’ve set myself all relate to a <code>boundary()</code> pattern of some kind, so that’s the <em>engine</em> I’ll use. So the commands I need here would be:</p>
+<pre class="r"><code>truth %&gt;% str_split(pattern = boundary(&quot;word&quot;))
+truth %&gt;% str_split(pattern = boundary(&quot;character&quot;))
+truth %&gt;% str_split(pattern = boundary(&quot;sentence&quot;))</code></pre>
 <pre><code>## [[1]]
-##  [1] &quot;Pride&quot;        &quot;and&quot;          &quot;Prejudice&quot;    &quot;by&quot;          
-##  [5] &quot;Jane&quot;         &quot;Austen&quot;       &quot;It&quot;           &quot;is&quot;          
-##  [9] &quot;a&quot;            &quot;truth&quot;        &quot;universally&quot;  &quot;acknowledged&quot;
-## [13] &quot;that&quot;         &quot;a&quot;            &quot;single&quot;       &quot;man&quot;         
-## [17] &quot;in&quot;           &quot;possession&quot;   &quot;of&quot;           &quot;a&quot;           
-## [21] &quot;good&quot;         &quot;fortune&quot;      &quot;must&quot;         &quot;be&quot;          
-## [25] &quot;in&quot;           &quot;want&quot;         &quot;of&quot;           &quot;a&quot;           
-## [29] &quot;wife&quot;        
+##  [1] &quot;It&quot;            &quot;is&quot;            &quot;a&quot;             &quot;truth&quot;        
+##  [5] &quot;universally&quot;   &quot;acknowledged&quot;  &quot;that&quot;          &quot;a&quot;            
+##  [9] &quot;single&quot;        &quot;man&quot;           &quot;in&quot;            &quot;possession&quot;   
+## [13] &quot;of&quot;            &quot;a&quot;             &quot;good&quot;          &quot;fortune&quot;      
+## [17] &quot;must&quot;          &quot;be&quot;            &quot;in&quot;            &quot;want&quot;         
+## [21] &quot;of&quot;            &quot;a&quot;             &quot;wife&quot;          &quot;However&quot;      
+## [25] &quot;little&quot;        &quot;known&quot;         &quot;the&quot;           &quot;feelings&quot;     
+## [29] &quot;or&quot;            &quot;views&quot;         &quot;of&quot;            &quot;such&quot;         
+## [33] &quot;a&quot;             &quot;man&quot;           &quot;may&quot;           &quot;be&quot;           
+## [37] &quot;on&quot;            &quot;his&quot;           &quot;first&quot;         &quot;entering&quot;     
+## [41] &quot;a&quot;             &quot;neighbourhood&quot; &quot;this&quot;          &quot;truth&quot;        
+## [45] &quot;is&quot;            &quot;so&quot;            &quot;well&quot;          &quot;fixed&quot;        
+## [49] &quot;in&quot;            &quot;the&quot;           &quot;minds&quot;         &quot;of&quot;           
+## [53] &quot;the&quot;           &quot;surrounding&quot;   &quot;families&quot;      &quot;that&quot;         
+## [57] &quot;he&quot;            &quot;is&quot;            &quot;considered&quot;    &quot;the&quot;          
+## [61] &quot;rightful&quot;      &quot;property&quot;      &quot;of&quot;            &quot;some&quot;         
+## [65] &quot;one&quot;           &quot;or&quot;            &quot;other&quot;         &quot;of&quot;           
+## [69] &quot;their&quot;         &quot;daughters&quot;    
 ## 
 ## [[1]]
-##   [1] &quot;P&quot; &quot;r&quot; &quot;i&quot; &quot;d&quot; &quot;e&quot; &quot; &quot; &quot;a&quot; &quot;n&quot; &quot;d&quot; &quot; &quot; &quot;P&quot; &quot;r&quot; &quot;e&quot; &quot;j&quot; &quot;u&quot; &quot;d&quot; &quot;i&quot;
-##  [18] &quot;c&quot; &quot;e&quot; &quot; &quot; &quot;b&quot; &quot;y&quot; &quot; &quot; &quot;J&quot; &quot;a&quot; &quot;n&quot; &quot;e&quot; &quot; &quot; &quot;A&quot; &quot;u&quot; &quot;s&quot; &quot;t&quot; &quot;e&quot; &quot;n&quot;
-##  [35] &quot;.&quot; &quot; &quot; &quot;I&quot; &quot;t&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;t&quot; &quot;r&quot; &quot;u&quot; &quot;t&quot; &quot;h&quot; &quot; &quot; &quot;u&quot;
-##  [52] &quot;n&quot; &quot;i&quot; &quot;v&quot; &quot;e&quot; &quot;r&quot; &quot;s&quot; &quot;a&quot; &quot;l&quot; &quot;l&quot; &quot;y&quot; &quot; &quot; &quot;a&quot; &quot;c&quot; &quot;k&quot; &quot;n&quot; &quot;o&quot; &quot;w&quot;
-##  [69] &quot;l&quot; &quot;e&quot; &quot;d&quot; &quot;g&quot; &quot;e&quot; &quot;d&quot; &quot;,&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;a&quot; &quot;t&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;s&quot; &quot;i&quot;
-##  [86] &quot;n&quot; &quot;g&quot; &quot;l&quot; &quot;e&quot; &quot; &quot; &quot;m&quot; &quot;a&quot; &quot;n&quot; &quot; &quot; &quot;i&quot; &quot;n&quot; &quot; &quot; &quot;p&quot; &quot;o&quot; &quot;s&quot; &quot;s&quot; &quot;e&quot;
-## [103] &quot;s&quot; &quot;s&quot; &quot;i&quot; &quot;o&quot; &quot;n&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;g&quot; &quot;o&quot; &quot;o&quot; &quot;d&quot; &quot; &quot; &quot;f&quot;
-## [120] &quot;o&quot; &quot;r&quot; &quot;t&quot; &quot;u&quot; &quot;n&quot; &quot;e&quot; &quot;,&quot; &quot; &quot; &quot;m&quot; &quot;u&quot; &quot;s&quot; &quot;t&quot; &quot; &quot; &quot;b&quot; &quot;e&quot; &quot; &quot; &quot;i&quot;
-## [137] &quot;n&quot; &quot; &quot; &quot;w&quot; &quot;a&quot; &quot;n&quot; &quot;t&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;w&quot; &quot;i&quot; &quot;f&quot; &quot;e&quot; &quot;.&quot;
+##   [1] &quot;I&quot; &quot;t&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;t&quot; &quot;r&quot; &quot;u&quot; &quot;t&quot; &quot;h&quot; &quot; &quot; &quot;u&quot; &quot;n&quot; &quot;i&quot;
+##  [18] &quot;v&quot; &quot;e&quot; &quot;r&quot; &quot;s&quot; &quot;a&quot; &quot;l&quot; &quot;l&quot; &quot;y&quot; &quot; &quot; &quot;a&quot; &quot;c&quot; &quot;k&quot; &quot;n&quot; &quot;o&quot; &quot;w&quot; &quot;l&quot; &quot;e&quot;
+##  [35] &quot;d&quot; &quot;g&quot; &quot;e&quot; &quot;d&quot; &quot;,&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;a&quot; &quot;t&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;s&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot;
+##  [52] &quot;l&quot; &quot;e&quot; &quot; &quot; &quot;m&quot; &quot;a&quot; &quot;n&quot; &quot; &quot; &quot;i&quot; &quot;n&quot; &quot; &quot; &quot;p&quot; &quot;o&quot; &quot;s&quot; &quot;s&quot; &quot;e&quot; &quot;s&quot; &quot;s&quot;
+##  [69] &quot;i&quot; &quot;o&quot; &quot;n&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;g&quot; &quot;o&quot; &quot;o&quot; &quot;d&quot; &quot; &quot; &quot;f&quot; &quot;o&quot; &quot;r&quot;
+##  [86] &quot;t&quot; &quot;u&quot; &quot;n&quot; &quot;e&quot; &quot;,&quot; &quot; &quot; &quot;m&quot; &quot;u&quot; &quot;s&quot; &quot;t&quot; &quot; &quot; &quot;b&quot; &quot;e&quot; &quot; &quot; &quot;i&quot; &quot;n&quot; &quot; &quot;
+## [103] &quot;w&quot; &quot;a&quot; &quot;n&quot; &quot;t&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;w&quot; &quot;i&quot; &quot;f&quot; &quot;e&quot; &quot;.&quot; &quot; &quot; &quot;H&quot;
+## [120] &quot;o&quot; &quot;w&quot; &quot;e&quot; &quot;v&quot; &quot;e&quot; &quot;r&quot; &quot; &quot; &quot;l&quot; &quot;i&quot; &quot;t&quot; &quot;t&quot; &quot;l&quot; &quot;e&quot; &quot; &quot; &quot;k&quot; &quot;n&quot; &quot;o&quot;
+## [137] &quot;w&quot; &quot;n&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;f&quot; &quot;e&quot; &quot;e&quot; &quot;l&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot; &quot;s&quot; &quot; &quot; &quot;o&quot;
+## [154] &quot;r&quot; &quot; &quot; &quot;v&quot; &quot;i&quot; &quot;e&quot; &quot;w&quot; &quot;s&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;s&quot; &quot;u&quot; &quot;c&quot; &quot;h&quot; &quot; &quot; &quot;a&quot;
+## [171] &quot; &quot; &quot;m&quot; &quot;a&quot; &quot;n&quot; &quot; &quot; &quot;m&quot; &quot;a&quot; &quot;y&quot; &quot; &quot; &quot;b&quot; &quot;e&quot; &quot; &quot; &quot;o&quot; &quot;n&quot; &quot; &quot; &quot;h&quot; &quot;i&quot;
+## [188] &quot;s&quot; &quot; &quot; &quot;f&quot; &quot;i&quot; &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot; &quot; &quot;e&quot; &quot;n&quot; &quot;t&quot; &quot;e&quot; &quot;r&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot; &quot; &quot;
+## [205] &quot;a&quot; &quot; &quot; &quot;n&quot; &quot;e&quot; &quot;i&quot; &quot;g&quot; &quot;h&quot; &quot;b&quot; &quot;o&quot; &quot;u&quot; &quot;r&quot; &quot;h&quot; &quot;o&quot; &quot;o&quot; &quot;d&quot; &quot;,&quot; &quot; &quot;
+## [222] &quot;t&quot; &quot;h&quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;t&quot; &quot;r&quot; &quot;u&quot; &quot;t&quot; &quot;h&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;s&quot; &quot;o&quot; &quot; &quot;
+## [239] &quot;w&quot; &quot;e&quot; &quot;l&quot; &quot;l&quot; &quot; &quot; &quot;f&quot; &quot;i&quot; &quot;x&quot; &quot;e&quot; &quot;d&quot; &quot; &quot; &quot;i&quot; &quot;n&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot;
+## [256] &quot; &quot; &quot;m&quot; &quot;i&quot; &quot;n&quot; &quot;d&quot; &quot;s&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;s&quot; &quot;u&quot; &quot;r&quot;
+## [273] &quot;r&quot; &quot;o&quot; &quot;u&quot; &quot;n&quot; &quot;d&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot; &quot; &quot; &quot;f&quot; &quot;a&quot; &quot;m&quot; &quot;i&quot; &quot;l&quot; &quot;i&quot; &quot;e&quot; &quot;s&quot;
+## [290] &quot;,&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;a&quot; &quot;t&quot; &quot; &quot; &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;c&quot; &quot;o&quot; &quot;n&quot; &quot;s&quot;
+## [307] &quot;i&quot; &quot;d&quot; &quot;e&quot; &quot;r&quot; &quot;e&quot; &quot;d&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;r&quot; &quot;i&quot; &quot;g&quot; &quot;h&quot; &quot;t&quot; &quot;f&quot;
+## [324] &quot;u&quot; &quot;l&quot; &quot; &quot; &quot;p&quot; &quot;r&quot; &quot;o&quot; &quot;p&quot; &quot;e&quot; &quot;r&quot; &quot;t&quot; &quot;y&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;s&quot; &quot;o&quot;
+## [341] &quot;m&quot; &quot;e&quot; &quot; &quot; &quot;o&quot; &quot;n&quot; &quot;e&quot; &quot; &quot; &quot;o&quot; &quot;r&quot; &quot; &quot; &quot;o&quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot;r&quot; &quot; &quot; &quot;o&quot;
+## [358] &quot;f&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot;i&quot; &quot;r&quot; &quot; &quot; &quot;d&quot; &quot;a&quot; &quot;u&quot; &quot;g&quot; &quot;h&quot; &quot;t&quot; &quot;e&quot; &quot;r&quot; &quot;s&quot;
+## [375] &quot;.&quot;
 ## 
 ## [[1]]
-## [1] &quot;Pride and Prejudice by Jane Austen. &quot;                                                                                 
-## [2] &quot;It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.&quot;</code></pre>
-<p>If I wanted to break it up by vowels, I could define a regular expression to do the job:</p>
-<pre class="r"><code>ppstart %&gt;%
-  str_split(pattern = regex(&quot;[aeiouAEIOU]&quot;)) %&gt;%
-  str_wrap(width = 80) %&gt;%
-  cat</code></pre>
-<pre><code>## Warning in stri_split_lines(str): argument is not an atomic vector;
-## coercing</code></pre>
-<pre><code>## c(&quot;Pr&quot;, &quot;d&quot;, &quot; &quot;, &quot;nd Pr&quot;, &quot;j&quot;, &quot;d&quot;, &quot;c&quot;, &quot; by J&quot;, &quot;n&quot;, &quot; &quot;, &quot;&quot;, &quot;st&quot;, &quot;n. &quot;,
-## &quot;t &quot;, &quot;s &quot;, &quot; tr&quot;, &quot;th &quot;, &quot;n&quot;, &quot;v&quot;, &quot;rs&quot;, &quot;lly &quot;, &quot;ckn&quot;, &quot;wl&quot;, &quot;dg&quot;, &quot;d, th&quot;, &quot;t
-## &quot;, &quot; s&quot;, &quot;ngl&quot;, &quot; m&quot;, &quot;n &quot;, &quot;n p&quot;, &quot;ss&quot;, &quot;ss&quot;, &quot;&quot;, &quot;n &quot;, &quot;f &quot;, &quot; g&quot;, &quot;&quot;, &quot;d f&quot;,
-## &quot;rt&quot;, &quot;n&quot;, &quot;, m&quot;, &quot;st b&quot;, &quot; &quot;, &quot;n w&quot;, &quot;nt &quot;, &quot;f &quot;, &quot; w&quot;, &quot;f&quot;, &quot;.&quot;)</code></pre>
-<p>where the calls to <code>str_wrap</code> and <code>cat</code> are there solely to make the output fit on the blog page, and the call to <code>regex</code> is redundant since the <code>stringr</code> package assumes by default that the pattern is a regular expression.</p>
-<p>If I wanted to disemvowel Jane Austen, it looks like I can use <code>str_remove</code> as a handy alias for <code>str_replace</code> with <code>replace = &quot;&quot;</code>. If I want to get rid of all the vowels rather than just one…</p>
-<pre class="r"><code>ppstart %&gt;%
-  str_remove_all(pattern = &quot;[aeiouAEIOU]&quot;) %&gt;%
-  str_squish %&gt;%
-  str_wrap(width = 80) %&gt;%
-  cat</code></pre>
-<pre><code>## Prd nd Prjdc by Jn stn. t s trth nvrslly cknwldgd, tht sngl mn n pssssn f gd
-## frtn, mst b n wnt f wf.</code></pre>
+## [1] &quot;It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. &quot;                                                                                                                                           
+## [2] &quot;However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered the rightful property of some one or other of their daughters.&quot;</code></pre>
+</div>
+<div id="count-detect-subset" class="section level2">
+<h2><span class="header-section-number">17.14</span> Count, detect, subset</h2>
+<p>Suppose I would like to look at the presence of the string <code>&quot;ni&quot;</code> within each of the <code>input</code> words. It’s a specific piece of text, so we’ll use <code>fixed(&quot;ni&quot;)</code> to specify the pattern. There are a few different tasks we might want to complete. We could count the <em>number</em> of times <code>&quot;ni&quot;</code> appears in every word (a job for <code>str_count</code>), we could ask <em>whether</em> the string <code>&quot;ni&quot;</code> appears in each word (a job for <code>str_detect</code>), or we could ask <em>which</em> of the words contain <code>&quot;ni&quot;</code>. That leads to the following commands:</p>
+<pre class="r"><code>input %&gt;% str_count(pattern = fixed(&quot;ni&quot;))</code></pre>
+<pre><code>##  [1] 1 0 0 1 1 0 0 1 0 1 0 0 0 1 2 0 1 0 0 0 0 0 1 0 0 1 1</code></pre>
+<pre class="r"><code>input %&gt;% str_detect(pattern = fixed(&quot;ni&quot;))</code></pre>
+<pre><code>##  [1]  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE
+## [12] FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE
+## [23]  TRUE FALSE FALSE  TRUE  TRUE</code></pre>
+<pre class="r"><code>input %&gt;% str_subset(pattern = fixed(&quot;ni&quot;))</code></pre>
+<pre><code>##  [1] &quot;kinimapi&quot; &quot;miwiniku&quot; &quot;pinipi&quot;   &quot;nipi&quot;     &quot;nihepi&quot;   &quot;miniki&quot;  
+##  [7] &quot;gepinini&quot; &quot;nipikuge&quot; &quot;kunige&quot;   &quot;winige&quot;   &quot;kinimage&quot;</code></pre>
+</div>
+<div id="locate" class="section level2">
+<h2><span class="header-section-number">17.15</span> Locate</h2>
+<pre class="r"><code>&quot;gepinini&quot; %&gt;% str_locate(fixed(&quot;ni&quot;))</code></pre>
+<pre><code>##      start end
+## [1,]     5   6</code></pre>
+<pre class="r"><code>&quot;gepinini&quot; %&gt;% str_locate_all(fixed(&quot;ni&quot;))</code></pre>
+<pre><code>## [[1]]
+##      start end
+## [1,]     5   6
+## [2,]     7   8</code></pre>
+</div>
+<div id="extract-remove-replace" class="section level2">
+<h2><span class="header-section-number">17.16</span> Extract, remove, replace</h2>
+<p>The last group of pattern matching functions I want talk about are those that <em>extract</em>, <em>remove</em> or <em>replace</em> parts of strings that match a pattern. To get the most out of these functions, it’s useful to switch to <em>regular expressions</em> to define patterns. Regular expressions are complicated things and I won’t even try to do anything but the most basic tasks with the. To start with, consider this:</p>
+<pre class="r"><code>vowels &lt;- regex(&quot;[aeiouAEIOU]&quot;)</code></pre>
+<p>Setting aside the details of how it works, you might guess that this is an expression that matches vowels. So if we take the opening passage to <em>Pride and Prejudice</em> and do this</p>
+<pre class="r"><code>truth %&gt;% str_remove_all(pattern = vowels) </code></pre>
+<pre><code>## [1] &quot;t s  trth nvrslly cknwldgd, tht  sngl mn n pssssn f  gd frtn, mst b n wnt f  wf. Hwvr lttl knwn th flngs r vws f sch  mn my b n hs frst ntrng  nghbrhd, ths trth s s wll fxd n th mnds f th srrndng fmls, tht h s cnsdrd th rghtfl prprty f sm n r thr f thr dghtrs.&quot;</code></pre>
+<p>we end up with output that removes all the vowels. Alternatively, we could replace all the vowels with periods using this command</p>
+<pre class="r"><code>truth %&gt;% str_replace_all(pattern = vowels, replacement = fixed(&quot;.&quot;)) </code></pre>
+<pre><code>## [1] &quot;.t .s . tr.th .n.v.rs.lly .ckn.wl.dg.d, th.t . s.ngl. m.n .n p.ss.ss..n .f . g..d f.rt.n., m.st b. .n w.nt .f . w.f.. H.w.v.r l.ttl. kn.wn th. f..l.ngs .r v..ws .f s.ch . m.n m.y b. .n h.s f.rst .nt.r.ng . n..ghb..rh..d, th.s tr.th .s s. w.ll f.x.d .n th. m.nds .f th. s.rr..nd.ng f.m.l..s, th.t h. .s c.ns.d.r.d th. r.ghtf.l pr.p.rty .f s.m. .n. .r .th.r .f th..r d..ght.rs.&quot;</code></pre>
+<p>Finally, we could use a command like this to extract all the vowels from <code>truth</code>:</p>
+<pre class="r"><code>truth %&gt;% str_extract_all(pattern = vowels) </code></pre>
+<pre><code>## [[1]]
+##   [1] &quot;I&quot; &quot;i&quot; &quot;a&quot; &quot;u&quot; &quot;u&quot; &quot;i&quot; &quot;e&quot; &quot;a&quot; &quot;a&quot; &quot;o&quot; &quot;e&quot; &quot;e&quot; &quot;a&quot; &quot;a&quot; &quot;i&quot; &quot;e&quot; &quot;a&quot;
+##  [18] &quot;i&quot; &quot;o&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;o&quot; &quot;a&quot; &quot;o&quot; &quot;o&quot; &quot;o&quot; &quot;u&quot; &quot;e&quot; &quot;u&quot; &quot;e&quot; &quot;i&quot; &quot;a&quot; &quot;o&quot;
+##  [35] &quot;a&quot; &quot;i&quot; &quot;e&quot; &quot;o&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot; &quot;e&quot; &quot;o&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;i&quot; &quot;e&quot; &quot;o&quot;
+##  [52] &quot;u&quot; &quot;a&quot; &quot;a&quot; &quot;a&quot; &quot;e&quot; &quot;o&quot; &quot;i&quot; &quot;i&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot; &quot;a&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;u&quot; &quot;o&quot;
+##  [69] &quot;o&quot; &quot;i&quot; &quot;u&quot; &quot;i&quot; &quot;o&quot; &quot;e&quot; &quot;i&quot; &quot;e&quot; &quot;i&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;e&quot; &quot;u&quot; &quot;o&quot; &quot;u&quot; &quot;i&quot;
+##  [86] &quot;a&quot; &quot;i&quot; &quot;i&quot; &quot;e&quot; &quot;a&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;i&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot; &quot;u&quot; &quot;o&quot; &quot;e&quot; &quot;o&quot;
+## [103] &quot;o&quot; &quot;e&quot; &quot;o&quot; &quot;e&quot; &quot;o&quot; &quot;o&quot; &quot;e&quot; &quot;o&quot; &quot;e&quot; &quot;i&quot; &quot;a&quot; &quot;u&quot; &quot;e&quot;</code></pre>
 </div>
 <div id="regular-expressions" class="section level2">
-<h2><span class="header-section-number">17.15</span> Regular expressions</h2>
+<h2><span class="header-section-number">17.17</span> Regular expressions</h2>
+<ul>
+<li>quick intro here</li>
+</ul>
 </div>
-<div id="playing-with-pride-and-prejudice" class="section level2">
-<h2><span class="header-section-number">17.16</span> Playing with Pride and Prejudice</h2>
+<div id="an-example" class="section level2">
+<h2><span class="header-section-number">17.18</span> An example</h2>
 <p>Okay, so now I should be able to do neat things with the whole novel. Let’s start by gluing the <code>pp</code> vector into one long string, since the line breaks don’t seem to appear at any interesting locations</p>
-<pre class="r"><code>library(glue)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;glue&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     collapse</code></pre>
-<pre class="r"><code>pp %&lt;&gt;%
-  glue_collapse(sep=&quot; &quot;) %&gt;%
-  str_squish
-pp %&gt;%
-  str_sub(start = 1, end = 500) %&gt;%
-  str_wrap(width = 80) %&gt;%
-  cat</code></pre>
-<pre><code>## PRIDE AND PREJUDICE By Jane Austen Chapter 1 It is a truth universally
-## acknowledged, that a single man in possession of a good fortune, must be in want
-## of a wife. However little known the feelings or views of such a man may be on
-## his first entering a neighbourhood, this truth is so well fixed in the minds of
-## the surrounding families, that he is considered the rightful property of some
-## one or other of their daughters. &quot;My dear Mr. Bennet,&quot; said his lady to him one
-## day, &quot;have you heard that Nether</code></pre>
+<pre class="r"><code>pp &lt;- janeaustenr::prideprejudice %&gt;%
+  str_flatten(&quot; &quot;) %&gt;%
+  str_squish</code></pre>
 <p>Okay, so now I want to give myself something to <em>do</em> with this. I’m tired and sick and I can’t think of anything clever, so I’ll just try and locate every appearance of the words <code>&quot;Elizabeth&quot;</code>, <code>&quot;Darcy&quot;</code> and <code>&quot;Wickham&quot;</code> in the text:</p>
-<pre class="r"><code>elizabeth &lt;- str_locate_all(pp, fixed(&quot;Elizabeth&quot;))[[1]][,1]
-darcy &lt;- str_locate_all(pp, fixed(&quot;Darcy&quot;))[[1]][,1]
-wickham &lt;- str_locate_all(pp, fixed(&quot;Wickham&quot;))[[1]][,1]</code></pre>
-<p>And now I will defy all sense (and offend my own sensibilities) by drawing a graph of this using some extraordinarily unsatisfying code:</p>
-<pre class="r"><code>plot(elizabeth, 1:length(elizabeth), xlab=&quot;Position&quot;,
-  ylab=&quot;Number of Appearances&quot;, xlim=c(0,str_length(pp)), lwd=2,
-  col=&quot;red&quot;, type=&quot;s&quot;)
-lines(darcy, 1:length(darcy), col=&quot;blue&quot;, lwd=2, type=&quot;s&quot;)
-lines(wickham, 1:length(wickham), col=&quot;green&quot;, lwd=2, type=&quot;s&quot;)
-legend(x = &quot;topleft&quot;, legend = c(&quot;Elizabeth&quot;, &quot;Darcy&quot;, &quot;Wickham&quot;),
-  col = c(&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;), lwd=2)</code></pre>
-<p><img src="working-with-text_files/figure-html/unnamed-chunk-24-1.png" width="456" style="display: block; margin: auto;" /> No surprises there: <code>Elizabeth</code> occurs most frequently, and at the most uniform rate. At the start of the book <code>Darcy</code> appears just as often, but then there are sections of the book that don’t concern him and the function flatlines for a while. <code>Wickham</code> is absent more often than not.</p>
+<pre class="r"><code>characters &lt;- regex(&quot;Elizabeth|Darcy|Wickham&quot;)
+x &lt;- pp %&gt;% str_extract_all(characters) 
+y &lt;- pp %&gt;% str_locate_all(characters) 
+df &lt;- tibble(character = x[[1]], location = y[[1]][,1] / str_length(pp))
+df %&gt;% ggplot(aes(x = location)) +
+  facet_wrap(~ character) +
+  geom_histogram(bins = 5)</code></pre>
+<p><img src="working-with-text_files/figure-html/unnamed-chunk-26-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p>No surprises there: <code>Elizabeth</code> occurs most frequently, and at the most uniform rate. At the start of the book <code>Darcy</code> appears just as often, but then there are sections of the book that don’t concern him and the function flatlines for a while. <code>Wickham</code> is absent more often than not.</p>
 </div>
 <div id="more-resources" class="section level2">
-<h2><span class="header-section-number">17.17</span> More resources</h2>
+<h2><span class="header-section-number">17.19</span> More resources</h2>
 <ul>
-<li>The <a href="https://stringr.tidyverse.org/">stringr</a> package homepage</li>
+<li>The <a href="https://stringr.tidyverse.org/">stringr</a> package</li>
+<li>The glue package</li>
 <li><a href="https://www.tidytextmining.com/">Text Mining with R</a> by Julia Silge and David Robinson</li>
 </ul>
 </div>

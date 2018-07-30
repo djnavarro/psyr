@@ -40,12 +40,13 @@ Sometimes your data set is quite text heavy. This can be for a lot of different 
 
 - `print` 
 - `cat`
+- escaping
 
 ## Getting started
 
 The data come from Experiment 1 in a [very cool paper](https://doi.org/10.1073/pnas.0707835105) by Simon Kirby, Hannah Cornish, and Kenny Smith. 
 
-```{r}
+```{r, message=FALSE}
 chains <- read_csv("./data/kirbyetal2008_exp1_wide.csv")
 chain_3 <- chains %>% 
   filter(version == "chain3") %>%
@@ -56,17 +57,7 @@ input <- chain_3$name_0
 output <- chain_3$name_10
 ```
 
-Excellent! I have a data set `r emo::ji("white_check_mark")` Next, I'll need a string manipulation package. **stringr** is loaded automatically with **tidyverse** so that's another `r emo::ji("white_check_mark")`. Time to get started! The easiest way to approach this is to take a look at the package documentation for **stringr**. As with most tidyverse packages it's clear and thorough, so a large part of what I'm doing here is providing an introduction to their work. To quote straight from the package [vignette](https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html)
-
->There are four main families of functions in stringr:
->
-> - Character manipulation: these functions allow you to manipulate individual characters within the strings in character vectors.
-> - Whitespace tools to add, remove, and manipulate whitespace.
-> - Locale sensitive operations whose operations will vary from locale to locale.
-> - Pattern matching functions. These recognise four engines of pattern description. The most common is regular expressions, but there are three other tools.
-
-In my experience, the first three of these are relatively straightforward and are sufficient to cover a wide range of applied problems. The *pattern maching* functions are a little more challenging, at least when regular expressions are involved, but even there you can achieve a lot with only a modest knowledge (which is lucky for me because regular expressions are painful)
-
+Excellent! I have a data set `r emo::ji("white_check_mark")` Next, I'll need a string manipulation package. **stringr** is loaded automatically with **tidyverse** so that's another `r emo::ji("white_check_mark")`. Time to get started! 
 
 ## Flatten strings
 
@@ -100,7 +91,7 @@ A feature of `str_sub` that sometimes comes in handy is that you can specify neg
 output %>% str_sub(start = -3, end = -1)
 ```
 
-## String duplication
+## Duplication
 
 I'm not sure why I would want it in this context, but we can duplicate strings using `str_dup()`
 
@@ -108,7 +99,7 @@ I'm not sure why I would want it in this context, but we can duplicate strings u
 output %>% str_dup(times = 3)
 ```
 
-## String truncation and padding
+## Truncation and padding
 
 Sometimes it is useful to ensure that every string has the same length. Again, this can be   quite useful when labelling data. For longer strings we might need to truncate it using `str_trunc()` and for shorter strings we might need to pad it with whitespace (or other characters) using `str_pad()`. To give a sense of this:
 
@@ -134,7 +125,7 @@ input %>%
   str_trunc(width = 7)
 ```
 
-## Removing white space
+## Removing whitespace
 
 A common problem when dealing with text is white space that appears in the wrong place. For example, suppose someone intended to type the words *tupim*, *tupin* and *poi* as part of the experiment but ended up with additional spaces, leading to this as the raw data:
 
@@ -150,7 +141,7 @@ raw %>% str_trim()
 raw %>% str_squish()
 ```
 
-## Wrapping a string
+## Wrapping strings
 
 ```{r}
 input %>% 
@@ -160,171 +151,159 @@ input %>%
 ```
 
 
+## Sorting strings
 
-## Locale sensitive functions
+There are a collection of functions that manipulate properties of text that vary from one language to the next. The order in which letters appear in the alphabet isn't always the same, for example. These functions all have a `locale` value that is set to `"en"` by default. 
 
-There are a collection of functions that manipulate properties of text that vary from one language to the next. So for instance
-
-- `str_to_upper`
-- `str_to_lower`
-- `str_to_title`
-- `str_order`
-- `str_sort`
-
-Okay, reading through the vignette further, the `str_to_upper`, `str_to_lower` and `str_to_title` functions do exactly what they say on the tin, but the package documentation is at pains to point out that they will give you different answers depending on where you are, as will sorting functions like `str_order` and `str_sort`. Makes perfect sense: alphabets and the ordering of characters within the alphabets vary from place to place, so it's really nice that these are locale-sensitive. Natural language is messy.
-
-
-
-
-
-
-
-
-## OLD
-
-- `str_pad`
-- `str_trim`
-- `str_wrap`
-- `str_squish`
-
-
-```{r}
-pp <- janeaustenr::prideprejudice
-titletext <- "dfdfgsesdfefasesdfsefsadfsefedå"
+```{r, results="hold"}
+letters %>% str_sort(locale = "en") %>% str_flatten()
+letters %>% str_sort(locale = "haw") %>% str_flatten()
 ```
 
+There is also a `str_order()` function that returns a numeric vector indicating the order in which the original input should be shuffled to produce a sorted output.
 
-... and we're back! The `str_pad` function adds whitespace padding to ensure that the string reaches a particular length:
+
+## Changing case 
+
+For dealing with upper and lower case:
 
 ```{r, results='hold'}
-str_pad(string = titletext, width = 20)
-str_pad(string = titletext, width = 20, side = "right")
-str_pad(string = titletext, width = 20, side = "both")
-str_pad(string = titletext, width = 20, side = "both", pad = "-")
+"DANIELLE navarro" %>% str_to_lower()
+"DANIELLE navarro" %>% str_to_upper()
+"DANIELLE navarro" %>% str_to_title()
 ```
 
-Combining `str_pad` and `str_trunc` means that you can force strings to be exactly a desired length, but padding one and truncating the other. Similarly, you can use `str_trim` to remove padding from one or both sides. For me favourite of these functions, it's a toss up between
-(a) `str_squish`, which removes *all* excess white space, whether it be leading, middle or trailing...
-
-```{r}
-titletext <- "   Pride      and Prejudice
-
-
-             by Jane    Austen      "
-str_squish(titletext)
-```
-
-or (b) `str_wrap`, which tries to modify the white space to ensure that every line is approximately the same width:
-
-```{r}
-ppstart <- "Pride and Prejudice by Jane Austen. It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife."
-cat(str_wrap(string = ppstart, width = 20))
-```
-
-It even lets you specify the `indent` and `exdent` of the output string, so you can have margins!
+Note that these are also locale sensitive: the precise mappings that determine what counts as upper and lower case aren't the same in different languages.
 
 
 
-## Pattern matching tasks
 
-Okay, pattern matching time. My nightmares about `grep` have mostly settled down in my old age, and it's refreshing to read something pertaining to regular expressions without bursting into tears! And I really like the way the pattern matching functions are organised in `stringr`. We have functions that specify *tasks*.
 
-For the sake of helping my own learning, I'll type out what they do:
 
-- `str_detect` finds all strings that match the pattern and returns a logical vector indicating whether they match
-- `str_subset` is similar, but it returns the subset of matching strings
-- `str_count` returns a numeric vector containing the *number* of times each string matches the pattern
-- `str_locate` returns the positions within the string of the first match, and `str_locate_all` returns the positions of all matches string
-- `str_extract` returns the matches themselves (first match within a string) and `str_extract_all` returns all of the matches.
-- `str_match` and `str_match_all` are similar, but they return the matches split by the groups. (see the vignette for the examples!)
-- `str_replace` and `str_replace_all` allow you to manipulate the matches, very much the same way that `sub` and `gsub` do.
-- `str_split` breaks a string by a separating character; and there's also the `str_split_fixed` function that breaks it into a fixed number of chunks.
 
-Okay, a lot of that feels very familiar, and it'll probably take a bit of getting used to, but I like the overall structure here. I think after a bit of playing it will be really natural.
+## Pattern matching
 
-## Pattern matching engines
+Many text processing tasks require us to solve *pattern matching* problems. This might be something simple like finding every instance of the word `"hello"` or something more complicated like extracting every email address from a messy web page. The approach taken in **stringr** is to make a conceptual distinction between functions that allow you to perform *tasks*, and functions that specify pattern matching *engines*.
+
+### Tasks
+
+There are many different tasks that you can solve using pattern matching methods and as a result there are many different pattern matching functions. This isn't a complete listing of the functions in **stringr** that you can use for this, but it covers most of the main ones:
+
+- `str_split` breaks a string by a separating character
+- `str_count` counts the number of times a string matches a pattern 
+- `str_detect` and `str_subset` finds strings that match a pattern
+- `str_locate` finds the position of the first pattern match in a string
+- `str_locate_all` finds the positions of all matches
+- `str_extract` returns the first match in a string (see also `str_match`)
+- `str_extract_all` returns all matches in a string (see also `str_match_all`)
+- `str_remove` deletes the first part of a string that matches a pattern
+- `str_remove_all` deletes all parts of a string that match a pattern
+- `str_replace` and `str_replace_all` allow you to make substitutions 
+
+I'll go into a little more detail on these shortly.
+
+### Engines
 
 The thing I really like, though, is the fact that the *engine* that defines what counts as a pattern is broken up into convenience functions:
 
-- A `fixed` pattern matches the exact pattern (sequence of bytes)
-- A `coll` pattern is a little more flexible, and recognises that the same character (in human reading terms) can be represented in different ways, which is useful if you're using non-English characters
-- A `boundary` pattern can match the breaks between words, lines, characters, or sentences. Where by convention `""` is treated as meaning `boundary("character")`
-- A `regex` (the default) is a regular expression
+- A `fixed` pattern is the simplest type: it matches an exact pattern
+- A `coll` pattern is similar, but recognises that the same character can be represented in different ways (especially useful if you're using non-English characters)
+- A `boundary` pattern can match the breaks between words, lines, characters, or sentences. By convention `""` is used as shorthand for `boundary("character")`
+- A `regex` (the default throughout **stringr**) is a regular expression
 
-That feels much cleaner than what I'm used to.
+I'll start out giving an example that uses `boundary`, but for the most part I'll use `fixed` expressions. I'll leave regular expressions for the very end - they're easily the most powerful tool but also the most complicated.
 
-## Trying out the pattern matching?
+## Splitting strings
 
-Okay so let's see if I understand this. Suppose I want to take the start of *Pride and Prejudice*, as per the `ppstart` string, and split it up by word, character, or sentence:
+To give a sense of how we might want to use `str_split()` to break up strings, let suppose I want to take the start of *Pride and Prejudice* and split it up by word, character, or sentence. First, I'll need to define it:
+
+```{r}
+truth <- "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered the rightful property of some one or other of their daughters."
+```
+
+Now, if I want to break this up, the *task* I need to solve is governed by the `str_split()` function, but the three goals I've set myself all relate to a `boundary()` pattern of some kind, so that's the *engine* I'll use. So the commands I need here would be:
 
 ```{r,results='hold'}
-str_split(string = ppstart, pattern = boundary("word"))
-str_split(string = ppstart, pattern = boundary("character"))
-str_split(string = ppstart, pattern = boundary("sentence"))
+truth %>% str_split(pattern = boundary("word"))
+truth %>% str_split(pattern = boundary("character"))
+truth %>% str_split(pattern = boundary("sentence"))
 ```
 
-If I wanted to break it up by vowels, I could define a regular expression to do the job:
+## Count, detect, subset
+
+Suppose I would like to look at the presence of the string `"ni"` within each of the 
+`input` words. It's a specific piece of text, so we'll use `fixed("ni")` to specify the pattern. There are a few different tasks we might want to complete. We could count the *number* of times `"ni"` appears in every word (a job for `str_count`), we could ask *whether* the string `"ni"` appears in each word (a job for `str_detect`), or we could ask *which* of the words contain `"ni"`. That leads to the following commands: 
 
 ```{r}
-ppstart %>%
-  str_split(pattern = regex("[aeiouAEIOU]")) %>%
-  str_wrap(width = 80) %>%
-  cat
+input %>% str_count(pattern = fixed("ni"))
+input %>% str_detect(pattern = fixed("ni"))
+input %>% str_subset(pattern = fixed("ni"))
 ```
 
-where the calls to `str_wrap` and `cat` are there solely to make the output fit on the blog page, and the call to `regex` is redundant since the `stringr` package assumes by default that the pattern is a regular expression.
-
-If I wanted to disemvowel Jane Austen, it looks like I can use `str_remove` as a handy alias for `str_replace` with `replace = ""`. If I want to get rid of all the vowels rather than just one...
+## Locate
 
 ```{r}
-ppstart %>%
-  str_remove_all(pattern = "[aeiouAEIOU]") %>%
-  str_squish %>%
-  str_wrap(width = 80) %>%
-  cat
+"gepinini" %>% str_locate(fixed("ni"))
+"gepinini" %>% str_locate_all(fixed("ni"))
+```
+
+
+
+## Extract, remove, replace
+
+The last group of pattern matching functions I want talk about are those that *extract*, *remove* or *replace* parts of strings that match a pattern. To get the most out of these functions, it's useful to switch to *regular expressions* to define patterns. Regular expressions are complicated things and I won't even try to do anything but the most basic tasks with the. To start with, consider this:
+```{r}
+vowels <- regex("[aeiouAEIOU]")
+```
+Setting aside the details of how it works, you might guess that this is an expression that matches vowels. So if we take the opening passage to *Pride and Prejudice* and do this
+
+```{r}
+truth %>% str_remove_all(pattern = vowels) 
+```
+
+we end up with output that removes all the vowels. Alternatively, we could replace all the vowels with periods using this command
+
+```{r}
+truth %>% str_replace_all(pattern = vowels, replacement = fixed(".")) 
+```
+
+Finally, we could use a command like this to extract all the vowels from `truth`:
+
+```{r}
+truth %>% str_extract_all(pattern = vowels) 
 ```
 
 ## Regular expressions
 
+- quick intro here
 
-## Playing with Pride and Prejudice
+## An example
 
 Okay, so now I should be able to do neat things with the whole novel. Let's start by gluing the `pp` vector into one long string, since the line breaks don't seem to appear at any interesting locations
 
 ```{r}
-library(glue)
-pp %<>%
-  glue_collapse(sep=" ") %>%
+pp <- janeaustenr::prideprejudice %>%
+  str_flatten(" ") %>%
   str_squish
-pp %>%
-  str_sub(start = 1, end = 500) %>%
-  str_wrap(width = 80) %>%
-  cat
 ```
-
 
 Okay, so now I want to give myself something to *do* with this. I'm tired and sick and I can't think of anything clever, so I'll just try and locate every appearance of the words `"Elizabeth"`, `"Darcy"` and `"Wickham"` in the text:
 ```{r}
-elizabeth <- str_locate_all(pp, fixed("Elizabeth"))[[1]][,1]
-darcy <- str_locate_all(pp, fixed("Darcy"))[[1]][,1]
-wickham <- str_locate_all(pp, fixed("Wickham"))[[1]][,1]
+characters <- regex("Elizabeth|Darcy|Wickham")
+x <- pp %>% str_extract_all(characters) 
+y <- pp %>% str_locate_all(characters) 
+df <- tibble(character = x[[1]], location = y[[1]][,1] / str_length(pp))
+df %>% ggplot(aes(x = location)) +
+  facet_wrap(~ character) +
+  geom_histogram(bins = 5)
 ```
-And now I will defy all sense (and offend my own sensibilities) by drawing a graph of this using some extraordinarily unsatisfying code:
 
-```{r}
-plot(elizabeth, 1:length(elizabeth), xlab="Position",
-  ylab="Number of Appearances", xlim=c(0,str_length(pp)), lwd=2,
-  col="red", type="s")
-lines(darcy, 1:length(darcy), col="blue", lwd=2, type="s")
-lines(wickham, 1:length(wickham), col="green", lwd=2, type="s")
-legend(x = "topleft", legend = c("Elizabeth", "Darcy", "Wickham"),
-  col = c("red","blue","green"), lwd=2)
-```
 No surprises there: `Elizabeth` occurs most frequently, and at the most uniform rate. At the start of the book `Darcy` appears just as often, but then there are sections of the book that don't concern him and the function flatlines for a while. `Wickham` is absent more often than not.
 
 
 ## More resources
 
-- The [stringr](https://stringr.tidyverse.org/) package homepage
+- The [stringr](https://stringr.tidyverse.org/) package
+- The glue package
 - [Text Mining with R](https://www.tidytextmining.com/) by Julia Silge and David Robinson
 
