@@ -432,26 +432,45 @@ h3{
   line-height: 60px;
 }
 </style>
-<p>Yay! Now I have something nerdy to do that is fun … I will play around with the text of <em>Pride and Prejudice</em> while (finally!) taking a look at <code>stringr</code>. So, let’s do this! First, I’ll need one Jane Austen novel please!</p>
-<pre class="r"><code>pp &lt;- janeaustenr::prideprejudice
-pp[1:11]</code></pre>
-<pre><code>##  [1] &quot;PRIDE AND PREJUDICE&quot;                                                    
-##  [2] &quot;&quot;                                                                       
-##  [3] &quot;By Jane Austen&quot;                                                         
-##  [4] &quot;&quot;                                                                       
-##  [5] &quot;&quot;                                                                       
-##  [6] &quot;&quot;                                                                       
-##  [7] &quot;Chapter 1&quot;                                                              
-##  [8] &quot;&quot;                                                                       
-##  [9] &quot;&quot;                                                                       
-## [10] &quot;It is a truth universally acknowledged, that a single man in possession&quot;
-## [11] &quot;of a good fortune, must be in want of a wife.&quot;</code></pre>
-<p>Check ✅ Next, I’ll need one text manipulation package:</p>
-<pre class="r"><code>library(stringr)</code></pre>
-<p>That’s another check! ✅ ✅ Yay!!!!</p>
+<p>Sometimes your data set is quite text heavy. This can be for a lot of different reasons. Maybe the raw data are actually taken from text sources (e.g., newspaper articles), or maybe your data set contains a lot of free responses to survey questions. Or maybe you just need to reorganise some of the text used to describe nominal scale variables. Regardless of what the reason is, you’ll probably want to know a little bit about how to handle text in R. A few minor examples of this have appeared earlier in these notes (e.g., using <code>nchar()</code> to calculate the number of characters in a string). When I wrote <em>Learning Statistics with R</em> I included some notes on how to work with text using base R, but overall I’ve come to the view that the tidyverse approach provided via the <strong>stringr</strong> package is a little more coherent and less problematic for new users, so I’ll take that approach here.</p>
+<div id="preliminaries" class="section level2">
+<h2><span class="header-section-number">17.1</span> Preliminaries</h2>
+<ul>
+<li><code>print</code></li>
+<li><code>cat</code></li>
+</ul>
+</div>
 <div id="getting-started" class="section level2">
-<h2><span class="header-section-number">17.1</span> Getting started</h2>
-<p>I’m really happy upon looking at the documentation 📚. It’s really nicely structured. To quote straight from the package vignette:</p>
+<h2><span class="header-section-number">17.2</span> Getting started</h2>
+<p>The data come from Experiment 1 in a <a href="https://doi.org/10.1073/pnas.0707835105">very cool paper</a> by Simon Kirby, Hannah Cornish, and Kenny Smith.</p>
+<pre class="r"><code>chains &lt;- read_csv(&quot;./data/kirbyetal2008_exp1_wide.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre class="r"><code>chain_3 &lt;- chains %&gt;% 
+  filter(version == &quot;chain3&quot;) %&gt;%
+  select(color,shape,motion,starts_with(&quot;name&quot;)) 
+print(chain_3)</code></pre>
+<pre><code>## # A tibble: 27 x 14
+##    color shape motion name_0 name_1 name_2 name_3 name_4 name_5 name_6
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; 
+##  1 black circ… bounce kinim… kimei  hepini tuge   tupim  tupim  minku 
+##  2 blue  circ… bounce wikuki miwn   miniku tupim  tupim  tupim  miniku
+##  3 red   circ… bounce kikumi mihen… hepini tupim  tupim  tupim  miniku
+##  4 black squa… bounce miwin… pemini nige   miniku mihunu mihunu miniku
+##  5 blue  squa… bounce pinipi kupini tuge   tuge   tupim  tupim  tupin 
+##  6 red   squa… bounce kihem… pon    mihenu mihunu miniku tupim  tupim 
+##  7 black tria… bounce miwimi poi    poi    poi    poi    miniku miniku
+##  8 blue  tria… bounce nipi   mhip   mpo    tuge   miniku tupim  tupin 
+##  9 red   tria… bounce wige   kuwpi  tupim  miniku miniku miniku tupin 
+## 10 black circ… horiz… nihepi mip    nige   tuge   tuge   tuge   tuge  
+## # ... with 17 more rows, and 4 more variables: name_7 &lt;chr&gt;, name_8 &lt;chr&gt;,
+## #   name_9 &lt;chr&gt;, name_10 &lt;chr&gt;</code></pre>
+<pre class="r"><code>input &lt;- chain_3$name_0
+output &lt;- chain_3$name_10</code></pre>
+<p>Excellent! I have a data set ✅ Next, I’ll need a string manipulation package. <strong>stringr</strong> is loaded automatically with <strong>tidyverse</strong> so that’s another ✅. Time to get started! The easiest way to approach this is to take a look at the package documentation for <strong>stringr</strong>. As with most tidyverse packages it’s clear and thorough, so a large part of what I’m doing here is providing an introduction to their work. To quote straight from the package <a href="https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html">vignette</a></p>
 <blockquote>
 <p>There are four main families of functions in stringr:</p>
 <ul>
@@ -461,42 +480,126 @@ pp[1:11]</code></pre>
 <li>Pattern matching functions. These recognise four engines of pattern description. The most common is regular expressions, but there are three other tools.</li>
 </ul>
 </blockquote>
-<p>… that’s promising! I guess I’ll just follow the <a href="https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html">vignette</a> then 😸 and try out each category one at a time.</p>
+<p>In my experience, the first three of these are relatively straightforward and are sufficient to cover a wide range of applied problems. The <em>pattern maching</em> functions are a little more challenging, at least when regular expressions are involved, but even there you can achieve a lot with only a modest knowledge (which is lucky for me because regular expressions are painful)</p>
 </div>
-<div id="character-manipulation" class="section level2">
-<h2><span class="header-section-number">17.2</span> Character manipulation</h2>
-<p>I feel like there’s an obvious joke to be made here about manipulative Jane Austen characters, but nothing is coming to mind, a sure sign that the viral infection has crossed the blood-brain barrier and I’m losing my mind. Neverthelesss…</p>
-<p>As one might expect, the <code>str_length</code> function returns the length of a string, much like <code>nchar</code> in the base packages:</p>
-<pre class="r"><code>titletext &lt;- c(&quot;Pride and Prejudice&quot;, &quot;by Jane Austen&quot;)
-str_length(string = titletext)</code></pre>
-<pre><code>## [1] 19 14</code></pre>
-<p>The <code>str_sub</code> function is used to extract substrings from the string, and replace them with new values. In this function the substring is defined by the <code>start</code> and <code>end</code> of the substring:</p>
-<pre class="r"><code>str_sub(string = titletext, start = 4, end = 12)</code></pre>
-<pre><code>## [1] &quot;de and Pr&quot; &quot;Jane Aust&quot;</code></pre>
-<p>So far, nothing too surprising. No wait, I tell a lie … you can use negative indices to define a position relative to the right edge of the string. So this would let me grab the last 8 characters of the string:</p>
-<pre class="r"><code>str_sub(string = titletext, start = -8, end = -1)</code></pre>
-<pre><code>## [1] &quot;rejudice&quot; &quot;e Austen&quot;</code></pre>
-<p>Ooh that is very nice. You can also replace text using <code>str_sub</code>. So in this instance I can truncate the strings at 5 characters and then append <code>&quot;...&quot;</code></p>
-<pre class="r"><code>str_sub(string = titletext, start = 6) &lt;- &quot;...&quot;
-titletext</code></pre>
-<pre><code>## [1] &quot;Pride...&quot; &quot;by Ja...&quot;</code></pre>
-<p>Finally, the <code>str_dup</code> function lets you replicate the content within a string. So either of these works:</p>
-<pre class="r"><code>str_dup(string = titletext, times = 2)
-str_dup(string = titletext, times = c(2,4))</code></pre>
-<pre><code>## [1] &quot;Pride...Pride...&quot; &quot;by Ja...by Ja...&quot;
-## [1] &quot;Pride...Pride...&quot;                 &quot;by Ja...by Ja...by Ja...by Ja...&quot;</code></pre>
-<p>Very nice.</p>
-<div id="whitespace-manipulation" class="section level3">
-<h3><span class="header-section-number">17.2.1</span> Whitespace manipulation</h3>
+<div id="flatten-strings" class="section level2">
+<h2><span class="header-section-number">17.3</span> Flatten strings</h2>
+<p>Our first job might be just to visually inspect the words that appear in the <code>output</code> of the iterated learning chain, and compare them to the words that were present in the <code>input</code>. To make things easier on ourselves, we’ll use the <code>str_flatten()</code> function to <em>flatten</em> each of these vectors to a single string. We’ll specify <code>collapse = &quot;, &quot;</code> so that the output takes the form of a nice comma-separated list of words</p>
+<pre class="r"><code>input %&gt;% str_flatten(collapse = &quot;, &quot;)</code></pre>
+<pre><code>## [1] &quot;kinimapi, wikuki, kikumi, miwiniku, pinipi, kihemiwi, miwimi, nipi, wige, nihepi, wigemi, mahekuki, wimaku, miniki, gepinini, wikima, nipikuge, hema, pikuhemi, kimaki, pimikihe, gepihemi, kunige, miki, mihe, winige, kinimage&quot;</code></pre>
+<pre class="r"><code>output %&gt;% str_flatten(collapse = &quot;, &quot;)</code></pre>
+<pre><code>## [1] &quot;miniku, miniku, miniku, tupim, tupim, tupim, tupin, tupin, tupin, tuge, tuge, tuge, tuge, tuge, tuge, tuge, tuge, tuge, poi, poi, poi, poi, poi, poi, poi, poi, poi&quot;</code></pre>
+</div>
+<div id="string-length" class="section level2">
+<h2><span class="header-section-number">17.4</span> String length</h2>
+<p>The one of the first things I notice when looking at this output is that they’re rather different in length. Even though there are 27 words in each list, it looks like the <code>output</code> words are shorter. We can check this by using the <code>str_length()</code> function to compute the length of each word.</p>
+<pre class="r"><code>input %&gt;% str_length() </code></pre>
+<pre><code>##  [1] 8 6 6 8 6 8 6 4 4 6 6 8 6 6 8 6 8 4 8 6 8 8 6 4 4 6 8</code></pre>
+<pre class="r"><code>output %&gt;% str_length()</code></pre>
+<pre><code>##  [1] 6 6 6 5 5 5 5 5 5 4 4 4 4 4 4 4 4 4 3 3 3 3 3 3 3 3 3</code></pre>
+</div>
+<div id="substrings" class="section level2">
+<h2><span class="header-section-number">17.5</span> Substrings</h2>
+<p>One thing I might be interested in, either for theoretical reasons (e.g., looking for meaningful prefixes) or practical ones (e.g., convenient plot labels) is extract a smaller subset of the string. A common example is to take the first three characters. We can do this using <code>str_sub()</code></p>
+<pre class="r"><code>output %&gt;% str_sub(start = 1, end = 3)</code></pre>
+<pre><code>##  [1] &quot;min&quot; &quot;min&quot; &quot;min&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tug&quot; &quot;tug&quot;
+## [12] &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;
+## [23] &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;</code></pre>
+<p>A feature of <code>str_sub</code> that sometimes comes in handy is that you can specify negative values here to refer to the distance from the end of the string. If for instance I wanted to extract the last three characters in every word:</p>
+<pre class="r"><code>output %&gt;% str_sub(start = -3, end = -1)</code></pre>
+<pre><code>##  [1] &quot;iku&quot; &quot;iku&quot; &quot;iku&quot; &quot;pim&quot; &quot;pim&quot; &quot;pim&quot; &quot;pin&quot; &quot;pin&quot; &quot;pin&quot; &quot;uge&quot; &quot;uge&quot;
+## [12] &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;
+## [23] &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;</code></pre>
+</div>
+<div id="string-duplication" class="section level2">
+<h2><span class="header-section-number">17.6</span> String duplication</h2>
+<p>I’m not sure why I would want it in this context, but we can duplicate strings using <code>str_dup()</code></p>
+<pre class="r"><code>output %&gt;% str_dup(times = 3)</code></pre>
+<pre><code>##  [1] &quot;minikuminikuminiku&quot; &quot;minikuminikuminiku&quot; &quot;minikuminikuminiku&quot;
+##  [4] &quot;tupimtupimtupim&quot;    &quot;tupimtupimtupim&quot;    &quot;tupimtupimtupim&quot;   
+##  [7] &quot;tupintupintupin&quot;    &quot;tupintupintupin&quot;    &quot;tupintupintupin&quot;   
+## [10] &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;      
+## [13] &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;      
+## [16] &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;      
+## [19] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;          &quot;poipoipoi&quot;         
+## [22] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;          &quot;poipoipoi&quot;         
+## [25] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;          &quot;poipoipoi&quot;</code></pre>
+</div>
+<div id="string-truncation-and-padding" class="section level2">
+<h2><span class="header-section-number">17.7</span> String truncation and padding</h2>
+<p>Sometimes it is useful to ensure that every string has the same length. Again, this can be quite useful when labelling data. For longer strings we might need to truncate it using <code>str_trunc()</code> and for shorter strings we might need to pad it with whitespace (or other characters) using <code>str_pad()</code>. To give a sense of this:</p>
+<pre class="r"><code>str_pad(string = &quot;Danielle&quot;, width = 20)
+str_pad(string = &quot;Danielle&quot;, width = 20, side = &quot;right&quot;)
+str_pad(string = &quot;Danielle&quot;, width = 20, side = &quot;both&quot;)
+str_pad(string = &quot;Danielle&quot;, width = 20, side = &quot;both&quot;, pad = &quot;-&quot;)</code></pre>
+<pre><code>## [1] &quot;            Danielle&quot;
+## [1] &quot;Danielle            &quot;
+## [1] &quot;      Danielle      &quot;
+## [1] &quot;------Danielle------&quot;</code></pre>
+<pre class="r"><code>str_trunc(string = &quot;Danielle&quot;, width = 9)
+str_trunc(string = &quot;Danielle&quot;, width = 8)
+str_trunc(string = &quot;Danielle&quot;, width = 7)
+str_trunc(string = &quot;Danielle&quot;, width = 7, ellipsis = &quot;+++&quot;)</code></pre>
+<pre><code>## [1] &quot;Danielle&quot;
+## [1] &quot;Danielle&quot;
+## [1] &quot;Dani...&quot;
+## [1] &quot;Dani+++&quot;</code></pre>
+<p>Truncation and padding work very nicely together:</p>
+<pre class="r"><code>input %&gt;% 
+  str_pad(width = 7, side = &quot;right&quot;) %&gt;%
+  str_trunc(width = 7)</code></pre>
+<pre><code>##  [1] &quot;kini...&quot; &quot;wikuki &quot; &quot;kikumi &quot; &quot;miwi...&quot; &quot;pinipi &quot; &quot;kihe...&quot; &quot;miwimi &quot;
+##  [8] &quot;nipi   &quot; &quot;wige   &quot; &quot;nihepi &quot; &quot;wigemi &quot; &quot;mahe...&quot; &quot;wimaku &quot; &quot;miniki &quot;
+## [15] &quot;gepi...&quot; &quot;wikima &quot; &quot;nipi...&quot; &quot;hema   &quot; &quot;piku...&quot; &quot;kimaki &quot; &quot;pimi...&quot;
+## [22] &quot;gepi...&quot; &quot;kunige &quot; &quot;miki   &quot; &quot;mihe   &quot; &quot;winige &quot; &quot;kini...&quot;</code></pre>
+</div>
+<div id="removing-white-space" class="section level2">
+<h2><span class="header-section-number">17.8</span> Removing white space</h2>
+<p>A common problem when dealing with text is white space that appears in the wrong place. For example, suppose someone intended to type the words <em>tupim</em>, <em>tupin</em> and <em>poi</em> as part of the experiment but ended up with additional spaces, leading to this as the raw data:</p>
+<pre class="r"><code>raw &lt;- &quot;  tupim   tupin    poi    &quot;</code></pre>
+<p>The <code>str_trim()</code> function removes all leading and trailing whitespace; <code>str_squish()</code> does the same but also compresses any internal whitespace to a single character. Thus:</p>
+<pre class="r"><code>raw
+raw %&gt;% str_trim()
+raw %&gt;% str_squish()</code></pre>
+<pre><code>## [1] &quot;  tupim   tupin    poi    &quot;
+## [1] &quot;tupim   tupin    poi&quot;
+## [1] &quot;tupim tupin poi&quot;</code></pre>
+</div>
+<div id="wrapping-a-string" class="section level2">
+<h2><span class="header-section-number">17.9</span> Wrapping a string</h2>
+<pre class="r"><code>input %&gt;% 
+  str_flatten(&quot;, &quot;) %&gt;% 
+  str_wrap(width = 30, indent = 5, exdent = 3) %&gt;% 
+  cat()</code></pre>
+<pre><code>##      kinimapi, wikuki, kikumi,
+##    miwiniku, pinipi, kihemiwi,
+##    miwimi, nipi, wige, nihepi,
+##    wigemi, mahekuki, wimaku,
+##    miniki, gepinini, wikima,
+##    nipikuge, hema, pikuhemi,
+##    kimaki, pimikihe, gepihemi,
+##    kunige, miki, mihe, winige,
+##    kinimage</code></pre>
+</div>
+<div id="whitespace-manipulation" class="section level2">
+<h2><span class="header-section-number">17.10</span> Whitespace manipulation</h2>
+<ul>
+<li><code>str_pad</code></li>
+<li><code>str_trim</code></li>
+<li><code>str_wrap</code></li>
+<li><code>str_squish</code></li>
+</ul>
+<pre class="r"><code>pp &lt;- janeaustenr::prideprejudice
+titletext &lt;- &quot;dfdfgsesdfefasesdfsefsadfsefedå&quot;</code></pre>
 <p>… and we’re back! The <code>str_pad</code> function adds whitespace padding to ensure that the string reaches a particular length:</p>
 <pre class="r"><code>str_pad(string = titletext, width = 20)
 str_pad(string = titletext, width = 20, side = &quot;right&quot;)
 str_pad(string = titletext, width = 20, side = &quot;both&quot;)
 str_pad(string = titletext, width = 20, side = &quot;both&quot;, pad = &quot;-&quot;)</code></pre>
-<pre><code>## [1] &quot;            Pride...&quot; &quot;            by Ja...&quot;
-## [1] &quot;Pride...            &quot; &quot;by Ja...            &quot;
-## [1] &quot;      Pride...      &quot; &quot;      by Ja...      &quot;
-## [1] &quot;------Pride...------&quot; &quot;------by Ja...------&quot;</code></pre>
+<pre><code>## [1] &quot;dfdfgsesdfefasesdfsefsadfsefedå&quot;
+## [1] &quot;dfdfgsesdfefasesdfsefsadfsefedå&quot;
+## [1] &quot;dfdfgsesdfefasesdfsefsadfsefedå&quot;
+## [1] &quot;dfdfgsesdfefasesdfsefsadfsefedå&quot;</code></pre>
 <p>Combining <code>str_pad</code> and <code>str_trunc</code> means that you can force strings to be exactly a desired length, but padding one and truncating the other. Similarly, you can use <code>str_trim</code> to remove padding from one or both sides. For me favourite of these functions, it’s a toss up between (a) <code>str_squish</code>, which removes <em>all</em> excess white space, whether it be leading, middle or trailing…</p>
 <pre class="r"><code>titletext &lt;- &quot;   Pride      and Prejudice
 
@@ -517,13 +620,19 @@ cat(str_wrap(string = ppstart, width = 20))</code></pre>
 ## want of a wife.</code></pre>
 <p>It even lets you specify the <code>indent</code> and <code>exdent</code> of the output string, so you can have margins!</p>
 </div>
-</div>
 <div id="locale-sensitive-functions" class="section level2">
-<h2><span class="header-section-number">17.3</span> Locale sensitive functions</h2>
+<h2><span class="header-section-number">17.11</span> Locale sensitive functions</h2>
+<ul>
+<li><code>str_to_upper</code></li>
+<li><code>str_to_lower</code></li>
+<li><code>str_to_title</code></li>
+<li><code>str_order</code></li>
+<li><code>str_sort</code></li>
+</ul>
 <p>Okay, reading through the vignette further, the <code>str_to_upper</code>, <code>str_to_lower</code> and <code>str_to_title</code> functions do exactly what they say on the tin, but the package documentation is at pains to point out that they will give you different answers depending on where you are, as will sorting functions like <code>str_order</code> and <code>str_sort</code>. Makes perfect sense: alphabets and the ordering of characters within the alphabets vary from place to place, so it’s really nice that these are locale-sensitive. Natural language is messy.</p>
 </div>
-<div id="pattern-matching" class="section level2">
-<h2><span class="header-section-number">17.4</span> Pattern matching!</h2>
+<div id="pattern-matching-tasks" class="section level2">
+<h2><span class="header-section-number">17.12</span> Pattern matching tasks</h2>
 <p>Okay, pattern matching time. My nightmares about <code>grep</code> have mostly settled down in my old age, and it’s refreshing to read something pertaining to regular expressions without bursting into tears! And I really like the way the pattern matching functions are organised in <code>stringr</code>. We have functions that specify <em>tasks</em>.</p>
 <p>For the sake of helping my own learning, I’ll type out what they do:</p>
 <ul>
@@ -537,6 +646,9 @@ cat(str_wrap(string = ppstart, width = 20))</code></pre>
 <li><code>str_split</code> breaks a string by a separating character; and there’s also the <code>str_split_fixed</code> function that breaks it into a fixed number of chunks.</li>
 </ul>
 <p>Okay, a lot of that feels very familiar, and it’ll probably take a bit of getting used to, but I like the overall structure here. I think after a bit of playing it will be really natural.</p>
+</div>
+<div id="pattern-matching-engines" class="section level2">
+<h2><span class="header-section-number">17.13</span> Pattern matching engines</h2>
 <p>The thing I really like, though, is the fact that the <em>engine</em> that defines what counts as a pattern is broken up into convenience functions:</p>
 <ul>
 <li>A <code>fixed</code> pattern matches the exact pattern (sequence of bytes)</li>
@@ -547,7 +659,7 @@ cat(str_wrap(string = ppstart, width = 20))</code></pre>
 <p>That feels much cleaner than what I’m used to.</p>
 </div>
 <div id="trying-out-the-pattern-matching" class="section level2">
-<h2><span class="header-section-number">17.5</span> Trying out the pattern matching?</h2>
+<h2><span class="header-section-number">17.14</span> Trying out the pattern matching?</h2>
 <p>Okay so let’s see if I understand this. Suppose I want to take the start of <em>Pride and Prejudice</em>, as per the <code>ppstart</code> string, and split it up by word, character, or sentence:</p>
 <pre class="r"><code>str_split(string = ppstart, pattern = boundary(&quot;word&quot;))
 str_split(string = ppstart, pattern = boundary(&quot;character&quot;))
@@ -597,8 +709,11 @@ str_split(string = ppstart, pattern = boundary(&quot;sentence&quot;))</code></pr
 <pre><code>## Prd nd Prjdc by Jn stn. t s trth nvrslly cknwldgd, tht sngl mn n pssssn f gd
 ## frtn, mst b n wnt f wf.</code></pre>
 </div>
+<div id="regular-expressions" class="section level2">
+<h2><span class="header-section-number">17.15</span> Regular expressions</h2>
+</div>
 <div id="playing-with-pride-and-prejudice" class="section level2">
-<h2><span class="header-section-number">17.6</span> Playing with Pride and Prejudice</h2>
+<h2><span class="header-section-number">17.16</span> Playing with Pride and Prejudice</h2>
 <p>Okay, so now I should be able to do neat things with the whole novel. Let’s start by gluing the <code>pp</code> vector into one long string, since the line breaks don’t seem to appear at any interesting locations</p>
 <pre class="r"><code>library(glue)</code></pre>
 <pre><code>## 
@@ -632,10 +747,10 @@ lines(darcy, 1:length(darcy), col=&quot;blue&quot;, lwd=2, type=&quot;s&quot;)
 lines(wickham, 1:length(wickham), col=&quot;green&quot;, lwd=2, type=&quot;s&quot;)
 legend(x = &quot;topleft&quot;, legend = c(&quot;Elizabeth&quot;, &quot;Darcy&quot;, &quot;Wickham&quot;),
   col = c(&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;), lwd=2)</code></pre>
-<p><img src="working-with-text_files/figure-html/unnamed-chunk-18-1.png" width="456" style="display: block; margin: auto;" /> No surprises there: <code>Elizabeth</code> occurs most frequently, and at the most uniform rate. At the start of the book <code>Darcy</code> appears just as often, but then there are sections of the book that don’t concern him and the function flatlines for a while. <code>Wickham</code> is absent more often than not.</p>
+<p><img src="working-with-text_files/figure-html/unnamed-chunk-24-1.png" width="456" style="display: block; margin: auto;" /> No surprises there: <code>Elizabeth</code> occurs most frequently, and at the most uniform rate. At the start of the book <code>Darcy</code> appears just as often, but then there are sections of the book that don’t concern him and the function flatlines for a while. <code>Wickham</code> is absent more often than not.</p>
 </div>
 <div id="more-resources" class="section level2">
-<h2><span class="header-section-number">17.7</span> More resources</h2>
+<h2><span class="header-section-number">17.17</span> More resources</h2>
 <ul>
 <li>The <a href="https://stringr.tidyverse.org/">stringr</a> package homepage</li>
 <li><a href="https://www.tidytextmining.com/">Text Mining with R</a> by Julia Silge and David Robinson</li>
