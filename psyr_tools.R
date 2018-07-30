@@ -30,5 +30,10 @@ psyr_status <- function(){
 
 # copy to local GAE and deploy
 psyr_deploy <- function() {
-  system(here::here("_shell","gae_deploy.sh"))
+  ans <- readline("do you want to deploy? [y/n] ")
+  if(ans == "y") {
+    system(here::here("_shell","gae_deploy.sh"))
+  } else {
+    message("deploy aborted")
+  }
 }
