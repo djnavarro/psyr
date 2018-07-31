@@ -1,0 +1,189 @@
+---
+title: 'Week 2'
+output:
+  html_document:
+    includes:
+      in_header: header.html
+    toc: false
+    theme: flatly
+    highlight: textmate
+    css: mystyle.css
+---
+
+
+## Revision from last week
+
+In week 1 we talked about getting started in R, the role it can play for psychology, and made our first attempt to learn how to use the language. We went through these slides and sections, and the "homework" exercise was to try to make sure we all have a basic understanding of these sections:
+
+- [slides](./docs/overview.pdf)
+- [getting started](./getting-started.html)
+- [variables](./variables.html)
+- [scripts](./scripts.html)
+- [packages](./packages.html)
+
+So the place we'll start this week is with "revision" (which in my experience is a terrible name to describe something important... which isn't just about revisiting something you already know, but also a mechanism for talking about stuff that didn't make sense the first time). Here are a few exercises that I'd like you to try:
+
+### Exercise 1
+
+Write a script that does the following
+
+- Calculate the number of seconds in a year, stores to variable & prints it 
+- Calculate the number of hours (approx) since the 0AD, stores to variable & prints it
+- Which number is bigger? Use logical operations test this and print the answer on screen
+- Add some comments to your script so make it easier to 
+
+Save your script to a file like `week2_ex1.R` 
+
+```{r, include=FALSE, eval=FALSE}
+yearsec <- 60 * 60 * 24 * 365
+hourcal <- 24 * 365 * 2018
+print(yearsec)
+print(hourcal)
+print(hourcal > yearsec)
+```
+
+
+### Exercise 2 
+
+Write a new script called `week2_ex2.R` (or whatever) that does the following
+
+- Stores the names of your family members as a character vector called `names` 
+- Stores the ages of the family members as a numeric vector called `ages`
+- Use logical indexing to print your age...   age[names == "dani"]
+
+```{r, include=FALSE, eval=FALSE}
+names <- c("nancy","dani","alex","fiona")
+ages <- c(46,40,8,5)
+myage <- ages[names == "dani"]
+print(myage)
+```
+
+### Exercise 3
+
+Make sure that the `TurtleGraphics` package is installed on your machine, by typing `library(TurtleGraphics)` at the console. If it works, great! Move on to Exercise 4. If it does not, here are the commands we need
+
+```{r,eval=FALSE}
+install.packages("devtools")
+library(devtools)
+install_github("djnavarro/TurtleGraphics")
+library(TurtleGraphics)
+```
+
+### Exercise 4
+
+Create a new script called `week2_turtle.R`. It should do this:
+
+- line 1: load the `TurtleGraphics` package
+- line 2: initialise the turtle using `turtle_init()`
+- line 3: move the turtle forward a distance of 5 units
+
+A question you should consider: why did I ask you to include line 1, given that you've already done exercise 3???
+
+
+## Programming concepts
+
+The main goal this week is to cover some key R concepts and programming ideas. We'll go through these sections in turn, each of which ends with some exercises.
+
+- [workspaces](./workspaces.html)
+- [loops](./loops.html)
+- [branches](./branches.html)
+- [functions](./functions.html)
+
+At the end of this, we reach the point that the turtle draws a pretty picture. Your main exercise here is to try to modify what picture it draws!
+
+## Getting started with data!
+
+I'm not sure how this will all work out time-wise, but if we do have time we'll follow this up by getting started on the "working with data" section of the notes. We'll start at the prelude, and talk briefly about some of the data types. 
+
+Here are some additional exercises:
+
+```{r, message=FALSE}
+library(tidyverse)
+```
+
+Reading a *data frame* from an online CSV file. We're taking a tidyverse approach so strictly speaking we have a tibble rather than a pure data frame!
+
+```{r}
+books <- read_csv(file = "http://compcogscisydney.org/psyr/data/booksales.csv")
+class(books)
+head(books)
+```
+
+"Inside" a data frame are just regular vectors:
+
+```{r}
+print(books$Sales)
+```
+
+To see how data frames are just regular vectors bound together, create one:
+
+```{r}
+names <- c("Granny","Nanny","Magrat")
+ages <- c(70, 70, 30)
+
+family <- tibble(names, ages)
+print(family)
+```
+
+
+### Extension: Using these skills to "check" data sets
+
+A data manipulation exercise... data from multiple people, but might be missing cases!
+First read one data set to take a look:
+
+```{r}
+subj1 <- read_csv(file = "http://compcogscisydney.org/psyr/data/subj1.csv")
+print(subj1)
+```
+
+Next, define a function to "check" if a data frame has the correct number of cases
+
+```{r}
+check_file <- function(dataset) {
+  n_cases <- dim(dataset)[1] # number of cases in the data frame
+  is_okay <- n_cases == 10 # file is okay if it has 10 observations
+  return(is_okay)
+}
+```
+
+Create a vector listing the files we want to check
+
+```{r}
+file_list <- c(
+  "http://compcogscisydney.org/psyr/data/subj1.csv",
+  "http://compcogscisydney.org/psyr/data/subj2.csv",
+  "http://compcogscisydney.org/psyr/data/subj3.csv",
+  "http://compcogscisydney.org/psyr/data/subj4.csv"
+)
+```
+
+Write a loop that checks the functions one at a time
+
+```{r, message=FALSE}
+for(file in file_list) {
+  dat <- read_csv(file)
+  is_okay <- check_file(dat)
+  if( !is_okay ) {
+    print(file)
+  }
+}
+```
+
+Make sure all three code fragments are in a single file and run it!
+
+## Further extension
+
+Eek what if there are 400 files! (there actually are!). I refuse to type all that into a long list, use text manipulation
+
+```{r, eval=FALSE}
+file_list <- paste0("http://compcogscisydney.org/psyr/data/subj", 1:20, ".csv")
+
+for(file in file_list) {
+  dat <- read_csv(file)
+  is_okay <- check_file(dat)
+  if( !is_okay ) {
+    print(file)
+  } else{ 
+    print("ok")}
+}
+```
