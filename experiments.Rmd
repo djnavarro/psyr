@@ -42,6 +42,55 @@ With that in mind, I'll talk about all three of those use cases in these notes. 
 
 ## Text based tasks
 
+To start with, lets consider a very simple task. Imagine that we wanted to investigate how people play "[hangman](https://en.wikipedia.org/wiki/Hangman_(game)". On the off chance you're unfamiliar with the game, it's a straightforward two player game. One player thinks of a word and the other person has to work it out by making a series of guesses as to what letters it contains. If the guesser works it out before making a predetermined number of errors then they win. To investigate this, we will need to implement this game in R, with the computer choosing the word and the human guessing. It's a text based task, so we should be able to do the whole thing in the console. Some problems we'll need to solve:
+
+- How do we present the current state of the game?
+- How do we get input from the participant?
+- How do we "refresh" the state of game after every event?
+- How do we record the data?
+
+Let's start by writing a function called `show_hangman()` that will take three inputs, the `guesses` the person has made made so far, the `word` that the person needs to guess, and the total number of `errors` they're allowed to make before losing. 
+
+```{r}
+show_hangman <- function(guesses, word, errors) {
+  
+  library(stringr)
+  reg <- function(x){ paste0("[",x,"]") }
+  
+  # what letters are they missing
+  missing <- letters %>% str_flatten() %>% str_remove_all(reg(guesses))
+
+  # what has the participant revealed
+  stimulus <- word %>% str_replace_all(reg(missing),".")
+  
+  # how many errors?
+  n_guess <- guesses %>% str_length()
+  n_hit <- guesses %>% str_count(reg(word))
+  n_err <- n_guess - n_hit
+  
+  # print the results:
+  cat("\n\n")
+  cat("what you know:\n\n")
+  cat(stimulus,"\n\n")
+  cat("your guesses:  ", guesses, "\n")
+  cat("errors so far: ", n_err, "\n")
+  cat("chances left:  ", errors-n_err, "\n\n")
+  
+}
+```
+
+Here's what that looks like:
+
+```{r}
+show_hangman(guesses = "aest", word = "computational", errors = 5)
+```
+
+
+
+
+## OLD
+
+
 Sometimes it's just too much effort to set up a whole Shiny app. Maybe all you want to do is have some simple text based interaction, and you'd be perfectly happy to go old school and have the user respond in the R console. Here's a simple example:
 
 ```{r, eval=FALSE}
