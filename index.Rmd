@@ -4,8 +4,6 @@ output:
   html_document:
     includes:
       in_header: header.html
-    toc: true
-    toc_float: true
     theme: flatly
     highlight: textmate
     css: mystyle.css
@@ -22,13 +20,16 @@ I've set this up as an introductory resource for psychology students taking my *
 
 The content borrows from my introductory statistics lecture notes ([Learning Statistics with R](https://compcogscisydney.org/learning-statistics-with-r/)), but they're not equivalent, and over time the two are likely to part ways. I wrote *Learning Statistics with R* to accompany an introductory statistics class that I taught some years ago, and the intended audience for that book is a psych student taking their first research methods class. This resource is a little different -- it's aimed at someone who has taken an research methods class and would like to learn how to use the R programming language in their own work.
 
-<img src="./img/splash_turtle.png" width=200px style="float:right">
-
 It is of course a work in progress, but I hope it is useful! Please don't hesitate to contact me if you spot an error or find something confusing.
 
 -[Danielle](d.navarro@unsw.edu.au) `r emo::ji("turtle")`
 
-## Part 1: Core toolkit
+<img src="./img/splash_turtle2.png" width=250px>
+
+
+## Sections {.tabset}
+
+### 1: Core toolkit
 
 - [Getting started](./getting-started.html)
 - [Variables](./variables.html)
@@ -43,7 +44,7 @@ It is of course a work in progress, but I hope it is useful! Please don't hesita
 - [File system](./file-system.html)
 
 
-## Part 2: Working with data
+### 2: Working with data
 
 Everything from here onwards is *very much* a work in progress!
 
@@ -55,14 +56,14 @@ Everything from here onwards is *very much* a work in progress!
 - [Working with text](./working-with-text.html) <span style="color:#cccccc">(draft)</span>
 - <span style="color:#cccccc">Import and export (to be added)</span>  <!-- data formats -->
 
-## Part 3: Statistical inference
+### 3: Statistics
 
 - [Probability distributions](./xx-distributions.html) <span style="color:#cccccc">(to be updated)</span>
 - [Introductory statistics](./xx-introductory-statistics.html) <span style="color:#cccccc">(to be updated)</span><!-- add Bayes factor -->
 - <span style="color:#cccccc">Intermediate statistics (to be added)</span> 
 - <span style="color:#cccccc">Advanced statistics (to be added)</span> 
 
-## Part 4: More applications
+### 4: More topics
 
 - [Behavioural experiments](./experiments.html) <span style="color:#cccccc">(to be updated)</span>
 - [Shiny web applications](./shiny.html) <span style="color:#cccccc">(to be updated)</span>
@@ -88,7 +89,8 @@ Everything from here onwards is *very much* a work in progress!
 
 -->
 
-## Other things
+
+### 5. Some links
 
 - Week 1 slides: [pptx](./docs/overview.pptx), [pdf](./docs/overview.pdf)
 - Week 2 workbook: [here](./lesson2.html)

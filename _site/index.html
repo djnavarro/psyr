@@ -19,9 +19,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -192,101 +189,6 @@ $(document).ready(function () {
 
 
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
-
-
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -432,11 +334,13 @@ An introductory resource
 <p>Hi there!</p>
 <p>I’ve set this up as an introductory resource for psychology students taking my <em>Programming with R</em> class at UNSW. There are two goals with this resource. The first is to provide an introduction to R programming that doesn’t assume any previous experience. The second is to provide a brief sketch of some of things that R can be useful for in psychology. Data analysis inevitably forms a large part of this, but I hope to cover a broader range of topics.</p>
 <p>The content borrows from my introductory statistics lecture notes (<a href="https://compcogscisydney.org/learning-statistics-with-r/">Learning Statistics with R</a>), but they’re not equivalent, and over time the two are likely to part ways. I wrote <em>Learning Statistics with R</em> to accompany an introductory statistics class that I taught some years ago, and the intended audience for that book is a psych student taking their first research methods class. This resource is a little different – it’s aimed at someone who has taken an research methods class and would like to learn how to use the R programming language in their own work.</p>
-<p><img src="img/splash_turtle.png" width=200px style="float:right"></p>
 <p>It is of course a work in progress, but I hope it is useful! Please don’t hesitate to contact me if you spot an error or find something confusing.</p>
 <p>-<a href="d.navarro@unsw.edu.au">Danielle</a> 🐢</p>
-<div id="part-1-core-toolkit" class="section level2">
-<h2>Part 1: Core toolkit</h2>
+<p><img src="img/splash_turtle2.png" width=250px></p>
+<div id="sections" class="section level2 tabset">
+<h2>Sections</h2>
+<div id="core-toolkit" class="section level3">
+<h3>1: Core toolkit</h3>
 <ul>
 <li><a href="./getting-started.html">Getting started</a></li>
 <li><a href="./variables.html">Variables</a></li>
@@ -451,8 +355,8 @@ An introductory resource
 <li><a href="./file-system.html">File system</a></li>
 </ul>
 </div>
-<div id="part-2-working-with-data" class="section level2">
-<h2>Part 2: Working with data</h2>
+<div id="working-with-data" class="section level3">
+<h3>2: Working with data</h3>
 <p>Everything from here onwards is <em>very much</em> a work in progress!</p>
 <ul>
 <li><a href="./prelude-to-data.html">Prelude to data</a></li>
@@ -464,8 +368,8 @@ An introductory resource
 <li><span style="color:#cccccc">Import and export (to be added)</span> <!-- data formats --></li>
 </ul>
 </div>
-<div id="part-3-statistical-inference" class="section level2">
-<h2>Part 3: Statistical inference</h2>
+<div id="statistics" class="section level3">
+<h3>3: Statistics</h3>
 <ul>
 <li><a href="./xx-distributions.html">Probability distributions</a> <span style="color:#cccccc">(to be updated)</span></li>
 <li><a href="./xx-introductory-statistics.html">Introductory statistics</a> <span style="color:#cccccc">(to be updated)</span><!-- add Bayes factor --></li>
@@ -473,8 +377,8 @@ An introductory resource
 <li><span style="color:#cccccc">Advanced statistics (to be added)</span></li>
 </ul>
 </div>
-<div id="part-4-more-applications" class="section level2">
-<h2>Part 4: More applications</h2>
+<div id="more-topics" class="section level3">
+<h3>4: More topics</h3>
 <ul>
 <li><a href="./experiments.html">Behavioural experiments</a> <span style="color:#cccccc">(to be updated)</span></li>
 <li><a href="./shiny.html">Shiny web applications</a> <span style="color:#cccccc">(to be updated)</span></li>
@@ -500,8 +404,8 @@ An introductory resource
 
 -->
 </div>
-<div id="other-things" class="section level2">
-<h2>Other things</h2>
+<div id="some-links" class="section level3">
+<h3>5. Some links</h3>
 <ul>
 <li>Week 1 slides: <a href="./docs/overview.pptx">pptx</a>, <a href="./docs/overview.pdf">pdf</a></li>
 <li>Week 2 workbook: <a href="./lesson2.html">here</a></li>
@@ -509,11 +413,10 @@ An introductory resource
 <li>Github repository is <a href="https://github.com/djnavarro/psyr">here</a></li>
 </ul>
 </div>
-
-
-
 </div>
-</div>
+
+
+
 
 </div>
 
