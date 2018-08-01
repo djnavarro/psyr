@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>Behavioural Experiments</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -417,104 +417,95 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore"><ol start="8" style="list-style-type: decimal">
-<li>Conditional branching</li>
-</ol></h1>
+<h1 class="title toc-ignore">Behavioural Experiments</h1>
 
 </div>
 
 
-<p>A second kind of flow control that programming languages provide is the ability to evaluate <strong>conditional statements</strong>. Unlike loops, which can repeat over and over again, a conditional statement only executes once, but it can switch between different possible commands depending on a condition that is specified by the programmer. The power of these commands is that they allow the program itself to make choices, and in particular, to make different choices depending on the context in which the program is run. The most prominent of example of a conditional statement is the <code>if</code> statement, and the accompanying <code>else</code> statement.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
-<div id="if" class="section level2">
-<h2><span class="header-section-number">8.1</span> If</h2>
-<p>The basic format of an <code>if</code> statement in R is as follows:</p>
-<pre><code>if ( CONDITION ) {
-  STATEMENT1
-  STATEMENT2
-  ETC 
-}</code></pre>
-<p>And the execution of the statement is pretty straightforward. If the condition is <code>TRUE</code>, then R will execute the statements contained in the curly braces. If the condition is <code>FALSE</code>, then it does not. So the way R processes an <code>if</code> statement is illustrated by this schematic:</p>
-<p><img src="img/branch_if.png" width=500px></p>
-</div>
-<div id="if-else" class="section level2">
-<h2><span class="header-section-number">8.2</span> If-else</h2>
-<p>If you want to, you can extend the <code>if</code> statement to include an <code>else</code> statement as well, leading to the following syntax:</p>
-<pre><code>if ( CONDITION ) {
-  STATEMENT1
-  STATEMENT2
-  ETC
-} else {
-  STATEMENT3
-  STATEMENT4
-  ETC
-}</code></pre>
-<p>As you’d expect, the interpretation of this version is similar. If the condition is <code>TRUE</code>, then the contents of the first block of code (i.e., <em>statement1</em>, <em>statement2</em>, etc) are executed; but if it is <code>FALSE</code>, then the contents of the second block of code (i.e., <em>statement3</em>, <em>statement4</em>, etc) are executed instead. So the schematic illustration of an if-else construction looks like this:</p>
-<p><img src="img/branch_ifelse.png" width=550px></p>
-<p>In other words, when we use an if-else pair, we can define different behaviour for our script for both cases.</p>
-</div>
-<div id="an-example" class="section level2">
-<h2><span class="header-section-number">8.3</span> An example</h2>
-<p>To give you a feel for how you can use <code>if</code> and <code>else</code>, the example that I’ll show you is a script (<a href="./scripts/feelings.R">feelings.R</a>) that prints out a different message depending the day of the week. Here’s the script:</p>
-<pre class="r"><code>if(today == &quot;Monday&quot;) {
-  print(&quot;I don’t like Mondays&quot;)
-} else {
-  print(&quot;I’m a happy little automaton&quot;)
-}</code></pre>
-<p>So let’s set the value of <code>today</code> to <code>Monday</code> and source the script:</p>
-<pre class="r"><code>today &lt;- &quot;Monday&quot;
-source(&quot;./scripts/feelings.R&quot;)</code></pre>
-<pre><code>## [1] &quot;I don’t like Mondays&quot;</code></pre>
-<p>That’s very sad. However, tomorrow should be better:</p>
-<pre class="r"><code>today &lt;- &quot;Tuesday&quot;
-source(&quot;./scripts/feelings.R&quot;)</code></pre>
-<pre><code>## [1] &quot;I’m a happy little automaton&quot;</code></pre>
-</div>
-<div id="another-example" class="section level2">
-<h2><span class="header-section-number">8.4</span> Another example</h2>
-<p>One useful feature of <code>if</code> and <code>else</code> is that you can chain several of them together to switch between several different possibilities. For example, the <a href="./scripts/more_feelings.R">more_feelings.R</a> script contains this code:</p>
-<pre class="r"><code>if(today == &quot;Monday&quot;) {
-  print(&quot;I don’t like Mondays&quot;)
+<div id="experiments-in-the-console" class="section level2">
+<h2><span class="header-section-number">0.1</span> Experiments in the console</h2>
+<p>Sometimes it’s just too much effort to set up a whole Shiny app. Maybe all you want to do is have some simple text based interaction, and you’d be perfectly happy to go old school and have the user respond in the R console. Here’s a simple example:</p>
+<pre class="r"><code># An interactive game at the console
+
+# A sneaky trick: RStudio recognises the &quot;form feed&quot; character
+# as a cue to clear all the text in the console. If we send it
+# to the console using &quot;cat&quot; it functions as a way of clearing
+# the screen. Define a &quot;clearscreen&quot; function...
+clearscreen &lt;- function(){
+  cat(&quot;\f&quot;) # form feed character: &quot;\014&quot;
+}
+
+# clear the screen
+clearscreen()
+
+# initialise the data as an empty data frame 
+dataset &lt;- data.frame(
+  trial = numeric(0),
+  upper = numeric(0),
+  lower = numeric(0),
+  query = numeric(0),
+  response = character(0)
+)
+
+# initialise the state of the experiment
+low &lt;- 1   # lowest possible number
+up &lt;- 100  # highest possible number
+rng &lt;- up-low # possible uncertainty?
+trial &lt;- 1
+
+# keep guessing until the answer is known
+while( rng &gt; 1 ) {
   
-} else if(today == &quot;Tuesday&quot;) {
-  print(&quot;I’m a happy little automaton&quot;)
+  # sample a query item
+  que &lt;- sample(low:up,1)
   
-} else if(today == &quot;Wednesday&quot;) {
-  print(&quot;Wednesday is beige&quot;)
+  # ask the question until the user responds with &quot;y&quot; or &quot;n&quot;
+  cat(&quot;\n\n\n\n\n&quot;)
+  resp &lt;- &quot;&quot;
+  while( !(resp %in% c(&quot;y&quot;,&quot;n&quot;))) {
+    prompt &lt;- paste0(&quot;Is it higher than &quot;, que, &quot;? [y/n]  &quot;)
+    resp &lt;- readline(prompt)
+    resp &lt;- tolower(resp)
+  }
   
-} else {
-  print(&quot;eh, I have no feelings&quot;)
-}</code></pre>
-<p>This code allows our little 🤖 to have opinions about several different days. Imagine that we have a vector <code>days</code> that lists the name of every day of the week:</p>
-<pre class="r"><code>days &lt;- c(
-  &quot;Monday&quot;, &quot;Tuesday&quot;,&quot;Wednesday&quot;,
-  &quot;Thursday&quot;,&quot;Friday&quot;,&quot;Saturday&quot;,
-  &quot;Sunday&quot;
-)</code></pre>
-<p>Now let’s combine what we learned in the <a href="./loops.html">loops</a> section with our new skills with <code>if</code> and <code>else</code>. Let’s loop over all the <code>days</code> and ask R to express some feelings on every day:</p>
-<pre class="r"><code>for(today in days) {
-  source(&quot;./scripts/more_feelings.R&quot;) 
-}</code></pre>
-<pre><code>## [1] &quot;I don’t like Mondays&quot;
-## [1] &quot;I’m a happy little automaton&quot;
-## [1] &quot;Wednesday is beige&quot;
-## [1] &quot;eh, I have no feelings&quot;
-## [1] &quot;eh, I have no feelings&quot;
-## [1] &quot;eh, I have no feelings&quot;
-## [1] &quot;eh, I have no feelings&quot;</code></pre>
+  # record the data
+  dataset &lt;- rbind(
+    dataset, 
+    data.frame(
+      trial=trial,
+      upper=up,
+      lower=low,
+      query=que,
+      response=resp
+    )
+  )
+
+  # use the user response to update the bounds
+  if(resp == &quot;y&quot;) {
+    low &lt;- que
+  } else{ 
+    up &lt;- que
+  }
+  
+  # update the rest of the state accordingly
+  rng &lt;- up-low
+  trial &lt;- trial + 1
+  
+  # clear the screen in readiness for the next trial
+  clearscreen()
+  
+}
+
+# end the experiment
+cat(&quot;Done!\n\n&quot;)
+print(dataset)</code></pre>
 </div>
-<div id="exercises" class="section level2">
-<h2><span class="header-section-number">8.5</span> Exercises</h2>
-<ul>
-<li>Write your own version of the “feelings” script that expresses your opinions about summer, winter, autumn and spring. Test your script out.</li>
-<li>Expand your script so that it loops over vector of four <code>seasons</code> and prints out your feelings about each of them</li>
-</ul>
-<p>The solutions for these exercises are <a href="./scripts/solutions_branch.R">here</a>.</p>
+<div id="experiments-in-graphics-window" class="section level2">
+<h2><span class="header-section-number">0.2</span> Experiments in graphics window</h2>
 </div>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>There are other ways of making conditional statements in R. In particular, the <code>ifelse</code> function and the <code>switch</code> functions can be very useful in different contexts.<a href="#fnref1">↩</a></p></li>
-</ol>
+<div id="experiments-in-a-web-application" class="section level2">
+<h2><span class="header-section-number">0.3</span> Experiments in a web application</h2>
+<p>The third and most sophisticated approach is to build a web application using Shiny. This has a number of advantages. Firstly, you can run a Shiny app locally on your machine or deploy it to the internet - so you can collect online data easily. Secondly, it has a lot more flexibility in terms of what you can do with it. However, the advantages do come at a cost. There’s a certain amount of effort involved in learning how to build a Shiny app, and some additional work to adapt the framework to behavioural experiments. It’s a big enough topic that I’m not going to try to force it into a subsection here. Instead, there’s a whole section devoted to <a href="./shiny.html">shiny</a>!</p>
 </div>
 
 

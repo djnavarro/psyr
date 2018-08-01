@@ -64,7 +64,8 @@ Everything from here onwards is *very much* a work in progress!
 
 ## Part 4: More applications
 
-- [Shiny web applications](./xx-shiny.html) <span style="color:#cccccc">(to be updated)</span>
+- [Behavioural experiments](./experiments.html) <span style="color:#cccccc">(to be updated)</span>
+- [Shiny web applications](./shiny.html) <span style="color:#cccccc">(to be updated)</span>
 - [Miscellaneous](./xx-miscellaneous.html) <span style="color:#cccccc">(to be updated)</span>
 - <span style="color:#cccccc">Authoring documents in R (to be added)</span> <!-- markdown, blogdown, papaja -->
 - <span style="color:#cccccc">Computational modelling (to be added)</span> <!-- Rescorla-Wagner, GCM -->

@@ -393,7 +393,10 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="xx-shiny.html">Shiny apps</a>
+      <a href="experiments.html">Experiments</a>
+    </li>
+    <li>
+      <a href="shiny.html">Shiny apps</a>
     </li>
     <li>
       <a href="xx-miscellaneous.html">Miscellaneous</a>
@@ -439,7 +442,7 @@ head(afl)                  # show the first few rows</code></pre>
 ## 5     3    FALSE                MCG      18012
 ## 6     3    FALSE Gold Coast Stadium      15867</code></pre>
 <div id="confidence-intervals" class="section level2">
-<h2><span class="header-section-number">99.1</span> Confidence intervals</h2>
+<h2><span class="header-section-number">0.1</span> Confidence intervals</h2>
 <p>As usual there are many ways to compute the confidence interval of the mean in R. One relatively simple one is with the <code>ciMean</code> function in the <code>lsr</code> package, which (conveniently) can take a data frame as input and computes confidence intervals for all the numeric variables:</p>
 <pre class="r"><code>ciMean(afl)</code></pre>
 <pre><code>##                    2.5%       97.5%
@@ -479,7 +482,7 @@ head(afl)                  # show the first few rows</code></pre>
 ## [1,] 100.6212 102.3955</code></pre>
 </div>
 <div id="comparing-two-means" class="section level2">
-<h2><span class="header-section-number">99.2</span> Comparing two means</h2>
+<h2><span class="header-section-number">0.2</span> Comparing two means</h2>
 <p>Does the home team tend to outscore the away team? This requires a <strong>paired samples t-test</strong>:</p>
 <pre class="r"><code>pairedSamplesTTest(~ home.score + away.score, afl)</code></pre>
 <pre><code>## 
@@ -534,7 +537,7 @@ independentSamplesTTest(total.score ~ is.final, afl)</code></pre>
 ##    estimated effect size (Cohen&#39;s d):  0.257</code></pre>
 </div>
 <div id="categorical-associations" class="section level2">
-<h2><span class="header-section-number">99.3</span> Categorical associations</h2>
+<h2><span class="header-section-number">0.3</span> Categorical associations</h2>
 <p>Are all teams equally likely to play their home games on every weekday? For that we might consider using a <strong>chi-square test of categorical association</strong>, but as you can see from the output below, a little care is needed:</p>
 <pre class="r"><code>associationTest(~ home.team + weekday, afl)</code></pre>
 <pre><code>## Warning in associationTest(~home.team + weekday, afl): Expected frequencies
@@ -665,7 +668,7 @@ afl$weekday_small &lt;- as.factor(afl$weekday_small)</code></pre>
 ##    estimated effect size (Cramer&#39;s v):  0.237</code></pre>
 </div>
 <div id="comparing-several-means" class="section level2">
-<h2><span class="header-section-number">99.4</span> Comparing several means</h2>
+<h2><span class="header-section-number">0.4</span> Comparing several means</h2>
 <p>Is there such a thing as a “high scoring ground”? Let’s take a look at the average number of points per game at each different ground, only considering grounds that had at least 100 games played during the the time period:</p>
 <pre class="r"><code>venue.use &lt;- table(afl$venue)
 majors &lt;- venue.use[venue.use &gt;= 100]
@@ -700,7 +703,7 @@ afl.majors &lt;- afl[ afl$venue %in% names(majors), ]</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>It seems to be a real thing, but we’ll come back to that in a moment because we might have some worries about confounding variables.</p>
 <div id="post-hoc-tests" class="section level3">
-<h3><span class="header-section-number">99.4.1</span> Post hoc tests</h3>
+<h3><span class="header-section-number">0.4.1</span> Post hoc tests</h3>
 <p>I am not a fan of post hoc tests, even with corrections for Type I error inflation. To see why they drive me nuts, let’s run the output of the ANOVA through the <code>posthocPairwiseT</code> function. By default it uses the Holm correction, but lets just use the simpler and very conservatice Bonferroni correction:</p>
 <pre class="r"><code>posthocPairwiseT(mod, p.adjust.method = &quot;bonferroni&quot;)</code></pre>
 <pre><code>## 
@@ -748,7 +751,7 @@ afl.majors &lt;- afl[ afl$venue %in% names(majors), ]</code></pre>
 </div>
 </div>
 <div id="assessing-relationships" class="section level2">
-<h2><span class="header-section-number">99.5</span> Assessing relationships</h2>
+<h2><span class="header-section-number">0.5</span> Assessing relationships</h2>
 <p>One thing that people commented on a lot during this time period was the fact that the games became lower scoring over time. Is that a real effect, or was it just random noise?</p>
 <pre class="r"><code>mod &lt;- lm(total.score ~ year, afl)
 summary(mod)</code></pre>
@@ -787,7 +790,7 @@ abline(coef = mod$coef)</code></pre>
 <p><img src="xx-introductory-statistics_files/figure-html/unnamed-chunk-17-1.png" width="456" style="display: block; margin: auto;" /></p>
 <p>That’s pretty clearly a real effect, but it does open up a new line of worries about the last analysis…</p>
 <div id="hierarchical-regression" class="section level3">
-<h3><span class="header-section-number">99.5.1</span> Hierarchical regression</h3>
+<h3><span class="header-section-number">0.5.1</span> Hierarchical regression</h3>
 <p>Suppose we’re a little paranoid. Maybe the effect of <code>venue</code> is spurious: some grounds came into use at different years, and we know there’s an effect of <code>year</code> on the <code>total.score</code>. Similarly, folk wisdom has it that finals games are lower scoring, and those games are disproportionately likely to be played at the MCG. Maybe there’s an effect of the size of the crowd? Some stadiums are bigger than others? Maybe there’s an effect of weekday, and some venues do indeed get used on different days. Maybe it’s an effect of the teams playing, since different teams tend to play at different grounds (especially when considering the home team!) To address this let’s dump all those variables into a regression model, and then see if adding <code>venue</code> leads to an improvement in fit over and above those. In other words, we’ll do a <strong>hierarchical regression</strong>. Here it is in R:</p>
 <pre class="r"><code>mod1 &lt;- lm(total.score ~ year + home.team + away.team + is.final + weekday + attendance, afl.majors)
 mod2 &lt;- lm(total.score ~ year + home.team + away.team + is.final + weekday + attendance + venue, afl.majors)
@@ -806,7 +809,7 @@ anova(mod2, mod1)</code></pre>
 <p>Overall it does rather look like there are genuine differences between venues. Though of course there could be many other things we didn’t control for!</p>
 </div>
 <div id="testing-a-correlation" class="section level3">
-<h3><span class="header-section-number">99.5.2</span> Testing a correlation</h3>
+<h3><span class="header-section-number">0.5.2</span> Testing a correlation</h3>
 <p>As an aside, it’s often noted that a Pearson correlation is essentially equivalent to a linear regression model with a single predictor. So we should be able to replicate the <code>total.score ~ year</code> analysis as a correlation. We use the <code>cor.test</code> function to run a hypothesis test here:</p>
 <pre class="r"><code>cor.test(
   x = afl$total.score, 

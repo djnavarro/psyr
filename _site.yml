@@ -52,8 +52,10 @@ navbar:
       href: xx-introductory-statistics.html
   - text: More
     menu:
+    - text: Experiments
+      href: experiments.html
     - text: Shiny apps
-      href: xx-shiny.html
+      href: shiny.html
     - text: Miscellaneous
       href: xx-miscellaneous.html
   right:
