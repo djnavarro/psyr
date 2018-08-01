@@ -42,7 +42,7 @@ With that in mind, I'll talk about all three of those use cases in these notes. 
 
 ## Text based tasks
 
-To start with, lets consider a very simple task. Imagine that we wanted to investigate how people play "[hangman](https://en.wikipedia.org/wiki/Hangman_(game)". On the off chance you're unfamiliar with the game, it's a straightforward two player game. One player thinks of a word and the other person has to work it out by making a series of guesses as to what letters it contains. If the guesser works it out before making a predetermined number of errors then they win. To investigate this, we will need to implement this game in R, with the computer choosing the word and the human guessing. It's a text based task, so we should be able to do the whole thing in the console. Some problems we'll need to solve:
+To start with, lets consider a very simple task. Imagine that we wanted to investigate how people play "[hangman](https://en.wikipedia.org/wiki/Hangman_(game)). On the off chance you're unfamiliar with the game, it's a straightforward two player game. One player thinks of a word and the other person has to work it out by making a series of guesses as to what letters it contains. If the guesser works it out before making a predetermined number of errors then they win. To investigate this, we will need to implement this game in R, with the computer choosing the word and the human guessing. It's a text based task, so we should be able to do the whole thing in the console. Some problems we'll need to solve:
 
 - How do we present the current state of the game?
 - How do we get input from the participant?
@@ -85,92 +85,94 @@ Here's what that looks like:
 show_hangman(guesses = "aest", word = "computational", errors = 5)
 ```
 
+That's a good beginning! Next, we'll need a function that can ask the participant to make a guess, and store the response. The `readline()` function is good for this:
 
-
-
-## OLD
-
-
-Sometimes it's just too much effort to set up a whole Shiny app. Maybe all you want to do is have some simple text based interaction, and you'd be perfectly happy to go old school and have the user respond in the R console. Here's a simple example:
-
-```{r, eval=FALSE}
-# An interactive game at the console
-
-# A sneaky trick: RStudio recognises the "form feed" character
-# as a cue to clear all the text in the console. If we send it
-# to the console using "cat" it functions as a way of clearing
-# the screen. Define a "clearscreen" function...
-clearscreen <- function(){
-  cat("\f") # form feed character: "\014"
+```{r}
+prompt_user <- function(){
+  guess <- readline("what letter would you like to guess next? ")
+  return(guess)
 }
-
-# clear the screen
-clearscreen()
-
-# initialise the data as an empty data frame 
-dataset <- data.frame(
-  trial = numeric(0),
-  upper = numeric(0),
-  lower = numeric(0),
-  query = numeric(0),
-  response = character(0)
-)
-
-# initialise the state of the experiment
-low <- 1   # lowest possible number
-up <- 100  # highest possible number
-rng <- up-low # possible uncertainty?
-trial <- 1
-
-# keep guessing until the answer is known
-while( rng > 1 ) {
-  
-  # sample a query item
-  que <- sample(low:up,1)
-  
-  # ask the question until the user responds with "y" or "n"
-  cat("\n\n\n\n\n")
-  resp <- ""
-  while( !(resp %in% c("y","n"))) {
-    prompt <- paste0("Is it higher than ", que, "? [y/n]  ")
-    resp <- readline(prompt)
-    resp <- tolower(resp)
-  }
-  
-  # record the data
-  dataset <- rbind(
-    dataset, 
-    data.frame(
-      trial=trial,
-      upper=up,
-      lower=low,
-      query=que,
-      response=resp
-    )
-  )
-
-  # use the user response to update the bounds
-  if(resp == "y") {
-    low <- que
-  } else{ 
-    up <- que
-  }
-  
-  # update the rest of the state accordingly
-  rng <- up-low
-  trial <- trial + 1
-  
-  # clear the screen in readiness for the next trial
-  clearscreen()
-  
-}
-
-# end the experiment
-cat("Done!\n\n")
-print(dataset)
 ```
 
+Ideally, during our experiment what we would do is clear the screen every time a person makes a guess and then update the display. To do this, we'll need a function to clear any text from the console. This is handled differently depending on what system you're using. I'll assume here that you're working within RStudio, in which case the trick here is to send the "[form feed](https://en.wikipedia.org/wiki/Page_break)" character to the console^[Form feed dates back to the early days of computing and doesn't serve much of a purpose anymore, but it's still recognised. As a consequence many software packages have co-opted it and used it for other purposes. Since the original definition was something like "clear the current page from the printer", it makes some sense to use it to mean "clear the current console log from the screen"]
 
+```{r}
+clear_screen <- function(){
+  cat("\f") # form feed character
+}
+```
+
+This seems to be most of what we would need. However, we will probably also need a function that checks to see whether the game is over. Most of what we needed to do this is contained in the `show_hangman()` function above, but here it is is stripped down:
+
+```{r}
+game_state <- function(guesses, word, errors) {
+  
+  library(stringr)
+  reg <- function(x){ paste0("[",x,"]") }
+  
+  n_missing <- word %>% str_remove_all(reg(guesses)) %>% str_length()
+  if(n_missing == 0) {
+    return("win")
+  }
+  
+  # how many errors?
+  n_guess <- guesses %>% str_length()
+  n_hit <- guesses %>% str_count(reg(word))
+  n_err <- n_guess - n_hit
+  if(n_err >= errors) {
+    return("lose")
+  }
+  
+  return("continuing")
+}
+```
+
+Now we can organise this into a function that plays a game of hangman!
+
+```{r}
+hangman <- function(word, errors) {
+  
+  guesses <- ""
+  state <- "continuing"
+  while(state == "continuing") {
+    
+    clear_screen()
+    show_hangman(guesses, word, errors)
+    g <- prompt_user()
+    
+    guesses <- guesses %>% str_c(g)
+    state <- game_state(guesses, word, errors)
+  }
+  
+  dat <- c(word = word, guesses = guesses, errors = errors, outcome = state)
+  
+  clear_screen()
+  show_hangman(guesses, word, errors)
+  
+  return(dat)
+}
+```
+
+From there, all you need to do is put them all into a single script and you're ready to go. The [hangman1.R](./scripts/hangman1.R) script provides an example that plays one game of hangman, and [hangman2.R](./scripts/hangman2.R) plays a series of three games and then stores the results in a data frame `d`. Obviously, in a real experiment you'd need to tidy the presentation, but I hope you get the idea.
+
+### A second example
+
+As the hangman example illustrates, R allows you to create text based tasks and use them as the basis for experiments in a way that might be difficult to do with simpler tools like Qualtrics or SurveyMonkey. The key feature of R (or any programming language for that matter) that allows this flexibility is the ability to write complicated forms of *interactivity* into your experiment. For the hangman task, the experiment is able to rely on text processing tools to update the state of the game after every guess, and to adapt appropriately no matter what the participant does.
+
+To give you a sense of how much further you can take this idea, imagine we were interested in studying how people solve strategic planning problems. An engaging way to do this is to implement a decision making problem in the form of a video game. Normally, this would require some fancy graphics to work, but thanks to the joy of emoji, you can go a suprisingly long way just using text. 
+
+The video below shows me playing a simple video game. Imagine you are a rabbit trying to get to a carrot, but there are a bunch of “fire devils” that you need to avoid. We can use the w/a/s/d keys to navigate or q to quit the game. The fire devils are stupid and move randomly; when they bump into each other they merge together. When the game starts there are too many fire devils for it to be safe to try to cross to the carrot, so it might be wise to wait for some of them to burn out before venturing across to the carrot:
+
+<video width="600" controls>
+  <source src="./img/rabbit.webm" type="video/webm">
+Your browser does not support the video tag.
+</video>
+
+In this video, R is running at the Mac OS terminal rather than inside RStudio. I'm doing this because there is a package called **keypress** that only works through the terminal. In the hangman example, for a participant to make a response they need to type the letter and then press enter. For hangman that's fine, but for the rabbit game it seems weird. So instead of using `readline` to get the user response I'm relying on the `keypress` function. If you're interested, the code for [rabbit.R](./scripts/rabbit.R) is available!
+
+### A third example
+
+Just because I can... the [guessing.R](./scripts/guessing.R) provides an example of different kind of task, one in which the participant has to pick a number and the computer tries to guess it. 
 
 ## Graphical tasks
 
