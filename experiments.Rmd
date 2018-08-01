@@ -15,15 +15,32 @@ output:
     ]
 ---
 
-```{r,echo=FALSE}
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
 rm(list=objects()) # start with a clean workspace
 source("knitr_tweaks.R")
 library(tidyverse,quietly = TRUE)
 ```
 
+In my experience, most people in psychology start using R because they need it to solve problems with data analysis. Either they need to organise a data set, visualise it cleanly, or apply a statistical tool to the data that isn't available via any other mechanism. Those are the areas in which R has traditionally held an advantage over other programming languages or other statistical software, and in my opinion that's still the area where it's strongest.
+
+That being said, R is a proper programming language and you can use it for all sorts of other things. For example, one question I'm often asked is whether R can be used to run behavioural experiments. Of course the answer to that question is "yes, absolutely", but I think it's worth thinking about when this is a good idea. There are a few examples I can think of where I'd strongly argue that R isn't the right tool for the job:
+
+- If all you need is a simple survey without a complicated design, tools like SurveyMonkey and Qualtrics are much easier to use and they're not generally all that expensive. I've never really found a use case for R in this context
+- If you need high precision timing and very low level control over stimulus presentation (i.e., down to the level of specifying exactly what happens at each screen refresh), I'd be wary about using R. Everything I've read about how event handling in R works suggests that it's just not as good as Python for that task. 
+- More generally if you already know how to implement the experiment using a tool like jsPsych - which is free, open source and has a community of users in psychology alread - why switch? If your system isn't broken don't try to fix it.
+
+So what does that leave? When should you consider using R to implement a behavioural experiment? I can think of a few possibilities.
+
+- If you have a text based task that doesn't require very high precision timing, but has a more complicated interactive structure than is possible with a questionnaire, R can deliver a perfectly workable task without a lot of effort
+- If your task is graphics-based and you're okay with running it on your own machine (i.e. not online) you can repurpose the R graphics system for this. 
+- If your experiment needs to take the form of a complicated web application and you aren't already a skilled web programmer, you can build "Shiny" apps through R that work really well
+
+In the long run I suspect most people will want to find other solutions to the problem besides R, but at the same time I think it's really important to recognise that you can't learn all the things at once. Just mastering one programming language is hard enough `r emo::ji("grinning")` so it's worth the effort to try to get as much mileage out of that as possible!
+
+With that in mind, I'll talk about all three of those use cases in these notes. The "Shiny" approach is complex enough that I've broken it off into its own [section](./shiny.html), but I'll talk about the other two approaches in this section.
 
 
-## Experiments in the console
+## Text based tasks
 
 Sometimes it's just too much effort to set up a whole Shiny app. Maybe all you want to do is have some simple text based interaction, and you'd be perfectly happy to go old school and have the user respond in the R console. Here's a simple example:
 
@@ -106,10 +123,10 @@ print(dataset)
 
 
 
-## Experiments in graphics window
+## Graphical tasks
 
 
-## Experiments in a web application
+## Shiny apps?
 
 The third and most sophisticated approach is to build a web application using Shiny. This has a number of advantages. Firstly, you can run a Shiny app locally on your machine or deploy it to the internet - so you can collect online data easily. Secondly, it has a lot more flexibility in terms of what you can do with it. However, the advantages do come at a cost. There's a certain amount of effort involved in learning how to build a Shiny app, and some additional work to adapt the framework to behavioural experiments. It's a big enough topic that I'm not going to try to force it into a subsection here. Instead, there's a whole section devoted to [shiny](./shiny.html)!
 
