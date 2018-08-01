@@ -1,5 +1,5 @@
 ---
-title: "Behavioural Experiments"
+title: "Behavioural experiments"
 output:
   html_document:
     includes:
@@ -175,6 +175,14 @@ In this video, R is running at the Mac OS terminal rather than inside RStudio. I
 Just because I can... the [guessing.R](./scripts/guessing.R) provides an example of different kind of task, one in which the participant has to pick a number and the computer tries to guess it. 
 
 ## Graphical tasks
+
+The rabbit example gives you a sense of how far you can go using nothing other than text, but in many situations you'll probably need something a little more sophisticated. The natural intuition that you might have is that we can use the R graphics system as the foundation for a psychological experiment: on every trial you'd use use a graphics tool (e.g. `ggplot`) to draw the stimulus on screen, and then the participant could respond using the keyboard or the mouse.
+
+That intuition is correct, but we'll need to modify our approach a little bit. Earlier on when we discussed [data visualisation](./visualising-data.html) I didn't really talk much about the capabilities of different *graphics devices* because it didn't matter much. In this context it starts to matter whether we draw the plot in the RStudio plot pane or somewhere else, because there are different graphics devices associated with each one, and only some of them are responsive to user input. Clearly, in order to design a behavioural experiment we will need to use a device that supports interactivity, and that means the RStudio graphics device is no good to us: it's designed for the user to draw plots, not for interaction. On a Windows system you can use the default `windows()` graphics device, and on a Mac you can use `X11()`.^[Note that newer Macs don't ship with X11 by default anymore: you can download [XQuartz](https://www.xquartz.org/) to fix this]
+
+The [getGraphicsEvent](https://www.rdocumentation.org/packages/grDevices/versions/3.5.1/topics/getGraphicsEvent) function solves our problem. An example of this is included in the [correlationtask.R](./scripts/correlationtask.R) script.
+
+**[to be continued...]**
 
 
 ## Shiny apps?

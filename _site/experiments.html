@@ -11,7 +11,7 @@
 
 
 
-<title>Behavioural Experiments</title>
+<title>Behavioural experiments</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -417,7 +417,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Behavioural Experiments</h1>
+<h1 class="title toc-ignore">Behavioural experiments</h1>
 
 </div>
 
@@ -553,6 +553,10 @@ div.tocify {
 </div>
 <div id="graphical-tasks" class="section level2">
 <h2><span class="header-section-number">0.2</span> Graphical tasks</h2>
+<p>The rabbit example gives you a sense of how far you can go using nothing other than text, but in many situations you’ll probably need something a little more sophisticated. The natural intuition that you might have is that we can use the R graphics system as the foundation for a psychological experiment: on every trial you’d use use a graphics tool (e.g. <code>ggplot</code>) to draw the stimulus on screen, and then the participant could respond using the keyboard or the mouse.</p>
+<p>That intuition is correct, but we’ll need to modify our approach a little bit. Earlier on when we discussed <a href="./visualising-data.html">data visualisation</a> I didn’t really talk much about the capabilities of different <em>graphics devices</em> because it didn’t matter much. In this context it starts to matter whether we draw the plot in the RStudio plot pane or somewhere else, because there are different graphics devices associated with each one, and only some of them are responsive to user input. Clearly, in order to design a behavioural experiment we will need to use a device that supports interactivity, and that means the RStudio graphics device is no good to us: it’s designed for the user to draw plots, not for interaction. On a Windows system you can use the default <code>windows()</code> graphics device, and on a Mac you can use <code>X11()</code>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<p>The <a href="https://www.rdocumentation.org/packages/grDevices/versions/3.5.1/topics/getGraphicsEvent">getGraphicsEvent</a> function solves our problem. An example of this is included in the <a href="./scripts/correlationtask.R">correlationtask.R</a> script.</p>
+<p><strong>[to be continued…]</strong></p>
 </div>
 <div id="shiny-apps" class="section level2">
 <h2><span class="header-section-number">0.3</span> Shiny apps?</h2>
@@ -562,6 +566,7 @@ div.tocify {
 <hr />
 <ol>
 <li id="fn1"><p>Form feed dates back to the early days of computing and doesn’t serve much of a purpose anymore, but it’s still recognised. As a consequence many software packages have co-opted it and used it for other purposes. Since the original definition was something like “clear the current page from the printer”, it makes some sense to use it to mean “clear the current console log from the screen”<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Note that newer Macs don’t ship with X11 by default anymore: you can download <a href="https://www.xquartz.org/">XQuartz</a> to fix this<a href="#fnref2">↩</a></p></li>
 </ol>
 </div>
 
