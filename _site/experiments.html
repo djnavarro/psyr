@@ -535,7 +535,20 @@ div.tocify {
   
   return(dat)
 }</code></pre>
-<p>From there, all you need to do is put them all into a single script and you’re ready to go. The <a href="./scripts/hangman1.R">hangman1.R</a> script provides an example that plays one game of hangman, and <a href="./scripts/hangman2.R">hangman2.R</a> plays a series of three games and then stores the results in a data frame <code>d</code>. Obviously, in a real experiment you’d need to tidy the presentation, but I hope you get the idea.</p>
+<p>From there, all you need to do is put them all into a single script and you’re ready to go. The <a href="./scripts/hangman1.R">hangman1.R</a> script provides an example that plays one game of hangman, and <a href="./scripts/hangman2.R">hangman2.R</a> plays a series of three games and then stores the results in a data frame <code>d</code>. The video below illustrates this in action:</p>
+<video width="600" controls>
+<source src="./img/hangman.webm" type="video/webm"> Your browser does not support the video tag.
+</video>
+<p>Obviously, if this were a real experiment there are a number of additional things you’d need to do:</p>
+<ul>
+<li>Add a stage for obtaining informed constent and demographics</li>
+<li>Provide instructions to participants and debriefing information</li>
+<li>Add randomisation of stimuli</li>
+<li>Make the code robust to upper and lower case</li>
+<li>Make the code require a single letter at a time</li>
+<li>Etc</li>
+</ul>
+<p>However, with any luck this minimal skeleton gives you enough to see how you might go about adding these additional properties to the code.</p>
 <div id="a-second-example" class="section level3">
 <h3><span class="header-section-number">0.1.1</span> A second example</h3>
 <p>As the hangman example illustrates, R allows you to create text based tasks and use them as the basis for experiments in a way that might be difficult to do with simpler tools like Qualtrics or SurveyMonkey. The key feature of R (or any programming language for that matter) that allows this flexibility is the ability to write complicated forms of <em>interactivity</em> into your experiment. For the hangman task, the experiment is able to rely on text processing tools to update the state of the game after every guess, and to adapt appropriately no matter what the participant does.</p>
@@ -554,9 +567,36 @@ div.tocify {
 <div id="graphical-tasks" class="section level2">
 <h2><span class="header-section-number">0.2</span> Graphical tasks</h2>
 <p>The rabbit example gives you a sense of how far you can go using nothing other than text, but in many situations you’ll probably need something a little more sophisticated. The natural intuition that you might have is that we can use the R graphics system as the foundation for a psychological experiment: on every trial you’d use use a graphics tool (e.g. <code>ggplot</code>) to draw the stimulus on screen, and then the participant could respond using the keyboard or the mouse.</p>
-<p>That intuition is correct, but we’ll need to modify our approach a little bit. Earlier on when we discussed <a href="./visualising-data.html">data visualisation</a> I didn’t really talk much about the capabilities of different <em>graphics devices</em> because it didn’t matter much. In this context it starts to matter whether we draw the plot in the RStudio plot pane or somewhere else, because there are different graphics devices associated with each one, and only some of them are responsive to user input. Clearly, in order to design a behavioural experiment we will need to use a device that supports interactivity, and that means the RStudio graphics device is no good to us: it’s designed for the user to draw plots, not for interaction. On a Windows system you can use the default <code>windows()</code> graphics device, and on a Mac you can use <code>X11()</code>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
-<p>The <a href="https://www.rdocumentation.org/packages/grDevices/versions/3.5.1/topics/getGraphicsEvent">getGraphicsEvent</a> function solves our problem. An example of this is included in the <a href="./scripts/correlationtask.R">correlationtask.R</a> script.</p>
-<p><strong>[to be continued…]</strong></p>
+<p>That intuition is correct, but we’ll need to modify our approach a little bit. Earlier on when we discussed <a href="./visualising-data.html">data visualisation</a> I didn’t really talk much about the capabilities of different <em>graphics devices</em> because it didn’t matter much. In this context it starts to matter whether we draw the plot in the RStudio plot pane or somewhere else, because there are different graphics devices associated with each one, and only some of them are responsive to user input. Clearly, in order to design a behavioural experiment we will need to use a device that supports interactivity, and that means the RStudio graphics device is no good to us: it’s designed for the user to draw plots, not for interaction. A simple way to get around this if you’re on a Unix based system (e.g. Mac, Linux) is to use the <code>X11()</code> graphics device,<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> as this does support user interaction. To give you a sense for what you can realistically achieve, the <a href="./scripts/orientation.R">orientation.R</a> script contains an example of an experiment that displays triangles that might be pointing upwards or downwards, and the task is to guess whether there are more upwards pointing arrows (press the “6” key) or downwards ones (press “b”):</p>
+<video width="600" controls>
+<source src="./img/orientation.webm" type="video/webm"> Your browser does not support the video tag.
+</video>
+<p>There’s a longer video of me running myself through 60 trials of this task <a href="./img/orientation_full.webm">here</a>, and the data set generated from it is <a href="./data/orientation.csv">here</a>.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p>So how does the code work? I won’t show the full code here, only the part that matters. At the beginning of the task I create an <code>X11</code> graphics device:</p>
+<pre class="r"><code>X11(width = 8, height = 8, 
+    xpos = 100, ypos = 30)</code></pre>
+<p>This opens up an 8 inch by 8 inch window, slightly offset from the top left of my screen. Besides specifying the location of the window, the main thing this is doing is switching R away from the RStudio plot pane, so that any plots I draw will now be sent to the new window. At the end of the task I close this graphics device by including the line:</p>
+<pre class="r"><code>dev.off()</code></pre>
+<p>The experiment itself is implemented as a loop over trials. At the start of each trial I generate the random array of points and plot them to the window, and then use the <a href="https://www.rdocumentation.org/packages/grDevices/versions/3.5.1/topics/getGraphicsEvent">getGraphicsEvent</a> function to tell the system to wait for the user to press a key. Here’s the relevant part of the code, slightly edited for clarity</p>
+<pre class="r"><code>user_response &lt;- getGraphicsEvent(onKeybd = response)</code></pre>
+<p>What this does is tell the system to wait until there is a <em>keyboard</em> event, at which point R will send the <code>key</code> that the user pressed to the <code>response()</code> function. Within the script, I define the <code>response()</code> function to be this:</p>
+<pre class="r"><code>response &lt;- function(key) {
+  if(key == &quot;6&quot;) return(&quot;up&quot;)
+  if(key == &quot;b&quot;) return(&quot;down&quot;)
+  return(NA)
+}</code></pre>
+<p>If I press the “6” key this function will return <code>&quot;up&quot;</code>, if I press “b” it will return <code>&quot;down&quot;</code>, and if I press anything else it will return <code>NA</code>. Regardless of what I press, the result of this will be stored as the <code>user_response</code> variable (though in the actual script you’ll see I write it to an entry in a tibble), and the program will continue running.</p>
+<p>There are a few other niceties in there. For instance, there is a line of code that uses <code>Sys.sleep()</code> to tell the system to pause for 1 second between trials. There’s also a line that uses <code>sample()</code> to randomise the order of trials. But I’ll let you take a look for yourself. The main thing for the current purposes is to note that it’s the <code>X11()</code> function that allows you to create the graphics device you need, and the <code>getGraphicsEvent()</code> function allows you to tell the system to wait for user response (it also allows you to grab mouse events).</p>
+<p>Oh, and how did I do at the task? Here’s a quick and dirty picture:</p>
+<pre class="r"><code>read_csv(&quot;./data/orientation.csv&quot;) %&gt;% 
+  group_by(n_up) %&gt;%
+  summarise(p_up = mean(response == &quot;up&quot;)) %&gt;%
+  ggplot(aes(x = n_up, y = p_up)) +
+  geom_point() +
+  geom_smooth() + 
+  xlab(&quot;Number of Upward Triangles&quot;) +
+  ylab(&quot;Choice Proportion&quot;)</code></pre>
+<p><img src="experiments_files/figure-html/unnamed-chunk-12-1.png" width="456" style="display: block; margin: auto;" /></p>
 </div>
 <div id="shiny-apps" class="section level2">
 <h2><span class="header-section-number">0.3</span> Shiny apps?</h2>
@@ -566,7 +606,8 @@ div.tocify {
 <hr />
 <ol>
 <li id="fn1"><p>Form feed dates back to the early days of computing and doesn’t serve much of a purpose anymore, but it’s still recognised. As a consequence many software packages have co-opted it and used it for other purposes. Since the original definition was something like “clear the current page from the printer”, it makes some sense to use it to mean “clear the current console log from the screen”<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>Note that newer Macs don’t ship with X11 by default anymore: you can download <a href="https://www.xquartz.org/">XQuartz</a> to fix this<a href="#fnref2">↩</a></p></li>
+<li id="fn2"><p>I’m not entirely sure what the fix would be if you’re on Windows. Also note that newer Macs don’t ship with X11 by default, so you have to install <a href="https://www.xquartz.org/">XQuartz</a>. Sigh.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>I should mention that although you the viewer can see the numbers scrolling past in these videos - so that you can see what decisions I was making - they were all far enough outside my focus of attention that I couldn’t see them while doing the task. I’m actually shocked I performed as well I did. It totally <em>felt</em> like I was guessing pretty randomly!<a href="#fnref3">↩</a></p></li>
 </ol>
 </div>
 

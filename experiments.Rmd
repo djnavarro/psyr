@@ -153,7 +153,25 @@ hangman <- function(word, errors) {
 }
 ```
 
-From there, all you need to do is put them all into a single script and you're ready to go. The [hangman1.R](./scripts/hangman1.R) script provides an example that plays one game of hangman, and [hangman2.R](./scripts/hangman2.R) plays a series of three games and then stores the results in a data frame `d`. Obviously, in a real experiment you'd need to tidy the presentation, but I hope you get the idea.
+From there, all you need to do is put them all into a single script and you're ready to go. The [hangman1.R](./scripts/hangman1.R) script provides an example that plays one game of hangman, and [hangman2.R](./scripts/hangman2.R) plays a series of three games and then stores the results in a data frame `d`. The video below illustrates this in action:
+
+<video width="600" controls>
+  <source src="./img/hangman.webm" type="video/webm">
+Your browser does not support the video tag.
+</video>
+
+
+Obviously, if this were a real experiment there are a number of additional things you'd need to do:
+
+- Add a stage for obtaining informed constent and demographics
+- Provide instructions to participants and debriefing information
+- Add randomisation of stimuli
+- Make the code robust to upper and lower case
+- Make the code require a single letter at a time
+- Etc
+
+However, with any luck this minimal skeleton gives you enough to see how you might go about adding these additional properties to the code. 
+
 
 ### A second example
 
@@ -178,11 +196,60 @@ Just because I can... the [guessing.R](./scripts/guessing.R) provides an example
 
 The rabbit example gives you a sense of how far you can go using nothing other than text, but in many situations you'll probably need something a little more sophisticated. The natural intuition that you might have is that we can use the R graphics system as the foundation for a psychological experiment: on every trial you'd use use a graphics tool (e.g. `ggplot`) to draw the stimulus on screen, and then the participant could respond using the keyboard or the mouse.
 
-That intuition is correct, but we'll need to modify our approach a little bit. Earlier on when we discussed [data visualisation](./visualising-data.html) I didn't really talk much about the capabilities of different *graphics devices* because it didn't matter much. In this context it starts to matter whether we draw the plot in the RStudio plot pane or somewhere else, because there are different graphics devices associated with each one, and only some of them are responsive to user input. Clearly, in order to design a behavioural experiment we will need to use a device that supports interactivity, and that means the RStudio graphics device is no good to us: it's designed for the user to draw plots, not for interaction. On a Windows system you can use the default `windows()` graphics device, and on a Mac you can use `X11()`.^[Note that newer Macs don't ship with X11 by default anymore: you can download [XQuartz](https://www.xquartz.org/) to fix this]
+That intuition is correct, but we'll need to modify our approach a little bit. Earlier on when we discussed [data visualisation](./visualising-data.html) I didn't really talk much about the capabilities of different *graphics devices* because it didn't matter much. In this context it starts to matter whether we draw the plot in the RStudio plot pane or somewhere else, because there are different graphics devices associated with each one, and only some of them are responsive to user input. Clearly, in order to design a behavioural experiment we will need to use a device that supports interactivity, and that means the RStudio graphics device is no good to us: it's designed for the user to draw plots, not for interaction. A simple way to get around this if you're on a Unix based system (e.g. Mac, Linux) is to use the `X11()` graphics device,^[I'm not entirely sure what the fix would be if you're on Windows. Also note that newer Macs don't ship with X11 by default, so you have to install [XQuartz](https://www.xquartz.org/). Sigh.] as this does support user interaction. To give you a sense for what you can realistically achieve, the [orientation.R](./scripts/orientation.R) script contains an example of an experiment that displays triangles that might be pointing upwards or downwards, and the task is to guess whether there are more upwards pointing arrows (press the "6" key) or downwards ones (press "b"):
 
-The [getGraphicsEvent](https://www.rdocumentation.org/packages/grDevices/versions/3.5.1/topics/getGraphicsEvent) function solves our problem. An example of this is included in the [correlationtask.R](./scripts/correlationtask.R) script.
+<video width="600" controls>
+  <source src="./img/orientation.webm" type="video/webm">
+Your browser does not support the video tag.
+</video>
 
-**[to be continued...]**
+There's a longer video of me running myself through 60 trials of this task [here](./img/orientation_full.webm), and the data set generated from it is [here](./data/orientation.csv).^[I should mention that although you the viewer can see the numbers scrolling past in these videos - so that you can see what decisions I was making - they were all far enough outside my focus of attention that I couldn't see them while doing the task. I'm actually shocked I performed as well I did. It totally *felt* like I was guessing pretty randomly!] 
+
+So how does the code work? I won't show the full code here, only the part that matters. At the beginning of the task I create an `X11` graphics device:
+
+```{r,eval=FALSE}
+X11(width = 8, height = 8, 
+    xpos = 100, ypos = 30)
+```
+
+This opens up an 8 inch by 8 inch window, slightly offset from the top left of my screen. Besides specifying the location of the window, the main thing this is doing is switching R away from the RStudio plot pane, so that any plots I draw will now be sent to the new window. At the end of the task I close this graphics device by including the line:
+
+```{r,eval=FALSE}
+dev.off()
+```
+
+The experiment itself is implemented as a loop over trials. At the start of each trial I generate the random array of points and plot them to the window, and then use the [getGraphicsEvent](https://www.rdocumentation.org/packages/grDevices/versions/3.5.1/topics/getGraphicsEvent) function to tell the system to wait for the user to press a key. Here's the relevant part of the code, slightly edited for clarity
+
+```{r,eval=FALSE}
+user_response <- getGraphicsEvent(onKeybd = response)
+```
+
+What this does is tell the system to wait until there is a *keyboard* event, at which point R will send the `key` that the user pressed to the `response()` function. Within the script, I define the `response()` function to be this:
+
+```{r,eval=FALSE}
+response <- function(key) {
+  if(key == "6") return("up")
+  if(key == "b") return("down")
+  return(NA)
+}
+```
+
+If I press the "6" key this function will return `"up"`, if I press "b" it will return `"down"`, and if I press anything else it will return `NA`. Regardless of what I press, the result of this will be stored as the `user_response` variable (though in the actual script you'll see I write it to an entry in a tibble), and the program will continue running.
+
+There are a few other niceties in there. For instance, there is a line of code that uses `Sys.sleep()` to tell the system to pause for 1 second between trials. There's also a line that uses `sample()` to randomise the order of trials. But I'll let you take a look for yourself. The main thing for the current purposes is to note that it's the `X11()` function that allows you to create the graphics device you need, and the `getGraphicsEvent()` function allows you to tell the system to wait for user response (it also allows you to grab mouse events). 
+
+Oh, and how did I do at the task? Here's a quick and dirty picture:
+
+```{r,message=FALSE}
+read_csv("./data/orientation.csv") %>% 
+  group_by(n_up) %>%
+  summarise(p_up = mean(response == "up")) %>%
+  ggplot(aes(x = n_up, y = p_up)) +
+  geom_point() +
+  geom_smooth() + 
+  xlab("Number of Upward Triangles") +
+  ylab("Choice Proportion")
+```
 
 
 ## Shiny apps?
