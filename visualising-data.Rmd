@@ -484,7 +484,9 @@ ggsave(
 The function is smart enough to guess from the `filename` argument what kind of image file to create (e.g., PNG, JPG, etc), and so as long as the filename specifies a file extension that `ggsave()` can handle it will automatically create the right kind of image. The result in this case is [this image file](./output/frame_pic.png).
 
 
+## More resources 
 
+- https://www.r-graph-gallery.com/
 
 
      

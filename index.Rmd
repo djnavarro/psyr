@@ -60,19 +60,21 @@ Everything from here onwards is *very much* a work in progress!
 
 ### 3: Statistics
 
-- [Probability distributions](./xx-distributions.html) <span style="color:#cccccc">(to be updated)</span>
-- [Introductory statistics](./xx-introductory-statistics.html) <span style="color:#cccccc">(to be updated)</span><!-- add Bayes factor -->
+- [Probability distributions](./probability.html) <span style="color:#cccccc">(draft)</span>
+- [Introductory statistics](./xx-introductory-statistics.html) <span style="color:#cccccc">(draft)</span><!-- add Bayes factor -->
 - <span style="color:#cccccc">Intermediate statistics (to be added)</span> 
 - <span style="color:#cccccc">Advanced statistics (to be added)</span> 
 
 ### 4: More topics
 
-- [Behavioural experiments](./experiments.html) <span style="color:#cccccc">(to be updated)</span>
-- [Shiny web applications](./shiny.html) <span style="color:#cccccc">(to be updated)</span>
-- [Miscellaneous](./xx-miscellaneous.html) <span style="color:#cccccc">(to be updated)</span>
+- [Behavioural experiments](./experiments.html) <span style="color:#cccccc">(draft)</span>
+- [Shiny web applications](./shiny.html) <span style="color:#cccccc">(draft)</span>
+- [Web scraping](./web-scraping.html) <span style="color:#cccccc">(draft)</span>
+- [Miscellaneous](./xx-miscellaneous.html) <span style="color:#cccccc">(draft)</span>
+- <span style="color:#cccccc">Image processing in R (to be added)</span> <!-- imager -->
 - <span style="color:#cccccc">Authoring documents in R (to be added)</span> <!-- markdown, blogdown, papaja -->
 - <span style="color:#cccccc">Computational modelling (to be added)</span> <!-- Rescorla-Wagner, GCM -->
-
+- <span style="color:#cccccc">Writing an R package (to be added)</span> <!-- very simple guide -->
 
 
 ### Links

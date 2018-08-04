@@ -284,3 +284,7 @@ left_join(demographics, responses)
 ```
 
 By analogy, if we wanted to retain data only for those characters that provided `responses`, we would use the `right_join()` function. It's also worth noting that there also `semi_join()` and `anti_join()` functions that can handle other kinds of situations, but I won't go into those here.
+
+## More resources
+
+- For a discussion of [dates using lubridate](https://data.library.virginia.edu/working-with-dates-and-time-in-r-using-the-lubridate-package/) 

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Web Scraping</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<!-- ###### start inserted header ##### -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115940772-1');
+</script>
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:title" content="R for Psychological Science">
+<meta property="og:description" content="An introductory resource">
+<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="mystyle.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Psychological Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Core
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="getting-started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li>
+      <a href="scripts.html">Scripts</a>
+    </li>
+    <li>
+      <a href="packages.html">Packages</a>
+    </li>
+    <li>
+      <a href="workspaces.html">Workspaces</a>
+    </li>
+    <li>
+      <a href="vectors.html">Vectors</a>
+    </li>
+    <li>
+      <a href="loops.html">Loops</a>
+    </li>
+    <li>
+      <a href="branches.html">Branches</a>
+    </li>
+    <li>
+      <a href="functions.html">Functions</a>
+    </li>
+    <li>
+      <a href="programming.html">Programming</a>
+    </li>
+    <li>
+      <a href="file-system.html">File system</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="prelude-to-data.html">Prelude</a>
+    </li>
+    <li>
+      <a href="data-types.html">Data types</a>
+    </li>
+    <li>
+      <a href="describing-data.html">Describing data</a>
+    </li>
+    <li>
+      <a href="visualising-data.html">Visualising data</a>
+    </li>
+    <li>
+      <a href="manipulating-data.html">Manipulating data</a>
+    </li>
+    <li>
+      <a href="working-with-text.html">Text data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Stats
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="xx-distributions.html">Probability distributions</a>
+    </li>
+    <li>
+      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="experiments.html">Experiments</a>
+    </li>
+    <li>
+      <a href="shiny.html">Shiny apps</a>
+    </li>
+    <li>
+      <a href="web-scraping.html">Web scraping</a>
+    </li>
+    <li>
+      <a href="xx-miscellaneous.html">Miscellaneous</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://compcogscisydney.org">compcogscisydney.org</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Web Scraping</h1>
+
+</div>
+
+
+<div id="twitter-client" class="section level2">
+<h2><span class="header-section-number">0.1</span> Twitter client</h2>
+<p>Researchers interested in social networks often scrape data from sites such as Twitter in order to obtain data. This is relatively easy to do in R, using a package like <code>twitteR</code>, which provides an interface with the Twitter web API.</p>
+<div id="setting-up-twitter" class="section level3">
+<h3><span class="header-section-number">0.1.1</span> Setting up <code>twitteR</code></h3>
+<p>It’s fairly easy to get set up (e.g. <a href="https://www.r-bloggers.com/setting-up-the-twitter-r-package-for-text-analytics/">this post</a>):</p>
+<ol style="list-style-type: decimal">
+<li>Install the <code>twitteR</code> package</li>
+<li>Get a twitter account
+<ul>
+<li>I have <span class="citation">@lsrbook</span> for this</li>
+<li>you do need to add a mobile number (for Australian numbers, drop the leading 0)</li>
+</ul></li>
+<li>Go to <a href="https://apps.twitter.com" class="uri">https://apps.twitter.com</a> (sign in with your account)</li>
+<li>Click on “create new app”</li>
+<li>Enter the information it requests: you need a name, a description, a website. For my client I set
+<ul>
+<li>lsr-book-twitter-app</li>
+<li>R twitter client for teaching purposes</li>
+<li>I used <a href="https://learningstatisticswithr.com" class="uri">https://learningstatisticswithr.com</a> (the post suggests: <a href="https://bigcomputing.blogspot.com" class="uri">https://bigcomputing.blogspot.com</a>)</li>
+</ul></li>
+<li>Agree to terms and conditions</li>
+</ol>
+<p>At this point the app is created on the Twitter side. You’ll need to get some information to allow R access to the app:</p>
+<ol start="7" style="list-style-type: decimal">
+<li>Click on “key &amp; access token” tab and get the following:
+<ul>
+<li>Consumer Key (API Key)</li>
+<li>Consumer Secret (API Secret)</li>
+</ul></li>
+<li>Go to the “create my access token” button:
+<ul>
+<li>Access Token</li>
+<li>Access Token Secret</li>
+</ul></li>
+</ol>
+<p>This is all R needs so go back to R and enter the following:</p>
+<pre class="r"><code>consumer_key &lt;- &quot;XXXXX&quot;
+consumer_secret &lt;- &quot;XXXXX&quot;
+access_token &lt;- &quot;XXXXX&quot;
+access_secret &lt;- &quot;XXXXX&quot;</code></pre>
+<p>where the <code>&quot;XXXXX&quot;</code> values are of course the keys you just downloaded. Within R the command to authorise the <code>twitteR</code> package access to the app is:</p>
+<pre><code>setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_secret)</code></pre>
+<p>Now we’re ready to go!</p>
+</div>
+<div id="using-the-twitter-client" class="section level3">
+<h3><span class="header-section-number">0.1.2</span> Using the Twitter client</h3>
+<p>Okay, so I guess people like to tweet about <code>#thedrum</code> so I decided to search for the last 10000 tweets containing that term. It’s easy to do:</p>
+<pre class="r"><code>library(twitteR)
+
+drumtweet10k &lt;- searchTwitter(
+  searchString = &quot;thedrum&quot;, 
+  n=10000
+)</code></pre>
+<p>The raw data are saved in the <code>dt10k.Rdata</code>. The format of the data is a little complicated, so I did a tiny bit of text processing and tidying, and then saved the results to <code>dt10k-sml.Rdata</code>. Let’s take a look:</p>
+<pre class="r"><code>load(&quot;./data/dt10k-sml.Rdata&quot;)
+library(lsr)
+who()</code></pre>
+<pre><code>##    -- Name --   -- Class --   -- Size --
+##    dt10k_stp    character     116860    
+##    dt10k_txt    character     10000     
+##    freq         table         16529     
+##    stopchars    character     25        
+##    stopwords    character     120</code></pre>
+<p>In the full data set the twitter client has downloaded a lot of information about each tweet, but in this simpler versionm <code>dt10k_txt</code> variable contains only the raw text of each tweet. Here’s the first few tweets:</p>
+<pre class="r"><code>dt10k_txt[1:5]</code></pre>
+<pre><code>## [1] &quot;RT @deniseshrivell: Joyce and the nationals deserve to be called out &amp;amp; held to account on their complete lack of policy in the public inter…&quot;
+## [2] &quot;Omnicom promotes Mark Halliday to CEO of perfomance and announces departure of Lee Smith https://t.co/ePom6lnAeX&quot;                                
+## [3] &quot;10 questions with… Sarah Ronald, founding director of Nile https://t.co/ZZQlPMe6fr&quot;                                                              
+## [4] &quot;Reeha Alder Shah, managing partner for AnalogFolk: BAME professionals should &#39;embrace their differences&#39; https://t.co/QXKGMqnGvI&quot;                
+## [5] &quot;Xiaomi and Microsoft sign deal to collaborate on AI, cloud and hardware https://t.co/vkelwHc3a2&quot;</code></pre>
+<p>The <code>dt10k_stp</code> vector concatenates all the tweets, splits them so that each word is a separate element, after removing punctuation characters, converting everthing to lower case, and removing certain <code>stopwords</code> that are very high frequency but rarely interesting:</p>
+<pre class="r"><code>dt10k_stp[1:50]</code></pre>
+<pre><code>##  [1] &quot;rt&quot;                 &quot;@deniseshrivell&quot;    &quot;joyce&quot;             
+##  [4] &quot;nationals&quot;          &quot;deserve&quot;            &quot;called&quot;            
+##  [7] &quot;out&quot;                &quot;held&quot;               &quot;account&quot;           
+## [10] &quot;complete&quot;           &quot;lack&quot;               &quot;policy&quot;            
+## [13] &quot;public&quot;             &quot;inter&quot;              &quot;omnicom&quot;           
+## [16] &quot;promotes&quot;           &quot;mark&quot;               &quot;halliday&quot;          
+## [19] &quot;ceo&quot;                &quot;perfomance&quot;         &quot;announces&quot;         
+## [22] &quot;departure&quot;          &quot;lee&quot;                &quot;smith&quot;             
+## [25] &quot;httpstcoepom6lnaex&quot; &quot;10&quot;                 &quot;questions&quot;         
+## [28] &quot;sarah&quot;              &quot;ronald&quot;             &quot;founding&quot;          
+## [31] &quot;director&quot;           &quot;nile&quot;               &quot;httpstcozzqlpme6fr&quot;
+## [34] &quot;reeha&quot;              &quot;alder&quot;              &quot;shah&quot;              
+## [37] &quot;managing&quot;           &quot;partner&quot;            &quot;analogfolk&quot;        
+## [40] &quot;bame&quot;               &quot;professionals&quot;      &quot;embrace&quot;           
+## [43] &quot;differences&quot;        &quot;httpstcoqxkgmqngvi&quot; &quot;xiaomi&quot;            
+## [46] &quot;microsoft&quot;          &quot;sign&quot;               &quot;deal&quot;              
+## [49] &quot;collaborate&quot;        &quot;ai&quot;</code></pre>
+<p>The <code>freq</code> variable is a frequency table for the words in <code>dt10k_stp</code>, sorted in order of decreasing frequency. Here are the top 20 words:</p>
+<pre class="r"><code>names(freq[1:20])</code></pre>
+<pre><code>##  [1] &quot;rt&quot;               &quot;@thedrum&quot;         &quot;#thedrum&quot;        
+##  [4] &quot;via&quot;              &quot;@abcthedrum&quot;      &quot;@stopadanicairns&quot;
+##  [7] &quot;new&quot;              &quot;#auspol&quot;          &quot;more&quot;            
+## [10] &quot;people&quot;           &quot;advertising&quot;      &quot;barnaby&quot;         
+## [13] &quot;#qldpol&quot;          &quot;marketing&quot;        &quot;ad&quot;              
+## [16] &quot;up&quot;               &quot;out&quot;              &quot;dont&quot;            
+## [19] &quot;joyce&quot;            &quot;time&quot;</code></pre>
+<p>Just to illustrate that there is psychological value in this approach, here’s the standard “rank-frequency plot”, showing the signature (approximately) power-law behaviour. There are a few <em>extremely</em> common words, and then a <em>very</em> long tail of low frequency words. Variations on this pattern are ubiquitous in natural language:</p>
+<pre class="r"><code>plot(
+  x = freq[1:100], 
+  xlab=&quot;Word&quot;, 
+  ylab=&quot;Frequency&quot;
+)</code></pre>
+<p><img src="web-scraping_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>That said, I do wonder how much of this data set is spam. There seem to be a lot of tweets about blockchain in there, which does make me suspicious. I may have to revisit this example in the future!</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
