@@ -459,18 +459,82 @@ HHHHHHHHHHH
 </div>
 <div id="sampling" class="section level2">
 <h2><span class="header-section-number">0.2</span> Sampling</h2>
-<div id="without-replacement" class="section level3">
-<h3><span class="header-section-number">0.2.1</span> …without replacement</h3>
-<video width="768"  controls loop>
-<source src="probability_files/figure-html/sampling_without_replacement.webm" />
-</video>
-</div>
-<div id="with-replacement" class="section level3">
-<h3><span class="header-section-number">0.2.2</span> …with replacement</h3>
-<video width="768"  controls loop>
-<source src="probability_files/figure-html/sampling_with_replacement.webm" />
-</video>
-</div>
+<p>The <code>sample()</code> function is an extremely useful tool. Suppose I have a set of 10 stimuli that I want to present to people in a random order. For simplicity I’ll label the items using <code>letters</code>:<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<pre class="r"><code>stimuli &lt;- letters[1:10]
+stimuli</code></pre>
+<pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot;</code></pre>
+<p>To sample them in a random order, all I need to do is this</p>
+<pre class="r"><code>shuffled_stimuli &lt;- sample(stimuli)
+shuffled_stimuli</code></pre>
+<pre><code>##  [1] &quot;j&quot; &quot;b&quot; &quot;i&quot; &quot;e&quot; &quot;d&quot; &quot;f&quot; &quot;h&quot; &quot;g&quot; &quot;a&quot; &quot;c&quot;</code></pre>
+<p>Or to do the same thing with piped code…</p>
+<pre class="r"><code>shuffled_stimuli &lt;- stimuli %&gt;% sample()
+shuffled_stimuli</code></pre>
+<pre><code>##  [1] &quot;g&quot; &quot;i&quot; &quot;f&quot; &quot;b&quot; &quot;a&quot; &quot;d&quot; &quot;e&quot; &quot;h&quot; &quot;c&quot; &quot;j&quot;</code></pre>
+<p>Notice that the output the second time around <em>isn’t</em> the same a the output the first time. The <code>sample()</code> function uses a pseudo-random number generator to order the items differently every time.</p>
+<pre class="r"><code>for(i in 1:5) {
+  stimuli %&gt;% 
+    sample() %&gt;% 
+    print()
+}</code></pre>
+<pre><code>##  [1] &quot;c&quot; &quot;b&quot; &quot;j&quot; &quot;i&quot; &quot;d&quot; &quot;g&quot; &quot;a&quot; &quot;e&quot; &quot;h&quot; &quot;f&quot;
+##  [1] &quot;i&quot; &quot;b&quot; &quot;e&quot; &quot;d&quot; &quot;g&quot; &quot;h&quot; &quot;j&quot; &quot;c&quot; &quot;a&quot; &quot;f&quot;
+##  [1] &quot;a&quot; &quot;b&quot; &quot;e&quot; &quot;i&quot; &quot;g&quot; &quot;f&quot; &quot;d&quot; &quot;j&quot; &quot;h&quot; &quot;c&quot;
+##  [1] &quot;c&quot; &quot;i&quot; &quot;f&quot; &quot;a&quot; &quot;b&quot; &quot;g&quot; &quot;h&quot; &quot;j&quot; &quot;d&quot; &quot;e&quot;
+##  [1] &quot;i&quot; &quot;j&quot; &quot;b&quot; &quot;f&quot; &quot;a&quot; &quot;e&quot; &quot;g&quot; &quot;c&quot; &quot;d&quot; &quot;h&quot;</code></pre>
+<p>As you can see if you feed in a vector of inputs, the default behaviour is to shuffle all the items. However, the <code>sample()</code> function is flexible. For example, “shuffling all the items” is a special case of “sampling without replacement”. Imagine taking all the stimuli (<em>letters</em>), and then placing them into a jar. To shuffle them into a random order all you need to do is shake the jar (<em>randomise</em>) pull them out of the jar (<em>sample</em>) one at a time until the jar is empty (<em>no replacement</em>).</p>
+<p>The jars metaphor is nice because we can extend it. Suppose we only want to pull 6 of the 10 stimuli out of the jar:</p>
+<pre class="r"><code>stimuli %&gt;% sample(size = 6)</code></pre>
+<pre><code>## [1] &quot;e&quot; &quot;j&quot; &quot;a&quot; &quot;g&quot; &quot;i&quot; &quot;b&quot;</code></pre>
+<p>Again, there are no repeats (it is impossible to pull the same item from the jar twice), but we stopped before pulling everything out. Here’s a loop showing you how the randomisation gives different answers every time, but it always follows the constraints of stopping at 6 draws and never draws the same item twice:</p>
+<pre class="r"><code>for(i in 1:5) {
+  stimuli %&gt;% 
+    sample(size = 6) %&gt;% 
+    print()
+}</code></pre>
+<pre><code>## [1] &quot;e&quot; &quot;b&quot; &quot;i&quot; &quot;a&quot; &quot;h&quot; &quot;g&quot;
+## [1] &quot;i&quot; &quot;h&quot; &quot;e&quot; &quot;a&quot; &quot;b&quot; &quot;f&quot;
+## [1] &quot;c&quot; &quot;h&quot; &quot;i&quot; &quot;d&quot; &quot;b&quot; &quot;j&quot;
+## [1] &quot;c&quot; &quot;j&quot; &quot;g&quot; &quot;e&quot; &quot;f&quot; &quot;b&quot;
+## [1] &quot;h&quot; &quot;a&quot; &quot;b&quot; &quot;d&quot; &quot;c&quot; &quot;i&quot;</code></pre>
+<p>Another way to extend the jars metaphor is to sample <em>with replacement</em>. In this version of the sampling scheme, every time we pull a letter out of the jar we write it down, but then put it back in the jar so that it becomes possible to sample it again.</p>
+<pre class="r"><code>for(i in 1:5) {
+  stimuli %&gt;% 
+    sample(size = 15, replace = TRUE) %&gt;% 
+    print()
+}</code></pre>
+<pre><code>##  [1] &quot;a&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;a&quot; &quot;a&quot; &quot;j&quot; &quot;g&quot; &quot;f&quot; &quot;f&quot; &quot;b&quot; &quot;j&quot; &quot;a&quot; &quot;g&quot; &quot;i&quot;
+##  [1] &quot;e&quot; &quot;j&quot; &quot;g&quot; &quot;g&quot; &quot;e&quot; &quot;c&quot; &quot;i&quot; &quot;a&quot; &quot;f&quot; &quot;i&quot; &quot;b&quot; &quot;i&quot; &quot;a&quot; &quot;a&quot; &quot;e&quot;
+##  [1] &quot;f&quot; &quot;c&quot; &quot;f&quot; &quot;h&quot; &quot;f&quot; &quot;c&quot; &quot;g&quot; &quot;g&quot; &quot;c&quot; &quot;h&quot; &quot;e&quot; &quot;g&quot; &quot;i&quot; &quot;f&quot; &quot;g&quot;
+##  [1] &quot;c&quot; &quot;j&quot; &quot;i&quot; &quot;a&quot; &quot;b&quot; &quot;d&quot; &quot;f&quot; &quot;f&quot; &quot;j&quot; &quot;h&quot; &quot;f&quot; &quot;c&quot; &quot;h&quot; &quot;f&quot; &quot;i&quot;
+##  [1] &quot;d&quot; &quot;h&quot; &quot;h&quot; &quot;h&quot; &quot;b&quot; &quot;j&quot; &quot;j&quot; &quot;g&quot; &quot;e&quot; &quot;c&quot; &quot;j&quot; &quot;i&quot; &quot;b&quot; &quot;b&quot; &quot;h&quot;</code></pre>
+<p>Notice that this time you can produce sequences of stimuli that are longer than the original set (because you’re putting them back in the jar). In this case even though I only had 10 items, each output has 15 samples from that set: there are of course repeats!</p>
+<p>A final way we can extend the metaphor is to imagine that some of the letters are written on larger pieces of paper than others: so when you reach into the hat you’re more likely to pull out the larger ones.</p>
+<pre class="r"><code>weights &lt;- 1:10 # weight the later letters more!</code></pre>
+<p>You can use this when sampling with replacement and without. Here’s what it looks like when sampling without replacement:</p>
+<pre class="r"><code>for(i in 1:5) {
+  stimuli %&gt;% 
+    sample(size = 10, replace = FALSE, prob = weights) %&gt;% 
+    print()
+}</code></pre>
+<pre><code>##  [1] &quot;f&quot; &quot;d&quot; &quot;a&quot; &quot;h&quot; &quot;j&quot; &quot;c&quot; &quot;b&quot; &quot;g&quot; &quot;e&quot; &quot;i&quot;
+##  [1] &quot;a&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;b&quot; &quot;e&quot; &quot;c&quot; &quot;g&quot; &quot;f&quot; &quot;d&quot;
+##  [1] &quot;b&quot; &quot;d&quot; &quot;j&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;a&quot; &quot;c&quot; &quot;f&quot; &quot;e&quot;
+##  [1] &quot;j&quot; &quot;i&quot; &quot;d&quot; &quot;g&quot; &quot;c&quot; &quot;f&quot; &quot;h&quot; &quot;a&quot; &quot;e&quot; &quot;b&quot;
+##  [1] &quot;c&quot; &quot;f&quot; &quot;i&quot; &quot;j&quot; &quot;g&quot; &quot;h&quot; &quot;b&quot; &quot;d&quot; &quot;e&quot; &quot;a&quot;</code></pre>
+<p>So in this output every line shuffles the 10 items, but there’s a definite bias in how the items are ordered! We’re much more likely to start with the later letters than with the early ones!</p>
+<p>We can also do this when sampling with replacement:</p>
+<pre class="r"><code>for(i in 1:5) {
+  stimuli %&gt;% 
+    sample(size = 10, replace = TRUE, prob = weights) %&gt;% 
+    print()
+}</code></pre>
+<pre><code>##  [1] &quot;f&quot; &quot;c&quot; &quot;e&quot; &quot;e&quot; &quot;c&quot; &quot;j&quot; &quot;j&quot; &quot;g&quot; &quot;d&quot; &quot;i&quot;
+##  [1] &quot;j&quot; &quot;c&quot; &quot;g&quot; &quot;b&quot; &quot;g&quot; &quot;j&quot; &quot;j&quot; &quot;f&quot; &quot;b&quot; &quot;h&quot;
+##  [1] &quot;j&quot; &quot;j&quot; &quot;e&quot; &quot;j&quot; &quot;h&quot; &quot;i&quot; &quot;i&quot; &quot;d&quot; &quot;e&quot; &quot;j&quot;
+##  [1] &quot;e&quot; &quot;f&quot; &quot;j&quot; &quot;j&quot; &quot;i&quot; &quot;g&quot; &quot;h&quot; &quot;j&quot; &quot;h&quot; &quot;j&quot;
+##  [1] &quot;h&quot; &quot;c&quot; &quot;g&quot; &quot;h&quot; &quot;c&quot; &quot;i&quot; &quot;f&quot; &quot;i&quot; &quot;h&quot; &quot;j&quot;</code></pre>
+<p>In this output, you can see that we’re very unlikely to sample the letter “a”.</p>
 </div>
 <div id="normal-distribution" class="section level2">
 <h2><span class="header-section-number">0.3</span> Normal distribution</h2>
@@ -493,26 +557,26 @@ HHHHHHHHHHH
 <p>For example, IQ scores are roughly normally distributed, and the tests are (supposedly) normed in such a way that the average IQ score is 100 and the standard deviation is 15. So let’s use R to randomly generate a sample of <code>n = 50</code> IQ scores using the <code>rnorm</code> function.</p>
 <pre class="r"><code>iq &lt;- rnorm(n = 50, mean = 100, sd = 15)  # sample the IQ scores
 hist(iq, xlab=&quot;IQ&quot;,main=&quot;&quot;)               # draw the histogram</code></pre>
-<p><img src="probability_files/figure-html/unnamed-chunk-2-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p><img src="probability_files/figure-html/unnamed-chunk-12-1.png" width="456" style="display: block; margin: auto;" /></p>
 <p>You can <em>kind of</em> see the shape of the bell curve with 50 observations, but it’s not super obvious. If we ratchet up the sample size to <code>n = 10000</code> data points, it becomes a lot more obvious</p>
 <pre class="r"><code>iq &lt;- rnorm(n = 10000, mean = 100, sd = 15)  # sample the IQ scores
 hist(iq, xlab=&quot;IQ&quot;,main=&quot;&quot;)               # draw the histogram</code></pre>
-<p><img src="probability_files/figure-html/unnamed-chunk-3-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p><img src="probability_files/figure-html/unnamed-chunk-13-1.png" width="456" style="display: block; margin: auto;" /></p>
 <p>We can draw the bell curve itself by using the <code>dnorm</code> function:</p>
 <pre class="r"><code>iq &lt;- 40:160
 prob &lt;- dnorm(x = iq, mean = 100, sd = 15)
 plot(iq, prob, xlab=&quot;IQ&quot;,ylab=&quot;Density&quot;, main=&quot;&quot;, type=&quot;l&quot;)</code></pre>
-<p><img src="probability_files/figure-html/unnamed-chunk-4-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p><img src="probability_files/figure-html/unnamed-chunk-14-1.png" width="456" style="display: block; margin: auto;" /></p>
 <p>The cumulative distribution function looks like this:</p>
 <pre class="r"><code>iq &lt;- 40:160
 cprob &lt;- pnorm(q = iq, mean = 100, sd = 15)
 plot(iq, cprob, xlab=&quot;IQ&quot;,ylab=&quot;Cumulative Probability&quot;, main=&quot;&quot;, type=&quot;l&quot;)</code></pre>
-<p><img src="probability_files/figure-html/unnamed-chunk-5-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p><img src="probability_files/figure-html/unnamed-chunk-15-1.png" width="456" style="display: block; margin: auto;" /></p>
 <p>The quantile function is just the inverse of the cumulative distribution (i.e., x and y axes are swapped):</p>
 <pre class="r"><code>prob &lt;- seq(from = .01, to = .99, by = .01)
 q &lt;- qnorm(p = prob, mean = 100, sd = 15)
 plot(prob, q, xlab=&quot;Probability&quot;,ylab=&quot;Quantile&quot;, main=&quot;&quot;, type=&quot;l&quot;)</code></pre>
-<p><img src="probability_files/figure-html/unnamed-chunk-6-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p><img src="probability_files/figure-html/unnamed-chunk-16-1.png" width="456" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="binomial-distribution" class="section level2">
@@ -520,6 +584,12 @@ plot(prob, q, xlab=&quot;Probability&quot;,ylab=&quot;Quantile&quot;, main=&quot
 <video width="456"  controls loop>
 <source src="probability_files/figure-html/binomial.webm" />
 </video>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The <code>letters</code> vector is a built in vector in R that contains the 26 lower case letters of the English alphabet in canonical order. There is also a <code>LETTERS</code> vector that has the upper case letters.<a href="#fnref1">↩</a></p></li>
+</ol>
 </div>
 
 

@@ -61,61 +61,123 @@ Let’s start with the first of these questions. What is “probability”? It m
 
 My personal view is much closer to the Bayesian perspective, and I tend to use Bayesian methods myself, but I'll talk a bit about both approaches in this book. Regardless of which version you prefer, the core *mechanics* for working with probabilities in R are the same.
 
-## Sampling 
+## Sampling from a set
 
-### ...without replacement
+The `sample()` function is an extremely useful tool. Suppose I have a set of 10 stimuli that I want to present to people in a random order. For simplicity I'll label the items using `letters`:^[The `letters` vector is a built in vector in R that contains the 26 lower case letters of the English alphabet in canonical order. There is also a `LETTERS` vector that has the upper case letters.]
 
-```{r sampling_without_replacement, fig.show='animate', interval=.5, cache=TRUE, echo=FALSE, message=FALSE,fig.height=4, fig.width=8}
-library(scico)
+```{r}
+stimuli <- letters[1:10]
+stimuli
+```
+
+To sample them in a random order, all I need to do is this
+
+```{r}
+shuffled_stimuli <- sample(stimuli)
+shuffled_stimuli
+```
+
+Or to do the same thing with piped code...
+
+```{r}
+shuffled_stimuli <- stimuli %>% sample()
+shuffled_stimuli
+```
+
+Notice that the output the second time around *isn't* the same a the output the first time. The `sample()` function uses a pseudo-random number generator to order the items differently every time. 
+
+```{r}
 for(i in 1:5) {
-  n <- 20
-  s <- 10
-  d <- tibble(
-    x = c(1:n, 1:s),
-    y = c(rep(2,n), rep(1,s)),
-    col = c(1:n, sample(1:n,size = s))
+  stimuli %>% 
+    sample() %>% 
+    print()
+}
+```
+
+As you can see if you feed in a vector of inputs, the default behaviour is to shuffle all the items. However, the `sample()` function is flexible. For example, "shuffling all the items" is a special case of "sampling without replacement". Imagine taking all the stimuli (*letters*), and then placing them into a jar. To shuffle them into a random order all you need to do is shake the jar (*randomise*) pull them out of the jar (*sample*) one at a time until the jar is empty (*no replacement*). 
+
+The jars metaphor is nice because we can extend it. Suppose we only want to pull 6 of the 10 stimuli out of the jar:
+
+```{r}
+stimuli %>% sample(size = 6)
+```
+
+Again, there are no repeats (it is impossible to pull the same item from the jar twice), but we stopped before pulling everything out. Here's a loop showing you how the randomisation gives different answers every time, but it always follows the constraints of stopping at 6 draws and never draws the same item twice:
+
+```{r}
+for(i in 1:5) {
+  stimuli %>% 
+    sample(size = 6) %>% 
+    print()
+}
+```
+
+Another way to extend the jars metaphor is to sample *with replacement*. In this version of the sampling scheme, every time we pull a letter out of the jar we write it down, but then put it back in the jar so that it becomes possible to sample it again.
+
+```{r}
+for(i in 1:5) {
+  stimuli %>% 
+    sample(size = 15, replace = TRUE) %>% 
+    print()
+}
+```
+
+Notice that this time you can produce sequences of stimuli that are longer than the original set (because you're putting them back in the jar). In this case even though I only had 10 items, each output has 15 samples from that set: there are of course repeats!
+
+A final way we can extend the metaphor is to imagine that some of the letters are written on larger pieces of paper than others: so when you reach into the hat you're more likely to pull out the larger ones. 
+
+```{r}
+weights <- 1:10 # weight the later letters more!
+```
+
+You can use this when sampling with replacement and without. Here's what it looks like when sampling without replacement:
+
+```{r}
+for(i in 1:5) {
+  stimuli %>% 
+    sample(size = 10, replace = FALSE, prob = weights) %>% 
+    print()
+}
+```
+
+So in this output every line shuffles the 10 items, but there's a definite bias in how the items are ordered! We're much more likely to start with the later letters than with the early ones!
+
+We can also do this when sampling with replacement:
+
+
+```{r}
+for(i in 1:5) {
+  stimuli %>% 
+    sample(size = 10, replace = TRUE, prob = weights) %>% 
+    print()
+}
+```
+
+In this output, you can see that we're very unlikely to sample the letter "a".
+
+
+## Binomial distribution
+
+```{r binomial, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, echo=FALSE}
+xmin <- 0
+xmax <- 20
+prob_list <- c(seq(.5,.96,.01),seq(.96,.04,-.01),seq(.04,.5,.01))
+
+for(prob in prob_list) {
+  df <- tibble(
+    Value = xmin:xmax,
+    Probability = dbinom(Value, size = xmax, prob = prob)
   )
-  for(j in 1:s) {
-    pic <- d %>% filter(x <= j | y == 2) %>% 
-      ggplot(aes(x=x,y=y,colour=col)) +
-      geom_point(size=6, show.legend = FALSE) + 
-      geom_line(aes(group=col), show.legend = FALSE) +
-      scale_color_scico(palette = "roma") + 
-      annotate("text", x = n/2, y = 2.25, label = "x", size=5) +
-      annotate("text", x = n/2, y = .75, label = "sample(x)", size=5) +  
-      ylim(.5,2.5) + theme_void()
-    plot(pic)
-  }
+  pic <- df %>% ggplot(aes(x = Value, y = Probability)) +
+    geom_col(width=.5) + 
+    ggtitle(paste0("Success Probability = ", sprintf("%.2f",prob))) +
+    theme_bw() + 
+    ylim(0,.5)
+  plot(pic)
 }
 ```
 
 
-
-### ...with replacement
-
-```{r sampling_with_replacement, fig.show='animate', interval=.5, cache=TRUE, echo=FALSE, message=FALSE,fig.height=4, fig.width=8}
-library(scico)
-for(i in 1:5) {
-  n <- 20
-  s <- 10
-  d <- tibble(
-    x = c(1:n, 1:s),
-    y = c(rep(2,n), rep(1,s)),
-    col = c(1:n, sample(1:n,size = s,replace=TRUE))
-  )
-  for(j in 1:s) {
-    pic <- d %>% filter(x <= j | y == 2) %>% 
-      ggplot(aes(x=x,y=y,colour=col)) +
-      geom_point(size=6, show.legend = FALSE) + 
-      geom_line(aes(group=col), show.legend = FALSE) +
-      scale_color_scico(palette = "roma") + 
-      annotate("text", x = n/2, y = 2.25, label = "x", size=5) +
-      annotate("text", x = n/2, y = .75, label = "sample(x)", size=5) +  
-      ylim(.5,2.5) + theme_void()
-    plot(pic)
-  }
-}
-```
 
 
 ## Normal distribution 
@@ -214,29 +276,6 @@ q <- qnorm(p = prob, mean = 100, sd = 15)
 plot(prob, q, xlab="Probability",ylab="Quantile", main="", type="l")
 ```
 
-
-
-
-## Binomial distribution
-
-```{r binomial, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, echo=FALSE}
-xmin <- 0
-xmax <- 20
-prob_list <- c(seq(.5,.96,.01),seq(.96,.04,-.01),seq(.04,.5,.01))
-
-for(prob in prob_list) {
-  df <- tibble(
-    Value = xmin:xmax,
-    Probability = dbinom(Value, size = xmax, prob = prob)
-  )
-  pic <- df %>% ggplot(aes(x = Value, y = Probability)) +
-    geom_col(width=.5) + 
-    ggtitle(paste0("Success Probability = ", sprintf("%.2f",prob))) +
-    theme_bw() + 
-    ylim(0,.5)
-  plot(pic)
-}
-```
 
 
 
