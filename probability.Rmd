@@ -65,9 +65,9 @@ My personal view is much closer to the Bayesian perspective, and I tend to use B
 
 ### ...without replacement
 
-```{r sampling_without_replacement, fig.show='animate', interval=1, cache=TRUE, echo=FALSE, message=FALSE,fig.height=4, fig.width=8}
+```{r sampling_without_replacement, fig.show='animate', interval=.5, cache=TRUE, echo=FALSE, message=FALSE,fig.height=4, fig.width=8}
 library(scico)
-for(i in 1:10) {
+for(i in 1:5) {
   n <- 20
   s <- 10
   d <- tibble(
@@ -75,14 +75,17 @@ for(i in 1:10) {
     y = c(rep(2,n), rep(1,s)),
     col = c(1:n, sample(1:n,size = s))
   )
-  pic <- d %>% ggplot(aes(x=x,y=y,colour=col)) +
-    geom_point(size=6, show.legend = FALSE) + 
-    geom_line(aes(group=col), show.legend = FALSE) +
-    scale_color_scico(palette = "roma") + 
-    annotate("text", x = n/2, y = 2.25, label = "x", size=5) +
-    annotate("text", x = n/2, y = .75, label = "sample(x)", size=5) +  
-    ylim(.5,2.5) + theme_void()
-  plot(pic)
+  for(j in 1:s) {
+    pic <- d %>% filter(x <= j | y == 2) %>% 
+      ggplot(aes(x=x,y=y,colour=col)) +
+      geom_point(size=6, show.legend = FALSE) + 
+      geom_line(aes(group=col), show.legend = FALSE) +
+      scale_color_scico(palette = "roma") + 
+      annotate("text", x = n/2, y = 2.25, label = "x", size=5) +
+      annotate("text", x = n/2, y = .75, label = "sample(x)", size=5) +  
+      ylim(.5,2.5) + theme_void()
+    plot(pic)
+  }
 }
 ```
 
@@ -90,9 +93,9 @@ for(i in 1:10) {
 
 ### ...with replacement
 
-```{r sampling_with_replacement, fig.show='animate', interval=1, cache=TRUE, echo=FALSE, message=FALSE,fig.height=4, fig.width=8}
+```{r sampling_with_replacement, fig.show='animate', interval=.5, cache=TRUE, echo=FALSE, message=FALSE,fig.height=4, fig.width=8}
 library(scico)
-for(i in 1:10) {
+for(i in 1:5) {
   n <- 20
   s <- 10
   d <- tibble(
@@ -100,55 +103,24 @@ for(i in 1:10) {
     y = c(rep(2,n), rep(1,s)),
     col = c(1:n, sample(1:n,size = s,replace=TRUE))
   )
-  pic <- d %>% ggplot(aes(x=x,y=y,colour=col)) +
-    geom_point(size=6, show.legend = FALSE) + 
-    geom_line(aes(group=col), show.legend = FALSE) +
-    scale_color_scico(palette = "roma") + 
-    annotate("text", x = n/2, y = 2.25, label = "x", size=5) +
-    annotate("text", x = n/2, y = .75, label = "sample(x)", size=5) +  
-    ylim(.5,2.5) + theme_void()
-  plot(pic)
+  for(j in 1:s) {
+    pic <- d %>% filter(x <= j | y == 2) %>% 
+      ggplot(aes(x=x,y=y,colour=col)) +
+      geom_point(size=6, show.legend = FALSE) + 
+      geom_line(aes(group=col), show.legend = FALSE) +
+      scale_color_scico(palette = "roma") + 
+      annotate("text", x = n/2, y = 2.25, label = "x", size=5) +
+      annotate("text", x = n/2, y = .75, label = "sample(x)", size=5) +  
+      ylim(.5,2.5) + theme_void()
+    plot(pic)
+  }
 }
 ```
 
 
-## Quick reference
+## Normal distribution 
 
-The tools for working with probability distributions in R tend to be fairly standardised. If I want to work with a normal distribution, for instance, there are four different functions - `rnorm`, `dnorm`, `pnorm` and `qnorm`. If I want to work with a uniform distribution, the functions are named `runif`, `dunif`, `punif` and `qunif`. For a binomial distribution, they are `rbinom`, `dbinom`, `pbinom` and `qbinom`. The four versions are:
-
-
-- The **r form** is a random number generator: you can use it to sample `n` random outcomes from the distribution.
-- The **d form** computes the probability (or probability density) with which you would observe a particular number `x` if it is generated from this distribution. 
-- The **p form** is the cumulative distribution function. You specify a particular value `q`, and it tells you the probability of obtaining an outcome smaller than or equal to `q`.
-- The **q form** calculates the quantiles of the distribution. You specify a probability value `p`, and gives you the corresponding percentile. That is, the value of the variable for which there’s a probability `p` of obtaining an outcome lower than `q`.
-
-
-## Binomial distribution
-
-
-
-```{r binomial, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, echo=FALSE}
-xmin <- 0
-xmax <- 20
-prob_list <- c(seq(.5,.96,.01),seq(.96,.04,-.01),seq(.04,.5,.01))
-
-for(prob in prob_list) {
-  df <- tibble(
-    Value = xmin:xmax,
-    Probability = dbinom(Value, size = xmax, prob = prob)
-  )
-  pic <- df %>% ggplot(aes(x = Value, y = Probability)) +
-    geom_col(width=.5) + 
-    ggtitle(paste0("Success Probability = ", sprintf("%.2f",prob))) +
-    theme_bw() + 
-    ylim(0,.5)
-  plot(pic)
-}
-```
-
-
-
-## The normal distribution 
+The normal distribution is the perhaps the most widely used distribution in statistics, so it's a natural place to start. 
 
 
 ```{r normal_mean, fig.show='animate', interval=0.05, cache=TRUE, message=FALSE, echo=FALSE}
@@ -191,7 +163,24 @@ for(sigma in sigma_list) {
 ```
 
 
-The normal distribution is the most widely used distribution in statistics, so it's a natural place to start. For example, IQ scores are roughly normally distributed, and the tests are 
+
+
+
+
+### r,d,p and q
+
+The tools for working with probability distributions in R tend to be fairly standardised. If I want to work with a normal distribution, for instance, there are four different functions - `rnorm`, `dnorm`, `pnorm` and `qnorm`. If I want to work with a uniform distribution, the functions are named `runif`, `dunif`, `punif` and `qunif`. For a binomial distribution, they are `rbinom`, `dbinom`, `pbinom` and `qbinom`. The four versions are:
+
+
+- The **r form** is a random number generator: you can use it to sample `n` random outcomes from the distribution.
+- The **d form** computes the probability (or probability density) with which you would observe a particular number `x` if it is generated from this distribution. 
+- The **p form** is the cumulative distribution function. You specify a particular value `q`, and it tells you the probability of obtaining an outcome smaller than or equal to `q`.
+- The **q form** calculates the quantiles of the distribution. You specify a probability value `p`, and gives you the corresponding percentile. That is, the value of the variable for which there’s a probability `p` of obtaining an outcome lower than `q`.
+
+
+
+
+For example, IQ scores are roughly normally distributed, and the tests are 
 (supposedly) normed in such a way that the average IQ score is 100 and the standard deviation is 15. So let's use R to randomly generate a sample of `n = 50` IQ scores using the `rnorm` function.
 ```{r}
 iq <- rnorm(n = 50, mean = 100, sd = 15)  # sample the IQ scores
@@ -223,6 +212,30 @@ The quantile function is just the inverse of the cumulative distribution (i.e., 
 prob <- seq(from = .01, to = .99, by = .01)
 q <- qnorm(p = prob, mean = 100, sd = 15)
 plot(prob, q, xlab="Probability",ylab="Quantile", main="", type="l")
+```
+
+
+
+
+## Binomial distribution
+
+```{r binomial, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, echo=FALSE}
+xmin <- 0
+xmax <- 20
+prob_list <- c(seq(.5,.96,.01),seq(.96,.04,-.01),seq(.04,.5,.01))
+
+for(prob in prob_list) {
+  df <- tibble(
+    Value = xmin:xmax,
+    Probability = dbinom(Value, size = xmax, prob = prob)
+  )
+  pic <- df %>% ggplot(aes(x = Value, y = Probability)) +
+    geom_col(width=.5) + 
+    ggtitle(paste0("Success Probability = ", sprintf("%.2f",prob))) +
+    theme_bw() + 
+    ylim(0,.5)
+  plot(pic)
+}
 ```
 
 

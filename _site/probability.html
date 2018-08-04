@@ -472,8 +472,17 @@ HHHHHHHHHHH
 </video>
 </div>
 </div>
-<div id="quick-reference" class="section level2">
-<h2><span class="header-section-number">0.3</span> Quick reference</h2>
+<div id="normal-distribution" class="section level2">
+<h2><span class="header-section-number">0.3</span> Normal distribution</h2>
+<p>The normal distribution is the perhaps the most widely used distribution in statistics, so it’s a natural place to start.</p>
+<video width="456"  controls loop>
+<source src="probability_files/figure-html/normal_mean.webm" />
+</video>
+<video width="456"  controls loop>
+<source src="probability_files/figure-html/normal_std.webm" />
+</video>
+<div id="rdp-and-q" class="section level3">
+<h3><span class="header-section-number">0.3.1</span> r,d,p and q</h3>
 <p>The tools for working with probability distributions in R tend to be fairly standardised. If I want to work with a normal distribution, for instance, there are four different functions - <code>rnorm</code>, <code>dnorm</code>, <code>pnorm</code> and <code>qnorm</code>. If I want to work with a uniform distribution, the functions are named <code>runif</code>, <code>dunif</code>, <code>punif</code> and <code>qunif</code>. For a binomial distribution, they are <code>rbinom</code>, <code>dbinom</code>, <code>pbinom</code> and <code>qbinom</code>. The four versions are:</p>
 <ul>
 <li>The <strong>r form</strong> is a random number generator: you can use it to sample <code>n</code> random outcomes from the distribution.</li>
@@ -481,22 +490,7 @@ HHHHHHHHHHH
 <li>The <strong>p form</strong> is the cumulative distribution function. You specify a particular value <code>q</code>, and it tells you the probability of obtaining an outcome smaller than or equal to <code>q</code>.</li>
 <li>The <strong>q form</strong> calculates the quantiles of the distribution. You specify a probability value <code>p</code>, and gives you the corresponding percentile. That is, the value of the variable for which there’s a probability <code>p</code> of obtaining an outcome lower than <code>q</code>.</li>
 </ul>
-</div>
-<div id="binomial-distribution" class="section level2">
-<h2><span class="header-section-number">0.4</span> Binomial distribution</h2>
-<video width="456"  controls loop>
-<source src="probability_files/figure-html/binomial.webm" />
-</video>
-</div>
-<div id="the-normal-distribution" class="section level2">
-<h2><span class="header-section-number">0.5</span> The normal distribution</h2>
-<video width="456"  controls loop>
-<source src="probability_files/figure-html/normal_mean.webm" />
-</video>
-<video width="456"  controls loop>
-<source src="probability_files/figure-html/normal_std.webm" />
-</video>
-<p>The normal distribution is the most widely used distribution in statistics, so it’s a natural place to start. For example, IQ scores are roughly normally distributed, and the tests are (supposedly) normed in such a way that the average IQ score is 100 and the standard deviation is 15. So let’s use R to randomly generate a sample of <code>n = 50</code> IQ scores using the <code>rnorm</code> function.</p>
+<p>For example, IQ scores are roughly normally distributed, and the tests are (supposedly) normed in such a way that the average IQ score is 100 and the standard deviation is 15. So let’s use R to randomly generate a sample of <code>n = 50</code> IQ scores using the <code>rnorm</code> function.</p>
 <pre class="r"><code>iq &lt;- rnorm(n = 50, mean = 100, sd = 15)  # sample the IQ scores
 hist(iq, xlab=&quot;IQ&quot;,main=&quot;&quot;)               # draw the histogram</code></pre>
 <p><img src="probability_files/figure-html/unnamed-chunk-2-1.png" width="456" style="display: block; margin: auto;" /></p>
@@ -519,6 +513,13 @@ plot(iq, cprob, xlab=&quot;IQ&quot;,ylab=&quot;Cumulative Probability&quot;, mai
 q &lt;- qnorm(p = prob, mean = 100, sd = 15)
 plot(prob, q, xlab=&quot;Probability&quot;,ylab=&quot;Quantile&quot;, main=&quot;&quot;, type=&quot;l&quot;)</code></pre>
 <p><img src="probability_files/figure-html/unnamed-chunk-6-1.png" width="456" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="binomial-distribution" class="section level2">
+<h2><span class="header-section-number">0.4</span> Binomial distribution</h2>
+<video width="456"  controls loop>
+<source src="probability_files/figure-html/binomial.webm" />
+</video>
 </div>
 
 
