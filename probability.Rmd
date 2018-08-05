@@ -421,12 +421,12 @@ for(mu in mu_list) {
   plot(pic)
 }
 ```
+
 <video width="450" style="display:block; margin: 0 auto;" controls>
-<source src="./img/normal_mean.webm" type="video/webm">
-<source src="./img/normal_mean.mp4" type="video/mp4">
-Your browser does not support the video tag.
-</video>
-<br>
+  <source src="./img/normal_mean.webm" type="video/webm">
+  <source src="./img/normal_mean.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video><br>
 
 Not too surprising. It's maybe a little more informative to look at what happens when we change the standard deviation $\sigma$:
 
@@ -447,10 +447,11 @@ for(sigma in sigma_list) {
   plot(pic)
 }
 ```
+
 <video width="450" style="display:block; margin: 0 auto;" controls>
-<source src="./img/normal_std.webm" type="video/webm">
+  <source src="./img/normal_std.webm" type="video/webm">
 <source src="./img/normal_std.mp4" type="video/mp4">
-Your browser does not support the video tag.
+  Your browser does not support the video tag.
 </video>
 <br>
 
