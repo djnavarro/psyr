@@ -158,7 +158,7 @@ In this output, you can see that we're very unlikely to sample the letter "a".
 
 ## Binomial distribution
 
-The `sample()` function gives you a good feel for how you can take a set of entities (stimuli, participants, outcomes, etc) and do probabilistic operations with them. When doing statistics we sometimes like to abstract away from the simple sampling mechanism and start talking in terms of *probability distriubutions*. To see how the abstraction works let's introduce one of the simplest examples, the **binomial distriubtion**. Imagine we have a six sided die, in which four sides are coloured `"blue"` and two sides are coloured `"red"`. Let's roll the die 20 times and see what we get:
+The `sample()` function gives you a good feel for how you can take a set of entities (stimuli, participants, outcomes, etc) and do probabilistic operations with them. When doing statistics we sometimes like to abstract away from the simple sampling mechanism and start talking in terms of *probability distributions*. To see how the abstraction works let's introduce one of the simplest examples, the **binomial distribution**. Imagine we have a six sided die, in which four sides are coloured `"blue"` and two sides are coloured `"red"`. Let's roll the die 20 times and see what we get:
 
 ```{r}
 die <- c("blue","blue","blue","blue","red","red")
@@ -207,7 +207,7 @@ as_tibble(frequencies, n = "count") %>%
   theme_bw()
 ```
 
-This picture is essentially a visualisation of the **binomial distribution** with success probability `prob = 2/3`, so it's worth taking a moment to be explicit about what we've done. Every one of our experiments produces an *outcome* (number of blues) that can be described as *one* random draw from the binomial distribution. So the 100000 replications of the experiment can be vieweed as a set of 100000 numbers sampled from the binomial. R contains a function `rbinom()` that we can use to do this directly:
+This picture is essentially a visualisation of the **binomial distribution** with success probability `prob = 2/3`, so it's worth taking a moment to be explicit about what we've done. Every one of our experiments produces an *outcome* (number of blues) that can be described as *one* random draw from the binomial distribution. So the 100000 replications of the experiment can be viewed as a set of 100000 numbers sampled from the binomial. R contains a function `rbinom()` that we can use to do this directly:
 
 ```{r}
 n_blue <- rbinom(n = 100000, size = 20, prob = 2/3)
@@ -241,14 +241,17 @@ plot(pic)
 
 Of course, the only reason it looks this nice and smooth is that we replicated the experiment 100000 times. Let's modify the code so the we start out with a relatively small number of replications and watch it smooth out as it gets larger:
 
-```{r, binomial_samples, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE}
+```{r, binomial_samples, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, eval=FALSE}
 for(rep in seq(from = 50, to = 10000, by = 50)){
   n_blue <- rbinom(n = rep, size = 20, prob = 2/3)
   pic <- plot_samples(n_blue)
   plot(pic)
 }
 ```
-
+<video width="450" style="display:block; margin: 0 auto;" controls>
+  <source src="./img/binomial_samples.webm" type="video/webm">
+Your browser does not support the video tag.
+</video>
 
 If you were typing this at the console, this loop would produce a sequence of plots, but what I've done (using some clever features of R Markdown) is wrap it up as an animation. Later on I'll talk about how to make animations.
 
@@ -273,7 +276,7 @@ Cool.
 
 The animation below shows how the binomial distribution changes as we shift the value of `prob`:
 
-```{r binomial, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, echo=FALSE}
+```{r binomial, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, echo=FALSE, eval=FALSE}
 xmin <- 0
 xmax <- 20
 prob_list <- c(seq(.67,.96,.01),seq(.96,.04,-.01),seq(.04,.67,.01))
@@ -291,12 +294,14 @@ for(prob in prob_list) {
   plot(pic)
 }
 ```
+<video width="450" style="display:block; margin: 0 auto;" controls>
+  <source src="./img/binomial.webm" type="video/webm">
+Your browser does not support the video tag.
+</video>
 
 Here's another one that shows what happens as we change the `size` of the experiment.
 
-
-
-```{r binomial_size, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, echo=FALSE}
+```{r binomial_size, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, echo=FALSE, eval=FALSE}
 xmin <- 0
 xmax_list <- 1:200
 
@@ -313,6 +318,10 @@ for(xmax in xmax_list) {
   plot(pic)
 }
 ```
+<video width="450" style="display:block; margin: 0 auto;" controls>
+  <source src="./img/binomial_size.webm" type="video/webm">
+Your browser does not support the video tag.
+</video>
 
 You can see the central limit theorem in action here! As the `size` gets larger, the shape of the binomial distribution gets progressively closer to normal. Speaking of which...
 
@@ -325,10 +334,7 @@ The normal distribution is the perhaps the most widely used distribution in stat
 - The **p form** is the cumulative distribution function. You specify a particular value `q`, and it tells you the probability of obtaining an outcome smaller than or equal to `q`.
 - The **q form** calculates the quantiles of the distribution. You specify a probability value `p`, and gives you the corresponding percentile. That is, the value of the variable for which there’s a probability `p` of obtaining an outcome lower than `q`.
 
-
-
-
-```{r normal_mean, fig.show='animate', interval=0.05, cache=TRUE, message=FALSE, echo=FALSE}
+```{r normal_mean, fig.show='animate', interval=0.05, cache=TRUE, message=FALSE, echo=FALSE, eval=FALSE}
 xmin <- -4
 xmax <- 4
 sigma <- 1
@@ -345,11 +351,13 @@ for(mu in mu_list) {
   plot(pic)
 }
 ```
+<video width="450" style="display:block; margin: 0 auto;" controls>
+  <source src="./img/normal_mean.webm" type="video/webm">
+Your browser does not support the video tag.
+</video>
 
 
-
-
-```{r normal_std, fig.show='animate', interval=0.05, cache=TRUE, message=FALSE, echo=FALSE}
+```{r normal_std, fig.show='animate', interval=0.05, cache=TRUE, message=FALSE, echo=FALSE, eval=FALSE}
 xmin <- -4
 xmax <- 4
 mu <- 0
@@ -366,11 +374,15 @@ for(sigma in sigma_list) {
   plot(pic)
 }
 ```
+<video width="450" style="display:block; margin: 0 auto;" controls>
+  <source src="./img/normal_std.webm" type="video/webm">
+Your browser does not support the video tag.
+</video>
 
 
 
 
-
+## OLD
 
 For example, IQ scores are roughly normally distributed, and the tests are
 (supposedly) normed in such a way that the average IQ score is 100 and the standard deviation is 15. So let's use R to randomly generate a sample of `n = 50` IQ scores using the `rnorm` function.

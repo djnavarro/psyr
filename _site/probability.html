@@ -472,48 +472,48 @@ stimuli</code></pre>
 <p>To sample them in a random order, all I need to do is this</p>
 <pre class="r"><code>shuffled_stimuli &lt;- sample(stimuli)
 shuffled_stimuli</code></pre>
-<pre><code>##  [1] &quot;h&quot; &quot;f&quot; &quot;i&quot; &quot;c&quot; &quot;a&quot; &quot;g&quot; &quot;d&quot; &quot;j&quot; &quot;e&quot; &quot;b&quot;</code></pre>
+<pre><code>##  [1] &quot;f&quot; &quot;i&quot; &quot;j&quot; &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;e&quot; &quot;h&quot; &quot;g&quot; &quot;d&quot;</code></pre>
 <p>Or to do the same thing with piped code…</p>
 <pre class="r"><code>shuffled_stimuli &lt;- stimuli %&gt;% sample()
 shuffled_stimuli</code></pre>
-<pre><code>##  [1] &quot;g&quot; &quot;h&quot; &quot;c&quot; &quot;i&quot; &quot;b&quot; &quot;j&quot; &quot;a&quot; &quot;d&quot; &quot;f&quot; &quot;e&quot;</code></pre>
+<pre><code>##  [1] &quot;e&quot; &quot;f&quot; &quot;i&quot; &quot;c&quot; &quot;g&quot; &quot;d&quot; &quot;a&quot; &quot;b&quot; &quot;h&quot; &quot;j&quot;</code></pre>
 <p>Notice that the output the second time around <em>isn’t</em> the same a the output the first time. The <code>sample()</code> function uses a pseudo-random number generator to order the items differently every time.</p>
 <pre class="r"><code>for(i in 1:5) {
   stimuli %&gt;%
     sample() %&gt;%
     print()
 }</code></pre>
-<pre><code>##  [1] &quot;c&quot; &quot;j&quot; &quot;a&quot; &quot;i&quot; &quot;e&quot; &quot;d&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;b&quot;
-##  [1] &quot;j&quot; &quot;d&quot; &quot;b&quot; &quot;e&quot; &quot;a&quot; &quot;c&quot; &quot;i&quot; &quot;g&quot; &quot;h&quot; &quot;f&quot;
-##  [1] &quot;d&quot; &quot;j&quot; &quot;c&quot; &quot;i&quot; &quot;a&quot; &quot;f&quot; &quot;g&quot; &quot;b&quot; &quot;e&quot; &quot;h&quot;
-##  [1] &quot;h&quot; &quot;e&quot; &quot;g&quot; &quot;c&quot; &quot;b&quot; &quot;j&quot; &quot;a&quot; &quot;f&quot; &quot;d&quot; &quot;i&quot;
-##  [1] &quot;e&quot; &quot;j&quot; &quot;h&quot; &quot;f&quot; &quot;g&quot; &quot;c&quot; &quot;a&quot; &quot;i&quot; &quot;d&quot; &quot;b&quot;</code></pre>
+<pre><code>##  [1] &quot;d&quot; &quot;c&quot; &quot;a&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;b&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot;
+##  [1] &quot;i&quot; &quot;e&quot; &quot;c&quot; &quot;j&quot; &quot;d&quot; &quot;g&quot; &quot;h&quot; &quot;b&quot; &quot;f&quot; &quot;a&quot;
+##  [1] &quot;i&quot; &quot;e&quot; &quot;g&quot; &quot;c&quot; &quot;h&quot; &quot;b&quot; &quot;a&quot; &quot;f&quot; &quot;d&quot; &quot;j&quot;
+##  [1] &quot;g&quot; &quot;j&quot; &quot;i&quot; &quot;e&quot; &quot;b&quot; &quot;c&quot; &quot;h&quot; &quot;f&quot; &quot;d&quot; &quot;a&quot;
+##  [1] &quot;c&quot; &quot;e&quot; &quot;j&quot; &quot;d&quot; &quot;g&quot; &quot;i&quot; &quot;f&quot; &quot;b&quot; &quot;h&quot; &quot;a&quot;</code></pre>
 <p>As you can see if you feed in a vector of inputs, the default behaviour is to shuffle all the items. However, the <code>sample()</code> function is flexible. For example, “shuffling all the items” is a special case of “sampling without replacement”. Imagine taking all the stimuli (<em>letters</em>), and then placing them into a jar. To shuffle them into a random order all you need to do is shake the jar (<em>randomise</em>) pull them out of the jar (<em>sample</em>) one at a time until the jar is empty (<em>no replacement</em>).</p>
 <p>The jars metaphor is nice because we can extend it. Suppose we only want to pull 6 of the 10 stimuli out of the jar:</p>
 <pre class="r"><code>stimuli %&gt;% sample(size = 6)</code></pre>
-<pre><code>## [1] &quot;i&quot; &quot;e&quot; &quot;a&quot; &quot;c&quot; &quot;f&quot; &quot;j&quot;</code></pre>
+<pre><code>## [1] &quot;d&quot; &quot;e&quot; &quot;b&quot; &quot;h&quot; &quot;f&quot; &quot;g&quot;</code></pre>
 <p>Again, there are no repeats (it is impossible to pull the same item from the jar twice), but we stopped before pulling everything out. Here’s a loop showing you how the randomisation gives different answers every time, but it always follows the constraints of stopping at 6 draws and never draws the same item twice:</p>
 <pre class="r"><code>for(i in 1:5) {
   stimuli %&gt;%
     sample(size = 6) %&gt;%
     print()
 }</code></pre>
-<pre><code>## [1] &quot;h&quot; &quot;d&quot; &quot;c&quot; &quot;f&quot; &quot;g&quot; &quot;a&quot;
-## [1] &quot;j&quot; &quot;b&quot; &quot;g&quot; &quot;h&quot; &quot;c&quot; &quot;d&quot;
-## [1] &quot;f&quot; &quot;d&quot; &quot;e&quot; &quot;a&quot; &quot;g&quot; &quot;b&quot;
-## [1] &quot;h&quot; &quot;c&quot; &quot;e&quot; &quot;a&quot; &quot;i&quot; &quot;d&quot;
-## [1] &quot;f&quot; &quot;j&quot; &quot;d&quot; &quot;i&quot; &quot;g&quot; &quot;e&quot;</code></pre>
+<pre><code>## [1] &quot;d&quot; &quot;j&quot; &quot;h&quot; &quot;f&quot; &quot;b&quot; &quot;a&quot;
+## [1] &quot;a&quot; &quot;e&quot; &quot;i&quot; &quot;d&quot; &quot;h&quot; &quot;f&quot;
+## [1] &quot;d&quot; &quot;j&quot; &quot;g&quot; &quot;h&quot; &quot;e&quot; &quot;i&quot;
+## [1] &quot;h&quot; &quot;a&quot; &quot;d&quot; &quot;b&quot; &quot;g&quot; &quot;f&quot;
+## [1] &quot;c&quot; &quot;e&quot; &quot;f&quot; &quot;h&quot; &quot;a&quot; &quot;i&quot;</code></pre>
 <p>Another way to extend the jars metaphor is to sample <em>with replacement</em>. In this version of the sampling scheme, every time we pull a letter out of the jar we write it down, but then put it back in the jar so that it becomes possible to sample it again.</p>
 <pre class="r"><code>for(i in 1:5) {
   stimuli %&gt;%
     sample(size = 15, replace = TRUE) %&gt;%
     print()
 }</code></pre>
-<pre><code>##  [1] &quot;a&quot; &quot;h&quot; &quot;i&quot; &quot;h&quot; &quot;d&quot; &quot;d&quot; &quot;a&quot; &quot;g&quot; &quot;h&quot; &quot;a&quot; &quot;a&quot; &quot;j&quot; &quot;f&quot; &quot;d&quot; &quot;g&quot;
-##  [1] &quot;a&quot; &quot;c&quot; &quot;f&quot; &quot;i&quot; &quot;c&quot; &quot;a&quot; &quot;d&quot; &quot;j&quot; &quot;h&quot; &quot;f&quot; &quot;e&quot; &quot;h&quot; &quot;b&quot; &quot;j&quot; &quot;h&quot;
-##  [1] &quot;c&quot; &quot;j&quot; &quot;a&quot; &quot;b&quot; &quot;b&quot; &quot;i&quot; &quot;c&quot; &quot;j&quot; &quot;c&quot; &quot;c&quot; &quot;e&quot; &quot;a&quot; &quot;c&quot; &quot;i&quot; &quot;g&quot;
-##  [1] &quot;j&quot; &quot;d&quot; &quot;a&quot; &quot;c&quot; &quot;j&quot; &quot;d&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;b&quot; &quot;c&quot; &quot;g&quot; &quot;c&quot; &quot;g&quot;
-##  [1] &quot;h&quot; &quot;b&quot; &quot;f&quot; &quot;c&quot; &quot;d&quot; &quot;d&quot; &quot;h&quot; &quot;i&quot; &quot;h&quot; &quot;d&quot; &quot;i&quot; &quot;b&quot; &quot;a&quot; &quot;j&quot; &quot;b&quot;</code></pre>
+<pre><code>##  [1] &quot;h&quot; &quot;g&quot; &quot;h&quot; &quot;a&quot; &quot;j&quot; &quot;d&quot; &quot;b&quot; &quot;a&quot; &quot;j&quot; &quot;e&quot; &quot;g&quot; &quot;c&quot; &quot;a&quot; &quot;e&quot; &quot;j&quot;
+##  [1] &quot;j&quot; &quot;a&quot; &quot;j&quot; &quot;a&quot; &quot;e&quot; &quot;a&quot; &quot;g&quot; &quot;d&quot; &quot;a&quot; &quot;e&quot; &quot;i&quot; &quot;i&quot; &quot;i&quot; &quot;b&quot; &quot;c&quot;
+##  [1] &quot;b&quot; &quot;f&quot; &quot;j&quot; &quot;e&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;d&quot; &quot;b&quot; &quot;b&quot; &quot;e&quot; &quot;b&quot; &quot;b&quot; &quot;h&quot; &quot;c&quot;
+##  [1] &quot;b&quot; &quot;j&quot; &quot;b&quot; &quot;d&quot; &quot;i&quot; &quot;d&quot; &quot;a&quot; &quot;i&quot; &quot;c&quot; &quot;b&quot; &quot;d&quot; &quot;i&quot; &quot;g&quot; &quot;b&quot; &quot;i&quot;
+##  [1] &quot;d&quot; &quot;j&quot; &quot;h&quot; &quot;d&quot; &quot;j&quot; &quot;a&quot; &quot;d&quot; &quot;a&quot; &quot;e&quot; &quot;c&quot; &quot;a&quot; &quot;b&quot; &quot;j&quot; &quot;j&quot; &quot;h&quot;</code></pre>
 <p>Notice that this time you can produce sequences of stimuli that are longer than the original set (because you’re putting them back in the jar). In this case even though I only had 10 items, each output has 15 samples from that set: there are of course repeats!</p>
 <p>A final way we can extend the metaphor is to imagine that some of the letters are written on larger pieces of paper than others: so when you reach into the hat you’re more likely to pull out the larger ones.</p>
 <pre class="r"><code>weights &lt;- 1:10 # weight the later letters more!</code></pre>
@@ -523,11 +523,11 @@ shuffled_stimuli</code></pre>
     sample(size = 10, replace = FALSE, prob = weights) %&gt;%
     print()
 }</code></pre>
-<pre><code>##  [1] &quot;d&quot; &quot;a&quot; &quot;e&quot; &quot;h&quot; &quot;j&quot; &quot;g&quot; &quot;i&quot; &quot;f&quot; &quot;b&quot; &quot;c&quot;
-##  [1] &quot;j&quot; &quot;h&quot; &quot;e&quot; &quot;b&quot; &quot;g&quot; &quot;f&quot; &quot;c&quot; &quot;d&quot; &quot;i&quot; &quot;a&quot;
-##  [1] &quot;d&quot; &quot;g&quot; &quot;i&quot; &quot;b&quot; &quot;j&quot; &quot;h&quot; &quot;f&quot; &quot;c&quot; &quot;e&quot; &quot;a&quot;
-##  [1] &quot;d&quot; &quot;g&quot; &quot;j&quot; &quot;i&quot; &quot;a&quot; &quot;b&quot; &quot;h&quot; &quot;e&quot; &quot;c&quot; &quot;f&quot;
-##  [1] &quot;g&quot; &quot;e&quot; &quot;i&quot; &quot;j&quot; &quot;b&quot; &quot;h&quot; &quot;f&quot; &quot;a&quot; &quot;c&quot; &quot;d&quot;</code></pre>
+<pre><code>##  [1] &quot;h&quot; &quot;g&quot; &quot;e&quot; &quot;d&quot; &quot;f&quot; &quot;b&quot; &quot;j&quot; &quot;i&quot; &quot;c&quot; &quot;a&quot;
+##  [1] &quot;f&quot; &quot;b&quot; &quot;h&quot; &quot;d&quot; &quot;e&quot; &quot;j&quot; &quot;c&quot; &quot;i&quot; &quot;g&quot; &quot;a&quot;
+##  [1] &quot;g&quot; &quot;d&quot; &quot;f&quot; &quot;i&quot; &quot;c&quot; &quot;j&quot; &quot;h&quot; &quot;e&quot; &quot;b&quot; &quot;a&quot;
+##  [1] &quot;j&quot; &quot;i&quot; &quot;f&quot; &quot;c&quot; &quot;g&quot; &quot;h&quot; &quot;e&quot; &quot;d&quot; &quot;b&quot; &quot;a&quot;
+##  [1] &quot;d&quot; &quot;e&quot; &quot;i&quot; &quot;g&quot; &quot;f&quot; &quot;h&quot; &quot;j&quot; &quot;c&quot; &quot;b&quot; &quot;a&quot;</code></pre>
 <p>So in this output every line shuffles the 10 items, but there’s a definite bias in how the items are ordered! We’re much more likely to start with the later letters than with the early ones!</p>
 <p>We can also do this when sampling with replacement:</p>
 <pre class="r"><code>for(i in 1:5) {
@@ -535,36 +535,36 @@ shuffled_stimuli</code></pre>
     sample(size = 10, replace = TRUE, prob = weights) %&gt;%
     print()
 }</code></pre>
-<pre><code>##  [1] &quot;j&quot; &quot;h&quot; &quot;j&quot; &quot;h&quot; &quot;a&quot; &quot;h&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;g&quot;
-##  [1] &quot;h&quot; &quot;h&quot; &quot;g&quot; &quot;f&quot; &quot;h&quot; &quot;e&quot; &quot;i&quot; &quot;h&quot; &quot;h&quot; &quot;h&quot;
-##  [1] &quot;h&quot; &quot;h&quot; &quot;f&quot; &quot;f&quot; &quot;c&quot; &quot;f&quot; &quot;f&quot; &quot;g&quot; &quot;j&quot; &quot;i&quot;
-##  [1] &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;g&quot; &quot;j&quot; &quot;i&quot; &quot;a&quot; &quot;d&quot; &quot;f&quot; &quot;f&quot;
-##  [1] &quot;g&quot; &quot;f&quot; &quot;j&quot; &quot;j&quot; &quot;e&quot; &quot;f&quot; &quot;f&quot; &quot;j&quot; &quot;g&quot; &quot;j&quot;</code></pre>
+<pre><code>##  [1] &quot;j&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;h&quot; &quot;i&quot; &quot;h&quot; &quot;h&quot; &quot;g&quot; &quot;f&quot;
+##  [1] &quot;f&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;j&quot; &quot;c&quot; &quot;i&quot; &quot;d&quot; &quot;h&quot; &quot;e&quot;
+##  [1] &quot;i&quot; &quot;c&quot; &quot;j&quot; &quot;j&quot; &quot;e&quot; &quot;i&quot; &quot;j&quot; &quot;e&quot; &quot;f&quot; &quot;i&quot;
+##  [1] &quot;h&quot; &quot;g&quot; &quot;e&quot; &quot;g&quot; &quot;f&quot; &quot;i&quot; &quot;g&quot; &quot;j&quot; &quot;g&quot; &quot;c&quot;
+##  [1] &quot;j&quot; &quot;g&quot; &quot;h&quot; &quot;j&quot; &quot;g&quot; &quot;f&quot; &quot;f&quot; &quot;c&quot; &quot;h&quot; &quot;f&quot;</code></pre>
 <p>In this output, you can see that we’re very unlikely to sample the letter “a”.</p>
 </div>
 <div id="binomial-distribution" class="section level2">
 <h2><span class="header-section-number">0.3</span> Binomial distribution</h2>
-<p>The <code>sample()</code> function gives you a good feel for how you can take a set of entities (stimuli, participants, outcomes, etc) and do probabilistic operations with them. When doing statistics we sometimes like to abstract away from the simple sampling mechanism and start talking in terms of <em>probability distriubutions</em>. To see how the abstraction works let’s introduce one of the simplest examples, the <strong>binomial distriubtion</strong>. Imagine we have a six sided die, in which four sides are coloured <code>&quot;blue&quot;</code> and two sides are coloured <code>&quot;red&quot;</code>. Let’s roll the die 20 times and see what we get:</p>
+<p>The <code>sample()</code> function gives you a good feel for how you can take a set of entities (stimuli, participants, outcomes, etc) and do probabilistic operations with them. When doing statistics we sometimes like to abstract away from the simple sampling mechanism and start talking in terms of <em>probability distributions</em>. To see how the abstraction works let’s introduce one of the simplest examples, the <strong>binomial distribution</strong>. Imagine we have a six sided die, in which four sides are coloured <code>&quot;blue&quot;</code> and two sides are coloured <code>&quot;red&quot;</code>. Let’s roll the die 20 times and see what we get:</p>
 <pre class="r"><code>die &lt;- c(&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;red&quot;,&quot;red&quot;)
 rolls &lt;- sample(die, size = 20, replace = TRUE)
 rolls</code></pre>
-<pre><code>##  [1] &quot;blue&quot; &quot;red&quot;  &quot;blue&quot; &quot;blue&quot; &quot;red&quot;  &quot;red&quot;  &quot;blue&quot; &quot;red&quot;  &quot;blue&quot; &quot;blue&quot;
-## [11] &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot;</code></pre>
+<pre><code>##  [1] &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;red&quot;  &quot;blue&quot; &quot;blue&quot; &quot;red&quot;  &quot;blue&quot; &quot;blue&quot; &quot;red&quot; 
+## [11] &quot;red&quot;  &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;red&quot;</code></pre>
 <p>We can count the number of times the result was <code>&quot;blue&quot;</code>:</p>
 <pre class="r"><code>n_blue &lt;- sum(rolls == &quot;blue&quot;)
 n_blue</code></pre>
-<pre><code>## [1] 16</code></pre>
+<pre><code>## [1] 15</code></pre>
 <p>Of course, there’s nothing stopping us from repeating this exercise several times:</p>
 <pre class="r"><code>for(i in 1:5){
   rolls &lt;- die %&gt;% sample(size = 20, replace = TRUE)
   n_blue &lt;- sum(rolls == &quot;blue&quot;)
   print(n_blue)
 }</code></pre>
-<pre><code>## [1] 14
+<pre><code>## [1] 10
 ## [1] 13
-## [1] 11
-## [1] 11
-## [1] 13</code></pre>
+## [1] 14
+## [1] 13
+## [1] 14</code></pre>
 <p>In fact, let’s go all out on this. Let’s replicate this tiny experiment 100,000 times because that’s easy to do with R:</p>
 <pre class="r"><code>n_replications &lt;- 100000
 n_blue &lt;- numeric(length = n_replications)
@@ -587,7 +587,7 @@ frequencies</code></pre>
   geom_col(width = .5) +
   theme_bw()</code></pre>
 <p><img src="probability_files/figure-html/unnamed-chunk-16-1.png" width="456" style="display: block; margin: auto;" /></p>
-<p>This picture is essentially a visualisation of the <strong>binomial distribution</strong> with success probability <code>prob = 2/3</code>, so it’s worth taking a moment to be explicit about what we’ve done. Every one of our experiments produces an <em>outcome</em> (number of blues) that can be described as <em>one</em> random draw from the binomial distribution. So the 100000 replications of the experiment can be vieweed as a set of 100000 numbers sampled from the binomial. R contains a function <code>rbinom()</code> that we can use to do this directly:</p>
+<p>This picture is essentially a visualisation of the <strong>binomial distribution</strong> with success probability <code>prob = 2/3</code>, so it’s worth taking a moment to be explicit about what we’ve done. Every one of our experiments produces an <em>outcome</em> (number of blues) that can be described as <em>one</em> random draw from the binomial distribution. So the 100000 replications of the experiment can be viewed as a set of 100000 numbers sampled from the binomial. R contains a function <code>rbinom()</code> that we can use to do this directly:</p>
 <pre class="r"><code>n_blue &lt;- rbinom(n = 100000, size = 20, prob = 2/3)</code></pre>
 <p>If we process this set of numbers using the same code, we get an almost identical figure. In fact, because I’m going to reuse this code, let’s write a function:</p>
 <pre class="r"><code>plot_samples &lt;- function(x, size = 20) {
@@ -614,8 +614,8 @@ plot(pic)</code></pre>
   pic &lt;- plot_samples(n_blue)
   plot(pic)
 }</code></pre>
-<video width="456"  controls loop>
-<source src="probability_files/figure-html/binomial_samples.webm" />
+<video width="450" style="display:block; margin: 0 auto;" controls>
+<source src="./img/binomial_samples.webm" type="video/webm"> Your browser does not support the video tag.
 </video>
 <p>If you were typing this at the console, this loop would produce a sequence of plots, but what I’ve done (using some clever features of R Markdown) is wrap it up as an animation. Later on I’ll talk about how to make animations.</p>
 <p>A natural question to ask is about the true probility of obtaining each outcome. One way to do it (approximately) would be to generate very large number of samples and then calculate the proportion of times that we end up with (say) 12 out of 20 rolls being blue. However, there’s an easier way. There’s actually a fairly simple formula for this, and R implements it using the <code>dbinom()</code> function:</p>
@@ -635,12 +635,12 @@ true_prob</code></pre>
 <p><img src="probability_files/figure-html/unnamed-chunk-21-1.png" width="456" style="display: block; margin: auto;" /></p>
 <p>Cool.</p>
 <p>The animation below shows how the binomial distribution changes as we shift the value of <code>prob</code>:</p>
-<video width="456"  controls loop>
-<source src="probability_files/figure-html/binomial.webm" />
+<video width="450" style="display:block; margin: 0 auto;" controls>
+<source src="./img/binomial.webm" type="video/webm"> Your browser does not support the video tag.
 </video>
 <p>Here’s another one that shows what happens as we change the <code>size</code> of the experiment.</p>
-<video width="456"  controls loop>
-<source src="probability_files/figure-html/binomial_size.webm" />
+<video width="450" style="display:block; margin: 0 auto;" controls>
+<source src="./img/binomial_size.webm" type="video/webm"> Your browser does not support the video tag.
 </video>
 <p>You can see the central limit theorem in action here! As the <code>size</code> gets larger, the shape of the binomial distribution gets progressively closer to normal. Speaking of which…</p>
 </div>
@@ -653,12 +653,15 @@ true_prob</code></pre>
 <li>The <strong>p form</strong> is the cumulative distribution function. You specify a particular value <code>q</code>, and it tells you the probability of obtaining an outcome smaller than or equal to <code>q</code>.</li>
 <li>The <strong>q form</strong> calculates the quantiles of the distribution. You specify a probability value <code>p</code>, and gives you the corresponding percentile. That is, the value of the variable for which there’s a probability <code>p</code> of obtaining an outcome lower than <code>q</code>.</li>
 </ul>
-<video width="456"  controls loop>
-<source src="probability_files/figure-html/normal_mean.webm" />
+<video width="450" style="display:block; margin: 0 auto;" controls>
+<source src="./img/normal_mean.webm" type="video/webm"> Your browser does not support the video tag.
 </video>
-<video width="456"  controls loop>
-<source src="probability_files/figure-html/normal_std.webm" />
+<video width="450" style="display:block; margin: 0 auto;" controls>
+<source src="./img/normal_std.webm" type="video/webm"> Your browser does not support the video tag.
 </video>
+</div>
+<div id="old" class="section level2">
+<h2><span class="header-section-number">0.5</span> OLD</h2>
 <p>For example, IQ scores are roughly normally distributed, and the tests are (supposedly) normed in such a way that the average IQ score is 100 and the standard deviation is 15. So let’s use R to randomly generate a sample of <code>n = 50</code> IQ scores using the <code>rnorm</code> function.</p>
 <pre class="r"><code>iq &lt;- rnorm(n = 50, mean = 100, sd = 15)  # sample the IQ scores
 hist(iq, xlab=&quot;IQ&quot;,main=&quot;&quot;)               # draw the histogram</code></pre>
@@ -684,28 +687,28 @@ plot(prob, q, xlab=&quot;Probability&quot;,ylab=&quot;Quantile&quot;, main=&quot
 <p><img src="probability_files/figure-html/unnamed-chunk-26-1.png" width="456" style="display: block; margin: auto;" /></p>
 </div>
 <div id="other-distributions" class="section level2">
-<h2><span class="header-section-number">0.5</span> Other distributions</h2>
+<h2><span class="header-section-number">0.6</span> Other distributions</h2>
 <p>Not yet written!</p>
 <div id="poisson-distribution" class="section level3">
-<h3><span class="header-section-number">0.5.1</span> Poisson distribution</h3>
+<h3><span class="header-section-number">0.6.1</span> Poisson distribution</h3>
 </div>
 <div id="log-normal-distribution" class="section level3">
-<h3><span class="header-section-number">0.5.2</span> Log-normal distribution</h3>
+<h3><span class="header-section-number">0.6.2</span> Log-normal distribution</h3>
 </div>
 <div id="response-time-distribution" class="section level3">
-<h3><span class="header-section-number">0.5.3</span> Response time distribution</h3>
+<h3><span class="header-section-number">0.6.3</span> Response time distribution</h3>
 </div>
 <div id="beta-distribution" class="section level3">
-<h3><span class="header-section-number">0.5.4</span> Beta distribution</h3>
+<h3><span class="header-section-number">0.6.4</span> Beta distribution</h3>
 </div>
 <div id="t-distribution" class="section level3">
-<h3><span class="header-section-number">0.5.5</span> t distribution</h3>
+<h3><span class="header-section-number">0.6.5</span> t distribution</h3>
 </div>
 <div id="chi-square-distribution" class="section level3">
-<h3><span class="header-section-number">0.5.6</span> Chi-square distribution</h3>
+<h3><span class="header-section-number">0.6.6</span> Chi-square distribution</h3>
 </div>
 <div id="f-distribution" class="section level3">
-<h3><span class="header-section-number">0.5.7</span> F distribution</h3>
+<h3><span class="header-section-number">0.6.7</span> F distribution</h3>
 </div>
 </div>
 <div class="footnotes">
