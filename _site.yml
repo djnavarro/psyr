@@ -49,7 +49,11 @@ navbar:
     - text: Probability distributions
       href: probability.html      
     - text: Introductory statistics
-      href: xx-introductory-statistics.html
+      href: introductory-statistics.html
+    - text: Intermediate statistics
+      href: intermediate-statistics.html
+    - text: Advanced statistics
+      href: advanced-statistics.html      
   - text: More
     menu:
     - text: Experiments

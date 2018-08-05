@@ -61,9 +61,9 @@ Everything from here onwards is *very much* a work in progress!
 ### 3: Statistics
 
 - [Probability distributions](./probability.html) <span style="color:#cccccc">(draft)</span>
-- [Introductory statistics](./xx-introductory-statistics.html) <span style="color:#cccccc">(draft)</span><!-- add Bayes factor -->
-- <span style="color:#cccccc">Intermediate statistics (to be added)</span> 
-- <span style="color:#cccccc">Advanced statistics (to be added)</span> 
+- [Introductory statistics](./introductory-statistics.html) <span style="color:#cccccc">(draft)</span><!-- add Bayes factor -->
+- [Intermediate statistics](./intermediate-statistics.html) <span style="color:#cccccc">(stub)</span>
+- [Advanced statistics](./advanced-statistics.html) <span style="color:#cccccc">(stub)</span>
 
 ### 4: More topics
 

@@ -11,3 +11,15 @@ stringr
 forcats
 scico
 bindrcpp
+rmarkdown
+magrittr
+skimr
+TurtleGraphics
+lubridate
+shiny
+shinyjs
+rdrop2
+HistData
+carData
+car
+rgl

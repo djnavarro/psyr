@@ -378,10 +378,16 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="xx-distributions.html">Probability distributions</a>
+      <a href="probability.html">Probability distributions</a>
     </li>
     <li>
-      <a href="xx-introductory-statistics.html">Introductory statistics</a>
+      <a href="introductory-statistics.html">Introductory statistics</a>
+    </li>
+    <li>
+      <a href="intermediate-statistics.html">Intermediate statistics</a>
+    </li>
+    <li>
+      <a href="advanced-statistics.html">Advanced statistics</a>
     </li>
   </ul>
 </li>
@@ -691,7 +697,7 @@ afl.majors &lt;- afl[ afl$venue %in% names(majors), ]</code></pre>
 ## 8                 SCG    198.9414
 ## 2      Etihad Stadium    200.7656
 ## 7        Princes Park    201.5918</code></pre>
-<p><img src="xx-introductory-statistics_files/figure-html/unnamed-chunk-12-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p><img src="introductory-statistics_files/figure-html/unnamed-chunk-12-1.png" width="456" style="display: block; margin: auto;" /></p>
 <p>A first pass analysis for this would be ANOVA. The underlying statistical model in ANOVA and multiple regression is essentially the same, and the work is done by the <code>lm</code> function in R. However, it’s generally considered sensible to use the <code>aov</code> function in the first instance, because that does a few nice things that come in handy with later analyses.</p>
 <pre class="r"><code>mod &lt;- aov(total.score ~ venue, afl.majors)</code></pre>
 <p>To analyse it as an ANOVA, the <code>Anova</code> function in the <code>car</code> package is very nice:</p>
@@ -790,7 +796,7 @@ plot(
   ylab = &quot;Average Points per Game&quot;
 )
 abline(coef = mod$coef)</code></pre>
-<p><img src="xx-introductory-statistics_files/figure-html/unnamed-chunk-17-1.png" width="456" style="display: block; margin: auto;" /></p>
+<p><img src="introductory-statistics_files/figure-html/unnamed-chunk-17-1.png" width="456" style="display: block; margin: auto;" /></p>
 <p>That’s pretty clearly a real effect, but it does open up a new line of worries about the last analysis…</p>
 <div id="hierarchical-regression" class="section level3">
 <h3><span class="header-section-number">0.5.1</span> Hierarchical regression</h3>
