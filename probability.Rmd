@@ -158,10 +158,125 @@ In this output, you can see that we're very unlikely to sample the letter "a".
 
 ## Binomial distribution
 
+The `sample()` function gives you a good feel for how you can take a set of entities (stimuli, participants, outcomes, etc) and do probabilistic operations with them. When doing statistics we sometimes like to abstract away from the simple sampling mechanism and start talking in terms of *probability distriubutions*. To see how the abstraction works let's introduce one of the simplest examples, the **binomial distriubtion**. Imagine we have a six sided die, in which four sides are coloured `"blue"` and two sides are coloured `"red"`. Let's roll the die 20 times and see what we get:
+
+```{r}
+die <- c("blue","blue","blue","blue","red","red")
+rolls <- sample(die, size = 20, replace = TRUE)
+rolls
+```
+
+We can count the number of times the result was `"blue"`:
+
+```{r}
+n_blue <- sum(rolls == "blue")
+n_blue
+```
+
+Of coure, there's nothing stopping us from repeating this exercise several times:
+
+```{r}
+for(i in 1:5){
+  rolls <- die %>% sample(size = 20, replace = TRUE)
+  n_blue <- sum(rolls == "blue")
+  print(n_blue)
+}
+```
+
+In fact, let's go all out on this. Let's replicate this tiny  experiment 100,000 times because that's easy to do with R:
+
+```{r, cache=TRUE}
+n_replications <- 100000
+n_blue <- numeric(length = n_replications)
+for(r in 1:n_replications){
+  rolls <- die %>% sample(size = 20, replace = TRUE)
+  n_blue[r] <- sum(rolls == "blue")
+}
+n_blue <- factor(n_blue, levels = 0:20, ordered = TRUE)
+frequencies <- table(n_blue)
+frequencies
+```
+
+With this particular `die` the probability of observing a `"blue"` on any one roll is two-thirds (4 out of 6 sides) and not surprisingly the outcomes of this "roll the die 20 times" experiment tend to be *distributed* mostly between 12 and 15. I hate looking at tables of numbers, so let's draw a picture:
+
+```{r}
+as_tibble(frequencies, n = "count") %>% 
+  mutate(n_blue = as.numeric(n_blue)) %>% 
+  ggplot(aes(x=n_blue, y = count)) +
+  geom_col(width = .5) + 
+  theme_bw() 
+```
+
+This picture is essentially a visualisation of the **binomial distribution** with success probability `prob = 2/3`, so it's worth taking a moment to be explicit about what we've done. Every one of our experiments produces an *outcome* (number of blues) that can be described as *one* random draw from the binomial distribution. So the 100000 replications of the experiment can be vieweed as a set of 100000 numbers sampled from the binomial. R contains a function `rbinom()` that we can use to do this directly:
+
+```{r}
+n_blue <- rbinom(n = 100000, size = 20, prob = 2/3)
+```
+
+If we process this set of numbers using the same code, we get an almost identical figure. In fact, because I'm going to reuse this code, let's write a function:
+
+```{r}
+plot_samples <- function(x, size = 20) {
+  x <- factor(x, levels = 0:size)
+  frequencies <- table(x) 
+  proportion <- frequencies / sum(frequencies)
+  pic <- as_tibble(proportion, n = "proportion") %>% 
+    mutate(x = as.numeric(x)) %>% 
+    ggplot(aes(x=x, y = proportion)) +
+    geom_col(width = .5) + 
+    xlab("outcome value") +
+    ggtitle(sum(frequencies)) +
+    ylim(0,.3) +
+    theme_bw() 
+  return(pic)
+}
+```
+
+Now call it:
+
+```{r}
+pic <- plot_samples(n_blue)
+plot(pic)
+```
+
+Of course, the only reason it looks this nice and smooth is that we replicated the experiment 100000 times. Let's modify the code so the we start out with a relatively small number of replications and watch it smooth out as it gets larger:
+
+```{r, binomial_samples, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE}
+for(rep in seq(from = 50, to = 10000, by = 50)){
+  n_blue <- rbinom(n = rep, size = 20, prob = 2/3)
+  pic <- plot_samples(n_blue)
+  plot(pic)
+}
+```
+
+
+If you were typing this at the console, this loop would produce a sequence of plots, but what I've done (using some clever features of R Markdown) is wrap it up as an animation. Later on I'll talk about how to make animations.
+
+A natural question to ask is about the true probility of obtaining each outcome. One way to do it (approximately) would be to generate very large number of samples and then calculate the proportion of times that we end up with (say) 12 out of 20 rolls being blue. However, there's an easier way. There's actually a fairly simple formula for this, and R implements it using the `dbinom()` function:
+
+```{r}
+outcome_value <- 0:20
+true_prob <- dbinom(x = outcome_value, size = 20, prob = 2/3)
+true_prob
+```
+
+Or, since we like pictures so much...
+
+```{r}
+tibble(outcome_value, true_prob) %>%
+  ggplot(aes(x = outcome_value, y = true_prob)) +
+  geom_col(width = .5) +
+  theme_bw()
+```
+
+Cool. 
+
+The animation below shows how the binomial distribution changes as we shift the value of `prob`:
+
 ```{r binomial, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, echo=FALSE}
 xmin <- 0
 xmax <- 20
-prob_list <- c(seq(.5,.96,.01),seq(.96,.04,-.01),seq(.04,.5,.01))
+prob_list <- c(seq(.67,.96,.01),seq(.96,.04,-.01),seq(.04,.67,.01))
 
 for(prob in prob_list) {
   df <- tibble(
@@ -177,12 +292,33 @@ for(prob in prob_list) {
 }
 ```
 
+Here's another one that shows what happens as we change the `size` of the experiment.
 
 
+
+```{r binomial_size, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, echo=FALSE}
+xmin <- 0
+xmax_list <- 1:200
+
+for(xmax in xmax_list) {
+  df <- tibble(
+    Value = xmin:xmax,
+    Probability = dbinom(Value, size = xmax, prob = prob)
+  )
+  pic <- df %>% ggplot(aes(x = Value, y = Probability)) +
+    geom_col(width=.5) + 
+    ggtitle(paste0("Size = ", xmax)) +
+    theme_bw() + 
+    ylim(0,.7)
+  plot(pic)
+}
+```
+
+You can see the central limit theorem in action here! As the `size` gets larger, the shape of the binomial distribution gets progressively closer to normal. Speaking of which...
 
 ## Normal distribution 
 
-The normal distribution is the perhaps the most widely used distribution in statistics, so it's a natural place to start. 
+The normal distribution is the perhaps the most widely used distribution in statistics, so I should talk about it in some detail. 
 
 
 ```{r normal_mean, fig.show='animate', interval=0.05, cache=TRUE, message=FALSE, echo=FALSE}
@@ -225,11 +361,7 @@ for(sigma in sigma_list) {
 ```
 
 
-
-
-
-
-### r,d,p and q
+### The "rdpq" functions
 
 The tools for working with probability distributions in R tend to be fairly standardised. If I want to work with a normal distribution, for instance, there are four different functions - `rnorm`, `dnorm`, `pnorm` and `qnorm`. If I want to work with a uniform distribution, the functions are named `runif`, `dunif`, `punif` and `qunif`. For a binomial distribution, they are `rbinom`, `dbinom`, `pbinom` and `qbinom`. The four versions are:
 
@@ -276,6 +408,24 @@ q <- qnorm(p = prob, mean = 100, sd = 15)
 plot(prob, q, xlab="Probability",ylab="Quantile", main="", type="l")
 ```
 
+
+## Other distributions
+
+Not yet written!
+
+### Poisson distribution
+
+### Log-normal distribution
+
+### Response time distribution
+
+### Beta distribution
+
+### t distribution
+
+### Chi-square distribution
+
+### F distribution
 
 
 
