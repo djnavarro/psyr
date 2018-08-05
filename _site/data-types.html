@@ -909,13 +909,13 @@ starks</code></pre>
 <p>To start with, let’s talk about the date. As it happens, modern operating systems are very good at keeping track of the time and date, and can even handle all those annoying timezone issues and daylight savings pretty well. So R takes the quite sensible view that it can just ask the operating system what the date is. We can pull the date using the <code>Sys.Date</code> function:</p>
 <pre class="r"><code>today &lt;- Sys.Date()  # ask the operating system for the date
 print(today)         # display the date</code></pre>
-<pre><code>## [1] &quot;2018-08-05&quot;</code></pre>
+<pre><code>## [1] &quot;2018-08-06&quot;</code></pre>
 <p>Okay, that seems straightforward. But, it does rather look like today is just a character string, doesn’t it? That would be a problem, because dates really do have a quasi-numeric character to them, and it would be nice to be able to do basic addition and subtraction with them. Well, fear not. If you type in <code>class(today)</code>, R will tell you that the <code>today</code> variable is a <code>&quot;Date&quot;</code> object. What this means is that, hidden underneath this text string, R has a numeric representation.<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> What that means is that you can in fact add and subtract days. For instance, if we add <code>1</code> to <code>today</code>, R will print out the date for tomorrow:</p>
 <pre class="r"><code>today + 1</code></pre>
-<pre><code>## [1] &quot;2018-08-06&quot;</code></pre>
+<pre><code>## [1] &quot;2018-08-07&quot;</code></pre>
 <p>Let’s see what happens when we add 365 days:</p>
 <pre class="r"><code>today + 365</code></pre>
-<pre><code>## [1] &quot;2019-08-05&quot;</code></pre>
+<pre><code>## [1] &quot;2019-08-06&quot;</code></pre>
 <p>R provides a number of functions for working with dates, but I don’t want to talk about them in any detail, other than to say that the <strong>lubridate</strong> package (part of the tidyverse) makes things a lot easier than they used to be. A little while back I wrote a <a href="http://djnavarro.net/post/2018-05-02-lubridate/">blog post about lubridate</a> and may fold it into these notes one day.</p>
 <!--
 
