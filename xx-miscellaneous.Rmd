@@ -1,5 +1,5 @@
 ---
-title: "Other Applications"
+title: "Miscellaneous topics"
 output:
   html_document:
     includes:
@@ -96,7 +96,7 @@ par(op) # reset plot parameters
 <source src="misc_dotsanimate/figure-html/unnamed-chunk-11.webm" />
 </video>
 
-## Using `rgl` for OpenGL and WebGL
+## OpenGL and WebGL
 
 The `rgl` package provides a method for constructing interactive 3D plots, using the OpenGL graphics engine. Conveniently it also allows you make use of the WebGL engine, which means that you can insert your fancy 3D graphics into a web page. On a Mac, you'll need to make sure you have [XQuartz](https://www.xquartz.org/) installed and running on your machine. Here's a simple example, shamelessly lifted straight from the `rgl` documentation... 
 

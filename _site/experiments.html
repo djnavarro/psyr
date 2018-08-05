@@ -11,7 +11,7 @@
 
 
 
-<title>Behavioural experiments</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -368,6 +368,9 @@ div.tocify {
     <li>
       <a href="working-with-text.html">Text data</a>
     </li>
+    <li>
+      <a href="import-export.html">Import/export</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -426,7 +429,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Behavioural experiments</h1>
+<h1 class="title toc-ignore"><ol start="23" style="list-style-type: decimal">
+<li>Behavioural experiments</li>
+</ol></h1>
 
 </div>
 
@@ -447,7 +452,7 @@ div.tocify {
 <p>In the long run I suspect most people will want to find other solutions to the problem besides R, but at the same time I think it’s really important to recognise that you can’t learn all the things at once. Just mastering one programming language is hard enough 😀 so it’s worth the effort to try to get as much mileage out of that as possible!</p>
 <p>With that in mind, I’ll talk about all three of those use cases in these notes. The “Shiny” approach is complex enough that I’ve broken it off into its own <a href="./shiny.html">section</a>, but I’ll talk about the other two approaches in this section.</p>
 <div id="text-based-tasks" class="section level2">
-<h2><span class="header-section-number">0.1</span> Text based tasks</h2>
+<h2><span class="header-section-number">23.1</span> Text based tasks</h2>
 <p>To start with, lets consider a very simple task. Imagine that we wanted to investigate how people play “<a href="https://en.wikipedia.org/wiki/Hangman_(game)">hangman</a>. On the off chance you’re unfamiliar with the game, it’s a straightforward two player game. One player thinks of a word and the other person has to work it out by making a series of guesses as to what letters it contains. If the guesser works it out before making a predetermined number of errors then they win. To investigate this, we will need to implement this game in R, with the computer choosing the word and the human guessing. It’s a text based task, so we should be able to do the whole thing in the console. Some problems we’ll need to solve:</p>
 <ul>
 <li>How do we present the current state of the game?</li>
@@ -559,7 +564,7 @@ div.tocify {
 </ul>
 <p>However, with any luck this minimal skeleton gives you enough to see how you might go about adding these additional properties to the code.</p>
 <div id="a-second-example" class="section level3">
-<h3><span class="header-section-number">0.1.1</span> A second example</h3>
+<h3><span class="header-section-number">23.1.1</span> A second example</h3>
 <p>As the hangman example illustrates, R allows you to create text based tasks and use them as the basis for experiments in a way that might be difficult to do with simpler tools like Qualtrics or SurveyMonkey. The key feature of R (or any programming language for that matter) that allows this flexibility is the ability to write complicated forms of <em>interactivity</em> into your experiment. For the hangman task, the experiment is able to rely on text processing tools to update the state of the game after every guess, and to adapt appropriately no matter what the participant does.</p>
 <p>To give you a sense of how much further you can take this idea, imagine we were interested in studying how people solve strategic planning problems. An engaging way to do this is to implement a decision making problem in the form of a video game. Normally, this would require some fancy graphics to work, but thanks to the joy of emoji, you can go a suprisingly long way just using text.</p>
 <p>The video below shows me playing a simple video game. Imagine you are a rabbit trying to get to a carrot, but there are a bunch of “fire devils” that you need to avoid. We can use the w/a/s/d keys to navigate or q to quit the game. The fire devils are stupid and move randomly; when they bump into each other they merge together. When the game starts there are too many fire devils for it to be safe to try to cross to the carrot, so it might be wise to wait for some of them to burn out before venturing across to the carrot:</p>
@@ -569,12 +574,12 @@ div.tocify {
 <p>In this video, R is running at the Mac OS terminal rather than inside RStudio. I’m doing this because there is a package called <strong>keypress</strong> that only works through the terminal. In the hangman example, for a participant to make a response they need to type the letter and then press enter. For hangman that’s fine, but for the rabbit game it seems weird. So instead of using <code>readline</code> to get the user response I’m relying on the <code>keypress</code> function. If you’re interested, the code for <a href="./scripts/rabbit.R">rabbit.R</a> is available!</p>
 </div>
 <div id="a-third-example" class="section level3">
-<h3><span class="header-section-number">0.1.2</span> A third example</h3>
+<h3><span class="header-section-number">23.1.2</span> A third example</h3>
 <p>Just because I can… the <a href="./scripts/guessing.R">guessing.R</a> provides an example of different kind of task, one in which the participant has to pick a number and the computer tries to guess it.</p>
 </div>
 </div>
 <div id="graphical-tasks" class="section level2">
-<h2><span class="header-section-number">0.2</span> Graphical tasks</h2>
+<h2><span class="header-section-number">23.2</span> Graphical tasks</h2>
 <p>The rabbit example gives you a sense of how far you can go using nothing other than text, but in many situations you’ll probably need something a little more sophisticated. The natural intuition that you might have is that we can use the R graphics system as the foundation for a psychological experiment: on every trial you’d use use a graphics tool (e.g. <code>ggplot</code>) to draw the stimulus on screen, and then the participant could respond using the keyboard or the mouse.</p>
 <p>That intuition is correct, but we’ll need to modify our approach a little bit. Earlier on when we discussed <a href="./visualising-data.html">data visualisation</a> I didn’t really talk much about the capabilities of different <em>graphics devices</em> because it didn’t matter much. In this context it starts to matter whether we draw the plot in the RStudio plot pane or somewhere else, because there are different graphics devices associated with each one, and only some of them are responsive to user input. Clearly, in order to design a behavioural experiment we will need to use a device that supports interactivity, and that means the RStudio graphics device is no good to us: it’s designed for the user to draw plots, not for interaction. A simple way to get around this if you’re on a Unix based system (e.g. Mac, Linux) is to use the <code>X11()</code> graphics device,<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> as this does support user interaction. To give you a sense for what you can realistically achieve, the <a href="./scripts/orientation.R">orientation.R</a> script contains an example of an experiment that displays triangles that might be pointing upwards or downwards, and the task is to guess whether there are more upwards pointing arrows (press the “6” key) or downwards ones (press “b”):</p>
 <video width="600" controls>
@@ -608,7 +613,7 @@ div.tocify {
 <p><img src="experiments_files/figure-html/unnamed-chunk-12-1.png" width="456" style="display: block; margin: auto;" /></p>
 </div>
 <div id="shiny-apps" class="section level2">
-<h2><span class="header-section-number">0.3</span> Shiny apps?</h2>
+<h2><span class="header-section-number">23.3</span> Shiny apps?</h2>
 <p>The third and most sophisticated approach is to build a web application using Shiny. This has a number of advantages. Firstly, you can run a Shiny app locally on your machine or deploy it to the internet - so you can collect online data easily. Secondly, it has a lot more flexibility in terms of what you can do with it. However, the advantages do come at a cost. There’s a certain amount of effort involved in learning how to build a Shiny app, and some additional work to adapt the framework to behavioural experiments. It’s a big enough topic that I’m not going to try to force it into a subsection here. Instead, there’s a whole section devoted to <a href="./shiny.html">shiny</a>!</p>
 </div>
 <div class="footnotes">

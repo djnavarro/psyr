@@ -43,7 +43,9 @@ navbar:
     - text: Manipulating data
       href: manipulating-data.html 
     - text: Text data
-      href: working-with-text.html       
+      href: working-with-text.html   
+    - text: Import/export
+      href: import-export.html         
   - text: Stats
     menu:
     - text: Probability distributions

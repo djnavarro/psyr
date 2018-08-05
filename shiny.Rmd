@@ -1,5 +1,5 @@
 ---
-title: "Shiny Web Applications"
+title: "24. Shiny web applications"
 output:
   html_document:
     includes:
@@ -11,7 +11,7 @@ output:
     css: mystyle.css
     number_sections: true
     pandoc_args: [
-      "--number-offset", 0
+      "--number-offset", 24
     ]
 ---
 

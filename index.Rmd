@@ -56,7 +56,7 @@ Everything from here onwards is *very much* a work in progress!
 - [Visualising data](./visualising-data.html)
 - [Manipulating data](./manipulating-data.html) <span style="color:#cccccc">(draft)</span>
 - [Working with text](./working-with-text.html) <span style="color:#cccccc">(draft)</span>
-- <span style="color:#cccccc">Import and export (to be added)</span>  <!-- data formats -->
+- [Import and export](./import-export.html) <span style="color:#cccccc">(stub)</span>
 
 ### 3: Statistics
 

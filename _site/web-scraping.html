@@ -11,7 +11,7 @@
 
 
 
-<title>Web Scraping</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -368,6 +368,9 @@ div.tocify {
     <li>
       <a href="working-with-text.html">Text data</a>
     </li>
+    <li>
+      <a href="import-export.html">Import/export</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -426,16 +429,18 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Web Scraping</h1>
+<h1 class="title toc-ignore"><ol start="25" style="list-style-type: decimal">
+<li>Web scraping</li>
+</ol></h1>
 
 </div>
 
 
 <div id="twitter-client" class="section level2">
-<h2><span class="header-section-number">0.1</span> Twitter client</h2>
+<h2><span class="header-section-number">25.1</span> Twitter client</h2>
 <p>Researchers interested in social networks often scrape data from sites such as Twitter in order to obtain data. This is relatively easy to do in R, using a package like <code>twitteR</code>, which provides an interface with the Twitter web API.</p>
 <div id="setting-up-twitter" class="section level3">
-<h3><span class="header-section-number">0.1.1</span> Setting up <code>twitteR</code></h3>
+<h3><span class="header-section-number">25.1.1</span> Setting up <code>twitteR</code></h3>
 <p>It’s fairly easy to get set up (e.g. <a href="https://www.r-bloggers.com/setting-up-the-twitter-r-package-for-text-analytics/">this post</a>):</p>
 <ol style="list-style-type: decimal">
 <li>Install the <code>twitteR</code> package</li>
@@ -477,7 +482,7 @@ access_secret &lt;- &quot;XXXXX&quot;</code></pre>
 <p>Now we’re ready to go!</p>
 </div>
 <div id="using-the-twitter-client" class="section level3">
-<h3><span class="header-section-number">0.1.2</span> Using the Twitter client</h3>
+<h3><span class="header-section-number">25.1.2</span> Using the Twitter client</h3>
 <p>Okay, so I guess people like to tweet about <code>#thedrum</code> so I decided to search for the last 10000 tweets containing that term. It’s easy to do:</p>
 <pre class="r"><code>library(twitteR)
 
