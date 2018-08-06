@@ -406,7 +406,7 @@ tibble(iq_score, density) %>%
 
 You're probably already familiar with how the parameters of the normal distribution work, but even so it's nice to look at some pretty animations. In the first one, we can see what happens when we shift the mean (i.e. $\mu$) of the distribution:
 
-```{r normal_mean, fig.show='animate', interval=0.05, cache=TRUE, message=FALSE, echo=FALSE, eval=FALSE}
+```{r normal_mean, fig.show='animate', interval=0.05, cache=TRUE, message=FALSE, echo=FALSE, eval=TRUE}
 xmin <- -4
 xmax <- 4
 sigma <- 1
@@ -432,7 +432,7 @@ for(mu in mu_list) {
 
 Not too surprising. It's maybe a little more informative to look at what happens when we change the standard deviation $\sigma$:
 
-```{r normal_std, fig.show='animate', interval=0.05, cache=TRUE, message=FALSE, echo=FALSE, eval=FALSE}
+```{r normal_std, fig.show='animate', interval=0.05, cache=TRUE, message=FALSE, echo=FALSE, eval=TRUE}
 xmin <- -4
 xmax <- 4
 mu <- 0
@@ -442,7 +442,7 @@ for(sigma in sigma_list) {
   df <- tibble(
     Value = seq(from = xmin, to = xmax, length.out = 100),
     Density = dnorm(Value, mean = mu, sd = sigma)
-  )
+  ) %>% mutate(Density=ifelse(Density < 1e-3, 1e-3, Density))
   pic <- df %>% ggplot(aes(x = Value, y = Density)) +
     geom_area() + ggtitle(paste0("Standard Deviation = ", round(sigma, digits = 1))) +
     theme_bw() + ylim(0,.8)
