@@ -23,3 +23,13 @@ library(tidyverse,quietly = TRUE)
 
 Earlier in these notes I used the [Rescorla-Wagner](./programming.html) model of associative learning as an example of how to implement computational models of cognition in R. In this and later sections, I'll expand the dicussion of models to cover a variety of other models in the field. I'll start with the **backpropagation rule** for learning in connectionist networks. 
 
+## Our first implementation 
+
+
+
+
+## Resources
+
+- The Rumelhart et al (1986) paper cached for teaching purposes [here](http://compcogscisydney.org/mm/2018/Rumelhart1986.pdf)
+- A nice [summary](http://neuralnetworksanddeeplearning.com/chap2.html)
+
