@@ -396,6 +396,8 @@ Just like with the `dbinom` function, we could implement our own version of it i
 ```{r}
 iq_score <- 40:160
 density <- iq_score %>% dnorm(mean = 100, sd = 15)
+density <- ifelse(density < 1e-4, 1e-4, density)
+
 tibble(iq_score, density) %>%
   ggplot(aes(x=iq_score,y=density)) +
   geom_area() +
@@ -414,7 +416,7 @@ for(mu in mu_list) {
   df <- tibble(
     Value = seq(from = xmin, to = xmax, length.out = 100),
     Density = dnorm(Value, mean = mu, sd = sigma)
-  )
+  ) %>% mutate(Density=ifelse(Density < 1e-3, 1e-3, Density))
   pic <- df %>% ggplot(aes(x = Value, y = Density)) +
     geom_area() + ggtitle(paste0("Mean = ", round(mu, digits = 1))) +
     theme_bw()
