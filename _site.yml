@@ -66,6 +66,8 @@ navbar:
       href: web-scraping.html
     - text: Miscellaneous
       href: xx-miscellaneous.html
+    - text: Backpropagation networks
+      href: backprop.html      
   right:
   - text: compcogscisydney.org
     href: https://compcogscisydney.org

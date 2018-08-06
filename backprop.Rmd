@@ -1,0 +1,25 @@
+---
+title: "Backpropagation networks"
+output:
+  html_document:
+    includes:
+      in_header: header.html    
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: textmate
+    css: mystyle.css
+    number_sections: true
+    pandoc_args: [
+      "--number-offset", 0
+    ]
+---
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+rm(list=objects()) # start with a clean workspace
+source("knitr_tweaks.R")
+library(tidyverse,quietly = TRUE)
+```
+
+Earlier in these notes I used the [Rescorla-Wagner](./programming.html) model of associative learning as an example of how to implement computational models of cognition in R. In this and later sections, I'll expand the dicussion of models to cover a variety of other models in the field. I'll start with the **backpropagation rule** for learning in connectionist networks. 
+

@@ -73,7 +73,8 @@ Everything from here onwards is *very much* a work in progress!
 - [Miscellaneous](./xx-miscellaneous.html) <span style="color:#cccccc">(draft)</span>
 - <span style="color:#cccccc">Image processing in R (to be added)</span> <!-- imager -->
 - <span style="color:#cccccc">Authoring documents in R (to be added)</span> <!-- markdown, blogdown, papaja -->
-- <span style="color:#cccccc">Computational modelling (to be added)</span> <!-- Rescorla-Wagner, GCM -->
+- [Backpropagation networks](./backprop.html) <span style="color:#cccccc">(draft)</span> 
+- <span style="color:#cccccc">More computational modelling (to be added)</span> <!-- Rescorla-Wagner, GCM -->
 - <span style="color:#cccccc">Writing an R package (to be added)</span> <!-- very simple guide -->
 
 
