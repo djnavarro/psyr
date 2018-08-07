@@ -1,92 +1,81 @@
+
+# packages
 library(magrittr)
+library(readr)
 library(dplyr)
 
-iris_features <- tibble(
-  sepal_length = iris$Sepal.Length,
-  sepal_width = iris$Sepal.Width,
-  petal_length = iris$Petal.Length,
-  petal_width = iris$Petal.Width,
-  context = 1 # a.k.a., bias, intercept, etc
-) %>% as.matrix()
+# read the irises data as a numeric matrix
+iris_file <- here::here("data", "iris_recode.csv")
+irises <- iris_file %>% read_csv() %>% as.matrix()
 
-iris_species <- tibble(
-  setosa = as.numeric(iris$Species == "setosa"),
-  versicolor = as.numeric(iris$Species == "versicolor"),
-  virginica = as.numeric(iris$Species == "virginica")
-) %>% as.matrix()
+# specify which features are inputs & targets
+input_names <- c("sepal_length", "sepal_width", "petal_length", "petal_width", "context")
+output_names <- c("species_setosa", "species_versicolor", "species_virginica")
 
-
+# the logit squashing function
 logit <- function(x){
-  1/(1+exp(-x))
+  y <- 1/(1 + exp(-x))
+  return(y)
 }
 
-input <- function(case) {
-  iris_features[case,]
-}
+# count the number of inputs, target, cases & weights
+n_input <- length(input_names)
+n_output <- length(output_names)
+n_cases <- dim(irises)[1]
+n_weights <- n_input * n_output
 
-target <- function(case) {
-  iris_species[case,]
-}
+# parameters
+n_epochs <- 100 # number of training epochs
+learning_rate <- .1 # learning rate
 
-labels <- list(
-  input = colnames(iris_features),
-  output = colnames(iris_species)
+# create a weight matrix with all weights set to 0
+# plus a tiny amount of random noise to break symmetry
+weight <- matrix(
+  data = rnorm(n_weights) *.01,
+  nrow = n_input,
+  ncol = n_output,
+  dimnames = list(input_names, output_names)
 )
 
+# create a matrix that keeps track of the sum squared prediction
+# error at the end of every trial, across every epoch
+sse <- matrix(NA, n_cases, n_epochs)
 
-n_in <- length(labels$input)
-n_out <- length(labels$output)
-n_case <- dim(iris_features)[1]
-
-weights <- matrix(
-  data = rnorm(n_in * n_out) *.01,
-  nrow = n_in,
-  ncol = n_out,
-  dimnames = labels
-)
-
-lambda <- .1
-n_epoch <- 100
-sse <- matrix(NA, n_case, n_epoch)
-
-for(e in 1:n_epoch){
+for(epoch in 1:n_epochs){
   
-  ord <- sample(1:n_case)
+  # to prevent weirdness, shuffle the order of trials 
+  # at the start of each epoch
+  trial_order <- sample(1:n_cases)
   
-  for(k in 1:n_case) {
+  for(case in 1:n_cases) {
     
-    case <- ord[k]
+    # which stimulus is this?
+    stimulus_id <- trial_order[case]
     
-    # feed forward
-    output <- input(case) %*% weights %>% logit()
+    # send the iris features to the input nodes
+    input <- irises[stimulus_id, input_names]
     
-    delta_w <- matrix(NA,n_in,n_out)
+    # feed forward expressed as matrix operation
+    output <- (input %*% weight) %>% logit()
     
-    # compute the error at the weight
-    for(i in 1:n_in) {
-      for(o in 1:n_out) {
-        
-        prediction_error <- target(case)[o] - output[o] # equation 4 (times -1)
-        
-        # eq 5 & 6
-        a_i <- input(case)[i] # salience value at the input node ("CS")
-        b_j <- output[o] * (1-output[o]) # salience value at the output node ("US")
-        delta_w[i,o] <- prediction_error * a_i * b_j
-        
-        weights[i,o] <- weights[i,o] + lambda * delta_w[i,o]  # equation 8
-        
-      }
-    }
+    # feedback: show the model the true "target" pattern
+    target <- irises[stimulus_id, output_names]
     
-    sse[case,e] <- sum((target(case) - output)^2)
+    # error gradient at the output nodes
+    prediction_error <- target - output
+    
+    # store the sum squared error for later
+    sse[stimulus_id, epoch] <- sum(prediction_error^2)
+    
+    # matrix algebra form
+    gradient <- input %*% (prediction_error * output * (1-output))
+    weight <- weight + learning_rate * gradient
     
   }
 }
 
+
 plot(colSums(sse),type="b")
 
-# matrix algebra form
-#err_gr <- output - target(case) 
-#dw_mat <- input(case) %*% (err_gr * output * (1-output))
 
 

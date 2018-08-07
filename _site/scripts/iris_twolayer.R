@@ -5,9 +5,8 @@ library(readr)
 library(dplyr)
 
 # read the irises data as a numeric matrix
-irises <- "./data/iris_recode.csv" %>%
-  read_csv() %>%
-  as.matrix()
+iris_file <- here::here("data", "iris_recode.csv")
+irises <- iris_file %>% read_csv() %>% as.matrix()
 
 # specify which features are inputs & targets
 input_names <- c("sepal_length", "sepal_width", "petal_length", "petal_width", "context")

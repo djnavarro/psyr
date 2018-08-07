@@ -84,7 +84,7 @@ Everything from here onwards is *very much* a work in progress!
 - Week 2 workbook: [here](./lesson2.html)
 - Data sets are [here](./docs/data.zip)
 - Github repository is [here](https://github.com/djnavarro/psyr)
-
+- A nice [resource](http://environmentalcomputing.net/) put together by the UNSW folks in BEES.
 
 
 
