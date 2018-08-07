@@ -438,8 +438,15 @@ div.tocify {
 
 
 <p>Earlier in these notes I used the <a href="./programming.html">Rescorla-Wagner</a> model of associative learning as an example of how to implement computational models of cognition in R. In this and later sections, I’ll expand the dicussion of models to cover a variety of other models in the field. I’ll start with the <strong>backpropagation rule</strong> for learning in connectionist networks.</p>
-<div id="our-first-implementation" class="section level2">
-<h2><span class="header-section-number">0.1</span> Our first implementation</h2>
+<div id="initial-implementation" class="section level2">
+<h2><span class="header-section-number">0.1</span> Initial implementation</h2>
+<ul>
+<li>The <a href="./data/iris_recode.csv">iris_recode.csv</a> file contains the classic iris dat slightly reorganised as purely numeric data (<a href="./scripts/iris_recode.R">here</a>) is the script that generated it.</li>
+<li>The first version of the modelling code implements a simple two-layer backpropagation network for the iris data: <a href="./scripts/iris_twolayer.R">iris_twolayer.R</a></li>
+<li>The second version of the code implements the same model, but expressing the learning rules as matrix operations in order to speed up the calculations: <a href="./scripts/iris_twolayer2.R">iris_twolayer2.R</a></li>
+</ul>
+<p>At the moment the scripts don’t do anything other than learn a classification rule. The goal for the full exercise will be to examine what the model is learning across the series of “epochs”, and consider the relationship between this connectionist network and a probabilistic logistic regression model.</p>
+<p>Ideally, I’ll also include some more complicated examples of backprop networks.</p>
 </div>
 <div id="resources" class="section level2">
 <h2><span class="header-section-number">0.2</span> Resources</h2>
