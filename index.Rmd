@@ -92,8 +92,16 @@ Some extra links re data:
 - the AFL data is [here](./data/afl.csv)
 - the orientation data is [here](./data/orientation.csv)
 - the reasoning data is [here](./data/frames_ex2.csv), and in wide form [here](./data/frames_ex2_wide.csv)
+- the titanic data is [here](./data/titanic3.csv) courtesy [here](biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/titanic3.xls)
 
+Alternatively use R data sets:
 
+- `data(diamonds)`: prices of 50,000 round cut diamonds (type `?diamonds`)
+- `data(iris)`: information about different kinds of flowers (`?iris`)
+- `data(mtcars)`: fuel efficiency of old cars (`?mtcars`)
+- `data(midwest)`: population information in the US... 
+- `data(starwars)`: characters from star wars...
+- etc
 
 <!--
 ## Topics I want to add
