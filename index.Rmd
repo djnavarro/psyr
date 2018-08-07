@@ -82,9 +82,16 @@ Everything from here onwards is *very much* a work in progress!
 
 - Week 1 slides: [pptx](./docs/overview.pptx), [pdf](./docs/overview.pdf)
 - Week 2 workbook: [here](./lesson2.html)
+- Week 3 slides: [here](https://slides.com/djnavarro/psyc-3361-workshop-3/)
 - Data sets are [here](./docs/data.zip)
 - Github repository is [here](https://github.com/djnavarro/psyr)
 - A nice [resource](http://environmentalcomputing.net/) put together by the UNSW folks in BEES.
+
+Some extra links re data:
+
+- the AFL data is [here](./data/afl.csv)
+- the orientation data is [here](./data/orientation.csv)
+- the reasoning data is [here](./data/frames_ex2.csv), and in wide form [here](./data/frames_ex2_wide.csv)
 
 
 
