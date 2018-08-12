@@ -103,6 +103,27 @@ Alternatively use R data sets:
 - `data(starwars)`: characters from star wars...
 - etc
 
+Some documentation for the original data sets here.
+
+<br>
+
+The [AFL data](./data/afl.csv) consists of single CSV file that contains information about every game played in the Australian Football League from 1987 to 2010. In total there are X cases (games) and Y variables recorded. The variables recorded are:
+
+- `home_team`: the name of the home team
+- `away_team`: the name of the away team
+- `home_score`: number of points scored by the home team
+- `away_score`: number of points scored by the away team
+- `year`: year in which the game was played
+- `round`: season week number in which the game was played
+- `weekday`: day of the week in which the game was played
+- `day`: day of the month in which the game was played
+- `month`: month of the year in which the game was played
+- `game_type`: was this a `regular` game or part of the `finals` series?
+- `venue`: the name of the stadium hosting the game
+- `attendance`: official attendance at the game
+
+
+
 <!--
 ## Topics I want to add
 
