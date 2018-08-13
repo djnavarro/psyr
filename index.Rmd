@@ -122,6 +122,21 @@ The [AFL data](./data/afl.csv) consists of single CSV file that contains informa
 - `venue`: the name of the stadium hosting the game
 - `attendance`: official attendance at the game
 
+The [users data](./data/users.csv) os a single CSV file containing 148 days of web traffic data for my lab website [compcogscisydney.org](compcogscisydney.org), collected via Google Analytics. I will likely extend this at a later date, but at the moment it includes only two fields:
+
+- `Date`: the date for which the statisics are reported
+- `Users`: the number of unique users accessing the site
+
+The [frames data](./data/frames_ex2.csv) contains data from Experiment 2 of Hayes et al (under review). It contains the following variables:
+
+- `id`
+- `gender`
+- `age`
+- `condition`
+- `sample_size`
+- `n_obs`
+- `test_item`
+- `response`
 
 
 <!--
