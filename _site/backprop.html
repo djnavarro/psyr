@@ -492,11 +492,11 @@ n_weights &lt;- n_input * n_output</code></pre>
 )
 weight</code></pre>
 <pre><code>##              species_setosa species_versicolor species_virginica
-## sepal_length   0.0088821382       -0.001355030      -0.003281048
-## sepal_width   -0.0016066377       -0.001541336       0.005163431
-## petal_length  -0.0008134903        0.012097252      -0.005143955
-## petal_width   -0.0049765263       -0.017957481       0.002846892
-## context       -0.0080286485        0.009765223       0.004322889</code></pre>
+## sepal_length   0.0104112421      -0.0093269503      -0.015956775
+## sepal_width   -0.0101282153      -0.0039994468       0.018374629
+## petal_length  -0.0033403879       0.0051374840      -0.008256671
+## petal_width    0.0008246459       0.0004231409      -0.006875058
+## context       -0.0035375603       0.0022267957      -0.011458729</code></pre>
 <p>Here’s the network we want to code:</p>
 <div class="figure">
 <img src="img/backprop_irises.png" />
@@ -515,7 +515,7 @@ weight</code></pre>
 <p>So what we do is first take the <code>sum</code> of the inputs and then pass them through our new <code>logit</code> function. So let’s say we want to compute the strength associated with the first species:</p>
 <pre class="r"><code>output_1 &lt;- sum(input * weight[,1]) %&gt;% logit() 
 output_1</code></pre>
-<pre><code>## [1] 0.5073777</code></pre>
+<pre><code>## [1] 0.5023998</code></pre>
 <p>More generally though we can loop over the three species:</p>
 <pre class="r"><code># initialise the output nodes at zero
 output &lt;- rep(0, n_output)
@@ -530,7 +530,7 @@ for(o in 1:n_output) {
 # print the result
 output</code></pre>
 <pre><code>##     species_setosa species_versicolor  species_virginica 
-##          0.5073777          0.5027011          0.4997573</code></pre>
+##          0.5023998          0.4869875          0.4896361</code></pre>
 <p>As you can see, initially the model has no knowledge at all! It’s predicting a value of about 0.5 for every category!</p>
 </div>
 <div id="learning-from-error" class="section level2">
@@ -539,7 +539,7 @@ output</code></pre>
 <pre class="r"><code>prediction_error &lt;- target - output
 prediction_error</code></pre>
 <pre><code>##     species_setosa species_versicolor  species_virginica 
-##          0.4926223         -0.5027011         -0.4997573</code></pre>
+##          0.4976002         -0.4869875         -0.4896361</code></pre>
 <p>Here is the code implementing the learning rule. What we’re doing is looping over every weight in the network, and then adjusting the strength proportional to the prediction error:</p>
 <pre class="r"><code>learning_rate &lt;- .1
 
@@ -564,28 +564,34 @@ for(o in 1:n_output) {
 ##          5.1          3.5          1.4          0.2          1.0</code></pre>
 <pre class="r"><code>output</code></pre>
 <pre><code>##     species_setosa species_versicolor  species_virginica 
-##          0.5073777          0.5027011          0.4997573</code></pre>
+##          0.5023998          0.4869875          0.4896361</code></pre>
 <pre class="r"><code>target</code></pre>
 <pre><code>##     species_setosa species_versicolor  species_virginica 
 ##                  1                  0                  0</code></pre>
 <pre class="r"><code>prediction_error</code></pre>
 <pre><code>##     species_setosa species_versicolor  species_virginica 
-##          0.4926223         -0.5027011         -0.4997573</code></pre>
+##          0.4976002         -0.4869875         -0.4896361</code></pre>
 <p>Now let’s look at how the weights changed:</p>
 <pre class="r"><code>weight - old_weight</code></pre>
 <pre><code>##              species_setosa species_versicolor species_virginica
-## sepal_length    0.062795672       -0.064092521      -0.063719047
-## sepal_width     0.043095069       -0.043985064      -0.043728758
-## petal_length    0.017238028       -0.017594025      -0.017491503
-## petal_width     0.002462575       -0.002513432      -0.002498786
-## context         0.012312877       -0.012567161      -0.012493931</code></pre>
+## sepal_length    0.063442560       -0.062048857      -0.062401784
+## sepal_width     0.043539012       -0.042582549      -0.042824754
+## petal_length    0.017415605       -0.017033020      -0.017129902
+## petal_width     0.002487944       -0.002433289      -0.002447129
+## context         0.012439718       -0.012166443      -0.012235644</code></pre>
 <p>Not surprisingly everything to setosa has gone up and the others down. But notice the scale!</p>
 </div>
 <div id="visualising-the-learning" class="section level2">
 <h2><span class="header-section-number">0.6</span> Visualising the learning</h2>
-<video width="456"  controls loop>
-<source src="backprop_files/figure-html/backproplearn.webm" />
-</video>
+<p>How the weights change over epochs:</p>
+<!-- NOTE:
+ffmpeg -i backpropweights.webm backpropweights.gif -hide_banner
+ffmpeg -i backpropweights.webm backpropweights.mp4 -hide_banner
+-->
+<video width="800" style="display:block; margin: 0 auto;" controls>
+<source src="./img/backpropweights.webm" type="video/webm">
+<source src="./img/backpropweights.mp4" type="video/mp4">
+<p>Your browser does not support the video tag </video> <br></p>
 </div>
 <div id="resources" class="section level2">
 <h2><span class="header-section-number">0.7</span> Resources</h2>

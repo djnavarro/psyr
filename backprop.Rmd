@@ -182,98 +182,39 @@ Not surprisingly everything to setosa has gone up and the others down. But notic
 
 ## Visualising the learning
 
-```{r backproplearn, fig.show='animate', interval=0.1, cache=TRUE, message=FALSE, echo=FALSE, eval = TRUE}
+How the weights change over epochs:
 
-# packages
-library(magrittr)
-library(readr)
-library(dplyr)
-library(ggplot2)
+```{r, cache=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+tidy_weights <- here::here("output","iris_weights.csv") %>%
+  read_csv()
+```
 
-# read the irises data as a numeric matrix
-iris_file <- here::here("data", "iris_recode.csv")
-irises <- iris_file %>% read_csv() %>% as.matrix()
-
-# specify which features are inputs & targets
-input_names <- c("sepal_length", "sepal_width", "petal_length", "petal_width", "context")
-output_names <- c("species_setosa", "species_versicolor", "species_virginica")
-
-# the logit squashing function
-logit <- function(x){
-  y <- 1/(1 + exp(-x))
-  return(y)
-}
-
-# count the number of inputs, target, cases & weights
-n_input <- length(input_names)
-n_output <- length(output_names)
-n_cases <- dim(irises)[1]
-n_weights <- n_input * n_output
-
-# parameters
-n_epochs <- 100 # number of training epochs
-learning_rate <- .1 # learning rate
-
-# create a weight matrix with all weights set to 0
-# plus a tiny amount of random noise to break symmetry
-weight <- matrix(
-  data = rnorm(n_weights) *.01,
-  nrow = n_input,
-  ncol = n_output,
-  dimnames = list(input_names, output_names)
-)
-
-# create a matrix that keeps track of the sum squared prediction
-# error at the end of every trial, across every epoch
-sse <- matrix(NA, n_cases, n_epochs)
-
-for(epoch in 1:n_epochs){
+```{r backpropweights, fig.show='animate', interval=0.05, cache=TRUE, message=FALSE, echo=FALSE, eval = FALSE, fig.width=8, fig.height=5}
+for(b in seq(from = 1, to = 4999, by = 10)) {
   
-  pic <- weight %>% 
-    as.tibble() %>%
-    mutate(feature = c("SL","SW","PL","PW","C")) %>%
-    gather(key = "species", value = "strength", 
-           species_setosa, species_versicolor, species_virginica) %>%
-    ggplot(aes(x = feature, y = strength)) +
+  pic4 <- tidy_weights %>%
+    filter(epoch <= b) %>%
+    ggplot(aes(x = epoch, y = strength, colour = feature)) +
     facet_wrap(~species) +
-    geom_bar(stat="identity") +
-    ylim(-4.5,4.5) + 
-    ggtitle(paste("Epoch:", epoch-1))
-  plot(pic)
-  
-  
-  # to prevent weirdness, shuffle the order of trials 
-  # at the start of each epoch
-  trial_order <- sample(1:n_cases)
-  
-  for(case in 1:n_cases) {
-    
-    # which stimulus is this?
-    stimulus_id <- trial_order[case]
-    
-    # send the iris features to the input nodes
-    input <- irises[stimulus_id, input_names]
-    
-    # feed forward expressed as matrix operation
-    output <- (input %*% weight) %>% logit()
-    
-    # feedback: show the model the true "target" pattern
-    target <- irises[stimulus_id, output_names]
-    
-    # error gradient at the output nodes
-    prediction_error <- target - output
-    
-    # store the sum squared error for later
-    sse[stimulus_id, epoch] <- sum(prediction_error^2)
-    
-    # matrix algebra form
-    gradient <- input %*% (prediction_error * output * (1-output))
-    weight <- weight + learning_rate * gradient
-    
-  }
+    geom_line() +
+    theme_bw() +
+    geom_point(data = tidy_weights %>% filter(epoch == b), 
+               size = 3) +
+    xlim(0,5000) + ylim(-6,6.5)
+  plot(pic4)
   
 }
 ```
+<!-- NOTE:
+ffmpeg -i backpropweights.webm backpropweights.gif -hide_banner
+ffmpeg -i backpropweights.webm backpropweights.mp4 -hide_banner
+-->
+<video width="800" style="display:block; margin: 0 auto;" controls>
+<source src="./img/backpropweights.webm" type="video/webm">
+<source src="./img/backpropweights.mp4" type="video/mp4">
+Your browser does not support the video tag
+</video>
+<br>
 
 
 ## Resources

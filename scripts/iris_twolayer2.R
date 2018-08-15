@@ -26,12 +26,12 @@ n_weights <- n_input * n_output
 
 # parameters
 n_epochs <- 100 # number of training epochs
-learning_rate <- .1 # learning rate
+learning_rate <- .01 # learning rate
 
 # create a weight matrix with all weights set to 0
 # plus a tiny amount of random noise to break symmetry
 weight <- matrix(
-  data = rnorm(n_weights) *.01,
+  data = rnorm(n_weights) *.02,
   nrow = n_input,
   ncol = n_output,
   dimnames = list(input_names, output_names)
@@ -74,7 +74,7 @@ for(epoch in 1:n_epochs){
   }
 }
 
-
+# draw a very simple plot
 plot(colSums(sse),type="b")
 
 
