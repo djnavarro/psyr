@@ -438,21 +438,161 @@ div.tocify {
 
 
 <p>Earlier in these notes I used the <a href="./programming.html">Rescorla-Wagner</a> model of associative learning as an example of how to implement computational models of cognition in R. In this and later sections, I’ll expand the dicussion of models to cover a variety of other models in the field. I’ll start with the <strong>backpropagation rule</strong> for learning in connectionist networks.</p>
-<div id="initial-implementation" class="section level2">
-<h2><span class="header-section-number">0.1</span> Initial implementation</h2>
+<div id="scripts-and-data-set" class="section level2">
+<h2><span class="header-section-number">0.1</span> Scripts and data set</h2>
 <ul>
-<li>The <a href="./data/iris_recode.csv">iris_recode.csv</a> file contains the classic iris dat slightly reorganised as purely numeric data (<a href="./scripts/iris_recode.R">here</a>) is the script that generated it.</li>
+<li>The <a href="./data/iris_recode.csv">iris_recode.csv</a> file contains the classic iris data slightly reorganised as purely numeric data (<a href="./scripts/iris_recode.R">here</a>) is the script that generated it.</li>
 <li>The first version of the modelling code implements a simple two-layer backpropagation network for the iris data: <a href="./scripts/iris_twolayer.R">iris_twolayer.R</a></li>
 <li>The second version of the code implements the same model, but expressing the learning rules as matrix operations in order to speed up the calculations: <a href="./scripts/iris_twolayer2.R">iris_twolayer2.R</a></li>
 </ul>
-<p>At the moment the scripts don’t do anything other than learn a classification rule. The goal for the full exercise will be to examine what the model is learning across the series of “epochs”, and consider the relationship between this connectionist network and a probabilistic logistic regression model.</p>
-<p>Ideally, I’ll also include some more complicated examples of backprop networks.</p>
+<p>At the moment the scripts don’t do anything other than learn a classification rule. The goal for the full exercise will (eventually) be to examine what the model is learning across the series of “epochs”, and consider the relationship between this connectionist network and a probabilistic logistic regression model, but for now it’s a bit simpler than that!</p>
+<p>In this tutorial we’ll only cover a very simple version of a backpropagation network, the two-layer “perceptron” model. There are two versions of the code posted above. The code in the <a href="./scripts/iris_twolayer.R">iris_twolayer.R</a> script is probably the more intuitive version, as it updates the association weights one at a time, but R code runs much faster when you express the learning rule using matrix operations, which is hwat the <a href="./scripts/iris_twolayer2.R">iris_twolayer2.R</a> version does. Let’s start with a walk through of the more intuitive version…</p>
+</div>
+<div id="input-and-output-patterns" class="section level2">
+<h2><span class="header-section-number">0.2</span> Input and output patterns</h2>
+<p>First, let’s take a look at the training data. I’m going to use the classic “iris” data set that comes bundled with R, but I’ve reorganised the data in a form that is a little bit more useful for thinking about the learning problem involved, and expressed it as a numeric matrix.</p>
+<pre class="r"><code>irises &lt;- read_csv(&quot;./data/iris_recode.csv&quot;) %&gt;% as.matrix()</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   sepal_length = col_double(),
+##   sepal_width = col_double(),
+##   petal_length = col_double(),
+##   petal_width = col_double(),
+##   context = col_integer(),
+##   species_setosa = col_integer(),
+##   species_versicolor = col_integer(),
+##   species_virginica = col_integer()
+## )</code></pre>
+<p>This data set has columns containing many features. First there are the <em>input features</em>, which consist of two features relating to the petals, two features relating to the sepal, and a context feature that is 1 for every flower. Additionally, there are three binary valued <em>output features</em> corresponding to the species of each flower, dummy coded so that only the correct species has value 1 and the incorrect species have value 0. Here are the names:</p>
+<pre class="r"><code>input_names &lt;- c(&quot;sepal_length&quot;, &quot;sepal_width&quot;, &quot;petal_length&quot;, &quot;petal_width&quot;, &quot;context&quot;)
+output_names &lt;- c(&quot;species_setosa&quot;, &quot;species_versicolor&quot;, &quot;species_virginica&quot;)</code></pre>
+<p>So for the first flower, the network would be given this pattern as input:</p>
+<pre class="r"><code>input &lt;- irises[1, input_names]
+input</code></pre>
+<pre><code>## sepal_length  sepal_width petal_length  petal_width      context 
+##          5.1          3.5          1.4          0.2          1.0</code></pre>
+<p>and we need to train it to produce this <em>target pattern</em> as the output:</p>
+<pre class="r"><code>target &lt;- irises[1, output_names]
+target </code></pre>
+<pre><code>##     species_setosa species_versicolor  species_virginica 
+##                  1                  0                  0</code></pre>
+</div>
+<div id="connection-weights-between-input-and-output" class="section level2">
+<h2><span class="header-section-number">0.3</span> Connection weights between input and output</h2>
+<p>In its simplest form we can describe the knowledge possessed by our network as a set of associative strengths between every input feature and every output feature. In that sense we can think of it as a generalisation of how the Rescorla-Wagner model represents knowledge:</p>
+<pre class="r"><code>n_input &lt;- length(input_names)
+n_output &lt;- length(output_names)
+n_weights &lt;- n_input * n_output</code></pre>
+<p>So what we’ll do is create a <em>weight matrix</em> that sets the initial associative strength to zero, with a tiny bit of random noise added to each of these associative weights:</p>
+<pre class="r"><code>weight &lt;- matrix(
+  data = rnorm(n_weights) *.01,
+  nrow = n_input,
+  ncol = n_output,
+  dimnames = list(input_names, output_names)
+)
+weight</code></pre>
+<pre><code>##              species_setosa species_versicolor species_virginica
+## sepal_length   0.0088821382       -0.001355030      -0.003281048
+## sepal_width   -0.0016066377       -0.001541336       0.005163431
+## petal_length  -0.0008134903        0.012097252      -0.005143955
+## petal_width   -0.0049765263       -0.017957481       0.002846892
+## context       -0.0080286485        0.009765223       0.004322889</code></pre>
+<p>Here’s the network we want to code:</p>
+<div class="figure">
+<img src="img/backprop_irises.png" />
+
+</div>
+<p>While we’re at it, store a copy for later:</p>
+<pre class="r"><code>old_weight &lt;- weight</code></pre>
+</div>
+<div id="making-predictions" class="section level2">
+<h2><span class="header-section-number">0.4</span> Making predictions</h2>
+<p>In the Rescorla-Wagner model, when the learner is shown a compound stimulus with elements A and B with individual associative strengths <span class="math inline">\(v_A\)</span> and <span class="math inline">\(v_B\)</span>, the association strength for the compound AB is assumed to be additive <span class="math inline">\(v_{AB} = v_{A} + v_{B}\)</span>. We could do this for our backpropagation network too, but it is much more common to assume a logistic activation function. So we’ll need to define this activation function:</p>
+<pre class="r"><code>logit &lt;- function(x){
+  y &lt;- 1/(1 + exp(-x))
+  return(y)
+}</code></pre>
+<p>So what we do is first take the <code>sum</code> of the inputs and then pass them through our new <code>logit</code> function. So let’s say we want to compute the strength associated with the first species:</p>
+<pre class="r"><code>output_1 &lt;- sum(input * weight[,1]) %&gt;% logit() 
+output_1</code></pre>
+<pre><code>## [1] 0.5073777</code></pre>
+<p>More generally though we can loop over the three species:</p>
+<pre class="r"><code># initialise the output nodes at zero
+output &lt;- rep(0, n_output)
+names(output) &lt;- output_names
+
+# feed forward to every output node by taking a weighted sum of
+# the inputs and passing it through a logit function
+for(o in 1:n_output) {
+  output[o] &lt;- sum(input * weight[,o]) %&gt;% logit() 
+}
+
+# print the result
+output</code></pre>
+<pre><code>##     species_setosa species_versicolor  species_virginica 
+##          0.5073777          0.5027011          0.4997573</code></pre>
+<p>As you can see, initially the model has no knowledge at all! It’s predicting a value of about 0.5 for every category!</p>
+</div>
+<div id="learning-from-error" class="section level2">
+<h2><span class="header-section-number">0.5</span> Learning from error</h2>
+<p>The prediction error is very familiar:</p>
+<pre class="r"><code>prediction_error &lt;- target - output
+prediction_error</code></pre>
+<pre><code>##     species_setosa species_versicolor  species_virginica 
+##          0.4926223         -0.5027011         -0.4997573</code></pre>
+<p>Here is the code implementing the learning rule. What we’re doing is looping over every weight in the network, and then adjusting the strength proportional to the prediction error:</p>
+<pre class="r"><code>learning_rate &lt;- .1
+
+# for each of the weights connecting to an output node...
+for(o in 1:n_output) {
+  for(i in 1:n_input) {
+    
+    # associative learning for this weight scales in a manner that depends on
+    # both the input value and output value. this is similar to the way that
+    # Rescorla-Wagner has CS scaling (alpha) and US scaling (beta) parameters
+    # but the specifics are slightly different (Equation 5 &amp; 6 in the paper)
+    scale_io &lt;- input[i] * output[o] * (1-output[o]) 
+    
+    # adjust the weights proportional to the error and the scaling (Equation 8)
+    weight[i,o] &lt;- weight[i,o] + (prediction_error[o] * scale_io * learning_rate)
+    
+  }
+}</code></pre>
+<p>(Let’s not worry too much about the <code>scale_io</code> factor for now). So let’s look at the input, output, target, and prediction error:</p>
+<pre class="r"><code>input</code></pre>
+<pre><code>## sepal_length  sepal_width petal_length  petal_width      context 
+##          5.1          3.5          1.4          0.2          1.0</code></pre>
+<pre class="r"><code>output</code></pre>
+<pre><code>##     species_setosa species_versicolor  species_virginica 
+##          0.5073777          0.5027011          0.4997573</code></pre>
+<pre class="r"><code>target</code></pre>
+<pre><code>##     species_setosa species_versicolor  species_virginica 
+##                  1                  0                  0</code></pre>
+<pre class="r"><code>prediction_error</code></pre>
+<pre><code>##     species_setosa species_versicolor  species_virginica 
+##          0.4926223         -0.5027011         -0.4997573</code></pre>
+<p>Now let’s look at how the weights changed:</p>
+<pre class="r"><code>weight - old_weight</code></pre>
+<pre><code>##              species_setosa species_versicolor species_virginica
+## sepal_length    0.062795672       -0.064092521      -0.063719047
+## sepal_width     0.043095069       -0.043985064      -0.043728758
+## petal_length    0.017238028       -0.017594025      -0.017491503
+## petal_width     0.002462575       -0.002513432      -0.002498786
+## context         0.012312877       -0.012567161      -0.012493931</code></pre>
+<p>Not surprisingly everything to setosa has gone up and the others down. But notice the scale!</p>
+</div>
+<div id="visualising-the-learning" class="section level2">
+<h2><span class="header-section-number">0.6</span> Visualising the learning</h2>
+<video width="456"  controls loop>
+<source src="backprop_files/figure-html/backproplearn.webm" />
+</video>
 </div>
 <div id="resources" class="section level2">
-<h2><span class="header-section-number">0.2</span> Resources</h2>
+<h2><span class="header-section-number">0.7</span> Resources</h2>
 <ul>
 <li>The Rumelhart et al (1986) paper cached for teaching purposes <a href="http://compcogscisydney.org/mm/2018/Rumelhart1986.pdf">here</a></li>
-<li>A nice <a href="http://neuralnetworksanddeeplearning.com/chap2.html">summary</a></li>
+<li>A very good, but somewhat technical <a href="http://neuralnetworksanddeeplearning.com/chap2.html">summary</a> of backpropagation by Michael Nielsen</li>
+<li>Really nice <a href="http://neuroplausible.com/connectionism">resources</a> in Python by Olivia Guest.</li>
 </ul>
 </div>
 
