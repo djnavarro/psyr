@@ -182,7 +182,7 @@ Not surprisingly everything to setosa has gone up and the others down. But notic
 
 ## Visualising the learning
 
-How the weights change over epochs:
+For the actual simulation I'll set the learning rate to .01, run it for 5000 epochs and average across 100 independent runs just to smooth out any artifacts of randomisation^[The script to run it is [here](./scripts/iris_twolater3.R), a csv with the connections weights is [here](./output/iris_weights.csv), another one (36Mb) with sum squared error to each item on each presentation [here](./output/iris_sse.csv), zipped version (11Mb) [here](./output/iris_sse.csv.zip)] How the weights change over epochs:
 
 ```{r, cache=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
 tidy_weights <- here::here("output","iris_weights.csv") %>%
