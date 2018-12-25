@@ -1,5 +1,5 @@
 ---
-title: '<div class="jumbotron"><h1 class="title toc-ignore display-3">R for Psychological Science</h1><p class="lead">An introductory resource</p></div>'
+title: '<div class="jumbotron"><h1 class="title toc-ignore display-3" align="center">R for Psychological Science</h1><p class="lead" align="center">by Danielle Navarro <a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a></p></div>'
 output:
   html_document:
     includes:
@@ -22,13 +22,26 @@ Hi there!
 
 I've set this up as an introductory resource for psychology students taking my *Programming with R* class at UNSW. There are two goals with this resource. The first is to provide an introduction to R programming that doesn't assume any previous experience. The second is to provide a brief sketch of some of things that R can be useful for in psychology. Data analysis inevitably forms a large part of this, but I hope to cover a broader range of topics.
 
-The content borrows from my introductory statistics lecture notes ([Learning Statistics with R](https://compcogscisydney.org/learning-statistics-with-r/)), but they're not equivalent, and over time the two are likely to part ways. I wrote *Learning Statistics with R* to accompany an introductory statistics class that I taught some years ago, and the intended audience for that book is a psych student taking their first research methods class. This resource is a little different -- it's aimed at someone who has taken an research methods class and would like to learn how to use the R programming language in their own work.
+The content borrows from my introductory statistics lecture notes ([Learning Statistics with R](https://learningstatisticswithr.com/)), but they're not equivalent, and over time the two are likely to part ways. I wrote *Learning Statistics with R* to accompany an introductory statistics class and the intended audience for that book is a psychology student taking their first research methods class. This resource is a little different -- it's aimed at someone who has taken at least one research methods class and would like to learn how to use the R programming language in their own work.
 
 It is of course a work in progress, but I hope it is useful! Please don't hesitate to contact me if you spot an error or find something confusing.
 
--[Danielle](d.navarro@unsw.edu.au) `r emo::ji("turtle")`
+-- Danielle
 
 <img src="./img/splash_turtle2.png" width=250px>
+
+
+<br>
+<center>
+---- &nbsp;&nbsp;
+<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
+<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
+<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
+&nbsp;&nbsp; ----
+</center>
+<br>
+<br>
 
 
 ### 1: Core toolkit
@@ -46,6 +59,19 @@ It is of course a work in progress, but I hope it is useful! Please don't hesita
 - [File system](./file-system.html)
 
 
+<br>
+<center>
+---- &nbsp;&nbsp;
+<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
+<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
+<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
+&nbsp;&nbsp; ----
+</center>
+<br>
+<br>
+
+
 ### 2: Working with data
 
 Everything from here onwards is *very much* a work in progress!
@@ -58,12 +84,40 @@ Everything from here onwards is *very much* a work in progress!
 - [Working with text](./working-with-text.html) <span style="color:#cccccc">(draft)</span>
 - [Import and export](./import-export.html) <span style="color:#cccccc">(stub)</span>
 
+
+<br>
+<center>
+---- &nbsp;&nbsp;
+<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
+<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
+<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
+&nbsp;&nbsp; ----
+</center>
+<br>
+<br>
+
+
 ### 3: Statistics
 
 - [Probability distributions](./probability.html) <span style="color:#cccccc">(draft)</span>
 - [Introductory statistics](./introductory-statistics.html) <span style="color:#cccccc">(draft)</span><!-- add Bayes factor -->
 - [Intermediate statistics](./intermediate-statistics.html) <span style="color:#cccccc">(stub)</span>
 - [Advanced statistics](./advanced-statistics.html) <span style="color:#cccccc">(stub)</span>
+
+
+<br>
+<center>
+---- &nbsp;&nbsp;
+<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
+<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
+<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
+&nbsp;&nbsp; ----
+</center>
+<br>
+<br>
+
 
 ### 4: More topics
 
@@ -76,6 +130,19 @@ Everything from here onwards is *very much* a work in progress!
 - [Backpropagation networks](./backprop.html) <span style="color:#cccccc">(draft)</span> 
 - <span style="color:#cccccc">More computational modelling (to be added)</span> <!-- Rescorla-Wagner, GCM -->
 - <span style="color:#cccccc">Writing an R package (to be added)</span> <!-- very simple guide -->
+
+
+<br>
+<center>
+---- &nbsp;&nbsp;
+<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
+<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
+<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
+&nbsp;&nbsp; ----
+</center>
+<br>
+<br>
 
 
 ### Links
@@ -156,5 +223,18 @@ The [frames data](./data/frames_ex2.csv) contains data from Experiment 2 of Haye
 - Week 2 notebook is posted [here](./misc/lesson2.nb.html) with output version [here](./misc/lesson2.html) 
 
 -->
+
+<br>
+<center>
+---- &nbsp;&nbsp;
+<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
+<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
+<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
+&nbsp;&nbsp; ----
+</center>
+<br>
+<br>
+
 
 
