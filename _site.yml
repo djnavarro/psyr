@@ -1,5 +1,5 @@
 name: R for Psychological Science
-output_dir: _site
+output_dir: docs
 exclude: 
   - "header.html"
   - "README.*"
@@ -11,51 +11,51 @@ navbar:
     - text: Getting started
       href: getting-started.html
     - text: Variables
-      href: variables.html     
+      href: variables.html
     - text: Scripts
       href: scripts.html
     - text: Packages
-      href: packages.html      
+      href: packages.html
     - text: Workspaces
       href: workspaces.html
     - text: Vectors
-      href: vectors.html        
+      href: vectors.html
     - text: Loops
       href: loops.html
     - text: Branches
-      href: branches.html    
+      href: branches.html
     - text: Functions
-      href: functions.html    
+      href: functions.html
     - text: Programming
-      href: programming.html   
+      href: programming.html
     - text: File system
-      href: file-system.html        
+      href: file-system.html
   - text: Data
     menu:
     - text: Prelude
-      href: prelude-to-data.html 
+      href: prelude-to-data.html
     - text: Data types
-      href: data-types.html 
+      href: data-types.html
     - text: Describing data
-      href: describing-data.html      
+      href: describing-data.html
     - text: Visualising data
       href: visualising-data.html
     - text: Manipulating data
-      href: manipulating-data.html 
+      href: manipulating-data.html
     - text: Text data
-      href: working-with-text.html   
+      href: working-with-text.html
     - text: Import/export
-      href: import-export.html         
+      href: import-export.html
   - text: Stats
     menu:
     - text: Probability distributions
-      href: probability.html      
+      href: probability.html
     - text: Introductory statistics
       href: introductory-statistics.html
     - text: Intermediate statistics
       href: intermediate-statistics.html
     - text: Advanced statistics
-      href: advanced-statistics.html      
+      href: advanced-statistics.html
   - text: More
     menu:
     - text: Experiments
@@ -67,7 +67,7 @@ navbar:
     - text: Miscellaneous
       href: xx-miscellaneous.html
     - text: Backpropagation networks
-      href: backprop.html      
+      href: backprop.html
   right:
   - text: compcogscisydney.org
     href: https://compcogscisydney.org

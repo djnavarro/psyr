@@ -80,10 +80,10 @@ Everything from here onwards is *very much* a work in progress!
 
 ### Links
 
-- Week 1 slides: [pptx](./docs/overview.pptx), [pdf](./docs/overview.pdf)
+- Week 1 slides: [pptx](./misc/overview.pptx), [pdf](./misc/overview.pdf)
 - Week 2 workbook: [here](./lesson2.html)
 - Week 3 slides: [here](https://slides.com/djnavarro/psyc-3361-workshop-3/)
-- Data sets are [here](./docs/data.zip)
+- Data sets are [here](./misc/data.zip)
 - Github repository is [here](https://github.com/djnavarro/psyr)
 - A nice [resource](http://environmentalcomputing.net/) put together by the UNSW folks in BEES.
 
@@ -151,9 +151,9 @@ The [frames data](./data/frames_ex2.csv) contains data from Experiment 2 of Haye
 - Archiving code with github, osf (& codeocean)
 - Source code for this site: https://github.com/djnavarro/psyr
 
-- Exercises: programming with turtles ([part1](./docs/turtle1.html), [part2](./docs/turtle2.html))
-- Week 1 slides are posted [here](./docs/overview.pdf)
-- Week 2 notebook is posted [here](./docs/lesson2.nb.html) with output version [here](./docs/lesson2.html) 
+- Exercises: programming with turtles ([part1](./misc/turtle1.html), [part2](./misc/turtle2.html))
+- Week 1 slides are posted [here](./misc/overview.pdf)
+- Week 2 notebook is posted [here](./misc/lesson2.nb.html) with output version [here](./misc/lesson2.html) 
 
 -->
 
