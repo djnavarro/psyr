@@ -1,7 +1,31 @@
-# The purpose of this script is to tell you all about scripts, 
-# and to show you some of the cool things you can do with R.
-#
-# Here are a few things to note:
+# This script is NOT something you need to understand yet. 
+# You're going to be asked to "source" this script, purely
+# as a mechanism to get us started in the class.
+
+# ------ everything here is stuff you can ignore for now ------
+
+# installations from CRAN
+install.packages("tidyverse")
+install.packages("devtools")
+install.packages("usethis")
+install.packages("janitor")
+install.packages("BayesFactor")
+install.packages("cowplot")
+install.packages("broom")
+install.packages("gapminder")
+install.packages("gganimate")
+install.packages("haven")
+install.packages("knitr")
+install.packages("leaflet")
+
+# installation from GitHub
+devtools::install_github("djnavarro/TurtleGraphics")
+
+
+# ------- okay, the stuff from here is "slightly interesting" ------
+
+# Okay, so some preliminaries. The file you have open here is a "script"
+# and we'll talk more about them later. Here are a few things to note:
 #
 # 1. An R script is just a text file, and it ends with a .R file
 #    extension. 
@@ -22,8 +46,11 @@
 #
 # 6. You may see some warning messages. That happens a lot - if you 
 #    do, don't be too worried. That's pretty normal because R is 
-#    usually very cautious :-) 
-
+#    usually very cautious, and it's giving you lots of info about
+#    all that installation stuff above. Ignore it unless it says
+#    "error", and if it does ask Danielle or Garston for help!
+#
+# 7. The "code" below is going to do a very simple data analysis...
 
 # packages
 library(tidyverse)
@@ -51,4 +78,10 @@ plot(pic)
 # 2. Look at the graph. Think a bit about whether it could be improved.
 # 3. Make an attempt to work out what the commands above (the "code") are
 #    doing. Don't worry if you can't figure it out yet!
+
+
+
+
+
+
 
