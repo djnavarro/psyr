@@ -8,10 +8,34 @@
 #     https://psyr.org/vectors.html
 #
 # You're back now? Excellent!
+#
+# The script below is BROKEN. The parts in ALL-CAPS are 
+# where you need to make changes. You will need to go through
+# it and fix all the problems using what you have learned
 
-#Use the combine function c to create a numeric vector called age that lists the ages of four people (e.g., 19, 34, 7 and 67)
-#Use the square brackets [] to print out the age of the second person.
-#Use the square brackets [] to print out the age of the second person and third persons
-#Use the combine function c to create a character vector called gender that lists the gender of those four people
-#Create a logical vector adult that indicates whether each participant was 18 or older. Instead of using c, try using a logical operator like > or >= to automatically create adult from age
-#Test your logical indexing skills. Print out the gender of all the adult participants.
+
+# create a vector of ages for four people
+age <- c(SOMETHING-IS-MISSING-HERE)
+
+# print out the age of the third person
+print(SOMETHING-MISSING)
+
+# print out the ages of the second person AND the third person
+print(age[SOMETHING-MISSING])
+
+# create a vector of genders for four people
+gender <- SOMETHING
+
+# create a logical vector that indicates whether each 
+# person is an adult
+adult <- SOMETHING > SOMETHING 
+
+# print out the genders of all the adults!
+OH-DEAR-EVERYTHING-IS-MISSING-THIS-TIME
+
+# Useful tip... if you want R to run a small section of the code rather 
+# than the whole script, select the part you want it to run and then
+# click on the "run" button above.
+#
+#    Run     =  R will execute the current line or selection
+#    Source  =  R will execute the entire script
