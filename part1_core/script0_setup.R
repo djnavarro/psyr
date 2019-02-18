@@ -2,6 +2,8 @@
 # You're going to be asked to "source" this script, purely
 # as a mechanism to get us started in the class.
 
+
+
 # ------ everything here is stuff you can ignore for now ------
 
 # installations from CRAN
@@ -22,7 +24,9 @@ install.packages("leaflet")
 devtools::install_github("djnavarro/TurtleGraphics")
 
 
-# ------- okay, the stuff from here is "slightly interesting" ------
+
+
+# ------- the stuff from here is "slightly interesting" ------
 
 # Okay, so some preliminaries. The file you have open here is a "script"
 # and we'll talk more about them later. Here are a few things to note:
@@ -71,6 +75,7 @@ pic <- gapminder %>%
 
 # plot the picture
 plot(pic)
+
 
 # Some notes:
 # 
