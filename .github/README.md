@@ -1,3 +1,3 @@
 # R for Psychological Science
 
-https://psyr.org
+https://psyr.djnavarro.net
