@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>probability.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,32 +37,32 @@
 
 <!-- ###### start inserted header ##### -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- add plausible.io -->
+<script async defer data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
 
-    gtag('config', 'UA-115940772-1');
-</script>
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <!-- add the twitter card and open graph tags -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@djnavarro">
-<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:url" content="https://psyr.org">
 <meta property="og:title" content="R for Psychological Science">
 <meta property="og:description" content="An introductory resource">
-<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+<meta property="og:image" content="http://psyr.org/img/splash_turtle.png">
 
 <!-- ###### end inserted header ##### -->
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -66,38 +75,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -105,13 +87,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -122,44 +99,56 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -170,54 +159,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -231,6 +251,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -266,8 +292,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -277,14 +301,24 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -428,13 +462,10 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><ol start="19" style="list-style-type: decimal">
-<li>Probability distributions</li>
-</ol></h1>
 
 </div>
 
@@ -466,55 +497,55 @@ div.tocify {
 </div>
 <div id="sampling-from-a-set" class="section level2">
 <h2><span class="header-section-number">19.2</span> Sampling from a set</h2>
-<p>The <code>sample()</code> function is an extremely useful tool. Suppose I have a set of 10 stimuli that I want to present to people in a random order. For simplicity I’ll label the items using <code>letters</code>:<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>The <code>sample()</code> function is an extremely useful tool. Suppose I have a set of 10 stimuli that I want to present to people in a random order. For simplicity I’ll label the items using <code>letters</code>:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <pre class="r"><code>stimuli &lt;- letters[1:10]
 stimuli</code></pre>
 <pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot;</code></pre>
 <p>To sample them in a random order, all I need to do is this</p>
 <pre class="r"><code>shuffled_stimuli &lt;- sample(stimuli)
 shuffled_stimuli</code></pre>
-<pre><code>##  [1] &quot;g&quot; &quot;d&quot; &quot;h&quot; &quot;j&quot; &quot;e&quot; &quot;c&quot; &quot;f&quot; &quot;b&quot; &quot;a&quot; &quot;i&quot;</code></pre>
+<pre><code>##  [1] &quot;a&quot; &quot;e&quot; &quot;g&quot; &quot;h&quot; &quot;j&quot; &quot;f&quot; &quot;d&quot; &quot;c&quot; &quot;i&quot; &quot;b&quot;</code></pre>
 <p>Or to do the same thing with piped code…</p>
 <pre class="r"><code>shuffled_stimuli &lt;- stimuli %&gt;% sample()
 shuffled_stimuli</code></pre>
-<pre><code>##  [1] &quot;e&quot; &quot;f&quot; &quot;b&quot; &quot;i&quot; &quot;c&quot; &quot;h&quot; &quot;j&quot; &quot;g&quot; &quot;d&quot; &quot;a&quot;</code></pre>
+<pre><code>##  [1] &quot;a&quot; &quot;d&quot; &quot;e&quot; &quot;b&quot; &quot;j&quot; &quot;f&quot; &quot;c&quot; &quot;g&quot; &quot;i&quot; &quot;h&quot;</code></pre>
 <p>Notice that the output the second time around <em>isn’t</em> the same a the output the first time. The <code>sample()</code> function uses a pseudo-random number generator to order the items differently every time.</p>
 <pre class="r"><code>for(i in 1:5) {
   stimuli %&gt;%
     sample() %&gt;%
     print()
 }</code></pre>
-<pre><code>##  [1] &quot;h&quot; &quot;c&quot; &quot;a&quot; &quot;i&quot; &quot;d&quot; &quot;g&quot; &quot;f&quot; &quot;j&quot; &quot;e&quot; &quot;b&quot;
-##  [1] &quot;j&quot; &quot;g&quot; &quot;c&quot; &quot;a&quot; &quot;b&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;h&quot; &quot;i&quot;
-##  [1] &quot;b&quot; &quot;f&quot; &quot;e&quot; &quot;h&quot; &quot;c&quot; &quot;j&quot; &quot;i&quot; &quot;a&quot; &quot;d&quot; &quot;g&quot;
-##  [1] &quot;j&quot; &quot;d&quot; &quot;f&quot; &quot;c&quot; &quot;h&quot; &quot;g&quot; &quot;i&quot; &quot;e&quot; &quot;b&quot; &quot;a&quot;
-##  [1] &quot;e&quot; &quot;j&quot; &quot;g&quot; &quot;b&quot; &quot;d&quot; &quot;a&quot; &quot;i&quot; &quot;h&quot; &quot;c&quot; &quot;f&quot;</code></pre>
+<pre><code>##  [1] &quot;i&quot; &quot;c&quot; &quot;f&quot; &quot;e&quot; &quot;j&quot; &quot;h&quot; &quot;b&quot; &quot;g&quot; &quot;d&quot; &quot;a&quot;
+##  [1] &quot;j&quot; &quot;c&quot; &quot;i&quot; &quot;b&quot; &quot;h&quot; &quot;e&quot; &quot;a&quot; &quot;d&quot; &quot;f&quot; &quot;g&quot;
+##  [1] &quot;b&quot; &quot;j&quot; &quot;c&quot; &quot;d&quot; &quot;a&quot; &quot;f&quot; &quot;g&quot; &quot;i&quot; &quot;e&quot; &quot;h&quot;
+##  [1] &quot;i&quot; &quot;b&quot; &quot;h&quot; &quot;e&quot; &quot;f&quot; &quot;d&quot; &quot;c&quot; &quot;g&quot; &quot;a&quot; &quot;j&quot;
+##  [1] &quot;j&quot; &quot;f&quot; &quot;d&quot; &quot;h&quot; &quot;e&quot; &quot;i&quot; &quot;b&quot; &quot;a&quot; &quot;c&quot; &quot;g&quot;</code></pre>
 <p>As you can see if you feed in a vector of inputs, the default behaviour is to shuffle all the items. However, the <code>sample()</code> function is flexible. For example, “shuffling all the items” is a special case of “sampling without replacement”. Imagine taking all the stimuli (<em>letters</em>), and then placing them into a jar. To shuffle them into a random order all you need to do is shake the jar (<em>randomise</em>) pull them out of the jar (<em>sample</em>) one at a time until the jar is empty (<em>no replacement</em>).</p>
 <p>The jars metaphor is nice because we can extend it. Suppose we only want to pull 6 of the 10 stimuli out of the jar:</p>
 <pre class="r"><code>stimuli %&gt;% sample(size = 6)</code></pre>
-<pre><code>## [1] &quot;a&quot; &quot;j&quot; &quot;i&quot; &quot;g&quot; &quot;h&quot; &quot;c&quot;</code></pre>
+<pre><code>## [1] &quot;b&quot; &quot;g&quot; &quot;i&quot; &quot;e&quot; &quot;h&quot; &quot;c&quot;</code></pre>
 <p>Again, there are no repeats (it is impossible to pull the same item from the jar twice), but we stopped before pulling everything out. Here’s a loop showing you how the randomisation gives different answers every time, but it always follows the constraints of stopping at 6 draws and never draws the same item twice:</p>
 <pre class="r"><code>for(i in 1:5) {
   stimuli %&gt;%
     sample(size = 6) %&gt;%
     print()
 }</code></pre>
-<pre><code>## [1] &quot;a&quot; &quot;g&quot; &quot;j&quot; &quot;i&quot; &quot;b&quot; &quot;h&quot;
-## [1] &quot;g&quot; &quot;h&quot; &quot;c&quot; &quot;e&quot; &quot;j&quot; &quot;d&quot;
-## [1] &quot;i&quot; &quot;j&quot; &quot;b&quot; &quot;g&quot; &quot;c&quot; &quot;f&quot;
-## [1] &quot;i&quot; &quot;c&quot; &quot;f&quot; &quot;h&quot; &quot;j&quot; &quot;e&quot;
-## [1] &quot;j&quot; &quot;d&quot; &quot;g&quot; &quot;i&quot; &quot;e&quot; &quot;f&quot;</code></pre>
+<pre><code>## [1] &quot;g&quot; &quot;j&quot; &quot;h&quot; &quot;f&quot; &quot;i&quot; &quot;b&quot;
+## [1] &quot;c&quot; &quot;a&quot; &quot;i&quot; &quot;e&quot; &quot;g&quot; &quot;d&quot;
+## [1] &quot;d&quot; &quot;a&quot; &quot;e&quot; &quot;h&quot; &quot;i&quot; &quot;f&quot;
+## [1] &quot;j&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;c&quot; &quot;d&quot;
+## [1] &quot;h&quot; &quot;j&quot; &quot;b&quot; &quot;i&quot; &quot;d&quot; &quot;g&quot;</code></pre>
 <p>Another way to extend the jars metaphor is to sample <em>with replacement</em>. In this version of the sampling scheme, every time we pull a letter out of the jar we write it down, but then put it back in the jar so that it becomes possible to sample it again.</p>
 <pre class="r"><code>for(i in 1:5) {
   stimuli %&gt;%
     sample(size = 15, replace = TRUE) %&gt;%
     print()
 }</code></pre>
-<pre><code>##  [1] &quot;i&quot; &quot;f&quot; &quot;d&quot; &quot;g&quot; &quot;a&quot; &quot;a&quot; &quot;f&quot; &quot;g&quot; &quot;e&quot; &quot;a&quot; &quot;h&quot; &quot;g&quot; &quot;b&quot; &quot;j&quot; &quot;d&quot;
-##  [1] &quot;h&quot; &quot;a&quot; &quot;e&quot; &quot;c&quot; &quot;i&quot; &quot;h&quot; &quot;d&quot; &quot;f&quot; &quot;j&quot; &quot;j&quot; &quot;d&quot; &quot;e&quot; &quot;i&quot; &quot;e&quot; &quot;j&quot;
-##  [1] &quot;f&quot; &quot;j&quot; &quot;a&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;g&quot; &quot;i&quot; &quot;i&quot; &quot;f&quot; &quot;b&quot; &quot;g&quot; &quot;j&quot; &quot;a&quot; &quot;a&quot;
-##  [1] &quot;e&quot; &quot;c&quot; &quot;f&quot; &quot;c&quot; &quot;a&quot; &quot;f&quot; &quot;a&quot; &quot;b&quot; &quot;f&quot; &quot;j&quot; &quot;a&quot; &quot;e&quot; &quot;d&quot; &quot;b&quot; &quot;a&quot;
-##  [1] &quot;a&quot; &quot;i&quot; &quot;g&quot; &quot;c&quot; &quot;b&quot; &quot;c&quot; &quot;h&quot; &quot;f&quot; &quot;i&quot; &quot;a&quot; &quot;h&quot; &quot;i&quot; &quot;d&quot; &quot;j&quot; &quot;j&quot;</code></pre>
+<pre><code>##  [1] &quot;h&quot; &quot;d&quot; &quot;j&quot; &quot;b&quot; &quot;d&quot; &quot;a&quot; &quot;f&quot; &quot;g&quot; &quot;f&quot; &quot;h&quot; &quot;i&quot; &quot;h&quot; &quot;f&quot; &quot;c&quot; &quot;c&quot;
+##  [1] &quot;i&quot; &quot;e&quot; &quot;h&quot; &quot;i&quot; &quot;f&quot; &quot;e&quot; &quot;g&quot; &quot;f&quot; &quot;j&quot; &quot;g&quot; &quot;c&quot; &quot;h&quot; &quot;b&quot; &quot;f&quot; &quot;f&quot;
+##  [1] &quot;b&quot; &quot;e&quot; &quot;c&quot; &quot;j&quot; &quot;a&quot; &quot;a&quot; &quot;i&quot; &quot;a&quot; &quot;a&quot; &quot;b&quot; &quot;i&quot; &quot;j&quot; &quot;b&quot; &quot;c&quot; &quot;i&quot;
+##  [1] &quot;f&quot; &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;c&quot; &quot;f&quot; &quot;a&quot; &quot;b&quot; &quot;e&quot; &quot;g&quot; &quot;i&quot; &quot;i&quot; &quot;c&quot; &quot;h&quot; &quot;i&quot;
+##  [1] &quot;e&quot; &quot;h&quot; &quot;f&quot; &quot;a&quot; &quot;e&quot; &quot;b&quot; &quot;e&quot; &quot;c&quot; &quot;a&quot; &quot;j&quot; &quot;h&quot; &quot;i&quot; &quot;e&quot; &quot;f&quot; &quot;e&quot;</code></pre>
 <p>Notice that this time you can produce sequences of stimuli that are longer than the original set (because you’re putting them back in the jar). In this case even though I only had 10 items, each output has 15 samples from that set: there are of course repeats!</p>
 <p>A final way we can extend the metaphor is to imagine that some of the letters are written on larger pieces of paper than others: so when you reach into the hat you’re more likely to pull out the larger ones.</p>
 <pre class="r"><code>weights &lt;- 1:10 # weight the later letters more!</code></pre>
@@ -524,11 +555,11 @@ shuffled_stimuli</code></pre>
     sample(size = 10, replace = FALSE, prob = weights) %&gt;%
     print()
 }</code></pre>
-<pre><code>##  [1] &quot;f&quot; &quot;e&quot; &quot;j&quot; &quot;g&quot; &quot;c&quot; &quot;i&quot; &quot;b&quot; &quot;h&quot; &quot;a&quot; &quot;d&quot;
-##  [1] &quot;e&quot; &quot;j&quot; &quot;d&quot; &quot;c&quot; &quot;h&quot; &quot;i&quot; &quot;g&quot; &quot;f&quot; &quot;b&quot; &quot;a&quot;
-##  [1] &quot;f&quot; &quot;j&quot; &quot;i&quot; &quot;g&quot; &quot;b&quot; &quot;h&quot; &quot;e&quot; &quot;c&quot; &quot;d&quot; &quot;a&quot;
-##  [1] &quot;j&quot; &quot;i&quot; &quot;d&quot; &quot;g&quot; &quot;f&quot; &quot;h&quot; &quot;c&quot; &quot;b&quot; &quot;e&quot; &quot;a&quot;
-##  [1] &quot;g&quot; &quot;h&quot; &quot;a&quot; &quot;e&quot; &quot;c&quot; &quot;f&quot; &quot;j&quot; &quot;d&quot; &quot;i&quot; &quot;b&quot;</code></pre>
+<pre><code>##  [1] &quot;h&quot; &quot;j&quot; &quot;e&quot; &quot;i&quot; &quot;f&quot; &quot;g&quot; &quot;b&quot; &quot;d&quot; &quot;c&quot; &quot;a&quot;
+##  [1] &quot;h&quot; &quot;b&quot; &quot;i&quot; &quot;d&quot; &quot;c&quot; &quot;e&quot; &quot;j&quot; &quot;a&quot; &quot;g&quot; &quot;f&quot;
+##  [1] &quot;f&quot; &quot;i&quot; &quot;e&quot; &quot;b&quot; &quot;h&quot; &quot;g&quot; &quot;j&quot; &quot;d&quot; &quot;c&quot; &quot;a&quot;
+##  [1] &quot;d&quot; &quot;g&quot; &quot;h&quot; &quot;f&quot; &quot;i&quot; &quot;j&quot; &quot;e&quot; &quot;b&quot; &quot;c&quot; &quot;a&quot;
+##  [1] &quot;b&quot; &quot;a&quot; &quot;e&quot; &quot;i&quot; &quot;c&quot; &quot;h&quot; &quot;j&quot; &quot;d&quot; &quot;g&quot; &quot;f&quot;</code></pre>
 <p>So in this output every line shuffles the 10 items, but there’s a definite bias in how the items are ordered! We’re much more likely to start with the later letters than with the early ones!</p>
 <p>We can also do this when sampling with replacement:</p>
 <pre class="r"><code>for(i in 1:5) {
@@ -536,22 +567,23 @@ shuffled_stimuli</code></pre>
     sample(size = 10, replace = TRUE, prob = weights) %&gt;%
     print()
 }</code></pre>
-<pre><code>##  [1] &quot;d&quot; &quot;d&quot; &quot;h&quot; &quot;j&quot; &quot;f&quot; &quot;e&quot; &quot;g&quot; &quot;j&quot; &quot;e&quot; &quot;h&quot;
-##  [1] &quot;j&quot; &quot;d&quot; &quot;e&quot; &quot;j&quot; &quot;d&quot; &quot;i&quot; &quot;b&quot; &quot;c&quot; &quot;f&quot; &quot;f&quot;
-##  [1] &quot;j&quot; &quot;j&quot; &quot;j&quot; &quot;f&quot; &quot;h&quot; &quot;e&quot; &quot;d&quot; &quot;h&quot; &quot;i&quot; &quot;h&quot;
-##  [1] &quot;g&quot; &quot;g&quot; &quot;e&quot; &quot;h&quot; &quot;g&quot; &quot;h&quot; &quot;d&quot; &quot;j&quot; &quot;e&quot; &quot;f&quot;
-##  [1] &quot;d&quot; &quot;j&quot; &quot;h&quot; &quot;g&quot; &quot;a&quot; &quot;g&quot; &quot;j&quot; &quot;a&quot; &quot;f&quot; &quot;f&quot;</code></pre>
+<pre><code>##  [1] &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;e&quot; &quot;g&quot; &quot;i&quot; &quot;i&quot; &quot;i&quot; &quot;f&quot; &quot;h&quot;
+##  [1] &quot;e&quot; &quot;i&quot; &quot;h&quot; &quot;i&quot; &quot;d&quot; &quot;h&quot; &quot;g&quot; &quot;g&quot; &quot;j&quot; &quot;i&quot;
+##  [1] &quot;h&quot; &quot;j&quot; &quot;h&quot; &quot;b&quot; &quot;h&quot; &quot;h&quot; &quot;g&quot; &quot;i&quot; &quot;d&quot; &quot;f&quot;
+##  [1] &quot;f&quot; &quot;h&quot; &quot;d&quot; &quot;d&quot; &quot;h&quot; &quot;a&quot; &quot;g&quot; &quot;j&quot; &quot;h&quot; &quot;i&quot;
+##  [1] &quot;g&quot; &quot;i&quot; &quot;e&quot; &quot;j&quot; &quot;b&quot; &quot;h&quot; &quot;j&quot; &quot;b&quot; &quot;g&quot; &quot;h&quot;</code></pre>
 <p>In this output, you can see that we’re very unlikely to sample the letter “a”.</p>
 </div>
 <div id="binomial-distribution" class="section level2">
 <h2><span class="header-section-number">19.3</span> Binomial distribution</h2>
-<p>The <code>sample()</code> function gives you a good feel for how you can take a set of entities (stimuli, participants, outcomes, etc) and do probabilistic operations with them. When doing statistics we sometimes like to abstract away from the simple sampling mechanism and start talking in terms of <em>probability distributions</em>. To see how the abstraction works let’s introduce one of the simplest examples, the <strong>binomial distribution</strong>. Imagine we have a six sided die, in which four sides are coloured <code>&quot;blue&quot;</code> and two sides are coloured <code>&quot;red&quot;</code>. Let’s roll the die 20 times and see what we get:</p>
+<p>The <code>sample()</code> function gives you a good feel for how you can take a set of entities (stimuli, participants, outcomes, etc) and do probabilistic operations with them. When doing statistics we sometimes like to abstract away from the simple sampling mechanism and start talking in terms of <em>probability distributions</em>. To see how the abstraction works let’s introduce one of the simplest examples, the <strong>binomial distribution</strong>. Imagine we have a six sided die, in which four sides are coloured <code>"blue"</code> and two sides are coloured <code>"red"</code>. Let’s roll the die 20 times and see what we get:</p>
 <pre class="r"><code>die &lt;- c(&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;blue&quot;,&quot;red&quot;,&quot;red&quot;)
 rolls &lt;- sample(die, size = 20, replace = TRUE)
 rolls</code></pre>
-<pre><code>##  [1] &quot;red&quot;  &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;red&quot;  &quot;red&quot;  &quot;red&quot;  &quot;blue&quot; &quot;blue&quot;
-## [11] &quot;red&quot;  &quot;red&quot;  &quot;blue&quot; &quot;red&quot;  &quot;blue&quot; &quot;red&quot;  &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot;</code></pre>
-<p>We can count the number of times the result was <code>&quot;blue&quot;</code>:</p>
+<pre><code>##  [1] &quot;blue&quot; &quot;red&quot;  &quot;red&quot;  &quot;red&quot;  &quot;red&quot;  &quot;blue&quot; &quot;red&quot;  &quot;red&quot; 
+##  [9] &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;red&quot;  &quot;blue&quot; &quot;red&quot;  &quot;blue&quot;
+## [17] &quot;blue&quot; &quot;blue&quot; &quot;blue&quot; &quot;blue&quot;</code></pre>
+<p>We can count the number of times the result was <code>"blue"</code>:</p>
 <pre class="r"><code>n_blue &lt;- sum(rolls == &quot;blue&quot;)
 n_blue</code></pre>
 <pre><code>## [1] 12</code></pre>
@@ -561,11 +593,11 @@ n_blue</code></pre>
   n_blue &lt;- sum(rolls == &quot;blue&quot;)
   print(n_blue)
 }</code></pre>
-<pre><code>## [1] 14
-## [1] 13
-## [1] 14
-## [1] 11
-## [1] 13</code></pre>
+<pre><code>## [1] 15
+## [1] 17
+## [1] 12
+## [1] 10
+## [1] 11</code></pre>
 <p>In fact, let’s go all out on this. Let’s replicate this tiny experiment 100,000 times because that’s easy to do with R:</p>
 <pre class="r"><code>n_replications &lt;- 100000
 n_blue &lt;- numeric(length = n_replications)
@@ -581,7 +613,7 @@ frequencies</code></pre>
 ##     0     0     0     1     0    13    74   279   939  2562  5513  9939 
 ##    12    13    14    15    16    17    18    19    20 
 ## 14867 18188 18073 14409  9210  4234  1375   297    27</code></pre>
-<p>With this particular <code>die</code> the probability of observing a <code>&quot;blue&quot;</code> on any one roll is two-thirds (4 out of 6 sides) and not surprisingly the outcomes of this “roll the die 20 times” experiment tend to be <em>distributed</em> mostly between 12 and 15. I hate looking at tables of numbers, so let’s draw a picture:</p>
+<p>With this particular <code>die</code> the probability of observing a <code>"blue"</code> on any one roll is two-thirds (4 out of 6 sides) and not surprisingly the outcomes of this “roll the die 20 times” experiment tend to be <em>distributed</em> mostly between 12 and 15. I hate looking at tables of numbers, so let’s draw a picture:</p>
 <pre class="r"><code>as_tibble(frequencies, n = &quot;count&quot;) %&gt;%
   mutate(n_blue = as.numeric(n_blue)) %&gt;%
   ggplot(aes(x=n_blue, y = count)) +
@@ -616,9 +648,9 @@ plot(pic)</code></pre>
   plot(pic)
 }</code></pre>
 <video width="450" style="display:block; margin: 0 auto;" controls>
-<source src="./img/binomial_samples.webm" type="video/webm"> <source src="./img/binomial_samples.mp4" type="video/mp4"> Your browser does not support the video tag.
-</video>
-<p><br></p>
+<source src="./img/binomial_samples.webm" type="video/webm">
+<source src="./img/binomial_samples.mp4" type="video/mp4">
+<p>Your browser does not support the video tag. </video> <br></p>
 <p>If you were typing this at the console, this loop would produce a sequence of plots, but what I’ve done (using some clever features of R Markdown) is wrap it up as an animation. Later on I’ll talk about how to make animations.</p>
 <p>A natural question to ask is about the true probility of obtaining each outcome. One way to do it (approximately) would be to generate very large number of samples and then calculate the proportion of times that we end up with (say) 12 out of 20 rolls being blue. However, there’s an easier way. It turns out there is a formula for this:</p>
 <p><span class="math display">\[
@@ -633,10 +665,11 @@ P(k | \theta, n) = \frac{n!}{k!(n-k)!} \theta^k (1-\theta)^{n-k}
 <pre class="r"><code>outcome_value &lt;- 0:20
 true_prob &lt;- dbinom(x = outcome_value, size = 20, prob = 2/3)
 true_prob</code></pre>
-<pre><code>##  [1] 2.867972e-10 1.147189e-08 2.179659e-07 2.615590e-06 2.223252e-05
-##  [6] 1.422881e-04 7.114406e-04 2.845762e-03 9.248728e-03 2.466327e-02
-## [11] 5.425920e-02 9.865310e-02 1.479796e-01 1.821288e-01 1.821288e-01
-## [16] 1.457030e-01 9.106440e-02 4.285383e-02 1.428461e-02 3.007287e-03
+<pre><code>##  [1] 2.867972e-10 1.147189e-08 2.179659e-07 2.615590e-06
+##  [5] 2.223252e-05 1.422881e-04 7.114406e-04 2.845762e-03
+##  [9] 9.248728e-03 2.466327e-02 5.425920e-02 9.865310e-02
+## [13] 1.479796e-01 1.821288e-01 1.821288e-01 1.457030e-01
+## [17] 9.106440e-02 4.285383e-02 1.428461e-02 3.007287e-03
 ## [21] 3.007287e-04</code></pre>
 <p>But just to confirm that our function actually does the same thing as the version R provides:</p>
 <pre class="r"><code>binomial_prob(k = 13, n = 20, theta = 2/3)</code></pre>
@@ -650,14 +683,14 @@ true_prob</code></pre>
 <p>Cool.</p>
 <p>The animation below shows how the binomial distribution changes as we shift the value of <code>prob</code>:</p>
 <video width="450" style="display:block; margin: 0 auto;" controls>
-<source src="./img/binomial.webm" type="video/webm"> <source src="./img/binomial.mp4" type="video/mp4"> Your browser does not support the video tag.
-</video>
-<p><br></p>
+<source src="./img/binomial.webm" type="video/webm">
+<source src="./img/binomial.mp4" type="video/mp4">
+<p>Your browser does not support the video tag. </video> <br></p>
 <p>Here’s another one that shows what happens as we change the <code>size</code> of the experiment.</p>
 <video width="450" style="display:block; margin: 0 auto;" controls>
-<source src="./img/binomial_size.webm" type="video/webm"> <source src="./img/binomial_size.mp4" type="video/mp4"> Your browser does not support the video tag.
-</video>
-<p><br></p>
+<source src="./img/binomial_size.webm" type="video/webm">
+<source src="./img/binomial_size.mp4" type="video/mp4">
+<p>Your browser does not support the video tag. </video> <br></p>
 <p>You can see the central limit theorem in action here! As the <code>size</code> gets larger, the shape of the binomial distribution gets progressively closer to normal. Speaking of which…</p>
 </div>
 <div id="normal-distribution" class="section level2">
@@ -674,8 +707,8 @@ true_prob</code></pre>
 <p>Let’s start with a classic example in the psychological context. By convention, measures of cognitive ability (IQ scores) are designed to have a mean of <span class="math inline">\(\mu = 100\)</span> and a standard deviation of <span class="math inline">\(\sigma = 15\)</span>. The <code>rnorm()</code> function allows us to generate normally distributed numbers:</p>
 <pre class="r"><code>iq &lt;- rnorm(n = 10, mean = 100, sd = 15)
 iq</code></pre>
-<pre><code>##  [1] 102.96236 107.18382 115.74983 102.33999 100.28263 105.77267  87.82983
-##  [8] 104.60808 102.62654  96.34584</code></pre>
+<pre><code>##  [1] 102.96236 107.18382 115.74983 102.33999 100.28263 105.77267
+##  [7]  87.82983 104.60808 102.62654  96.34584</code></pre>
 <p>In a real IQ battery such as the <a href="https://en.wikipedia.org/wiki/Wechsler_Adult_Intelligence_Scale">WAIS</a> you would probably get results rounded to the nearest whole number, so it probably makes more sense to think of this as the data:</p>
 <pre class="r"><code>iq &lt;- round(iq)
 iq</code></pre>
@@ -704,22 +737,22 @@ tibble(iq_score, density) %&gt;%
   geom_area() +
   theme_bw()</code></pre>
 <p><img src="probability_files/figure-html/unnamed-chunk-28-1.png" width="456" style="display: block; margin: auto;" /></p>
-<p>You’re probably already familiar with how the parameters of the normal distribution work, but even so it’s nice to look at some pretty animations. In the first one, we can see what happens when we shift the mean (i.e. <span class="math inline">\(\mu\)</span>) of the distribution:</p>
+<p>You’re probably already familiar with how the parameters of the normal distribution work, but even so it’s nice to look at some pretty animations. In the first one, we can see what happens when we shift the mean (i.e. <span class="math inline">\(\mu\)</span>) of the distribution:</p>
 <video width="456"  controls loop>
 <source src="probability_files/figure-html/normal_mean.webm" />
 </video>
 <video width="450" style="display:block; margin: 0 auto;" controls>
-<source src="./img/normal_mean.webm" type="video/webm"> <source src="./img/normal_mean.mp4" type="video/mp4"> Your browser does not support the video tag.
-</video>
-<p><br></p>
+<source src="./img/normal_mean.webm" type="video/webm">
+<source src="./img/normal_mean.mp4" type="video/mp4">
+<p>Your browser does not support the video tag. </video><br></p>
 <p>Not too surprising. It’s maybe a little more informative to look at what happens when we change the standard deviation <span class="math inline">\(\sigma\)</span>:</p>
 <video width="456"  controls loop>
 <source src="probability_files/figure-html/normal_std.webm" />
 </video>
 <video width="450" style="display:block; margin: 0 auto;" controls>
-<source src="./img/normal_std.webm" type="video/webm"> <source src="./img/normal_std.mp4" type="video/mp4"> Your browser does not support the video tag.
-</video>
-<p><br></p>
+<source src="./img/normal_std.webm" type="video/webm">
+<source src="./img/normal_std.mp4" type="video/mp4">
+<p>Your browser does not support the video tag. </video> <br></p>
 </div>
 <div id="cumulative-probability" class="section level3">
 <h3><span class="header-section-number">19.4.3</span> Cumulative probability</h3>
@@ -793,7 +826,7 @@ tibble(quantile, cumulative_probability) %&gt;%
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>The <code>letters</code> vector is a built in vector in R that contains the 26 lower case letters of the English alphabet in canonical order. There is also a <code>LETTERS</code> vector that has the upper case letters.<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>The <code>letters</code> vector is a built in vector in R that contains the 26 lower case letters of the English alphabet in canonical order. There is also a <code>LETTERS</code> vector that has the upper case letters.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
@@ -808,13 +841,56 @@ tibble(quantile, cumulative_probability) %&gt;%
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

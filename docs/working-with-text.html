@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>working-with-text.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,32 +37,32 @@
 
 <!-- ###### start inserted header ##### -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- add plausible.io -->
+<script async defer data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
 
-    gtag('config', 'UA-115940772-1');
-</script>
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <!-- add the twitter card and open graph tags -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@djnavarro">
-<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:url" content="https://psyr.org">
 <meta property="og:title" content="R for Psychological Science">
 <meta property="og:description" content="An introductory resource">
-<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+<meta property="og:image" content="http://psyr.org/img/splash_turtle.png">
 
 <!-- ###### end inserted header ##### -->
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -66,38 +75,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -105,13 +87,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -122,44 +99,56 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -170,54 +159,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -231,6 +251,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -266,8 +292,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -277,14 +301,24 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -428,13 +462,10 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><ol start="17" style="list-style-type: decimal">
-<li>Working with text</li>
-</ol></h1>
 
 </div>
 
@@ -468,27 +499,27 @@ chain_3 &lt;- chains %&gt;%
   select(color,shape,motion,starts_with(&quot;name&quot;)) 
 print(chain_3)</code></pre>
 <pre><code>## # A tibble: 27 x 14
-##    color shape motion name_0 name_1 name_2 name_3 name_4 name_5 name_6
-##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; 
-##  1 black circ… bounce kinim… kimei  hepini tuge   tupim  tupim  minku 
-##  2 blue  circ… bounce wikuki miwn   miniku tupim  tupim  tupim  miniku
-##  3 red   circ… bounce kikumi mihen… hepini tupim  tupim  tupim  miniku
-##  4 black squa… bounce miwin… pemini nige   miniku mihunu mihunu miniku
-##  5 blue  squa… bounce pinipi kupini tuge   tuge   tupim  tupim  tupin 
-##  6 red   squa… bounce kihem… pon    mihenu mihunu miniku tupim  tupim 
-##  7 black tria… bounce miwimi poi    poi    poi    poi    miniku miniku
-##  8 blue  tria… bounce nipi   mhip   mpo    tuge   miniku tupim  tupin 
-##  9 red   tria… bounce wige   kuwpi  tupim  miniku miniku miniku tupin 
-## 10 black circ… horiz… nihepi mip    nige   tuge   tuge   tuge   tuge  
-## # ... with 17 more rows, and 4 more variables: name_7 &lt;chr&gt;, name_8 &lt;chr&gt;,
-## #   name_9 &lt;chr&gt;, name_10 &lt;chr&gt;</code></pre>
+##    color shape  motion name_0 name_1 name_2 name_3 name_4 name_5
+##    &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; 
+##  1 black circle bounce kinim… kimei  hepini tuge   tupim  tupim 
+##  2 blue  circle bounce wikuki miwn   miniku tupim  tupim  tupim 
+##  3 red   circle bounce kikumi mihen… hepini tupim  tupim  tupim 
+##  4 black square bounce miwin… pemini nige   miniku mihunu mihunu
+##  5 blue  square bounce pinipi kupini tuge   tuge   tupim  tupim 
+##  6 red   square bounce kihem… pon    mihenu mihunu miniku tupim 
+##  7 black trian… bounce miwimi poi    poi    poi    poi    miniku
+##  8 blue  trian… bounce nipi   mhip   mpo    tuge   miniku tupim 
+##  9 red   trian… bounce wige   kuwpi  tupim  miniku miniku miniku
+## 10 black circle horiz… nihepi mip    nige   tuge   tuge   tuge  
+## # … with 17 more rows, and 5 more variables: name_6 &lt;chr&gt;,
+## #   name_7 &lt;chr&gt;, name_8 &lt;chr&gt;, name_9 &lt;chr&gt;, name_10 &lt;chr&gt;</code></pre>
 <pre class="r"><code>input &lt;- chain_3$name_0
 output &lt;- chain_3$name_10</code></pre>
 <p>Excellent! I have a data set ✅ Next, I’ll need a string manipulation package. <strong>stringr</strong> is loaded automatically with <strong>tidyverse</strong> so that’s another ✅. Time to get started!</p>
 </div>
 <div id="flatten-strings" class="section level2">
 <h2><span class="header-section-number">17.3</span> Flatten strings</h2>
-<p>Our first job might be just to visually inspect the words that appear in the <code>output</code> of the iterated learning chain, and compare them to the words that were present in the <code>input</code>. To make things easier on ourselves, we’ll use the <code>str_flatten()</code> function to <em>flatten</em> each of these vectors to a single string. We’ll specify <code>collapse = &quot;, &quot;</code> so that the output takes the form of a nice comma-separated list of words</p>
+<p>Our first job might be just to visually inspect the words that appear in the <code>output</code> of the iterated learning chain, and compare them to the words that were present in the <code>input</code>. To make things easier on ourselves, we’ll use the <code>str_flatten()</code> function to <em>flatten</em> each of these vectors to a single string. We’ll specify <code>collapse = ", "</code> so that the output takes the form of a nice comma-separated list of words</p>
 <pre class="r"><code>input %&gt;% str_flatten(collapse = &quot;, &quot;)</code></pre>
 <pre><code>## [1] &quot;kinimapi, wikuki, kikumi, miwiniku, pinipi, kihemiwi, miwimi, nipi, wige, nihepi, wigemi, mahekuki, wimaku, miniki, gepinini, wikima, nipikuge, hema, pikuhemi, kimaki, pimikihe, gepihemi, kunige, miki, mihe, winige, kinimage&quot;</code></pre>
 <pre class="r"><code>output %&gt;% str_flatten(collapse = &quot;, &quot;)</code></pre>
@@ -506,28 +537,33 @@ output &lt;- chain_3$name_10</code></pre>
 <h2><span class="header-section-number">17.5</span> Substrings</h2>
 <p>One thing I might be interested in, either for theoretical reasons (e.g., looking for meaningful prefixes) or practical ones (e.g., convenient plot labels) is extract a smaller subset of the string. A common example is to take the first three characters. We can do this using <code>str_sub()</code></p>
 <pre class="r"><code>output %&gt;% str_sub(start = 1, end = 3)</code></pre>
-<pre><code>##  [1] &quot;min&quot; &quot;min&quot; &quot;min&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tug&quot; &quot;tug&quot;
-## [12] &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;
-## [23] &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;</code></pre>
+<pre><code>##  [1] &quot;min&quot; &quot;min&quot; &quot;min&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tup&quot; &quot;tug&quot;
+## [11] &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;tug&quot; &quot;poi&quot; &quot;poi&quot;
+## [21] &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;</code></pre>
 <p>A feature of <code>str_sub</code> that sometimes comes in handy is that you can specify negative values here to refer to the distance from the end of the string. If for instance I wanted to extract the last three characters in every word:</p>
 <pre class="r"><code>output %&gt;% str_sub(start = -3, end = -1)</code></pre>
-<pre><code>##  [1] &quot;iku&quot; &quot;iku&quot; &quot;iku&quot; &quot;pim&quot; &quot;pim&quot; &quot;pim&quot; &quot;pin&quot; &quot;pin&quot; &quot;pin&quot; &quot;uge&quot; &quot;uge&quot;
-## [12] &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;
-## [23] &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;</code></pre>
+<pre><code>##  [1] &quot;iku&quot; &quot;iku&quot; &quot;iku&quot; &quot;pim&quot; &quot;pim&quot; &quot;pim&quot; &quot;pin&quot; &quot;pin&quot; &quot;pin&quot; &quot;uge&quot;
+## [11] &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;uge&quot; &quot;poi&quot; &quot;poi&quot;
+## [21] &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot; &quot;poi&quot;</code></pre>
 </div>
 <div id="duplication" class="section level2">
 <h2><span class="header-section-number">17.6</span> Duplication</h2>
 <p>I’m not sure why I would want it in this context, but we can duplicate strings using <code>str_dup()</code></p>
 <pre class="r"><code>output %&gt;% str_dup(times = 3)</code></pre>
-<pre><code>##  [1] &quot;minikuminikuminiku&quot; &quot;minikuminikuminiku&quot; &quot;minikuminikuminiku&quot;
-##  [4] &quot;tupimtupimtupim&quot;    &quot;tupimtupimtupim&quot;    &quot;tupimtupimtupim&quot;   
-##  [7] &quot;tupintupintupin&quot;    &quot;tupintupintupin&quot;    &quot;tupintupintupin&quot;   
-## [10] &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;      
-## [13] &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;      
-## [16] &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;      
-## [19] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;          &quot;poipoipoi&quot;         
-## [22] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;          &quot;poipoipoi&quot;         
-## [25] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;          &quot;poipoipoi&quot;</code></pre>
+<pre><code>##  [1] &quot;minikuminikuminiku&quot; &quot;minikuminikuminiku&quot;
+##  [3] &quot;minikuminikuminiku&quot; &quot;tupimtupimtupim&quot;   
+##  [5] &quot;tupimtupimtupim&quot;    &quot;tupimtupimtupim&quot;   
+##  [7] &quot;tupintupintupin&quot;    &quot;tupintupintupin&quot;   
+##  [9] &quot;tupintupintupin&quot;    &quot;tugetugetuge&quot;      
+## [11] &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;      
+## [13] &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;      
+## [15] &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;      
+## [17] &quot;tugetugetuge&quot;       &quot;tugetugetuge&quot;      
+## [19] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;         
+## [21] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;         
+## [23] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;         
+## [25] &quot;poipoipoi&quot;          &quot;poipoipoi&quot;         
+## [27] &quot;poipoipoi&quot;</code></pre>
 </div>
 <div id="truncation-and-padding" class="section level2">
 <h2><span class="header-section-number">17.7</span> Truncation and padding</h2>
@@ -552,10 +588,11 @@ str_trunc(string = &quot;Danielle&quot;, width = 7, ellipsis = &quot;+++&quot;)<
 <pre class="r"><code>input %&gt;% 
   str_pad(width = 7, side = &quot;right&quot;) %&gt;%
   str_trunc(width = 7)</code></pre>
-<pre><code>##  [1] &quot;kini...&quot; &quot;wikuki &quot; &quot;kikumi &quot; &quot;miwi...&quot; &quot;pinipi &quot; &quot;kihe...&quot; &quot;miwimi &quot;
-##  [8] &quot;nipi   &quot; &quot;wige   &quot; &quot;nihepi &quot; &quot;wigemi &quot; &quot;mahe...&quot; &quot;wimaku &quot; &quot;miniki &quot;
-## [15] &quot;gepi...&quot; &quot;wikima &quot; &quot;nipi...&quot; &quot;hema   &quot; &quot;piku...&quot; &quot;kimaki &quot; &quot;pimi...&quot;
-## [22] &quot;gepi...&quot; &quot;kunige &quot; &quot;miki   &quot; &quot;mihe   &quot; &quot;winige &quot; &quot;kini...&quot;</code></pre>
+<pre><code>##  [1] &quot;kini...&quot; &quot;wikuki &quot; &quot;kikumi &quot; &quot;miwi...&quot; &quot;pinipi &quot; &quot;kihe...&quot;
+##  [7] &quot;miwimi &quot; &quot;nipi   &quot; &quot;wige   &quot; &quot;nihepi &quot; &quot;wigemi &quot; &quot;mahe...&quot;
+## [13] &quot;wimaku &quot; &quot;miniki &quot; &quot;gepi...&quot; &quot;wikima &quot; &quot;nipi...&quot; &quot;hema   &quot;
+## [19] &quot;piku...&quot; &quot;kimaki &quot; &quot;pimi...&quot; &quot;gepi...&quot; &quot;kunige &quot; &quot;miki   &quot;
+## [25] &quot;mihe   &quot; &quot;winige &quot; &quot;kini...&quot;</code></pre>
 </div>
 <div id="removing-whitespace" class="section level2">
 <h2><span class="header-section-number">17.8</span> Removing whitespace</h2>
@@ -587,7 +624,7 @@ raw %&gt;% str_squish()</code></pre>
 </div>
 <div id="sorting-strings" class="section level2">
 <h2><span class="header-section-number">17.10</span> Sorting strings</h2>
-<p>There are a collection of functions that manipulate properties of text that vary from one language to the next. The order in which letters appear in the alphabet isn’t always the same, for example. These functions all have a <code>locale</code> value that is set to <code>&quot;en&quot;</code> by default.</p>
+<p>There are a collection of functions that manipulate properties of text that vary from one language to the next. The order in which letters appear in the alphabet isn’t always the same, for example. These functions all have a <code>locale</code> value that is set to <code>"en"</code> by default.</p>
 <pre class="r"><code>letters %&gt;% str_sort(locale = &quot;en&quot;) %&gt;% str_flatten()
 letters %&gt;% str_sort(locale = &quot;haw&quot;) %&gt;% str_flatten()</code></pre>
 <pre><code>## [1] &quot;abcdefghijklmnopqrstuvwxyz&quot;
@@ -607,7 +644,7 @@ letters %&gt;% str_sort(locale = &quot;haw&quot;) %&gt;% str_flatten()</code></p
 </div>
 <div id="pattern-matching" class="section level2">
 <h2><span class="header-section-number">17.12</span> Pattern matching</h2>
-<p>Many text processing tasks require us to solve <em>pattern matching</em> problems. This might be something simple like finding every instance of the word <code>&quot;hello&quot;</code> or something more complicated like extracting every email address from a messy web page. The approach taken in <strong>stringr</strong> is to make a conceptual distinction between functions that allow you to perform <em>tasks</em>, and functions that specify pattern matching <em>engines</em>.</p>
+<p>Many text processing tasks require us to solve <em>pattern matching</em> problems. This might be something simple like finding every instance of the word <code>"hello"</code> or something more complicated like extracting every email address from a messy web page. The approach taken in <strong>stringr</strong> is to make a conceptual distinction between functions that allow you to perform <em>tasks</em>, and functions that specify pattern matching <em>engines</em>.</p>
 <div id="tasks" class="section level3">
 <h3><span class="header-section-number">17.12.1</span> Tasks</h3>
 <p>There are many different tasks that you can solve using pattern matching methods and as a result there are many different pattern matching functions. This isn’t a complete listing of the functions in <strong>stringr</strong> that you can use for this, but it covers most of the main ones:</p>
@@ -631,7 +668,7 @@ letters %&gt;% str_sort(locale = &quot;haw&quot;) %&gt;% str_flatten()</code></p
 <ul>
 <li>A <code>fixed</code> pattern is the simplest type: it matches an exact pattern</li>
 <li>A <code>coll</code> pattern is similar, but recognises that the same character can be represented in different ways (especially useful if you’re using non-English characters)</li>
-<li>A <code>boundary</code> pattern can match the breaks between words, lines, characters, or sentences. By convention <code>&quot;&quot;</code> is used as shorthand for <code>boundary(&quot;character&quot;)</code></li>
+<li>A <code>boundary</code> pattern can match the breaks between words, lines, characters, or sentences. By convention <code>""</code> is used as shorthand for <code>boundary("character")</code></li>
 <li>A <code>regex</code> (the default throughout <strong>stringr</strong>) is a regular expression</li>
 </ul>
 <p>I’ll start out giving an example that uses <code>boundary</code>, but for the most part I’ll use <code>fixed</code> expressions. I’ll leave regular expressions for the very end - they’re easily the most powerful tool but also the most complicated.</p>
@@ -646,49 +683,59 @@ letters %&gt;% str_sort(locale = &quot;haw&quot;) %&gt;% str_flatten()</code></p
 truth %&gt;% str_split(pattern = boundary(&quot;character&quot;))
 truth %&gt;% str_split(pattern = boundary(&quot;sentence&quot;))</code></pre>
 <pre><code>## [[1]]
-##  [1] &quot;It&quot;            &quot;is&quot;            &quot;a&quot;             &quot;truth&quot;        
-##  [5] &quot;universally&quot;   &quot;acknowledged&quot;  &quot;that&quot;          &quot;a&quot;            
-##  [9] &quot;single&quot;        &quot;man&quot;           &quot;in&quot;            &quot;possession&quot;   
-## [13] &quot;of&quot;            &quot;a&quot;             &quot;good&quot;          &quot;fortune&quot;      
-## [17] &quot;must&quot;          &quot;be&quot;            &quot;in&quot;            &quot;want&quot;         
-## [21] &quot;of&quot;            &quot;a&quot;             &quot;wife&quot;          &quot;However&quot;      
-## [25] &quot;little&quot;        &quot;known&quot;         &quot;the&quot;           &quot;feelings&quot;     
-## [29] &quot;or&quot;            &quot;views&quot;         &quot;of&quot;            &quot;such&quot;         
-## [33] &quot;a&quot;             &quot;man&quot;           &quot;may&quot;           &quot;be&quot;           
-## [37] &quot;on&quot;            &quot;his&quot;           &quot;first&quot;         &quot;entering&quot;     
-## [41] &quot;a&quot;             &quot;neighbourhood&quot; &quot;this&quot;          &quot;truth&quot;        
-## [45] &quot;is&quot;            &quot;so&quot;            &quot;well&quot;          &quot;fixed&quot;        
-## [49] &quot;in&quot;            &quot;the&quot;           &quot;minds&quot;         &quot;of&quot;           
-## [53] &quot;the&quot;           &quot;surrounding&quot;   &quot;families&quot;      &quot;that&quot;         
-## [57] &quot;he&quot;            &quot;is&quot;            &quot;considered&quot;    &quot;the&quot;          
-## [61] &quot;rightful&quot;      &quot;property&quot;      &quot;of&quot;            &quot;some&quot;         
-## [65] &quot;one&quot;           &quot;or&quot;            &quot;other&quot;         &quot;of&quot;           
-## [69] &quot;their&quot;         &quot;daughters&quot;    
+##  [1] &quot;It&quot;            &quot;is&quot;            &quot;a&quot;            
+##  [4] &quot;truth&quot;         &quot;universally&quot;   &quot;acknowledged&quot; 
+##  [7] &quot;that&quot;          &quot;a&quot;             &quot;single&quot;       
+## [10] &quot;man&quot;           &quot;in&quot;            &quot;possession&quot;   
+## [13] &quot;of&quot;            &quot;a&quot;             &quot;good&quot;         
+## [16] &quot;fortune&quot;       &quot;must&quot;          &quot;be&quot;           
+## [19] &quot;in&quot;            &quot;want&quot;          &quot;of&quot;           
+## [22] &quot;a&quot;             &quot;wife&quot;          &quot;However&quot;      
+## [25] &quot;little&quot;        &quot;known&quot;         &quot;the&quot;          
+## [28] &quot;feelings&quot;      &quot;or&quot;            &quot;views&quot;        
+## [31] &quot;of&quot;            &quot;such&quot;          &quot;a&quot;            
+## [34] &quot;man&quot;           &quot;may&quot;           &quot;be&quot;           
+## [37] &quot;on&quot;            &quot;his&quot;           &quot;first&quot;        
+## [40] &quot;entering&quot;      &quot;a&quot;             &quot;neighbourhood&quot;
+## [43] &quot;this&quot;          &quot;truth&quot;         &quot;is&quot;           
+## [46] &quot;so&quot;            &quot;well&quot;          &quot;fixed&quot;        
+## [49] &quot;in&quot;            &quot;the&quot;           &quot;minds&quot;        
+## [52] &quot;of&quot;            &quot;the&quot;           &quot;surrounding&quot;  
+## [55] &quot;families&quot;      &quot;that&quot;          &quot;he&quot;           
+## [58] &quot;is&quot;            &quot;considered&quot;    &quot;the&quot;          
+## [61] &quot;rightful&quot;      &quot;property&quot;      &quot;of&quot;           
+## [64] &quot;some&quot;          &quot;one&quot;           &quot;or&quot;           
+## [67] &quot;other&quot;         &quot;of&quot;            &quot;their&quot;        
+## [70] &quot;daughters&quot;    
 ## 
 ## [[1]]
-##   [1] &quot;I&quot; &quot;t&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;t&quot; &quot;r&quot; &quot;u&quot; &quot;t&quot; &quot;h&quot; &quot; &quot; &quot;u&quot; &quot;n&quot; &quot;i&quot;
-##  [18] &quot;v&quot; &quot;e&quot; &quot;r&quot; &quot;s&quot; &quot;a&quot; &quot;l&quot; &quot;l&quot; &quot;y&quot; &quot; &quot; &quot;a&quot; &quot;c&quot; &quot;k&quot; &quot;n&quot; &quot;o&quot; &quot;w&quot; &quot;l&quot; &quot;e&quot;
-##  [35] &quot;d&quot; &quot;g&quot; &quot;e&quot; &quot;d&quot; &quot;,&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;a&quot; &quot;t&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;s&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot;
-##  [52] &quot;l&quot; &quot;e&quot; &quot; &quot; &quot;m&quot; &quot;a&quot; &quot;n&quot; &quot; &quot; &quot;i&quot; &quot;n&quot; &quot; &quot; &quot;p&quot; &quot;o&quot; &quot;s&quot; &quot;s&quot; &quot;e&quot; &quot;s&quot; &quot;s&quot;
-##  [69] &quot;i&quot; &quot;o&quot; &quot;n&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;g&quot; &quot;o&quot; &quot;o&quot; &quot;d&quot; &quot; &quot; &quot;f&quot; &quot;o&quot; &quot;r&quot;
-##  [86] &quot;t&quot; &quot;u&quot; &quot;n&quot; &quot;e&quot; &quot;,&quot; &quot; &quot; &quot;m&quot; &quot;u&quot; &quot;s&quot; &quot;t&quot; &quot; &quot; &quot;b&quot; &quot;e&quot; &quot; &quot; &quot;i&quot; &quot;n&quot; &quot; &quot;
-## [103] &quot;w&quot; &quot;a&quot; &quot;n&quot; &quot;t&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;w&quot; &quot;i&quot; &quot;f&quot; &quot;e&quot; &quot;.&quot; &quot; &quot; &quot;H&quot;
-## [120] &quot;o&quot; &quot;w&quot; &quot;e&quot; &quot;v&quot; &quot;e&quot; &quot;r&quot; &quot; &quot; &quot;l&quot; &quot;i&quot; &quot;t&quot; &quot;t&quot; &quot;l&quot; &quot;e&quot; &quot; &quot; &quot;k&quot; &quot;n&quot; &quot;o&quot;
-## [137] &quot;w&quot; &quot;n&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;f&quot; &quot;e&quot; &quot;e&quot; &quot;l&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot; &quot;s&quot; &quot; &quot; &quot;o&quot;
-## [154] &quot;r&quot; &quot; &quot; &quot;v&quot; &quot;i&quot; &quot;e&quot; &quot;w&quot; &quot;s&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;s&quot; &quot;u&quot; &quot;c&quot; &quot;h&quot; &quot; &quot; &quot;a&quot;
-## [171] &quot; &quot; &quot;m&quot; &quot;a&quot; &quot;n&quot; &quot; &quot; &quot;m&quot; &quot;a&quot; &quot;y&quot; &quot; &quot; &quot;b&quot; &quot;e&quot; &quot; &quot; &quot;o&quot; &quot;n&quot; &quot; &quot; &quot;h&quot; &quot;i&quot;
-## [188] &quot;s&quot; &quot; &quot; &quot;f&quot; &quot;i&quot; &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot; &quot; &quot;e&quot; &quot;n&quot; &quot;t&quot; &quot;e&quot; &quot;r&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot; &quot; &quot;
-## [205] &quot;a&quot; &quot; &quot; &quot;n&quot; &quot;e&quot; &quot;i&quot; &quot;g&quot; &quot;h&quot; &quot;b&quot; &quot;o&quot; &quot;u&quot; &quot;r&quot; &quot;h&quot; &quot;o&quot; &quot;o&quot; &quot;d&quot; &quot;,&quot; &quot; &quot;
-## [222] &quot;t&quot; &quot;h&quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;t&quot; &quot;r&quot; &quot;u&quot; &quot;t&quot; &quot;h&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;s&quot; &quot;o&quot; &quot; &quot;
-## [239] &quot;w&quot; &quot;e&quot; &quot;l&quot; &quot;l&quot; &quot; &quot; &quot;f&quot; &quot;i&quot; &quot;x&quot; &quot;e&quot; &quot;d&quot; &quot; &quot; &quot;i&quot; &quot;n&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot;
-## [256] &quot; &quot; &quot;m&quot; &quot;i&quot; &quot;n&quot; &quot;d&quot; &quot;s&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;s&quot; &quot;u&quot; &quot;r&quot;
-## [273] &quot;r&quot; &quot;o&quot; &quot;u&quot; &quot;n&quot; &quot;d&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot; &quot; &quot; &quot;f&quot; &quot;a&quot; &quot;m&quot; &quot;i&quot; &quot;l&quot; &quot;i&quot; &quot;e&quot; &quot;s&quot;
-## [290] &quot;,&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;a&quot; &quot;t&quot; &quot; &quot; &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;c&quot; &quot;o&quot; &quot;n&quot; &quot;s&quot;
-## [307] &quot;i&quot; &quot;d&quot; &quot;e&quot; &quot;r&quot; &quot;e&quot; &quot;d&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;r&quot; &quot;i&quot; &quot;g&quot; &quot;h&quot; &quot;t&quot; &quot;f&quot;
-## [324] &quot;u&quot; &quot;l&quot; &quot; &quot; &quot;p&quot; &quot;r&quot; &quot;o&quot; &quot;p&quot; &quot;e&quot; &quot;r&quot; &quot;t&quot; &quot;y&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;s&quot; &quot;o&quot;
-## [341] &quot;m&quot; &quot;e&quot; &quot; &quot; &quot;o&quot; &quot;n&quot; &quot;e&quot; &quot; &quot; &quot;o&quot; &quot;r&quot; &quot; &quot; &quot;o&quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot;r&quot; &quot; &quot; &quot;o&quot;
-## [358] &quot;f&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot;i&quot; &quot;r&quot; &quot; &quot; &quot;d&quot; &quot;a&quot; &quot;u&quot; &quot;g&quot; &quot;h&quot; &quot;t&quot; &quot;e&quot; &quot;r&quot; &quot;s&quot;
-## [375] &quot;.&quot;
+##   [1] &quot;I&quot; &quot;t&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;t&quot; &quot;r&quot; &quot;u&quot; &quot;t&quot; &quot;h&quot; &quot; &quot;
+##  [15] &quot;u&quot; &quot;n&quot; &quot;i&quot; &quot;v&quot; &quot;e&quot; &quot;r&quot; &quot;s&quot; &quot;a&quot; &quot;l&quot; &quot;l&quot; &quot;y&quot; &quot; &quot; &quot;a&quot; &quot;c&quot;
+##  [29] &quot;k&quot; &quot;n&quot; &quot;o&quot; &quot;w&quot; &quot;l&quot; &quot;e&quot; &quot;d&quot; &quot;g&quot; &quot;e&quot; &quot;d&quot; &quot;,&quot; &quot; &quot; &quot;t&quot; &quot;h&quot;
+##  [43] &quot;a&quot; &quot;t&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;s&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot; &quot;l&quot; &quot;e&quot; &quot; &quot; &quot;m&quot; &quot;a&quot;
+##  [57] &quot;n&quot; &quot; &quot; &quot;i&quot; &quot;n&quot; &quot; &quot; &quot;p&quot; &quot;o&quot; &quot;s&quot; &quot;s&quot; &quot;e&quot; &quot;s&quot; &quot;s&quot; &quot;i&quot; &quot;o&quot;
+##  [71] &quot;n&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;g&quot; &quot;o&quot; &quot;o&quot; &quot;d&quot; &quot; &quot; &quot;f&quot; &quot;o&quot;
+##  [85] &quot;r&quot; &quot;t&quot; &quot;u&quot; &quot;n&quot; &quot;e&quot; &quot;,&quot; &quot; &quot; &quot;m&quot; &quot;u&quot; &quot;s&quot; &quot;t&quot; &quot; &quot; &quot;b&quot; &quot;e&quot;
+##  [99] &quot; &quot; &quot;i&quot; &quot;n&quot; &quot; &quot; &quot;w&quot; &quot;a&quot; &quot;n&quot; &quot;t&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;a&quot; &quot; &quot;
+## [113] &quot;w&quot; &quot;i&quot; &quot;f&quot; &quot;e&quot; &quot;.&quot; &quot; &quot; &quot;H&quot; &quot;o&quot; &quot;w&quot; &quot;e&quot; &quot;v&quot; &quot;e&quot; &quot;r&quot; &quot; &quot;
+## [127] &quot;l&quot; &quot;i&quot; &quot;t&quot; &quot;t&quot; &quot;l&quot; &quot;e&quot; &quot; &quot; &quot;k&quot; &quot;n&quot; &quot;o&quot; &quot;w&quot; &quot;n&quot; &quot; &quot; &quot;t&quot;
+## [141] &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;f&quot; &quot;e&quot; &quot;e&quot; &quot;l&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot; &quot;s&quot; &quot; &quot; &quot;o&quot; &quot;r&quot;
+## [155] &quot; &quot; &quot;v&quot; &quot;i&quot; &quot;e&quot; &quot;w&quot; &quot;s&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;s&quot; &quot;u&quot; &quot;c&quot; &quot;h&quot;
+## [169] &quot; &quot; &quot;a&quot; &quot; &quot; &quot;m&quot; &quot;a&quot; &quot;n&quot; &quot; &quot; &quot;m&quot; &quot;a&quot; &quot;y&quot; &quot; &quot; &quot;b&quot; &quot;e&quot; &quot; &quot;
+## [183] &quot;o&quot; &quot;n&quot; &quot; &quot; &quot;h&quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;f&quot; &quot;i&quot; &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot; &quot; &quot;e&quot;
+## [197] &quot;n&quot; &quot;t&quot; &quot;e&quot; &quot;r&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot; &quot; &quot; &quot;a&quot; &quot; &quot; &quot;n&quot; &quot;e&quot; &quot;i&quot; &quot;g&quot;
+## [211] &quot;h&quot; &quot;b&quot; &quot;o&quot; &quot;u&quot; &quot;r&quot; &quot;h&quot; &quot;o&quot; &quot;o&quot; &quot;d&quot; &quot;,&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;i&quot;
+## [225] &quot;s&quot; &quot; &quot; &quot;t&quot; &quot;r&quot; &quot;u&quot; &quot;t&quot; &quot;h&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;s&quot; &quot;o&quot; &quot; &quot;
+## [239] &quot;w&quot; &quot;e&quot; &quot;l&quot; &quot;l&quot; &quot; &quot; &quot;f&quot; &quot;i&quot; &quot;x&quot; &quot;e&quot; &quot;d&quot; &quot; &quot; &quot;i&quot; &quot;n&quot; &quot; &quot;
+## [253] &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;m&quot; &quot;i&quot; &quot;n&quot; &quot;d&quot; &quot;s&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;t&quot;
+## [267] &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;s&quot; &quot;u&quot; &quot;r&quot; &quot;r&quot; &quot;o&quot; &quot;u&quot; &quot;n&quot; &quot;d&quot; &quot;i&quot; &quot;n&quot; &quot;g&quot;
+## [281] &quot; &quot; &quot;f&quot; &quot;a&quot; &quot;m&quot; &quot;i&quot; &quot;l&quot; &quot;i&quot; &quot;e&quot; &quot;s&quot; &quot;,&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;a&quot;
+## [295] &quot;t&quot; &quot; &quot; &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;c&quot; &quot;o&quot; &quot;n&quot; &quot;s&quot; &quot;i&quot; &quot;d&quot;
+## [309] &quot;e&quot; &quot;r&quot; &quot;e&quot; &quot;d&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot; &quot; &quot;r&quot; &quot;i&quot; &quot;g&quot; &quot;h&quot; &quot;t&quot;
+## [323] &quot;f&quot; &quot;u&quot; &quot;l&quot; &quot; &quot; &quot;p&quot; &quot;r&quot; &quot;o&quot; &quot;p&quot; &quot;e&quot; &quot;r&quot; &quot;t&quot; &quot;y&quot; &quot; &quot; &quot;o&quot;
+## [337] &quot;f&quot; &quot; &quot; &quot;s&quot; &quot;o&quot; &quot;m&quot; &quot;e&quot; &quot; &quot; &quot;o&quot; &quot;n&quot; &quot;e&quot; &quot; &quot; &quot;o&quot; &quot;r&quot; &quot; &quot;
+## [351] &quot;o&quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot;r&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;t&quot; &quot;h&quot; &quot;e&quot; &quot;i&quot; &quot;r&quot;
+## [365] &quot; &quot; &quot;d&quot; &quot;a&quot; &quot;u&quot; &quot;g&quot; &quot;h&quot; &quot;t&quot; &quot;e&quot; &quot;r&quot; &quot;s&quot; &quot;.&quot;
 ## 
 ## [[1]]
 ## [1] &quot;It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. &quot;                                                                                                                                           
@@ -696,16 +743,17 @@ truth %&gt;% str_split(pattern = boundary(&quot;sentence&quot;))</code></pre>
 </div>
 <div id="count-detect-subset" class="section level2">
 <h2><span class="header-section-number">17.14</span> Count, detect, subset</h2>
-<p>Suppose I would like to look at the presence of the string <code>&quot;ni&quot;</code> within each of the <code>input</code> words. It’s a specific piece of text, so we’ll use <code>fixed(&quot;ni&quot;)</code> to specify the pattern. There are a few different tasks we might want to complete. We could count the <em>number</em> of times <code>&quot;ni&quot;</code> appears in every word (a job for <code>str_count</code>), we could ask <em>whether</em> the string <code>&quot;ni&quot;</code> appears in each word (a job for <code>str_detect</code>), or we could ask <em>which</em> of the words contain <code>&quot;ni&quot;</code>. That leads to the following commands:</p>
+<p>Suppose I would like to look at the presence of the string <code>"ni"</code> within each of the <code>input</code> words. It’s a specific piece of text, so we’ll use <code>fixed("ni")</code> to specify the pattern. There are a few different tasks we might want to complete. We could count the <em>number</em> of times <code>"ni"</code> appears in every word (a job for <code>str_count</code>), we could ask <em>whether</em> the string <code>"ni"</code> appears in each word (a job for <code>str_detect</code>), or we could ask <em>which</em> of the words contain <code>"ni"</code>. That leads to the following commands:</p>
 <pre class="r"><code>input %&gt;% str_count(pattern = fixed(&quot;ni&quot;))</code></pre>
 <pre><code>##  [1] 1 0 0 1 1 0 0 1 0 1 0 0 0 1 2 0 1 0 0 0 0 0 1 0 0 1 1</code></pre>
 <pre class="r"><code>input %&gt;% str_detect(pattern = fixed(&quot;ni&quot;))</code></pre>
-<pre><code>##  [1]  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE
-## [12] FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE
-## [23]  TRUE FALSE FALSE  TRUE  TRUE</code></pre>
+<pre><code>##  [1]  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE
+## [11] FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE
+## [21] FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE</code></pre>
 <pre class="r"><code>input %&gt;% str_subset(pattern = fixed(&quot;ni&quot;))</code></pre>
-<pre><code>##  [1] &quot;kinimapi&quot; &quot;miwiniku&quot; &quot;pinipi&quot;   &quot;nipi&quot;     &quot;nihepi&quot;   &quot;miniki&quot;  
-##  [7] &quot;gepinini&quot; &quot;nipikuge&quot; &quot;kunige&quot;   &quot;winige&quot;   &quot;kinimage&quot;</code></pre>
+<pre><code>##  [1] &quot;kinimapi&quot; &quot;miwiniku&quot; &quot;pinipi&quot;   &quot;nipi&quot;     &quot;nihepi&quot;  
+##  [6] &quot;miniki&quot;   &quot;gepinini&quot; &quot;nipikuge&quot; &quot;kunige&quot;   &quot;winige&quot;  
+## [11] &quot;kinimage&quot;</code></pre>
 </div>
 <div id="locate" class="section level2">
 <h2><span class="header-section-number">17.15</span> Locate</h2>
@@ -731,13 +779,15 @@ truth %&gt;% str_split(pattern = boundary(&quot;sentence&quot;))</code></pre>
 <p>Finally, we could use a command like this to extract all the vowels from <code>truth</code>:</p>
 <pre class="r"><code>truth %&gt;% str_extract_all(pattern = vowels) </code></pre>
 <pre><code>## [[1]]
-##   [1] &quot;I&quot; &quot;i&quot; &quot;a&quot; &quot;u&quot; &quot;u&quot; &quot;i&quot; &quot;e&quot; &quot;a&quot; &quot;a&quot; &quot;o&quot; &quot;e&quot; &quot;e&quot; &quot;a&quot; &quot;a&quot; &quot;i&quot; &quot;e&quot; &quot;a&quot;
-##  [18] &quot;i&quot; &quot;o&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;o&quot; &quot;a&quot; &quot;o&quot; &quot;o&quot; &quot;o&quot; &quot;u&quot; &quot;e&quot; &quot;u&quot; &quot;e&quot; &quot;i&quot; &quot;a&quot; &quot;o&quot;
-##  [35] &quot;a&quot; &quot;i&quot; &quot;e&quot; &quot;o&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot; &quot;e&quot; &quot;o&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;i&quot; &quot;e&quot; &quot;o&quot;
-##  [52] &quot;u&quot; &quot;a&quot; &quot;a&quot; &quot;a&quot; &quot;e&quot; &quot;o&quot; &quot;i&quot; &quot;i&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot; &quot;a&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;u&quot; &quot;o&quot;
-##  [69] &quot;o&quot; &quot;i&quot; &quot;u&quot; &quot;i&quot; &quot;o&quot; &quot;e&quot; &quot;i&quot; &quot;e&quot; &quot;i&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;e&quot; &quot;u&quot; &quot;o&quot; &quot;u&quot; &quot;i&quot;
-##  [86] &quot;a&quot; &quot;i&quot; &quot;i&quot; &quot;e&quot; &quot;a&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;i&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot; &quot;u&quot; &quot;o&quot; &quot;e&quot; &quot;o&quot;
-## [103] &quot;o&quot; &quot;e&quot; &quot;o&quot; &quot;e&quot; &quot;o&quot; &quot;o&quot; &quot;e&quot; &quot;o&quot; &quot;e&quot; &quot;i&quot; &quot;a&quot; &quot;u&quot; &quot;e&quot;</code></pre>
+##   [1] &quot;I&quot; &quot;i&quot; &quot;a&quot; &quot;u&quot; &quot;u&quot; &quot;i&quot; &quot;e&quot; &quot;a&quot; &quot;a&quot; &quot;o&quot; &quot;e&quot; &quot;e&quot; &quot;a&quot; &quot;a&quot;
+##  [15] &quot;i&quot; &quot;e&quot; &quot;a&quot; &quot;i&quot; &quot;o&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;o&quot; &quot;a&quot; &quot;o&quot; &quot;o&quot; &quot;o&quot; &quot;u&quot;
+##  [29] &quot;e&quot; &quot;u&quot; &quot;e&quot; &quot;i&quot; &quot;a&quot; &quot;o&quot; &quot;a&quot; &quot;i&quot; &quot;e&quot; &quot;o&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot; &quot;e&quot;
+##  [43] &quot;o&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;i&quot; &quot;e&quot; &quot;o&quot; &quot;u&quot; &quot;a&quot; &quot;a&quot; &quot;a&quot; &quot;e&quot;
+##  [57] &quot;o&quot; &quot;i&quot; &quot;i&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot; &quot;a&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;u&quot; &quot;o&quot; &quot;o&quot; &quot;i&quot;
+##  [71] &quot;u&quot; &quot;i&quot; &quot;o&quot; &quot;e&quot; &quot;i&quot; &quot;e&quot; &quot;i&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;e&quot; &quot;u&quot; &quot;o&quot; &quot;u&quot;
+##  [85] &quot;i&quot; &quot;a&quot; &quot;i&quot; &quot;i&quot; &quot;e&quot; &quot;a&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;i&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;i&quot;
+##  [99] &quot;u&quot; &quot;o&quot; &quot;e&quot; &quot;o&quot; &quot;o&quot; &quot;e&quot; &quot;o&quot; &quot;e&quot; &quot;o&quot; &quot;o&quot; &quot;e&quot; &quot;o&quot; &quot;e&quot; &quot;i&quot;
+## [113] &quot;a&quot; &quot;u&quot; &quot;e&quot;</code></pre>
 </div>
 <div id="regular-expressions" class="section level2">
 <h2><span class="header-section-number">17.17</span> Regular expressions</h2>
@@ -751,7 +801,7 @@ truth %&gt;% str_split(pattern = boundary(&quot;sentence&quot;))</code></pre>
 <pre class="r"><code>pp &lt;- janeaustenr::prideprejudice %&gt;%
   str_flatten(&quot; &quot;) %&gt;%
   str_squish</code></pre>
-<p>Okay, so now I want to give myself something to <em>do</em> with this. I’m tired and sick and I can’t think of anything clever, so I’ll just try and locate every appearance of the words <code>&quot;Elizabeth&quot;</code>, <code>&quot;Darcy&quot;</code> and <code>&quot;Wickham&quot;</code> in the text:</p>
+<p>Okay, so now I want to give myself something to <em>do</em> with this. I’m tired and sick and I can’t think of anything clever, so I’ll just try and locate every appearance of the words <code>"Elizabeth"</code>, <code>"Darcy"</code> and <code>"Wickham"</code> in the text:</p>
 <pre class="r"><code>characters &lt;- regex(&quot;Elizabeth|Darcy|Wickham&quot;)
 x &lt;- pp %&gt;% str_extract_all(characters) 
 y &lt;- pp %&gt;% str_locate_all(characters) 
@@ -782,13 +832,56 @@ df %&gt;% ggplot(aes(x = location)) +
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

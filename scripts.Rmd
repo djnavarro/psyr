@@ -84,9 +84,9 @@ source("./scripts/hello.R")
 ```{r,echo=FALSE}
 source("./scripts/hello.R", local=TRUE)
 ```
-If you don't know how to interpret the `"./scripts/hello.R"`, don't panic. I'll talk about [file paths](./file-paths.html) later. But for now, just note that `.` means *the current folder*. Because these notes are posted on the web, `.` refers to the folder in which they are stored, which is `https://compcogscisydney.org/psyr`. So in these notes when I write that I have sourced the file locate at `"./scripts/hello.R"`, I'm referring to a real file located here:
+If you don't know how to interpret the `"./scripts/hello.R"`, don't panic. I'll talk about [file paths](./file-paths.html) later. But for now, just note that `.` means *the current folder*. Because these notes are posted on the web, `.` refers to the folder in which they are stored, which is `https://psyr.djnavarro.net`. So in these notes when I write that I have sourced the file locate at `"./scripts/hello.R"`, I'm referring to a real file located here:
 
-https://compcogscisydney.org/psyr/scripts/hello.R
+https://psyr.djnavarro.net/scripts/hello.R
 
 Indeed if you click on that link you'll see that this is where the script lives!
 

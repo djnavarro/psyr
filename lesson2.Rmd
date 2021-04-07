@@ -104,7 +104,7 @@ library(tidyverse)
 Reading a *data frame* from an online CSV file. We're taking a tidyverse approach so strictly speaking we have a tibble rather than a pure data frame!
 
 ```{r}
-books <- read_csv(file = "http://compcogscisydney.org/psyr/data/booksales.csv")
+books <- read_csv(file = "http://psyr.djnavarro.net/data/booksales.csv")
 class(books)
 head(books)
 ```
@@ -132,7 +132,7 @@ A data manipulation exercise... data from multiple people, but might be missing 
 First read one data set to take a look:
 
 ```{r}
-subj1 <- read_csv(file = "http://compcogscisydney.org/psyr/data/subj1.csv")
+subj1 <- read_csv(file = "http://psyr.djnavarro.net/data/subj1.csv")
 print(subj1)
 ```
 
@@ -150,10 +150,10 @@ Create a vector listing the files we want to check
 
 ```{r}
 file_list <- c(
-  "http://compcogscisydney.org/psyr/data/subj1.csv",
-  "http://compcogscisydney.org/psyr/data/subj2.csv",
-  "http://compcogscisydney.org/psyr/data/subj3.csv",
-  "http://compcogscisydney.org/psyr/data/subj4.csv"
+  "http://psyr.djnavarro.net/data/subj1.csv",
+  "http://psyr.djnavarro.net/data/subj2.csv",
+  "http://psyr.djnavarro.net/data/subj3.csv",
+  "http://psyr.djnavarro.net/data/subj4.csv"
 )
 ```
 
@@ -176,7 +176,7 @@ Make sure all three code fragments are in a single file and run it!
 Eek what if there are 400 files! (there actually are!). I refuse to type all that into a long list, use text manipulation
 
 ```{r, eval=FALSE}
-file_list <- paste0("http://compcogscisydney.org/psyr/data/subj", 1:20, ".csv")
+file_list <- paste0("http://psyr.djnavarro.net/data/subj", 1:20, ".csv")
 
 for(file in file_list) {
   dat <- read_csv(file)

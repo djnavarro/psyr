@@ -3,7 +3,7 @@ library(tidyverse)
 library(lubridate)
 
 # where is the data?
-data_file <- "https://compcogscisydney.org/psyr/data/users.csv"
+data_file <- "https://psyr.djnavarro.net/data/users.csv"
 
 # read the data from the file
 web <- data_file %>%

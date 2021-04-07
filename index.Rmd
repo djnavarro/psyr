@@ -35,7 +35,7 @@ It is of course a work in progress, but I hope it is useful! Please don't hesita
 <center>
 ---- &nbsp;&nbsp;
 <a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
 <a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
 <a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
 &nbsp;&nbsp; ----
@@ -63,7 +63,7 @@ It is of course a work in progress, but I hope it is useful! Please don't hesita
 <center>
 ---- &nbsp;&nbsp;
 <a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
 <a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
 <a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
 &nbsp;&nbsp; ----
@@ -89,7 +89,7 @@ Everything from here onwards is *very much* a work in progress!
 <center>
 ---- &nbsp;&nbsp;
 <a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
 <a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
 <a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
 &nbsp;&nbsp; ----
@@ -110,7 +110,7 @@ Everything from here onwards is *very much* a work in progress!
 <center>
 ---- &nbsp;&nbsp;
 <a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
 <a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
 <a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
 &nbsp;&nbsp; ----
@@ -136,7 +136,7 @@ Everything from here onwards is *very much* a work in progress!
 <center>
 ---- &nbsp;&nbsp;
 <a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
 <a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
 <a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
 &nbsp;&nbsp; ----
@@ -189,7 +189,7 @@ The [AFL data](./data/afl.csv) consists of single CSV file that contains informa
 - `venue`: the name of the stadium hosting the game
 - `attendance`: official attendance at the game
 
-The [users data](./data/users.csv) os a single CSV file containing 148 days of web traffic data for my lab website [compcogscisydney.org](compcogscisydney.org), collected via Google Analytics. I will likely extend this at a later date, but at the moment it includes only two fields:
+The [users data](./data/users.csv) os a single CSV file containing 148 days of web traffic data for my now-defunct lab website, collected via Google Analytics. I will likely extend this at a later date, but at the moment it includes only two fields:
 
 - `Date`: the date for which the statisics are reported
 - `Users`: the number of unique users accessing the site
@@ -228,7 +228,7 @@ The [frames data](./data/frames_ex2.csv) contains data from Experiment 2 of Haye
 <center>
 ---- &nbsp;&nbsp;
 <a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://compcogscisydney.org"><i class="fas fa-home"></i></a> &nbsp;
+<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
 <a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
 <a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
 &nbsp;&nbsp; ----

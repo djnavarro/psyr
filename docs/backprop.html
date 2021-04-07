@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title>Backpropagation networks</title>
+<title>backprop.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,32 +37,32 @@
 
 <!-- ###### start inserted header ##### -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- add plausible.io -->
+<script async defer data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
 
-    gtag('config', 'UA-115940772-1');
-</script>
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <!-- add the twitter card and open graph tags -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@djnavarro">
-<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:url" content="https://psyr.org">
 <meta property="og:title" content="R for Psychological Science">
 <meta property="og:description" content="An introductory resource">
-<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+<meta property="og:image" content="http://psyr.org/img/splash_turtle.png">
 
 <!-- ###### end inserted header ##### -->
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -66,38 +75,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -105,13 +87,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -122,44 +99,56 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -170,54 +159,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -231,6 +251,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -266,8 +292,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -277,14 +301,24 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -428,11 +462,10 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore">Backpropagation networks</h1>
 
 </div>
 
@@ -452,16 +485,17 @@ div.tocify {
 <h2><span class="header-section-number">0.2</span> Input and output patterns</h2>
 <p>First, let’s take a look at the training data. I’m going to use the classic “iris” data set that comes bundled with R, but I’ve reorganised the data in a form that is a little bit more useful for thinking about the learning problem involved, and expressed it as a numeric matrix.</p>
 <pre class="r"><code>irises &lt;- read_csv(&quot;./data/iris_recode.csv&quot;) %&gt;% as.matrix()</code></pre>
-<pre><code>## Parsed with column specification:
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────
 ## cols(
 ##   sepal_length = col_double(),
 ##   sepal_width = col_double(),
 ##   petal_length = col_double(),
 ##   petal_width = col_double(),
-##   context = col_integer(),
-##   species_setosa = col_integer(),
-##   species_versicolor = col_integer(),
-##   species_virginica = col_integer()
+##   context = col_double(),
+##   species_setosa = col_double(),
+##   species_versicolor = col_double(),
+##   species_virginica = col_double()
 ## )</code></pre>
 <p>This data set has columns containing many features. First there are the <em>input features</em>, which consist of two features relating to the petals, two features relating to the sepal, and a context feature that is 1 for every flower. Additionally, there are three binary valued <em>output features</em> corresponding to the species of each flower, dummy coded so that only the correct species has value 1 and the incorrect species have value 0. Here are the names:</p>
 <pre class="r"><code>input_names &lt;- c(&quot;sepal_length&quot;, &quot;sepal_width&quot;, &quot;petal_length&quot;, &quot;petal_width&quot;, &quot;context&quot;)
@@ -469,8 +503,10 @@ output_names &lt;- c(&quot;species_setosa&quot;, &quot;species_versicolor&quot;,
 <p>So for the first flower, the network would be given this pattern as input:</p>
 <pre class="r"><code>input &lt;- irises[1, input_names]
 input</code></pre>
-<pre><code>## sepal_length  sepal_width petal_length  petal_width      context 
-##          5.1          3.5          1.4          0.2          1.0</code></pre>
+<pre><code>## sepal_length  sepal_width petal_length  petal_width 
+##          5.1          3.5          1.4          0.2 
+##      context 
+##          1.0</code></pre>
 <p>and we need to train it to produce this <em>target pattern</em> as the output:</p>
 <pre class="r"><code>target &lt;- irises[1, output_names]
 target </code></pre>
@@ -491,17 +527,20 @@ n_weights &lt;- n_input * n_output</code></pre>
   dimnames = list(input_names, output_names)
 )
 weight</code></pre>
-<pre><code>##              species_setosa species_versicolor species_virginica
-## sepal_length  -0.0006319492       -0.020747209      -0.009599228
-## sepal_width   -0.0015100447        0.012470262       0.017131124
-## petal_length  -0.0019515272        0.002459665      -0.007272674
-## petal_width    0.0049298408        0.002108018       0.006111287
-## context        0.0151908952        0.008725164      -0.009562111</code></pre>
+<pre><code>##              species_setosa species_versicolor
+## sepal_length   0.0001884182       -0.002436106
+## sepal_width    0.0038484447        0.010395166
+## petal_length  -0.0081134439        0.001517001
+## petal_width    0.0030720543       -0.006541571
+## context        0.0017510249       -0.003016261
+##              species_virginica
+## sepal_length      -0.009807158
+## sepal_width       -0.002421969
+## petal_length      -0.015949876
+## petal_width       -0.002328241
+## context           -0.004348950</code></pre>
 <p>Here’s the network we want to code:</p>
-<div class="figure">
-<img src="img/backprop_irises.png" />
-
-</div>
+<p><img src="img/backprop_irises.png" /></p>
 <p>While we’re at it, store a copy for later:</p>
 <pre class="r"><code>old_weight &lt;- weight</code></pre>
 </div>
@@ -515,7 +554,7 @@ weight</code></pre>
 <p>So what we do is first take the <code>sum</code> of the inputs and then pass them through our new <code>logit</code> function. So let’s say we want to compute the strength associated with the first species:</p>
 <pre class="r"><code>output_1 &lt;- sum(input * weight[,1]) %&gt;% logit() 
 output_1</code></pre>
-<pre><code>## [1] 0.5012342</code></pre>
+<pre><code>## [1] 0.5013593</code></pre>
 <p>More generally though we can loop over the three species:</p>
 <pre class="r"><code># initialise the output nodes at zero
 output &lt;- rep(0, n_output)
@@ -530,7 +569,7 @@ for(o in 1:n_output) {
 # print the result
 output</code></pre>
 <pre><code>##     species_setosa species_versicolor  species_virginica 
-##          0.5012342          0.4876089          0.4981203</code></pre>
+##          0.5013593          0.5054393          0.4786036</code></pre>
 <p>As you can see, initially the model has no knowledge at all! It’s predicting a value of about 0.5 for every category!</p>
 </div>
 <div id="learning-from-error" class="section level2">
@@ -539,7 +578,7 @@ output</code></pre>
 <pre class="r"><code>prediction_error &lt;- target - output
 prediction_error</code></pre>
 <pre><code>##     species_setosa species_versicolor  species_virginica 
-##          0.4987658         -0.4876089         -0.4981203</code></pre>
+##          0.4986407         -0.5054393         -0.4786036</code></pre>
 <p>Here is the code implementing the learning rule. What we’re doing is looping over every weight in the network, and then adjusting the strength proportional to the prediction error:</p>
 <pre class="r"><code>learning_rate &lt;- .1
 
@@ -560,30 +599,38 @@ for(o in 1:n_output) {
 }</code></pre>
 <p>(Let’s not worry too much about the <code>scale_io</code> factor for now). So let’s look at the input, output, target, and prediction error:</p>
 <pre class="r"><code>input</code></pre>
-<pre><code>## sepal_length  sepal_width petal_length  petal_width      context 
-##          5.1          3.5          1.4          0.2          1.0</code></pre>
+<pre><code>## sepal_length  sepal_width petal_length  petal_width 
+##          5.1          3.5          1.4          0.2 
+##      context 
+##          1.0</code></pre>
 <pre class="r"><code>output</code></pre>
 <pre><code>##     species_setosa species_versicolor  species_virginica 
-##          0.5012342          0.4876089          0.4981203</code></pre>
+##          0.5013593          0.5054393          0.4786036</code></pre>
 <pre class="r"><code>target</code></pre>
 <pre><code>##     species_setosa species_versicolor  species_virginica 
 ##                  1                  0                  0</code></pre>
 <pre class="r"><code>prediction_error</code></pre>
 <pre><code>##     species_setosa species_versicolor  species_virginica 
-##          0.4987658         -0.4876089         -0.4981203</code></pre>
+##          0.4986407         -0.5054393         -0.4786036</code></pre>
 <p>Now let’s look at how the weights changed:</p>
 <pre class="r"><code>weight - old_weight</code></pre>
-<pre><code>##              species_setosa species_versicolor species_virginica
-## sepal_length    0.063592258       -0.062131952      -0.063509444
-## sepal_width     0.043641746       -0.042639575      -0.043584913
-## petal_length    0.017456698       -0.017055830      -0.017433965
-## petal_width     0.002493814       -0.002436547      -0.002490566
-## context         0.012469070       -0.012182736      -0.012452832</code></pre>
+<pre><code>##              species_setosa species_versicolor
+## sepal_length    0.063576223       -0.064435888
+## sepal_width     0.043630741       -0.044220707
+## petal_length    0.017452296       -0.017688283
+## petal_width     0.002493185       -0.002526898
+## context         0.012465926       -0.012634488
+##              species_virginica
+## sepal_length      -0.060910217
+## sepal_width       -0.041801129
+## petal_length      -0.016720452
+## petal_width       -0.002388636
+## context           -0.011943180</code></pre>
 <p>Not surprisingly everything to setosa has gone up and the others down. But notice the scale!</p>
 </div>
 <div id="visualising-the-learning" class="section level2">
 <h2><span class="header-section-number">0.6</span> Visualising the learning</h2>
-<p>For the actual simulation I’ll set the learning rate to .01, run it for 5000 epochs and average across 100 independent runs just to smooth out any artifacts of randomisation<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> How the weights change over epochs:</p>
+<p>For the actual simulation I’ll set the learning rate to .01, run it for 5000 epochs and average across 100 independent runs just to smooth out any artifacts of randomisation<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> How the weights change over epochs:</p>
 <!-- NOTE:
 ffmpeg -i backpropweights.webm backpropweights.gif -hide_banner
 ffmpeg -i backpropweights.webm backpropweights.mp4 -hide_banner
@@ -593,18 +640,10 @@ ffmpeg -i backpropweights.webm backpropweights.mp4 -hide_banner
 <source src="./img/backpropweights.mp4" type="video/mp4">
 <p>Your browser does not support the video tag </video> <br></p>
 </div>
-<div id="resources" class="section level2">
-<h2><span class="header-section-number">0.7</span> Resources</h2>
-<ul>
-<li>The Rumelhart et al (1986) paper cached for teaching purposes <a href="http://compcogscisydney.org/mm/2018/Rumelhart1986.pdf">here</a></li>
-<li>A very good, but somewhat technical <a href="http://neuralnetworksanddeeplearning.com/chap2.html">summary</a> of backpropagation by Michael Nielsen</li>
-<li>Really nice <a href="http://neuroplausible.com/connectionism">resources</a> in Python by Olivia Guest.</li>
-</ul>
-</div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>The script to run it is <a href="./scripts/iris_twolater3.R">here</a>, a csv with the connections weights is <a href="./output/iris_weights.csv">here</a>, another one (36Mb) with sum squared error to each item on each presentation <a href="./output/iris_sse.csv">here</a>, zipped version (11Mb) <a href="./output/iris_sse.csv.zip">here</a><a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>The script to run it is <a href="./scripts/iris_twolater3.R">here</a>, a csv with the connections weights is <a href="./output/iris_weights.csv">here</a>, another one (36Mb) with sum squared error to each item on each presentation <a href="./output/iris_sse.csv">here</a>, zipped version (11Mb) <a href="./output/iris_sse.csv.zip">here</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
@@ -619,13 +658,56 @@ ffmpeg -i backpropweights.webm backpropweights.mp4 -hide_banner
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

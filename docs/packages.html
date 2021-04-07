@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>packages.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,32 +37,32 @@
 
 <!-- ###### start inserted header ##### -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- add plausible.io -->
+<script async defer data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
 
-    gtag('config', 'UA-115940772-1');
-</script>
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <!-- add the twitter card and open graph tags -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@djnavarro">
-<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:url" content="https://psyr.org">
 <meta property="og:title" content="R for Psychological Science">
 <meta property="og:description" content="An introductory resource">
-<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+<meta property="og:image" content="http://psyr.org/img/splash_turtle.png">
 
 <!-- ###### end inserted header ##### -->
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -66,38 +75,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -105,13 +87,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -122,44 +99,56 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -170,54 +159,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -231,6 +251,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -266,8 +292,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -277,14 +301,24 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -428,13 +462,10 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><ol start="4" style="list-style-type: decimal">
-<li>Packages</li>
-</ol></h1>
 
 </div>
 
@@ -448,12 +479,12 @@ div.tocify {
 </ul>
 <p>You only need to install a package once, but you will need to load it whenever you want to use it. This relationship is illustrated in the image below:</p>
 <p><img src="img/packages_schematic.png" width=800px></p>
-<p>I’ll explain this in a bit more detail as we go along.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>I’ll explain this in a bit more detail as we go along.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <div id="the-package-pane" class="section level2">
 <h2><span class="header-section-number">4.1</span> The package pane</h2>
 <p>Right, let’s get started. The first thing you need to do is look in the lower right hand panel in Rstudio. You’ll see a tab labelled “Packages”. Click on the tab, and you’ll see a list of packages that looks something like this:</p>
 <p><img src="img/packages_panel.png" width=700px></p>
-<p>Yours will list different packages than mine, of course, because I’ve installed quite a few additional packages as I’ve gone along. Every row in this panel corresponds to a different package, and every column is a useful piece of information about that package.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Going from left to right, here’s what each column is telling you:</p>
+<p>Yours will list different packages than mine, of course, because I’ve installed quite a few additional packages as I’ve gone along. Every row in this panel corresponds to a different package, and every column is a useful piece of information about that package.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> Going from left to right, here’s what each column is telling you:</p>
 <ul>
 <li>The check box on the far left column indicates whether or not the package is loaded.</li>
 <li>The one word of text immediately to the right of the check box is the name of the package.</li>
@@ -486,7 +517,7 @@ div.tocify {
 </div>
 <div id="conflicts" class="section level2">
 <h2><span class="header-section-number">4.4</span> Conflicts</h2>
-<p>Something else you should be aware of. Sometimes you’ll attempt to load a package, and R will print out a message on screen telling you that something or other has been “masked”. This will be confusing to you if I don’t explain it now, and it actually ties very closely to the whole reason why R forces you to load packages separately from installing them. Here’s an example. Two package that I use a lot are called <strong>car</strong> and <strong>psych</strong>. The <strong>car</strong> package is short for <a href="https://us.sagepub.com/en-us/nam/an-r-companion-to-applied-regression/book233899">Companion to Applied Regression</a> (an excellent book, I’ll add), and it has a number of tools that I’m quite fond of. For the most part, <strong>car</strong> and <strong>psych</strong> are unrelated to each other. They do different things, so not surprisingly almost all of the function names are different. But… there’s one exception to that. The <strong>car</strong> package and the <strong>psych</strong> package both contain a function called <code>logit</code>.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> This creates a naming conflict. If I load both packages into R, an ambiguity is created. If the user types in <code>logit(100)</code>, should R use the <code>logit</code> function in the <strong>car</strong> package, or the one in the <strong>psych</strong> package? The answer is: R uses whichever package you loaded most recently, and it tells you this very explicitly. Here’s what happens when I load the <strong>car</strong> package, and then afterwards load the <strong>psych</strong> package:</p>
+<p>Something else you should be aware of. Sometimes you’ll attempt to load a package, and R will print out a message on screen telling you that something or other has been “masked”. This will be confusing to you if I don’t explain it now, and it actually ties very closely to the whole reason why R forces you to load packages separately from installing them. Here’s an example. Two package that I use a lot are called <strong>car</strong> and <strong>psych</strong>. The <strong>car</strong> package is short for <a href="https://us.sagepub.com/en-us/nam/an-r-companion-to-applied-regression/book233899">Companion to Applied Regression</a> (an excellent book, I’ll add), and it has a number of tools that I’m quite fond of. For the most part, <strong>car</strong> and <strong>psych</strong> are unrelated to each other. They do different things, so not surprisingly almost all of the function names are different. But… there’s one exception to that. The <strong>car</strong> package and the <strong>psych</strong> package both contain a function called <code>logit</code>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> This creates a naming conflict. If I load both packages into R, an ambiguity is created. If the user types in <code>logit(100)</code>, should R use the <code>logit</code> function in the <strong>car</strong> package, or the one in the <strong>psych</strong> package? The answer is: R uses whichever package you loaded most recently, and it tells you this very explicitly. Here’s what happens when I load the <strong>car</strong> package, and then afterwards load the <strong>psych</strong> package:</p>
 <pre class="r"><code>library(car)</code></pre>
 <pre><code>## Loading required package: carData</code></pre>
 <pre class="r"><code>library(psych)</code></pre>
@@ -495,7 +526,7 @@ div.tocify {
 ## The following object is masked from &#39;package:car&#39;:
 ## 
 ##     logit</code></pre>
-<p>The output here is telling you that the <code>logit</code> object (i.e., function) in the <strong>car</strong> package is no longer accessible to you. It’s been hidden (or “masked”) from you by the one in the <strong>psych</strong> package<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+<p>The output here is telling you that the <code>logit</code> object (i.e., function) in the <strong>car</strong> package is no longer accessible to you. It’s been hidden (or “masked”) from you by the one in the <strong>psych</strong> package<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
 </div>
 <div id="installing-packages" class="section level2">
 <h2><span class="header-section-number">4.5</span> Installing packages</h2>
@@ -510,7 +541,7 @@ div.tocify {
 <p>There’s a little more I should say about installing packages. Most of the time the packages that you’ll want to install have been made available on CRAN, so the <code>install.packages</code> function is what you’d want to use. However, that’s not always true. Sometimes people write fun packages that they don’t bother to submit to CRAN, and sometimes you might want to try out a package that is currently under development. In these situations, people who write packages will often make them available on sites like <a href="https://github.com/">GitHub</a>, <a href="https://bitbucket.org/">Bitbucket</a> or <a href="https://about.gitlab.com/">Gitlab</a>. It’s perfectly possible to install packages directly from those sites, using the <strong>devtools</strong> package.</p>
 <p>The first thing you’ll need to do is install <strong>devtools</strong>, which is easy because that package is available on CRAN.</p>
 <pre class="r"><code>install.packages(&quot;devtools&quot;)</code></pre>
-<p>Once you have <strong>devtools</strong> on installed, you can use the <code>install_github</code> command to install a package directly from a GitHub repository. To give you an example of this, there’s a package called <code>TurtleGraphics</code> on my <a href="https://github.com/djnavarro/TurtleGraphics">GitHub page</a> that I’m going to use later.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> So we can install the package directly from my GitHub page like this:</p>
+<p>Once you have <strong>devtools</strong> on installed, you can use the <code>install_github</code> command to install a package directly from a GitHub repository. To give you an example of this, there’s a package called <code>TurtleGraphics</code> on my <a href="https://github.com/djnavarro/TurtleGraphics">GitHub page</a> that I’m going to use later.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> So we can install the package directly from my GitHub page like this:</p>
 <pre class="r"><code>library(devtools)
 install_github(&quot;djnavarro/TurtleGraphics&quot;)</code></pre>
 <p>Just like we saw before, R responds by printing out a lot of unintelligible garbage, but in the end it works and we have a shiny new <strong>TurtleGraphics</strong> package to play with! And just to verify that it did work properly, let’s load the package and draw a turtle:</p>
@@ -543,7 +574,7 @@ turtle_init()</code></pre>
 </div>
 <div id="exercises" class="section level2">
 <h2><span class="header-section-number">4.9</span> Exercises</h2>
-<p>One package I’ll occasionally use for a few simple tasks is the <strong>lsr</strong> package that I wrote to accompany <a href="https://compcogscisydney.org/learning-statistics-with-r/">Learning Statistics with R</a></p>
+<p>One package I’ll occasionally use for a few simple tasks is the <strong>lsr</strong> package that I wrote to accompany <a href="https://learningstatisticswithr.com">Learning Statistics with R</a></p>
 <ul>
 <li>Install the <strong>lsr</strong> package</li>
 <li>Load the <strong>lsr</strong> package</li>
@@ -560,17 +591,17 @@ turtle_init()</code></pre>
 <p>If you haven’t already done so while reading this section</p>
 <ul>
 <li>Load the <strong>devtools</strong> package</li>
-<li>Use the <code>install_github</code> command to install <strong>TurtleGraphics</strong> from my GitHub page (i.e., <code>repo = &quot;djnavarro/TurtleGraphics&quot;</code>)</li>
+<li>Use the <code>install_github</code> command to install <strong>TurtleGraphics</strong> from my GitHub page (i.e., <code>repo = "djnavarro/TurtleGraphics"</code>)</li>
 </ul>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Every time I teach this part, there’s always at least one person who notices the inconsistency… why do we use quote marks in the <code>install.packages(&quot;packagename&quot;)</code> command but not in the <code>library(packagename)</code> part. The answer is… it’s complicated. The <code>library()</code> function actually works both ways, so <code>library(&quot;packagename&quot;)</code> and <code>library(packagename)</code> both work (…usually). Under the hood it is doing something clever, and using an advanced feature of R known as <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">non-standard evaluation</a>. My advice is to ignore this completely for now. Take it on faith that something weird is happening here, and return to it at a later date.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>If you’re using the command line, you can get the same information by typing <code>library()</code>.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>The logit function a simple mathematical function that happens not to have been included in the basic R distribution.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>Tip for advanced users. You can get R to use the one from the car package by using <code>car::logit</code> as your command rather than <code>logit</code>, since the <code>car::</code> part tells R explicitly which package to use. See also <code>:::</code> if you’re especially keen to force R to use functions it otherwise wouldn’t, but take care, since <code>:::</code> can be dangerous.<a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p>I really need to stress that I can’t take any of the credit for this package. I really love the <strong>TurtleGraphics</strong> package, but it’s a minor modification of <a href="https://github.com/gagolews/TurtleGraphics">this</a> package (<a href="https://github.com/gagolews/TurtleGraphics/blob/master/vignettes/TurtleGraphics.pdf">documentation</a>), and the original version is up on CRAN. The version on my GitHub page makes a few tweaks to it internally, fixing some bugs that were giving me some grief. I should probably submit a proper bug report at some stage!<a href="#fnref5">↩</a></p></li>
+<li id="fn1"><p>Every time I teach this part, there’s always at least one person who notices the inconsistency… why do we use quote marks in the <code>install.packages("packagename")</code> command but not in the <code>library(packagename)</code> part. The answer is… it’s complicated. The <code>library()</code> function actually works both ways, so <code>library("packagename")</code> and <code>library(packagename)</code> both work (…usually). Under the hood it is doing something clever, and using an advanced feature of R known as <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">non-standard evaluation</a>. My advice is to ignore this completely for now. Take it on faith that something weird is happening here, and return to it at a later date.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>If you’re using the command line, you can get the same information by typing <code>library()</code>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>The logit function a simple mathematical function that happens not to have been included in the basic R distribution.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Tip for advanced users. You can get R to use the one from the car package by using <code>car::logit</code> as your command rather than <code>logit</code>, since the <code>car::</code> part tells R explicitly which package to use. See also <code>:::</code> if you’re especially keen to force R to use functions it otherwise wouldn’t, but take care, since <code>:::</code> can be dangerous.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>I really need to stress that I can’t take any of the credit for this package. I really love the <strong>TurtleGraphics</strong> package, but it’s a minor modification of <a href="https://github.com/gagolews/TurtleGraphics">this</a> package (<a href="https://github.com/gagolews/TurtleGraphics/blob/master/vignettes/TurtleGraphics.pdf">documentation</a>), and the original version is up on CRAN. The version on my GitHub page makes a few tweaks to it internally, fixing some bugs that were giving me some grief. I should probably submit a proper bug report at some stage!<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
@@ -585,13 +616,56 @@ turtle_init()</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

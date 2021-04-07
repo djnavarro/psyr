@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>variables.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,32 +37,32 @@
 
 <!-- ###### start inserted header ##### -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- add plausible.io -->
+<script async defer data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
 
-    gtag('config', 'UA-115940772-1');
-</script>
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <!-- add the twitter card and open graph tags -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@djnavarro">
-<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:url" content="https://psyr.org">
 <meta property="og:title" content="R for Psychological Science">
 <meta property="og:description" content="An introductory resource">
-<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+<meta property="og:image" content="http://psyr.org/img/splash_turtle.png">
 
 <!-- ###### end inserted header ##### -->
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -66,38 +75,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -105,13 +87,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -122,44 +99,56 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -170,54 +159,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -231,6 +251,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -266,8 +292,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -277,14 +301,24 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -428,13 +462,10 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><ol start="2" style="list-style-type: decimal">
-<li>Variables</li>
-</ol></h1>
 
 </div>
 
@@ -442,7 +473,7 @@ div.tocify {
 <p>One of the most important things to be able to do in R (or any programming language, for that matter) is to store information in <strong>variables</strong>. At a conceptual level you can think of a variable as label for a certain piece of information, or even several different pieces of information. When doing statistical analysis in R your data are stored as variables in R, but we also create variables to do other things. Before we delve into all the messy details of data sets and statistical analysis, let’s look at the very basics for how we create variables and work with them.</p>
 <div id="numeric-data" class="section level2">
 <h2><span class="header-section-number">2.1</span> Numeric data</h2>
-<p>Since we’ve been working with numbers so far, let’s start by creating variables to store our numbers. The first quantity we might care about is the number of questionnaire items included in our survey, so we’ll create a variable called <code>n_items</code>, and we’ll assign a <strong>value</strong> to that variable . If the survey contains 20 items then that value should be <code>20</code>. We do this by using the <strong>assignment operator</strong>,<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> written as a leftward pointing arrow <code>&lt;-</code>. Note that you cannot insert spaces here: if you type <code>&lt; -</code> R will interpret the command very differently 😬. To create the variable <code>n_items</code>, the command needed is:</p>
+<p>Since we’ve been working with numbers so far, let’s start by creating variables to store our numbers. The first quantity we might care about is the number of questionnaire items included in our survey, so we’ll create a variable called <code>n_items</code>, and we’ll assign a <strong>value</strong> to that variable . If the survey contains 20 items then that value should be <code>20</code>. We do this by using the <strong>assignment operator</strong>,<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> written as a leftward pointing arrow <code>&lt;-</code>. Note that you cannot insert spaces here: if you type <code>&lt; -</code> R will interpret the command very differently 😬. To create the variable <code>n_items</code>, the command needed is:</p>
 <pre class="r"><code>n_items &lt;- 20</code></pre>
 <p>We sometimes describe this verbally by saying that the variable <em>gets</em> a value of 20.</p>
 <p>The leftwards arrow is a nice visual convention: it tells you that R is taking the value of <code>20</code> and assigning it “to” the variable <code>n_items</code>. This is really nice, because R is also smart enough to let you use a rightward pointing arrow to assign in the other direction, like <code>20 -&gt; n_item</code>. I tend to describe this form of the command by saying that 20 <em>goes to</em> the variable, but I’m not sure anyone else talks that way.</p>
@@ -486,8 +517,8 @@ survey_type &lt;- &#39;multiple choice&#39;</code></pre>
 <p>Eh, fair enough.</p>
 <div id="working-with-text" class="section level3">
 <h3><span class="header-section-number">2.2.1</span> Working with text</h3>
-<p>Working with text data is somewhat more complicated than working with numeric data, and I discuss some of the more useful ideas later, but for purposes of the current chapter we only need a bare bones sketch. The only other thing I want to do before moving on is show you an example of a function that can be applied to text data. So far, most of the functions that we have seen (i.e., <code>sqrt</code>, <code>abs</code> and <code>round</code>) only make sense when applied to numeric data - you can’t calculate the square root of <code>&quot;multiple choice&quot;</code>, for instance. So it might be nice to see an example of a function that can be applied to text.</p>
-<p>The function I’m going to introduce you to is called <code>nchar</code>, and what it does is count the number of individual characters that make up a string. The <code>survey_type</code> variable contains the string <code>&quot;multiple choice&quot;</code>. So how many characters are there in this string? Sure, I could count them, but that’s boring, and more to the point it’s a terrible strategy if I want to know the length of <a href="https://en.wikisource.org/wiki/Pride_and_Prejudice">Pride and Prejudice</a>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> That’s where the <code>nchar</code> function is helpful:</p>
+<p>Working with text data is somewhat more complicated than working with numeric data, and I discuss some of the more useful ideas later, but for purposes of the current chapter we only need a bare bones sketch. The only other thing I want to do before moving on is show you an example of a function that can be applied to text data. So far, most of the functions that we have seen (i.e., <code>sqrt</code>, <code>abs</code> and <code>round</code>) only make sense when applied to numeric data - you can’t calculate the square root of <code>"multiple choice"</code>, for instance. So it might be nice to see an example of a function that can be applied to text.</p>
+<p>The function I’m going to introduce you to is called <code>nchar</code>, and what it does is count the number of individual characters that make up a string. The <code>survey_type</code> variable contains the string <code>"multiple choice"</code>. So how many characters are there in this string? Sure, I could count them, but that’s boring, and more to the point it’s a terrible strategy if I want to know the length of <a href="https://en.wikisource.org/wiki/Pride_and_Prejudice">Pride and Prejudice</a>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> That’s where the <code>nchar</code> function is helpful:</p>
 <pre class="r"><code>nchar(survey_type)</code></pre>
 <pre><code>## [1] 15</code></pre>
 <p>Notice that this answer counts the space between words as a character. That is, it’s returning the number of <em>characters</em> not the number of <em>letters</em>. The <code>nchar</code> function can do a bit more than this, and there’s a lot of other functions that you can do to extract more information from text or do all sorts of fancy things. However, the goal here is not to teach any of that! The goal right now is just to see an example of a function that actually does work when applied to text.</p>
@@ -495,7 +526,7 @@ survey_type &lt;- &#39;multiple choice&#39;</code></pre>
 </div>
 <div id="logical-data" class="section level2">
 <h2><span class="header-section-number">2.3</span> Logical data</h2>
-<p>Time to move onto a third kind of data. A key concept in that a lot of R relies on is the idea of a <strong>logical value</strong>. A logical value is an assertion about whether something is true or false. This is implemented in R in a pretty straightforward way. There are two logical values, namely <code>TRUE</code> and <code>FALSE</code>. Despite the simplicity, a logical values are very useful things. For example, to return to the survey we are designing, I might want to define a variable <code>consent_given</code> that indicates whether a person has in fact consented to participate in the study, like so:<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p>Time to move onto a third kind of data. A key concept in that a lot of R relies on is the idea of a <strong>logical value</strong>. A logical value is an assertion about whether something is true or false. This is implemented in R in a pretty straightforward way. There are two logical values, namely <code>TRUE</code> and <code>FALSE</code>. Despite the simplicity, a logical values are very useful things. For example, to return to the survey we are designing, I might want to define a variable <code>consent_given</code> that indicates whether a person has in fact consented to participate in the study, like so:<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
 <pre class="r"><code>consent_given &lt;- TRUE</code></pre>
 <p>Because <code>TRUE</code> and <code>FALSE</code> are logical valiues that pertain to… well… truth and falseness, there are a number of special rules that they follow.</p>
 <div id="truth-values" class="section level3">
@@ -506,7 +537,7 @@ survey_type &lt;- &#39;multiple choice&#39;</code></pre>
 <p>… and of course that answer is never <code>5</code>. That being said, there’s something to notice here. In this command, R is just doing the calculations. I haven’t asked it to explicitly <em>test</em> whether <code>2 + 2 = 4</code> is a true statement. If I want R to make an explicit judgement on that topic, I can use a command like this:</p>
 <pre class="r"><code>2 + 2 == 4</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<p>What I’ve done here is use the <strong>equality operator</strong>, <code>==</code>, to force R to make a “true or false” judgement. Note that the use of the double equals <code>==</code> is important here. If we tried to do this with a single equals sign, R won’t do what we want it to<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> Okay, let’s see what R thinks of the Party slogan:</p>
+<p>What I’ve done here is use the <strong>equality operator</strong>, <code>==</code>, to force R to make a “true or false” judgement. Note that the use of the double equals <code>==</code> is important here. If we tried to do this with a single equals sign, R won’t do what we want it to<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Okay, let’s see what R thinks of the Party slogan:</p>
 <pre class="r"><code>2 + 2 == 5</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <p>Yay! Freedom and ponies for all! 🦄</p>
@@ -544,7 +575,7 @@ survey_type &lt;- &#39;multiple choice&#39;</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code>2 &lt;= 2</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<p>As you might imagine, there are two more operators along these lines: <code>&gt;</code> is the <em>greater than</em> operator, and <code>&gt;=</code> is the <em>greater than or equal to</em> operator, and their behaviour is exactly what you’d expect.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>As you might imagine, there are two more operators along these lines: <code>&gt;</code> is the <em>greater than</em> operator, and <code>&gt;=</code> is the <em>greater than or equal to</em> operator, and their behaviour is exactly what you’d expect.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
 </div>
 <div id="not" class="section level3">
 <h3><span class="header-section-number">2.3.4</span> “Not”</h3>
@@ -555,7 +586,7 @@ survey_type &lt;- &#39;multiple choice&#39;</code></pre>
 <pre class="r"><code>age &lt;- 12</code></pre>
 <p>We can use that to determine whether the participant is an <code>adult</code></p>
 <pre class="r"><code>adult &lt;- age &gt;= 18</code></pre>
-<p>In the code snippet above, what we’ve done is constructed a test of whether the participant is 18 or older (i.e. <code>age &gt;= 18</code>). So this will be a logical value (i.e., <code>TRUE</code> or <code>FALSE</code>), and this result is the value that gets assigned to the <code>adult</code> variable. However, in our scenario, the only time where we will want to seek parental consent is when the participant is <em>not</em> an adult, so what we want to know is this:</p>
+<p>In the code snippet above, what we’ve done is constructed a test of whether the participant is 18 or older (i.e. <code>age &gt;= 18</code>). So this will be a logical value (i.e., <code>TRUE</code> or <code>FALSE</code>), and this result is the value that gets assigned to the <code>adult</code> variable. However, in our scenario, the only time where we will want to seek parental consent is when the participant is <em>not</em> an adult, so what we want to know is this:</p>
 <pre class="r"><code>!adult</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p>Not surprisingly, since the participant is only twelve, it is of course <code>TRUE</code> that we’ll need to check with a parent or legal guardian in order to have them participate in the survey.</p>
@@ -572,7 +603,7 @@ guardian_consent_needed</code></pre>
 </div>
 <div id="and" class="section level3">
 <h3><span class="header-section-number">2.3.6</span> “And”</h3>
-<p>The last operator to introduce is <code>&amp;</code> which has a meaning simlar to the word <em>“and”</em>. A logical expression <code>x &amp; y</code> is true only if <em>both</em> <code>x</code> and <code>y</code> are true. In our survey example, for example, a survey might only be counted as valid data if we have properly obtained consent (i.e. <code>consent_given</code> is <code>TRUE</code>) and if the survey has been corectly filled out (i.e., <code>survey_complete</code> is <code>TRUE</code>). If a participant has provided consent but not filled out the survey properly, we might have these variables:</p>
+<p>The last operator to introduce is <code>&amp;</code> which has a meaning simlar to the word <em>“and”</em>. A logical expression <code>x &amp; y</code> is true only if <em>both</em> <code>x</code> and <code>y</code> are true. In our survey example, for example, a survey might only be counted as valid data if we have properly obtained consent (i.e. <code>consent_given</code> is <code>TRUE</code>) and if the survey has been corectly filled out (i.e., <code>survey_complete</code> is <code>TRUE</code>). If a participant has provided consent but not filled out the survey properly, we might have these variables:</p>
 <pre class="r"><code>consent_given &lt;- TRUE
 survey_complete &lt;- FALSE</code></pre>
 <p>So do we have a <code>valid_response</code> in this case?</p>
@@ -583,7 +614,7 @@ valid_response</code></pre>
 </div>
 <div id="naming-your-variables" class="section level2">
 <h2><span class="header-section-number">2.4</span> Naming your variables</h2>
-<p>What should you call your variables? R allows some flexibility in this regard, but there are some limitations, as the following list of rules<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> illustrates:</p>
+<p>What should you call your variables? R allows some flexibility in this regard, but there are some limitations, as the following list of rules<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> illustrates:</p>
 <ul>
 <li>Names can only use the upper case alphabetic characters <code>A-Z</code> as well as the lower case characters <code>a-z</code>. You can also include numeric characters <code>0-9</code> in the variable name, as well as the period <code>.</code> or underscore <code>_</code> character. In other words, <code>SuR.v_eY</code> is a valid (but stupid) variable name, while <code>survey?</code> is not.</li>
 <li>Names cannot include spaces: <code>survey_time</code> is valid, but <code>survey time</code> is not.</li>
@@ -628,7 +659,7 @@ valid_response</code></pre>
 <p><strong>Character data.</strong></p>
 <p>In our new survey, the reason that the questions take a little longer to answer is that people are being asked to provide <em>free response</em> data. Create a variable called <code>new_survey_type</code> that records this information.</p>
 <ul>
-<li><p>R has a function called <code>toupper</code> that converts text from lower case to upper case. Try typing <code>toupper(&quot;multiple choice&quot;)</code> at the console and see what happens.</p></li>
+<li><p>R has a function called <code>toupper</code> that converts text from lower case to upper case. Try typing <code>toupper("multiple choice")</code> at the console and see what happens.</p></li>
 <li><p>R also has a function called <code>tolower</code>. What does it do?</p></li>
 </ul>
 <p><strong>Logical data.</strong></p>
@@ -637,19 +668,19 @@ valid_response</code></pre>
 identified_gender &lt;- &quot;non-binary&quot;</code></pre>
 <ul>
 <li><p>Create a variable <code>transgender</code> that is <code>TRUE</code> if <code>assigned_gender</code> is different to <code>identified_gender</code>.</p></li>
-<li><p>As a second exercise, suppose that the survey allows people to specify their marital status as <code>&quot;single&quot;</code>, <code>&quot;widowed&quot;</code>, <code>&quot;married&quot;</code> or <code>&quot;de facto&quot;</code>. For the purposes of some analyses we might want to collapse this to a binary variable <code>has_spouse</code> that is <code>TRUE</code> if the participant is married or in a de facto relationship, but <code>FALSE</code> otherwise. How would we do this in R?</p></li>
+<li><p>As a second exercise, suppose that the survey allows people to specify their marital status as <code>"single"</code>, <code>"widowed"</code>, <code>"married"</code> or <code>"de facto"</code>. For the purposes of some analyses we might want to collapse this to a binary variable <code>has_spouse</code> that is <code>TRUE</code> if the participant is married or in a de facto relationship, but <code>FALSE</code> otherwise. How would we do this in R?</p></li>
 </ul>
 <p>The solutions for these exercises are <a href="./scripts/solutions_variables.R">here</a>.</p>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Actually, in keeping with the R tradition of providing you with a billion different screwdrivers when you’re actually looking for a hammer, this isn’t the only way to do it. In addition to the <code>&lt;-</code> operator, we can also use <code>-&gt;</code> and <code>=</code>. There’s also the <code>assign()</code> function, and the <code>&lt;&lt;-</code> and <code>-&gt;&gt;</code> operators, all of which have slightly different behaviour. I won’t talk much about any of those here.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>For no reason I want to mention that there is an R package called <strong>janeaustenr</strong> that does nothing other than contain the entire text to all of Jane Austen’s novels and it is the best thing in all the world.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>It’s kind of tedious to type <code>TRUE</code> or <code>FALSE</code> over and over again, so R provides you with a shortcut. You can use <code>T</code> and <code>F</code> instead. However, it is not a good idea to do this. The values <code>TRUE</code> and <code>FALSE</code> are <em>reserved keywords</em> in R and so R won’t let you define a variable called <code>TRUE</code>. This is for a good reason - it protects you from accidentally redefining the meaning of “true” and “false”. There is no such protection for <code>T</code> and <code>F</code>. It’s better to type the full word<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>In this context <code>x == 4</code> is interpreted as a test of whether <code>x</code> is equal to <code>4</code>, whereas <code>x = 4</code> will be treated as an assignment operation, exactly as if you’d typed <code>x &lt;- 4</code><a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p>As an aside, R does allow you to compare text using the <code>&lt;</code> operator, and it provides a test of which text comes first in the alphabet (e.g. try <code>&quot;cat&quot; &lt; &quot;dog&quot;</code>). However, it’s not an amazingly useful thing to do, and it doesn’t always behave the way you might expect.<a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p>Actually, you can override a lot of these rules if you want to, and quite easily. All you have to do is add quote marks or backticks around your non-standard variable name. For instance <code>') my annoyance&gt;' &lt;- 350</code> would work just fine, but it’s almost never a good idea to do this.<a href="#fnref6">↩</a></p></li>
+<li id="fn1"><p>Actually, in keeping with the R tradition of providing you with a billion different screwdrivers when you’re actually looking for a hammer, this isn’t the only way to do it. In addition to the <code>&lt;-</code> operator, we can also use <code>-&gt;</code> and <code>=</code>. There’s also the <code>assign()</code> function, and the <code>&lt;&lt;-</code> and <code>-&gt;&gt;</code> operators, all of which have slightly different behaviour. I won’t talk much about any of those here.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>For no reason I want to mention that there is an R package called <strong>janeaustenr</strong> that does nothing other than contain the entire text to all of Jane Austen’s novels and it is the best thing in all the world.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>It’s kind of tedious to type <code>TRUE</code> or <code>FALSE</code> over and over again, so R provides you with a shortcut. You can use <code>T</code> and <code>F</code> instead. However, it is not a good idea to do this. The values <code>TRUE</code> and <code>FALSE</code> are <em>reserved keywords</em> in R and so R won’t let you define a variable called <code>TRUE</code>. This is for a good reason - it protects you from accidentally redefining the meaning of “true” and “false”. There is no such protection for <code>T</code> and <code>F</code>. It’s better to type the full word<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>In this context <code>x == 4</code> is interpreted as a test of whether <code>x</code> is equal to <code>4</code>, whereas <code>x = 4</code> will be treated as an assignment operation, exactly as if you’d typed <code>x &lt;- 4</code><a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>As an aside, R does allow you to compare text using the <code>&lt;</code> operator, and it provides a test of which text comes first in the alphabet (e.g. try <code>"cat" &lt; "dog"</code>). However, it’s not an amazingly useful thing to do, and it doesn’t always behave the way you might expect.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Actually, you can override a lot of these rules if you want to, and quite easily. All you have to do is add quote marks or backticks around your non-standard variable name. For instance <code>') my annoyance&gt;' &lt;- 350</code> would work just fine, but it’s almost never a good idea to do this.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
@@ -664,13 +695,56 @@ identified_gender &lt;- &quot;non-binary&quot;</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

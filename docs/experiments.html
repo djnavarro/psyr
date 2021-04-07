@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>experiments.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,32 +37,32 @@
 
 <!-- ###### start inserted header ##### -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- add plausible.io -->
+<script async defer data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
 
-    gtag('config', 'UA-115940772-1');
-</script>
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <!-- add the twitter card and open graph tags -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@djnavarro">
-<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:url" content="https://psyr.org">
 <meta property="og:title" content="R for Psychological Science">
 <meta property="og:description" content="An introductory resource">
-<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+<meta property="og:image" content="http://psyr.org/img/splash_turtle.png">
 
 <!-- ###### end inserted header ##### -->
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -66,38 +75,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -105,13 +87,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -122,44 +99,56 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -170,54 +159,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -231,6 +251,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -266,8 +292,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -277,14 +301,24 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -428,13 +462,10 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><ol start="23" style="list-style-type: decimal">
-<li>Behavioural experiments</li>
-</ol></h1>
 
 </div>
 
@@ -456,7 +487,7 @@ div.tocify {
 <p>With that in mind, I’ll talk about all three of those use cases in these notes. The “Shiny” approach is complex enough that I’ve broken it off into its own <a href="./shiny.html">section</a>, but I’ll talk about the other two approaches in this section.</p>
 <div id="text-based-tasks" class="section level2">
 <h2><span class="header-section-number">23.1</span> Text based tasks</h2>
-<p>To start with, lets consider a very simple task. Imagine that we wanted to investigate how people play “<a href="https://en.wikipedia.org/wiki/Hangman_(game)">hangman</a>. On the off chance you’re unfamiliar with the game, it’s a straightforward two player game. One player thinks of a word and the other person has to work it out by making a series of guesses as to what letters it contains. If the guesser works it out before making a predetermined number of errors then they win. To investigate this, we will need to implement this game in R, with the computer choosing the word and the human guessing. It’s a text based task, so we should be able to do the whole thing in the console. Some problems we’ll need to solve:</p>
+<p>To start with, lets consider a very simple task. Imagine that we wanted to investigate how people play "<a href="https://en.wikipedia.org/wiki/Hangman_(game)">hangman</a>. On the off chance you’re unfamiliar with the game, it’s a straightforward two player game. One player thinks of a word and the other person has to work it out by making a series of guesses as to what letters it contains. If the guesser works it out before making a predetermined number of errors then they win. To investigate this, we will need to implement this game in R, with the computer choosing the word and the human guessing. It’s a text based task, so we should be able to do the whole thing in the console. Some problems we’ll need to solve:</p>
 <ul>
 <li>How do we present the current state of the game?</li>
 <li>How do we get input from the participant?</li>
@@ -505,7 +536,7 @@ div.tocify {
   guess &lt;- readline(&quot;what letter would you like to guess next? &quot;)
   return(guess)
 }</code></pre>
-<p>Ideally, during our experiment what we would do is clear the screen every time a person makes a guess and then update the display. To do this, we’ll need a function to clear any text from the console. This is handled differently depending on what system you’re using. I’ll assume here that you’re working within RStudio, in which case the trick here is to send the “<a href="https://en.wikipedia.org/wiki/Page_break">form feed</a>” character to the console<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>Ideally, during our experiment what we would do is clear the screen every time a person makes a guess and then update the display. To do this, we’ll need a function to clear any text from the console. This is handled differently depending on what system you’re using. I’ll assume here that you’re working within RStudio, in which case the trick here is to send the “<a href="https://en.wikipedia.org/wiki/Page_break">form feed</a>” character to the console<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <pre class="r"><code>clear_screen &lt;- function(){
   cat(&quot;\f&quot;) # form feed character
 }</code></pre>
@@ -554,8 +585,8 @@ div.tocify {
 }</code></pre>
 <p>From there, all you need to do is put them all into a single script and you’re ready to go. The <a href="./scripts/hangman1.R">hangman1.R</a> script provides an example that plays one game of hangman, and <a href="./scripts/hangman2.R">hangman2.R</a> plays a series of three games and then stores the results in a data frame <code>d</code>. The video below illustrates this in action:</p>
 <video width="600" controls>
-<source src="./img/hangman.webm" type="video/webm"> Your browser does not support the video tag.
-</video>
+<source src="./img/hangman.webm" type="video/webm">
+<p>Your browser does not support the video tag. </video></p>
 <p>Obviously, if this were a real experiment there are a number of additional things you’d need to do:</p>
 <ul>
 <li>Add a stage for obtaining informed constent and demographics</li>
@@ -572,8 +603,8 @@ div.tocify {
 <p>To give you a sense of how much further you can take this idea, imagine we were interested in studying how people solve strategic planning problems. An engaging way to do this is to implement a decision making problem in the form of a video game. Normally, this would require some fancy graphics to work, but thanks to the joy of emoji, you can go a suprisingly long way just using text.</p>
 <p>The video below shows me playing a simple video game. Imagine you are a rabbit trying to get to a carrot, but there are a bunch of “fire devils” that you need to avoid. We can use the w/a/s/d keys to navigate or q to quit the game. The fire devils are stupid and move randomly; when they bump into each other they merge together. When the game starts there are too many fire devils for it to be safe to try to cross to the carrot, so it might be wise to wait for some of them to burn out before venturing across to the carrot:</p>
 <video width="600" controls>
-<source src="./img/rabbit.webm" type="video/webm"> Your browser does not support the video tag.
-</video>
+<source src="./img/rabbit.webm" type="video/webm">
+<p>Your browser does not support the video tag. </video></p>
 <p>In this video, R is running at the Mac OS terminal rather than inside RStudio. I’m doing this because there is a package called <strong>keypress</strong> that only works through the terminal. In the hangman example, for a participant to make a response they need to type the letter and then press enter. For hangman that’s fine, but for the rabbit game it seems weird. So instead of using <code>readline</code> to get the user response I’m relying on the <code>keypress</code> function. If you’re interested, the code for <a href="./scripts/rabbit.R">rabbit.R</a> is available!</p>
 </div>
 <div id="a-third-example" class="section level3">
@@ -583,12 +614,12 @@ div.tocify {
 </div>
 <div id="graphical-tasks" class="section level2">
 <h2><span class="header-section-number">23.2</span> Graphical tasks</h2>
-<p>The rabbit example gives you a sense of how far you can go using nothing other than text, but in many situations you’ll probably need something a little more sophisticated. The natural intuition that you might have is that we can use the R graphics system as the foundation for a psychological experiment: on every trial you’d use use a graphics tool (e.g. <code>ggplot</code>) to draw the stimulus on screen, and then the participant could respond using the keyboard or the mouse.</p>
-<p>That intuition is correct, but we’ll need to modify our approach a little bit. Earlier on when we discussed <a href="./visualising-data.html">data visualisation</a> I didn’t really talk much about the capabilities of different <em>graphics devices</em> because it didn’t matter much. In this context it starts to matter whether we draw the plot in the RStudio plot pane or somewhere else, because there are different graphics devices associated with each one, and only some of them are responsive to user input. Clearly, in order to design a behavioural experiment we will need to use a device that supports interactivity, and that means the RStudio graphics device is no good to us: it’s designed for the user to draw plots, not for interaction. A simple way to get around this if you’re on a Unix based system (e.g. Mac, Linux) is to use the <code>X11()</code> graphics device,<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> as this does support user interaction. To give you a sense for what you can realistically achieve, the <a href="./scripts/orientation.R">orientation.R</a> script contains an example of an experiment that displays triangles that might be pointing upwards or downwards, and the task is to guess whether there are more upwards pointing arrows (press the “6” key) or downwards ones (press “b”):</p>
+<p>The rabbit example gives you a sense of how far you can go using nothing other than text, but in many situations you’ll probably need something a little more sophisticated. The natural intuition that you might have is that we can use the R graphics system as the foundation for a psychological experiment: on every trial you’d use use a graphics tool (e.g. <code>ggplot</code>) to draw the stimulus on screen, and then the participant could respond using the keyboard or the mouse.</p>
+<p>That intuition is correct, but we’ll need to modify our approach a little bit. Earlier on when we discussed <a href="./visualising-data.html">data visualisation</a> I didn’t really talk much about the capabilities of different <em>graphics devices</em> because it didn’t matter much. In this context it starts to matter whether we draw the plot in the RStudio plot pane or somewhere else, because there are different graphics devices associated with each one, and only some of them are responsive to user input. Clearly, in order to design a behavioural experiment we will need to use a device that supports interactivity, and that means the RStudio graphics device is no good to us: it’s designed for the user to draw plots, not for interaction. A simple way to get around this if you’re on a Unix based system (e.g. Mac, Linux) is to use the <code>X11()</code> graphics device,<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> as this does support user interaction. To give you a sense for what you can realistically achieve, the <a href="./scripts/orientation.R">orientation.R</a> script contains an example of an experiment that displays triangles that might be pointing upwards or downwards, and the task is to guess whether there are more upwards pointing arrows (press the “6” key) or downwards ones (press “b”):</p>
 <video width="600" controls>
-<source src="./img/orientation.webm" type="video/webm"> Your browser does not support the video tag.
-</video>
-<p>There’s a longer video of me running myself through 60 trials of this task <a href="./img/orientation_full.webm">here</a>, and the data set generated from it is <a href="./data/orientation.csv">here</a>.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<source src="./img/orientation.webm" type="video/webm">
+<p>Your browser does not support the video tag. </video></p>
+<p>There’s a longer video of me running myself through 60 trials of this task <a href="./img/orientation_full.webm">here</a>, and the data set generated from it is <a href="./data/orientation.csv">here</a>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
 <p>So how does the code work? I won’t show the full code here, only the part that matters. At the beginning of the task I create an <code>X11</code> graphics device:</p>
 <pre class="r"><code>X11(width = 8, height = 8, 
     xpos = 100, ypos = 30)</code></pre>
@@ -602,7 +633,7 @@ div.tocify {
   if(key == &quot;b&quot;) return(&quot;down&quot;)
   return(NA)
 }</code></pre>
-<p>If I press the “6” key this function will return <code>&quot;up&quot;</code>, if I press “b” it will return <code>&quot;down&quot;</code>, and if I press anything else it will return <code>NA</code>. Regardless of what I press, the result of this will be stored as the <code>user_response</code> variable (though in the actual script you’ll see I write it to an entry in a tibble), and the program will continue running.</p>
+<p>If I press the “6” key this function will return <code>"up"</code>, if I press “b” it will return <code>"down"</code>, and if I press anything else it will return <code>NA</code>. Regardless of what I press, the result of this will be stored as the <code>user_response</code> variable (though in the actual script you’ll see I write it to an entry in a tibble), and the program will continue running.</p>
 <p>There are a few other niceties in there. For instance, there is a line of code that uses <code>Sys.sleep()</code> to tell the system to pause for 1 second between trials. There’s also a line that uses <code>sample()</code> to randomise the order of trials. But I’ll let you take a look for yourself. The main thing for the current purposes is to note that it’s the <code>X11()</code> function that allows you to create the graphics device you need, and the <code>getGraphicsEvent()</code> function allows you to tell the system to wait for user response (it also allows you to grab mouse events).</p>
 <p>Oh, and how did I do at the task? Here’s a quick and dirty picture:</p>
 <pre class="r"><code>read_csv(&quot;./data/orientation.csv&quot;) %&gt;% 
@@ -622,9 +653,9 @@ div.tocify {
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Form feed dates back to the early days of computing and doesn’t serve much of a purpose anymore, but it’s still recognised. As a consequence many software packages have co-opted it and used it for other purposes. Since the original definition was something like “clear the current page from the printer”, it makes some sense to use it to mean “clear the current console log from the screen”<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>I’m not entirely sure what the fix would be if you’re on Windows. Also note that newer Macs don’t ship with X11 by default, so you have to install <a href="https://www.xquartz.org/">XQuartz</a>. Sigh.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>I should mention that although you the viewer can see the numbers scrolling past in these videos - so that you can see what decisions I was making - they were all far enough outside my focus of attention that I couldn’t see them while doing the task. I’m actually shocked I performed as well I did. It totally <em>felt</em> like I was guessing pretty randomly!<a href="#fnref3">↩</a></p></li>
+<li id="fn1"><p>Form feed dates back to the early days of computing and doesn’t serve much of a purpose anymore, but it’s still recognised. As a consequence many software packages have co-opted it and used it for other purposes. Since the original definition was something like “clear the current page from the printer”, it makes some sense to use it to mean “clear the current console log from the screen”<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>I’m not entirely sure what the fix would be if you’re on Windows. Also note that newer Macs don’t ship with X11 by default, so you have to install <a href="https://www.xquartz.org/">XQuartz</a>. Sigh.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>I should mention that although you the viewer can see the numbers scrolling past in these videos - so that you can see what decisions I was making - they were all far enough outside my focus of attention that I couldn’t see them while doing the task. I’m actually shocked I performed as well I did. It totally <em>felt</em> like I was guessing pretty randomly!<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
@@ -639,13 +670,56 @@ div.tocify {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

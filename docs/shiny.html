@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>shiny.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,32 +37,32 @@
 
 <!-- ###### start inserted header ##### -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- add plausible.io -->
+<script async defer data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
 
-    gtag('config', 'UA-115940772-1');
-</script>
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <!-- add the twitter card and open graph tags -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@djnavarro">
-<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:url" content="https://psyr.org">
 <meta property="og:title" content="R for Psychological Science">
 <meta property="og:description" content="An introductory resource">
-<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+<meta property="og:image" content="http://psyr.org/img/splash_turtle.png">
 
 <!-- ###### end inserted header ##### -->
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -66,38 +75,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -105,13 +87,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -122,44 +99,56 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -170,54 +159,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -231,6 +251,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -266,8 +292,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -277,14 +301,24 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -428,13 +462,10 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><ol start="24" style="list-style-type: decimal">
-<li>Shiny web applications</li>
-</ol></h1>
 
 </div>
 
@@ -507,7 +538,7 @@ server &lt;- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)</code></pre>
-<p>This structure reflects the fact that Shiny is designed to produce <em>web</em> applications. Like any web application it is based around the idea that we can divide responsibility between two machines, the <em>server</em> that hosts the application, and the <em>client</em> that interacts with it. For a Shiny app, the server is a machine running R, and uses R (plus some other things) to generate the content. The client does not need to have R installed: as long as it has a modern web browser it will be able to render the page just fine.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> In essense, the server generates content, the client displays it. So the Shiny application needs to specify some rules for the user interface <code>ui</code>, and for the behaviour of the <code>server</code>. This architecture is illustrated below:</p>
+<p>This structure reflects the fact that Shiny is designed to produce <em>web</em> applications. Like any web application it is based around the idea that we can divide responsibility between two machines, the <em>server</em> that hosts the application, and the <em>client</em> that interacts with it. For a Shiny app, the server is a machine running R, and uses R (plus some other things) to generate the content. The client does not need to have R installed: as long as it has a modern web browser it will be able to render the page just fine.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> In essense, the server generates content, the client displays it. So the Shiny application needs to specify some rules for the user interface <code>ui</code>, and for the behaviour of the <code>server</code>. This architecture is illustrated below:</p>
 <p><img src="img_shiny/architecture.png" width=550px></p>
 <p>When you run a Shiny app <em>locally</em>, your own machine (e.g., you laptop) plays both roles: your copy of R acts as the server, and your web browser acts as the client. When you push the app to the cloud, a machine somewhere else (e.g., run by shinyapps.io) is the server, and anyone visiting the website can be the client. The R code is pretty much identical in both cases, and as you can see in the figure below, the structure of the application maps on to the structure of the code in <code>app.R</code>:</p>
 <p><img src="img_shiny/mapping.png" width=700px></p>
@@ -515,7 +546,7 @@ shinyApp(ui = ui, server = server)</code></pre>
 <div id="building-our-very-own-shiny-app" class="section level2">
 <h2><span class="header-section-number">24.4</span> Building our very own Shiny app</h2>
 <p>To understand how to build a Shiny app, let’s build one to run a very simple psychology experiment. Suppose I’m interested in how people express their uncertainty about a probabilistic event. For instance, it might rain next week. According to meteorologists, there is some probability <span class="math inline">\(p\)</span> that it will rain - they have some uncertainty about whether the event (rain) will actually occur, and it is this uncertainty that the forecast probability <span class="math inline">\(p\)</span> captures. However, I have some additional uncertainty over and above that - I don’t really know what the probability of rain actually is. So from my point of view this could be thought of as an <em>imprecise probability</em>… I might not be willing to make any <em>specific</em> claim about the probability of rain, but I might be able to provide a <em>range</em> of probabilities that seem acceptable. So I might say that the chance of rain is somewhere between 60% and 90%. Okay, so maybe I would like to run a simple web survey asking people to provide interval estimates, and after a bit of thinking I might decide I’d like the survey to look like this:</p>
-<p><img src = "img_shiny/impreciseapp.png", width=800px></p>
+<p>&lt;img src = “img_shiny/impreciseapp.png”, width=800px&gt;</p>
 <p>On every trial the participant is presented with some text describing the unknown probability, and their task is to adjust the slider to produce an interval that they are happy with. Once they’ve got the sliders located somewhere they like, they can click the “submit” button and move onto the next trial. How can we build this using Shiny?</p>
 <div id="create-the-project" class="section level3">
 <h3><span class="header-section-number">24.4.1</span> Create the project</h3>
@@ -545,7 +576,7 @@ shinyApp(ui, server)</code></pre>
 <div id="designing-a-user-interface" class="section level3">
 <h3><span class="header-section-number">24.4.2</span> Designing a user interface</h3>
 <p>The vertical layout for our study is pretty typical for psychology experiments. At the top is a <em>content</em> area that displays the stimulus material (i.e., the question), in the middle there is a <em>response</em> area that allows the user to interact with the stimulus (i.e., the slider) and at the bottom there is an <em>action</em> button that allows the user to submit the response and move on to the next trial. There are a few different ways we could create this layout, but let’s do a simple thing and stack everything on top of each other. Conceptually, what we’re going to create is this:</p>
-<p><img src = "img_shiny/uistructure.png", width=500px></p>
+<p>&lt;img src = “img_shiny/uistructure.png”, width=500px&gt;</p>
 <p>So the first thing we’re going to do when creating the <code>makeUI.R</code> function is set it up with the structure shown above:</p>
 <pre class="r"><code>ui &lt;- fluidPage( 
   fluidRow( # the page has one row...
@@ -641,7 +672,7 @@ myAction &lt;- actionButton(
   )</code></pre>
 <p>Hopefully it’s pretty clear what each of the arguments here is doing. For instance, the slider bar ranges from a minimum value of 0 to a maximum of 100, and it is initially set to have values of 40 and 60. The important thing to note is that the <code>myResponse</code> and <code>myAction</code> objects both have an <code>inputId</code> (the user can supply input with these), and the <code>myContent</code> object has an <code>outputId</code> (the server can send output to this), emphasising the different roles they play in the application.</p>
 <p>At this point, we actually have a properly specified Shiny app. To see this, go to the <code>app.R</code> file and click “run app”. You’ll see something like this pop up:</p>
-<p><img src = "img_shiny/blankui.png", width=350px></p>
+<p>&lt;img src = “img_shiny/blankui.png”, width=350px&gt;</p>
 <p>It won’t actually do anything though. You can play with the slider and click on the button, but nothing will happen in response because the <code>server</code> isn’t listening to the user input, and there’s no text being displayed because it isn’t generating any output. So the next thing we’ll need to work on the <code>makeServer.R</code> file</p>
 </div>
 <div id="specifying-the-server" class="section level3">
@@ -654,7 +685,7 @@ myAction &lt;- actionButton(
 <p>There’s something worth pointing out even with this blank server though. The Shiny framework expects <code>server</code> to be a function with (at least) two arguments. The <code>input</code> argument tells the server what do do with user input, and the <code>output</code> argument tells it how to generate output for the user. Conceptually, there are three different jobs the server needs:</p>
 <ul>
 <li>It needs a representation of the <code>study</code> materials (the questions). That’s a study specific thing, so what we’ll do is assume that <code>study</code> is a list object, with one element per trial, such that <code>study[[1]]</code> contains the relevant information for trial 1. We’ll assume that the <code>study</code> list is produced by a <code>myStimuli</code> function that we’ll have to add to the <code>study.R</code> file.</li>
-<li>It needs to know what to <em>do</em> with the stimulus material. Specifically, it needs to produce some <code>output</code> that will go back to the user interface. The way we designed our UI was that there is object that has an output ID of <code>&quot;content&quot;</code>, so any server output that has to go to that object needs to be assigned to <code>output$content</code>. All the details for this will be handled by two functions <code>processContent</code> and <code>renderContent</code> that we’ll specify in the <code>study.R</code> file.</li>
+<li>It needs to know what to <em>do</em> with the stimulus material. Specifically, it needs to produce some <code>output</code> that will go back to the user interface. The way we designed our UI was that there is object that has an output ID of <code>"content"</code>, so any server output that has to go to that object needs to be assigned to <code>output$content</code>. All the details for this will be handled by two functions <code>processContent</code> and <code>renderContent</code> that we’ll specify in the <code>study.R</code> file.</li>
 <li>Finally, it needs to know how to end the trial when the user clicks the action button. For that, we’ll need to specify and <code>endTrial</code> function.</li>
 </ul>
 <p>To reflect these needs, we’ll modify the <code>makeServer.R</code> file as shown below:</p>
@@ -859,7 +890,7 @@ getTrialData &lt;- function(input, stimulus) {
   )
   return( trialData )
 }</code></pre>
-<p>In the <code>makeServer.R</code> function we need to do two things. We need to create a data frame called <code>responses</code> that will store all the trial data, and we need to add some code that calls the <code>getTrialData</code> function to obtain data at the e3nd of every trial the trial and then writes it to the <code>responses</code> data frame. That measn we need to modify the <code>endTrial</code> function, and add one extra line at the bottom:<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<p>In the <code>makeServer.R</code> function we need to do two things. We need to create a data frame called <code>responses</code> that will store all the trial data, and we need to add some code that calls the <code>getTrialData</code> function to obtain data at the e3nd of every trial the trial and then writes it to the <code>responses</code> data frame. That measn we need to modify the <code>endTrial</code> function, and add one extra line at the bottom:<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
 <pre class="r"><code>endTrial &lt;- function(input, study) {
 
   # before each trial, use shinyjs reset the response object
@@ -1186,14 +1217,14 @@ getTrialData &lt;- function(input, stimulus) {
 saveDir &lt;- &quot;Teaching/2018_interns/shiny2_data&quot;   # save it to this directory
 saveMethod &lt;- &quot;dropbox&quot;</code></pre>
 <p>It produces an experiment that looks like this:</p>
-<p><img src = "img_shiny/correlationapp.png", width=800px></p>
+<p>&lt;img src = “img_shiny/correlationapp.png”, width=800px&gt;</p>
 <p>So that’s nice.</p>
 </div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Shiny relies on <a href="https://getbootstrap.com/">bootstrap</a> to do all the fancy web stuff. You don’t need to know anything about bootstrap to make Shiny apps though.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>This uses the <code>&lt;&lt;-</code> operator to ensure that the <code>responses</code> variable is visible to every other function on the server (i.e., global). That’s not ideal programming, but I haven’t worked out a better solution yet!<a href="#fnref2">↩</a></p></li>
+<li id="fn1"><p>Shiny relies on <a href="https://getbootstrap.com/">bootstrap</a> to do all the fancy web stuff. You don’t need to know anything about bootstrap to make Shiny apps though.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>This uses the <code>&lt;&lt;-</code> operator to ensure that the <code>responses</code> variable is visible to every other function on the server (i.e., global). That’s not ideal programming, but I haven’t worked out a better solution yet!<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
@@ -1208,13 +1239,56 @@ saveMethod &lt;- &quot;dropbox&quot;</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

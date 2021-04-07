@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>visualising-data.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,32 +37,32 @@
 
 <!-- ###### start inserted header ##### -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- add plausible.io -->
+<script async defer data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
 
-    gtag('config', 'UA-115940772-1');
-</script>
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <!-- add the twitter card and open graph tags -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@djnavarro">
-<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:url" content="https://psyr.org">
 <meta property="og:title" content="R for Psychological Science">
 <meta property="og:description" content="An introductory resource">
-<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+<meta property="og:image" content="http://psyr.org/img/splash_turtle.png">
 
 <!-- ###### end inserted header ##### -->
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -66,38 +75,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -105,13 +87,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -122,44 +99,56 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -170,54 +159,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -231,6 +251,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -266,8 +292,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -277,14 +301,24 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -428,13 +462,10 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><ol start="15" style="list-style-type: decimal">
-<li>Visualising Data</li>
-</ol></h1>
 
 </div>
 
@@ -450,38 +481,39 @@ div.tocify {
 <div id="r-graphics" class="section level2">
 <h2><span class="header-section-number">15.1</span> R graphics</h2>
 <p>Reduced to its simplest form, you can think of R graphics like a painting. You start out with an empty canvas. Every time you use a graphics function, it paints some new things onto your canvas. Later you can paint more things over the top if you want, layering new information over the old. This way of thinking about plotting data is referred to as the <strong>painter’s model</strong> - the key thing to keep in mind is because the plot is constructed sequentially, the order in which you do things matters.</p>
-<p>We can extend the painting metaphor a little. If you want to paint a picture, you need to paint it on something. In real life, you can paint on lots of different things. Painting onto canvas isn’t the same as painting onto paper, and neither is the same as painting on a wall. In R, the thing that you paint onto is called a <strong>graphics device</strong>. In RStudio, the default graphics device is <code>RStudioGD</code> and it corresponds to the “plot” pane. If you were using the basic R program for Windows (i.e., <code>R.exe</code>) the default device is <code>windows</code>, on the Mac application (<code>R.app</code>) it’s called <code>quartz</code>, etc. However, from the computer’s perspective there’s nothing terribly special about drawing pictures on screen, and so R is quite happy to paint pictures directly into a file. R can paint several different types of image files: <code>jpeg</code>, <code>png</code>, <code>pdf</code>, <code>postscript</code>, <code>tiff</code> and <code>bmp</code> files are all available as graphics devices and you can write plots directly to those using those<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
-<p>Secondly, when you paint a picture you need to paint it with something. Maybe you want to do an oil painting, but maybe you want to use watercolour. And, generally speaking, you pretty much have to pick one or the other. The analog to this in R is a “graphics system”. A graphics system defines a collection of graphics commands about what to draw and where to draw it. Something that surprises most new R users is the discovery that R actually has several mutually incompatible graphics systems. The two of most interest to us are the <strong>base graphics</strong> system that comes with R and the <strong>ggplot2</strong> system<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> that forms part of <strong>tidyverse</strong>. There’s quite a difference of opinion among R users about the relative merits of these two systems. You can get started in base graphics really easily. To see just how easy it is, let’s load a new data set and try to draw a picture.</p>
+<p>We can extend the painting metaphor a little. If you want to paint a picture, you need to paint it on something. In real life, you can paint on lots of different things. Painting onto canvas isn’t the same as painting onto paper, and neither is the same as painting on a wall. In R, the thing that you paint onto is called a <strong>graphics device</strong>. In RStudio, the default graphics device is <code>RStudioGD</code> and it corresponds to the “plot” pane. If you were using the basic R program for Windows (i.e., <code>R.exe</code>) the default device is <code>windows</code>, on the Mac application (<code>R.app</code>) it’s called <code>quartz</code>, etc. However, from the computer’s perspective there’s nothing terribly special about drawing pictures on screen, and so R is quite happy to paint pictures directly into a file. R can paint several different types of image files: <code>jpeg</code>, <code>png</code>, <code>pdf</code>, <code>postscript</code>, <code>tiff</code> and <code>bmp</code> files are all available as graphics devices and you can write plots directly to those using those<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>Secondly, when you paint a picture you need to paint it with something. Maybe you want to do an oil painting, but maybe you want to use watercolour. And, generally speaking, you pretty much have to pick one or the other. The analog to this in R is a “graphics system”. A graphics system defines a collection of graphics commands about what to draw and where to draw it. Something that surprises most new R users is the discovery that R actually has several mutually incompatible graphics systems. The two of most interest to us are the <strong>base graphics</strong> system that comes with R and the <strong>ggplot2</strong> system<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> that forms part of <strong>tidyverse</strong>. There’s quite a difference of opinion among R users about the relative merits of these two systems. You can get started in base graphics really easily. To see just how easy it is, let’s load a new data set and try to draw a picture.</p>
 </div>
 <div id="the-data-set" class="section level2">
 <h2><span class="header-section-number">15.2</span> The data set</h2>
 <p>The <a href="./data/frames_ex2.csv">frames</a> data set comes from a simple experiment I ran a little while ago (it’s experiment two from <a href="https://psyarxiv.com/2m83v/">this paper</a>). What we were interested in was understanding how people use statistical information to guide inductive inferences. For example, suppose you observe a sample of “robins” that have “plaxium blood” (whatever that is). How likely is it that “sparrows” will possess plaxium blood? Or “cows”? Does it matter how many robins you have seen? Does it matter whether you specifically selected robins and they turned out to have plaxium blood (category sampling) as opposed to detecting animals with plaxium blood that then turned out to all be robins (property sampling)? In that paper we had a computational model of inductive reasoning that made specific predictions about how the sample size (number of robins) and sampling method (property or category) would inflence people’s judgments.</p>
-<p>In this particular experiment we didn’t show people animals (though we have done those too!) we just showed them small “alien rocks” called “sodor spheres”, and asked people to make guesses about new rocks of different sizes: <code>test_loc</code> values of 1 and 2 were very similar to the items they were shown during training, whereas value 7 was quite dissimilar. The number of training observations ranged from 2 (<code>sample_size = &quot;small&quot;</code>) to 12 (<code>sample_size = &quot;large&quot;</code>) and was varied within-subject. So everyone saw two observations, made some generalization judgments (<code>response</code> on a scale from 0 to 9), then saw more training observations and so on. Participants were randomly assigned to a <code>&quot;property&quot;</code> sampling <code>condition</code> or to a category sampling one. We also recorded <code>age</code>, <code>gender</code>, and assigned each person a unique <code>id</code>. So here’s the data</p>
+<p>In this particular experiment we didn’t show people animals (though we have done those too!) we just showed them small “alien rocks” called “sodor spheres”, and asked people to make guesses about new rocks of different sizes: <code>test_loc</code> values of 1 and 2 were very similar to the items they were shown during training, whereas value 7 was quite dissimilar. The number of training observations ranged from 2 (<code>sample_size = "small"</code>) to 12 (<code>sample_size = "large"</code>) and was varied within-subject. So everyone saw two observations, made some generalization judgments (<code>response</code> on a scale from 0 to 9), then saw more training observations and so on. Participants were randomly assigned to a <code>"property"</code> sampling <code>condition</code> or to a category sampling one. We also recorded <code>age</code>, <code>gender</code>, and assigned each person a unique <code>id</code>. So here’s the data</p>
 <pre class="r"><code>frames &lt;- read_csv(&quot;./data/frames_ex2.csv&quot;)
 frames</code></pre>
 <pre><code>## # A tibble: 4,725 x 8
-##       id gender   age condition sample_size n_obs test_item response
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;       &lt;int&gt;     &lt;int&gt;    &lt;int&gt;
-##  1     1 male      36 category  small           2         1        8
-##  2     1 male      36 category  small           2         2        7
-##  3     1 male      36 category  small           2         3        6
-##  4     1 male      36 category  small           2         4        6
-##  5     1 male      36 category  small           2         5        5
-##  6     1 male      36 category  small           2         6        6
-##  7     1 male      36 category  small           2         7        3
-##  8     1 male      36 category  medium          6         1        9
-##  9     1 male      36 category  medium          6         2        7
-## 10     1 male      36 category  medium          6         3        5
-## # ... with 4,715 more rows</code></pre>
+##       id gender   age condition sample_size n_obs test_item
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+##  1     1 male      36 category  small           2         1
+##  2     1 male      36 category  small           2         2
+##  3     1 male      36 category  small           2         3
+##  4     1 male      36 category  small           2         4
+##  5     1 male      36 category  small           2         5
+##  6     1 male      36 category  small           2         6
+##  7     1 male      36 category  small           2         7
+##  8     1 male      36 category  medium          6         1
+##  9     1 male      36 category  medium          6         2
+## 10     1 male      36 category  medium          6         3
+## # … with 4,715 more rows, and 1 more variable: response &lt;dbl&gt;</code></pre>
 <p>Using the tools from the last section, let’s also create a smaller summary data frame that contains one row per person:</p>
 <pre class="r"><code>frames_small &lt;- frames %&gt;%
   group_by(id, gender, age, condition) %&gt;%
-  summarise(response = mean(response))
-frames_small</code></pre>
+  summarise(response = mean(response))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;id&#39;, &#39;gender&#39;, &#39;age&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>frames_small</code></pre>
 <pre><code>## # A tibble: 225 x 5
-## # Groups:   id, gender, age [?]
+## # Groups:   id, gender, age [225]
 ##       id gender   age condition response
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;        &lt;dbl&gt;
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;
 ##  1     1 male      36 category      5.33
 ##  2     2 male      46 category      7.05
 ##  3     3 female    33 property      4.86
@@ -492,7 +524,7 @@ frames_small</code></pre>
 ##  8     8 female    31 property      4   
 ##  9     9 female    37 category      3.38
 ## 10    10 female    46 category      5.86
-## # ... with 215 more rows</code></pre>
+## # … with 215 more rows</code></pre>
 <p>Let’s see if we can understand what’s going on with this data set by drawing pictures, and also learn about R graphics in the process.</p>
 </div>
 <div id="histograms" class="section level2">
@@ -550,7 +582,7 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
   geom_point() + 
   geom_rug()</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-13-1.png" width="480" style="display: block; margin: auto;" /></p>
-<p>Notice the style here. A pretty typical way to build a visualisation is to construct it in layers, <em>adding</em> new geoms, aesthetics and other plot customisations as you go. So you’ll often end up with code structured like this:<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p>Notice the style here. A pretty typical way to build a visualisation is to construct it in layers, <em>adding</em> new geoms, aesthetics and other plot customisations as you go. So you’ll often end up with code structured like this:<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
 <pre><code>DATA %&gt;%
   ggplot(aes( LIST_OF_AESTHETICS )) +
   A_GEOM +
@@ -560,7 +592,7 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
 </div>
 <div id="bar-graphs" class="section level2">
 <h2><span class="header-section-number">15.5</span> Bar graphs</h2>
-<p>The humble bar graph is a staple in the scientific literature, and can be rendered by <strong>ggplot2</strong> with the assistance of the <code>geom_bar()</code> function. Suppose I want to check that the gender distribution for this study was relatively even across conditions.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> To do that, I’ll set up my mapping with <code>gender</code> on the x-axis (using <code>ggplot</code> to initialise the plot and <code>aes</code> to specify the aesthetics), create separate panels for each <code>condition</code> (using <code>facet_wrap</code> which I’ll explain in more detail below), and then use <code>geom_bar()</code> to draw the plot:</p>
+<p>The humble bar graph is a staple in the scientific literature, and can be rendered by <strong>ggplot2</strong> with the assistance of the <code>geom_bar()</code> function. Suppose I want to check that the gender distribution for this study was relatively even across conditions.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> To do that, I’ll set up my mapping with <code>gender</code> on the x-axis (using <code>ggplot</code> to initialise the plot and <code>aes</code> to specify the aesthetics), create separate panels for each <code>condition</code> (using <code>facet_wrap</code> which I’ll explain in more detail below), and then use <code>geom_bar()</code> to draw the plot:</p>
 <pre class="r"><code>frames_small %&gt;%
   ggplot(aes(x = gender)) +  # set up the mapping
   facet_wrap(~condition) +   # split it into plots
@@ -586,7 +618,7 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
   ggplot(aes(x = condition, y = response)) + 
   geom_violin()</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-16-1.png" width="456" style="display: block; margin: auto;" /></p>
-<p>It’s intuitively obvious what this plot is doing: the “width” of the violin<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> at each point shows the estimated “density” of the population distribution at that point. To make it a little clearer what this is showing, let’s overlay the raw data on the plot, using the <code>geom_jitter()</code> method to make it a little easier to see:</p>
+<p>It’s intuitively obvious what this plot is doing: the “width” of the violin<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> at each point shows the estimated “density” of the population distribution at that point. To make it a little clearer what this is showing, let’s overlay the raw data on the plot, using the <code>geom_jitter()</code> method to make it a little easier to see:</p>
 <pre class="r"><code>frames_small %&gt;%
   ggplot(aes(x = condition, y = response)) + 
   geom_violin() +
@@ -633,13 +665,13 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
 <li>The effect of sample size is inhomogeneous. For stimuli that are very similar to the training items (test locations 1 and 2), increasing the sample size pushes the generalisation <em>upwards</em>, regardless of whether category sampling or property sampling is applied</li>
 <li>For stimuli that are very dissimilar (especially test items 6 and 7), the effect of sample size depends on the sampling method. For category sampling, basically <em>nothing happens</em>: the box plots for large sample sizes aren’t any different to those for small sample sizes. Yet for property sampling, there’s a systematic tendency for these to shift <em>downwards</em></li>
 </ul>
-<p>Assuming that these findings replicate<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> it looks like we have a three-way interaction of some kind!</p>
+<p>Assuming that these findings replicate<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> it looks like we have a three-way interaction of some kind!</p>
 <p>To be honest though, I’m still not pleased with this graph. I think we can do better.</p>
 </div>
 <div id="bubble-plots" class="section level2">
 <h2><span class="header-section-number">15.9</span> Bubble plots</h2>
 <p>One difficulty with box plots is that they only work as distributional summaries when the data are unimodal. If most people respond with extreme values, the box plot ends up being a little misleading. Violin plots are often better at capturing multimodality, but they’re designed to work for continuous variables and often behave poorly when applied to data that fall in a small number of ordered categories. Psychological data from questionnaires or – as in the <code>frames</code> data set - other ordinal response methods often have exactly this characteristic. Neither box plots nor violin plots are ideally suited to this situation.</p>
-<p>Fortunately a bubble plot can help out here. This takes the form of a scatter plot, but instead of plotting every data point as a unique dot, we plot dots at every location whose size (area) is proportional to the number of cases at that location.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> To do this with <strong>ggplot2</strong> all we need to do is use the <code>geom_count()</code> function. When applied to the <code>frames</code> data, we get this:</p>
+<p>Fortunately a bubble plot can help out here. This takes the form of a scatter plot, but instead of plotting every data point as a unique dot, we plot dots at every location whose size (area) is proportional to the number of cases at that location.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> To do this with <strong>ggplot2</strong> all we need to do is use the <code>geom_count()</code> function. When applied to the <code>frames</code> data, we get this:</p>
 <pre class="r"><code>frames %&gt;%
   ggplot(aes(x = test_item, y = response)) + 
   facet_grid(condition ~ sample_size) +
@@ -652,7 +684,7 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
   facet_grid(condition ~ sample_size) +
   geom_count(aes(colour = ..n..))</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-22-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>That’s a little nicer, but in this case I don’t want or need the pretty blue colouring. What I want to do is specify my own grey scale, where larger dots are coloured closer to black (e.g., upper bound is <code>&quot;grey20&quot;</code>) and the smaller dots are coloured in a light grey (e.g., lower bound is <code>&quot;grey80&quot;</code>).<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> Then all I have to do is this:</p>
+<p>That’s a little nicer, but in this case I don’t want or need the pretty blue colouring. What I want to do is specify my own grey scale, where larger dots are coloured closer to black (e.g., upper bound is <code>"grey20"</code>) and the smaller dots are coloured in a light grey (e.g., lower bound is <code>"grey80"</code>).<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> Then all I have to do is this:</p>
 <pre class="r"><code>frames %&gt;%
   ggplot(aes(x = test_item, y = response)) + 
   facet_grid(condition ~ sample_size) +
@@ -670,12 +702,13 @@ hist(frames_small$age[frames$condition == &quot;property&quot;])</code></pre>
     mean_response = mean(response),
     lower = lsr::ciMean(response)[1],
     upper = lsr::ciMean(response)[2]
-  )
-frames_mean</code></pre>
+  )</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;condition&#39;, &#39;sample_size&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>frames_mean</code></pre>
 <pre><code>## # A tibble: 42 x 6
-## # Groups:   condition, sample_size [?]
+## # Groups:   condition, sample_size [6]
 ##    condition sample_size test_item mean_response lower upper
-##    &lt;chr&gt;     &lt;fct&gt;           &lt;int&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##    &lt;chr&gt;     &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ##  1 category  small               1          6.07  5.55  6.59
 ##  2 category  small               2          6.26  5.84  6.69
 ##  3 category  small               3          5.87  5.50  6.24
@@ -686,12 +719,12 @@ frames_mean</code></pre>
 ##  8 category  medium              1          7.32  6.85  7.78
 ##  9 category  medium              2          7.17  6.80  7.54
 ## 10 category  medium              3          5.98  5.54  6.42
-## # ... with 32 more rows</code></pre>
+## # … with 32 more rows</code></pre>
 <p>In this case I’m using the <code>ciMean()</code> function from the <strong>lsr</strong> package to compute the 95% confidence intervals. Just so that you can see how this function works – without all the additional complications from calling it within the <code>summarise()</code> operation – here’s a simple example. I’ll generate 20 numbers from a normal distribution with true mean 100 and true standard deviation 15 (following the convention used for IQ scores), and then use the <code>ciMean()</code> function to calculate a 95% confidence interval:</p>
 <pre class="r"><code>fake_iq &lt;- rnorm(n = 20, mean = 100, sd = 15)  # normally distributed data
 lsr::ciMean(fake_iq)                           # 95% confidence interval </code></pre>
 <pre><code>##             2.5%    97.5%
-## fake_iq 93.31407 107.1136</code></pre>
+## fake_iq 93.72256 107.2601</code></pre>
 <p>So the <code>lower</code> variable in <code>frames_mean</code> is the lower bound on the 95% confidence interval, and <code>upper</code> is the upper bound. In any case, now that we have data in an appropriate format we can create the plot.</p>
 <p>To add error bars is no more difficult than anything else in <strong>ggplot2</strong>. There is a geom called <code>geom_errorbar()</code> that will draw those for us. However, it does need some new information. In our previous graphs we’ve specifed three aesthetics at the beginning of our graphing exercise, namely <code>x = test_item</code>, <code>y = mean_response</code> and <code>colour = condition</code>. That works fine for <code>geom_point()</code> because doesn’t need anything else, but <code>geom_errorbar()</code> also needs to know which variables specify the <code>ymin</code> and <code>ymax</code> values that will be displayed in the error bars. If I wanted to, I could could include these aesthetics within the original call to <code>ggplot()</code> but I’ll do something a little different this time. Individual geoms can have their own unique aesthetics, so I can insert a new call to <code>aes()</code> within the <code>geom_errorbar()</code> call. Conceptually I find this neater, because it makes clear that <code>ymin</code> and <code>ymax</code> are aesthetics that apply to the error bars, but not to other geoms in the plot. Anyway here’s the command:</p>
 <pre class="r"><code>my_pic &lt;- frames_mean %&gt;%
@@ -719,13 +752,14 @@ lsr::ciMean(fake_iq)                           # 95% confidence interval </code>
   facet_wrap(~condition) +
   ylim(0,9)</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-29-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>Alternatively, if I want to add regression lines to this plot I can use <code>geom_smooth()</code>. By default the <code>geom_smooth()</code> function applies a non-linear method (loess regression), which we saw previously in the <a href="./prelude-to-data.html">prelude</a>. This is also customisable. If I want to use a simpler linear model to provide my regression line, all I need to do is specify <code>method = &quot;lm&quot;</code> and I get a plot like this:</p>
+<p>Alternatively, if I want to add regression lines to this plot I can use <code>geom_smooth()</code>. By default the <code>geom_smooth()</code> function applies a non-linear method (loess regression), which we saw previously in the <a href="./prelude-to-data.html">prelude</a>. This is also customisable. If I want to use a simpler linear model to provide my regression line, all I need to do is specify <code>method = "lm"</code> and I get a plot like this:</p>
 <pre class="r"><code>frames_small %&gt;% 
   ggplot(mapping = aes(x = age, y = response, colour = condition)) +
   geom_point() + 
   geom_smooth(method = &quot;lm&quot;) +
   facet_wrap(~condition) +
   ylim(0,9)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="visualising-data_files/figure-html/unnamed-chunk-30-1.png" width="456" style="display: block; margin: auto;" /></p>
 <p>Similarly, plots are customisable in other ways. We can use <code>theme_dark()</code> to switch to a dark theme or <code>theme_bw()</code> to switch to a black and white scheme. We can add horizontal lines to plots with <code>geom_hline()</code>, vertical lines with <code>geom_vline()</code> and diagonal lines with <code>geom_abline()</code>. The colour palette can be adapted in arbitrary ways (e.g. with <code>scale_color_brewer</code>). We can control the axis scales with <code>xlim()</code> and <code>ylim()</code>. We can add text to a plot with <code>geom_text()</code>. Here’s an example showing some of those customisation:</p>
 <pre class="r"><code>my_new_pic &lt;- my_pic + 
@@ -761,14 +795,14 @@ my_new_pic</code></pre>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>If you are interested, take a look at the various <code>dev</code> functions for working with graphics devces, such as <code>dev.new</code>, <code>dev.print</code>, <code>dev.off</code> etc. I won’t talk about those here because I’m focusing on <strong>tidyverse</strong> but they’re handy in other situations<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>It’s worth acknowledging that <strong>ggplot2</strong> and builds off the <strong>grid</strong> graphics system that we very briefly encountered when using <strong>TurtleGraphics</strong><a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>There is a little bit of weirdness to this. Once you’ve gotten accustomed to using the pipe operator <code>%&gt;%</code> it starts to feel like we should be writing code like <code>data %&gt;% ggplot() %&gt;% geom() %&gt;% etc</code> rather than <code>data %&gt;% (ggplot() + geom() + etc)</code>. This is purely for historical reasons: <strong>ggplot2</strong> predates the pipe operator and so unlike everything else in <strong>tidyverse</strong> it’s not very compatible with <code>%&gt;%</code>.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>In this study I asked people to respond with a three value questionnaire, with options for “male”, “female” and “other” as possible gender identities. I’m not entirely satisfied with this as a measurement method though, and the question wasn’t compulsory to answer.<a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p>Yeah, they never actually look like violins. We should just give up and call them blob plots<a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p>They appear to – we ran 9 experiments in total and while some effects are a little fragile and I wouldn’t put too much faith in their ability to replicate, the core effect in which there are systematic differences in how statistical information (e.g., sample size, base rate, auxiliary data) interacts with the sampling mechanism replicated every time; oh and if you go read the paper the model predictions correlate with human data very highly, always produce the same qualitative patterns regardless of parametre values… etc, etc. This isn’t a cognitive science paper so I won’t bore you with details, but the reason this works as cleanly as it does is that we didn’t choose these manipulations arbitrarily. We had a proper theory to guide us!<a href="#fnref6">↩</a></p></li>
-<li id="fn7"><p>There are drawbacks to bubble plots. The psychophysical function for area isn’t linear, so subjective area doesn’t scale perfectly with actual area. If you need people to be able to make fine-grained comparisons between quantities don’t use bubble plots. However, my goal here is different - I don’t mind if we can’t quite see the “perfect” relationship, I just want the “gist” to come through properly.<a href="#fnref7">↩</a></p></li>
-<li id="fn8"><p>R is quite flexible in how it handles colours. For most purposes you can use an English colour word and R will have a rough idea what you mean. Type <code>colours()</code> at the console to see a list of the colour names it knows: there are a lot! Alternatively you can specify a hexadecimal string like <code>#88398A</code>, or use a function like <code>rgb()</code> or <code>hsv()</code> to construct the colour you want.<a href="#fnref8">↩</a></p></li>
+<li id="fn1"><p>If you are interested, take a look at the various <code>dev</code> functions for working with graphics devces, such as <code>dev.new</code>, <code>dev.print</code>, <code>dev.off</code> etc. I won’t talk about those here because I’m focusing on <strong>tidyverse</strong> but they’re handy in other situations<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>It’s worth acknowledging that <strong>ggplot2</strong> and builds off the <strong>grid</strong> graphics system that we very briefly encountered when using <strong>TurtleGraphics</strong><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>There is a little bit of weirdness to this. Once you’ve gotten accustomed to using the pipe operator <code>%&gt;%</code> it starts to feel like we should be writing code like <code>data %&gt;% ggplot() %&gt;% geom() %&gt;% etc</code> rather than <code>data %&gt;% (ggplot() + geom() + etc)</code>. This is purely for historical reasons: <strong>ggplot2</strong> predates the pipe operator and so unlike everything else in <strong>tidyverse</strong> it’s not very compatible with <code>%&gt;%</code>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>In this study I asked people to respond with a three value questionnaire, with options for “male”, “female” and “other” as possible gender identities. I’m not entirely satisfied with this as a measurement method though, and the question wasn’t compulsory to answer.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Yeah, they never actually look like violins. We should just give up and call them blob plots<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>They appear to – we ran 9 experiments in total and while some effects are a little fragile and I wouldn’t put too much faith in their ability to replicate, the core effect in which there are systematic differences in how statistical information (e.g., sample size, base rate, auxiliary data) interacts with the sampling mechanism replicated every time; oh and if you go read the paper the model predictions correlate with human data very highly, always produce the same qualitative patterns regardless of parametre values… etc, etc. This isn’t a cognitive science paper so I won’t bore you with details, but the reason this works as cleanly as it does is that we didn’t choose these manipulations arbitrarily. We had a proper theory to guide us!<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>There are drawbacks to bubble plots. The psychophysical function for area isn’t linear, so subjective area doesn’t scale perfectly with actual area. If you need people to be able to make fine-grained comparisons between quantities don’t use bubble plots. However, my goal here is different - I don’t mind if we can’t quite see the “perfect” relationship, I just want the “gist” to come through properly.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>R is quite flexible in how it handles colours. For most purposes you can use an English colour word and R will have a rough idea what you mean. Type <code>colours()</code> at the console to see a list of the colour names it knows: there are a lot! Alternatively you can specify a hexadecimal string like <code>#88398A</code>, or use a function like <code>rgb()</code> or <code>hsv()</code> to construct the colour you want.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
@@ -783,13 +817,56 @@ my_new_pic</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

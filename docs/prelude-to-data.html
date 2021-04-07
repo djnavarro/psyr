@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>prelude-to-data.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,32 +37,32 @@
 
 <!-- ###### start inserted header ##### -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- add plausible.io -->
+<script async defer data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
 
-    gtag('config', 'UA-115940772-1');
-</script>
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <!-- add the twitter card and open graph tags -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@djnavarro">
-<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:url" content="https://psyr.org">
 <meta property="og:title" content="R for Psychological Science">
 <meta property="og:description" content="An introductory resource">
-<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+<meta property="og:image" content="http://psyr.org/img/splash_turtle.png">
 
 <!-- ###### end inserted header ##### -->
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -66,38 +75,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -105,13 +87,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -122,44 +99,56 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -170,54 +159,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -231,6 +251,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -266,8 +292,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -277,14 +301,24 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -428,13 +462,10 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><ol start="12" style="list-style-type: decimal">
-<li>Prelude to data</li>
-</ol></h1>
 
 </div>
 
@@ -448,20 +479,20 @@ div.tocify {
 afl &lt;- read_csv(&quot;./data/afl.csv&quot;)
 afl</code></pre>
 <pre><code>## # A tibble: 4,296 x 12
-##    home_team away_team home_score away_score  year round weekday   day
-##    &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;      &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;int&gt;
-##  1 North Me… Brisbane         104        137  1987     1 Fri        27
-##  2 Western … Essendon          62        121  1987     1 Sat        28
-##  3 Carlton   Hawthorn         104        149  1987     1 Sat        28
-##  4 Collingw… Sydney            74        165  1987     1 Sat        28
-##  5 Melbourne Fitzroy          128         89  1987     1 Sat        28
-##  6 St Kilda  Geelong          101        102  1987     1 Sat        28
-##  7 West Coa… Richmond         133        119  1987     1 Sun        29
-##  8 North Me… Melbourne         92         59  1987     2 Fri         3
-##  9 Geelong   Brisbane         131        150  1987     2 Sat         4
-## 10 Collingw… Carlton          107        114  1987     2 Sat         4
-## # ... with 4,286 more rows, and 4 more variables: month &lt;int&gt;,
-## #   game_type &lt;chr&gt;, venue &lt;chr&gt;, attendance &lt;int&gt;</code></pre>
+##    home_team away_team home_score away_score  year round weekday
+##    &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  
+##  1 North Me… Brisbane         104        137  1987     1 Fri    
+##  2 Western … Essendon          62        121  1987     1 Sat    
+##  3 Carlton   Hawthorn         104        149  1987     1 Sat    
+##  4 Collingw… Sydney            74        165  1987     1 Sat    
+##  5 Melbourne Fitzroy          128         89  1987     1 Sat    
+##  6 St Kilda  Geelong          101        102  1987     1 Sat    
+##  7 West Coa… Richmond         133        119  1987     1 Sun    
+##  8 North Me… Melbourne         92         59  1987     2 Fri    
+##  9 Geelong   Brisbane         131        150  1987     2 Sat    
+## 10 Collingw… Carlton          107        114  1987     2 Sat    
+## # … with 4,286 more rows, and 5 more variables: day &lt;dbl&gt;,
+## #   month &lt;dbl&gt;, game_type &lt;chr&gt;, venue &lt;chr&gt;, attendance &lt;dbl&gt;</code></pre>
 <p>For the moment let’s not worry too much about what this code is doing or what the output means. The gist of the output is pretty clear. We have information about 4296 football vgames. For each game we have recorded 12 variables: the names of the home and away team, the number of points scored by each team, information about when the game was played, the venue where it was played, the official attendance statistics, and whether it was a regular home-and-away game or part of the finals series.</p>
 <p>That’s nice, but currently our data takes the form of a table with 4296 rows and 12 columns, and I have no idea what any of it <em>means</em>. How do I extract meaningful information out of this data set? Let’s say my goal is to investigate how the average attendance at AFL games has changed over the years, and I’d like to look at regular season games separate from finals. To do so, I first summarise the AFL data in terms of the relevant variables:</p>
 <pre class="r"><code>attendance &lt;- afl %&gt;% 
@@ -469,9 +500,9 @@ afl</code></pre>
   summarise(attendance = mean(attendance)) 
 attendance</code></pre>
 <pre><code>## # A tibble: 48 x 3
-## # Groups:   year [?]
+## # Groups:   year [24]
 ##     year game_type attendance
-##    &lt;int&gt; &lt;chr&gt;          &lt;dbl&gt;
+##    &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
 ##  1  1987 finals        71510.
 ##  2  1987 regular       19120.
 ##  3  1988 finals        72700.
@@ -482,7 +513,7 @@ attendance</code></pre>
 ##  8  1990 regular       23296.
 ##  9  1991 finals        54530.
 ## 10  1991 regular       23013.
-## # ... with 38 more rows</code></pre>
+## # … with 38 more rows</code></pre>
 <p>Again, while you probably won’t be completely sure how this code works, the gist of it is pretty clear. I’m taking the raw AFL data, grouping the games by the year and whether they were finals games, and calculting the mean attendance. This <em>summary</em> of the data is a huge improvement over the raw data itself, but it’s still just a long list of numbers. Like most people, I don’t enjoy looking at numbers - I like pictures.</p>
 <p>As before we can take this <code>attendance</code> data and turn it into something nicer. The command to do ths is a little more involved but again the gist of it should be clear:</p>
 <pre class="r"><code>pic &lt;- attendance %&gt;%
@@ -502,7 +533,7 @@ plot(pic) </code></pre>
 <p>The tidyverse is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures.</p>
 </blockquote>
 <p>When I wrote <em>Learning Statistics with R</em> to accompany my first statistics class the tidyverse didn’t play much of a part, because most of it didn’t exist. Over the last several years the tidyverse has had a huge influence on how data analysis in R is typically conducted, so in these notes I’ll often use on tools from the tidyverse. From now on, when reading the code presented in these notes you should presume that there’s a hidden <code>library(tidyverse)</code> command at the start of every page… because there is! 😀</p>
-<p>If you are interested in learning more about the tidyverse and the role it plays in the R data science community, an excellent place to start is with Hadley Wickham and Garrett Grolemund’s book <a href="http://r4ds.had.co.nz/">R for Data Science</a>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> The tidyverse emphasises an approach to data exploration illustrated below:</p>
+<p>If you are interested in learning more about the tidyverse and the role it plays in the R data science community, an excellent place to start is with Hadley Wickham and Garrett Grolemund’s book <a href="http://r4ds.had.co.nz/">R for Data Science</a>.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> The tidyverse emphasises an approach to data exploration illustrated below:</p>
 <p><img src="img/prelude_explore.png" width=600px></p>
 <p>(You’ll see exactly this image used in a lot of tidyverse related documents)</p>
 <p>A typical approach to data analysis involves importing data from an external source, tidying the data and cleaning up any problems with the data set, transforming it in a fashion that extracts the relevant information, visualising the key insights, and so on. Even in the brief analysis I presented above you can see some of this process play out. The tidyverse packages are designed around the goal of making it easy for users to manipulate, summarise and visualise data. Because those are the main goals of this section of the notes I’m going to rely heavily on packages that are in or based on <strong>tidyverse</strong>.</p>
@@ -558,7 +589,7 @@ c &lt;- exp(b)
 d &lt;- round(c, digits = 2)
 print(d)</code></pre>
 <pre><code>## [1] 562.01</code></pre>
-<p>Here’s the same thing<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> written as piped code:</p>
+<p>Here’s the same thing<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> written as piped code:</p>
 <pre class="r"><code>response_time %&gt;% log %&gt;% 
   mean %&gt;% 
   exp %&gt;% 
@@ -586,8 +617,9 @@ print(speaker)
 ```
 
 ```
-##  [1] "upsy-daisy"  "upsy-daisy"  "upsy-daisy"  "upsy-daisy"  "tombliboo"  
-##  [6] "tombliboo"   "makka-pakka" "makka-pakka" "makka-pakka" "makka-pakka"
+##  [1] "upsy-daisy"  "upsy-daisy"  "upsy-daisy"  "upsy-daisy" 
+##  [5] "tombliboo"   "tombliboo"   "makka-pakka" "makka-pakka"
+##  [9] "makka-pakka" "makka-pakka"
 ```
 
 ```r
@@ -618,7 +650,8 @@ speaker[ utterance %in% c("pip","oo") ]
 ```
 
 ```
-## [1] "upsy-daisy"  "upsy-daisy"  "tombliboo"   "makka-pakka" "makka-pakka"
+## [1] "upsy-daisy"  "upsy-daisy"  "tombliboo"   "makka-pakka"
+## [5] "makka-pakka"
 ```
 
 -->
@@ -636,7 +669,6 @@ print( my.formula )             # print it the normal way
 
 ```
 ## blah ~ blah.blah
-## <environment: 0x116a11710>
 ```
 
 So far, there’s nothing very surprising here. But there’s actually a lot going on behind the scenes here. When I type `print(my.formula)`, what actually happens is the `print` function checks the class of the `my.formula` variable. When the function discovers that the variable it’s been given is a formula, it goes looking for a function called `print.formula`, and then delegates the whole business of printing out the variable to the `print.formula` function.^[For readers with a programming background: R has three separate systems for object oriented programming. The earliest system was S3, and it was very informal: generic functions as described here are part of the S3 system. Later on S4 was introduced as a more formal way of doing things. I confess I never learned S4 because it looked tedious. More recently R introduced Reference Classes, which look kind of neat and I should probably learn about them. Discussed [here](http://adv-r.had.co.nz/R5.html) if you're interested.] For what it’s worth, the name for a “dedicated” function like `print.formula` that exists only to be a special case of a generic function like `print` is a **method**, and the name for the process in which the generic function passes off all the hard work onto a method is called **method dispatch**. You won’t need to understand the details at all for this book, but you do need to know the gist of it; if only because a lot of the functions we’ll use are actually generics.
@@ -653,7 +685,7 @@ print.default( my.formula ) # do something silly by using the wrong method
 ## attr(,"class")
 ## [1] "formula"
 ## attr(,".Environment")
-## <environment: 0x116a11710>
+## <environment: R_GlobalEnv>
 ```
 
 Hm. You can kind of see that it is trying to print out the same formula, but there’s a bunch of ugly low-level details that have also turned up on screen. This is because the `print.default` method doesn’t know anything about formulas, and doesn’t know that it’s supposed to be hiding the obnoxious internal gibberish that R produces sometimes. 
@@ -666,8 +698,8 @@ At this stage, this is about as much as we need to know about generic functions 
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>As I type this, I realise that I’ve unconsciously been influenced by the title. I honestly hadn’t intended <em>R for Psychological Science</em> to serve as an oblique reference to <em>R for Data Science</em>, it just felt like the natural name for the book I wanted to write.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>Well, I suppose the piped version would be more akin to <code>print(round(exp(mean(log(response_time)))),digits=2)</code> but let’s not get bogged down with technicalities<a href="#fnref2">↩</a></p></li>
+<li id="fn1"><p>As I type this, I realise that I’ve unconsciously been influenced by the title. I honestly hadn’t intended <em>R for Psychological Science</em> to serve as an oblique reference to <em>R for Data Science</em>, it just felt like the natural name for the book I wanted to write.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Well, I suppose the piped version would be more akin to <code>print(round(exp(mean(log(response_time)))),digits=2)</code> but let’s not get bogged down with technicalities<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
@@ -682,13 +714,56 @@ At this stage, this is about as much as we need to know about generic functions 
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

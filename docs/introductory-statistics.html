@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>introductory-statistics.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,32 +37,32 @@
 
 <!-- ###### start inserted header ##### -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- add plausible.io -->
+<script async defer data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
 
-    gtag('config', 'UA-115940772-1');
-</script>
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <!-- add the twitter card and open graph tags -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@djnavarro">
-<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:url" content="https://psyr.org">
 <meta property="og:title" content="R for Psychological Science">
 <meta property="og:description" content="An introductory resource">
-<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+<meta property="og:image" content="http://psyr.org/img/splash_turtle.png">
 
 <!-- ###### end inserted header ##### -->
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -66,38 +75,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -105,13 +87,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -122,44 +99,56 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -170,54 +159,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -231,6 +251,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -266,8 +292,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -277,14 +301,24 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -428,13 +462,10 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><ol start="20" style="list-style-type: decimal">
-<li>Introductory statistics</li>
-</ol></h1>
 
 </div>
 
@@ -444,20 +475,20 @@ div.tocify {
 </blockquote>
 <pre class="r"><code>load(&quot;./data/afl24.Rdata&quot;) # load data
 head(afl)                  # show the first few rows</code></pre>
-<pre><code>##          home.team away.team home.score away.score year round weekday day
-## 1  North Melbourne  Brisbane        104        137 1987     1     Fri  27
-## 2 Western Bulldogs  Essendon         62        121 1987     1     Sat  28
-## 3          Carlton  Hawthorn        104        149 1987     1     Sat  28
-## 4      Collingwood    Sydney         74        165 1987     1     Sat  28
-## 5        Melbourne   Fitzroy        128         89 1987     1     Sat  28
-## 6         St Kilda   Geelong        101        102 1987     1     Sat  28
-##   month is.final              venue attendance
-## 1     3    FALSE                MCG      14096
-## 2     3    FALSE      Waverley Park      22550
-## 3     3    FALSE       Princes Park      19967
-## 4     3    FALSE      Victoria Park      17129
-## 5     3    FALSE                MCG      18012
-## 6     3    FALSE Gold Coast Stadium      15867</code></pre>
+<pre><code>##          home.team away.team home.score away.score year round
+## 1  North Melbourne  Brisbane        104        137 1987     1
+## 2 Western Bulldogs  Essendon         62        121 1987     1
+## 3          Carlton  Hawthorn        104        149 1987     1
+## 4      Collingwood    Sydney         74        165 1987     1
+## 5        Melbourne   Fitzroy        128         89 1987     1
+## 6         St Kilda   Geelong        101        102 1987     1
+##   weekday day month is.final              venue attendance
+## 1     Fri  27     3    FALSE                MCG      14096
+## 2     Sat  28     3    FALSE      Waverley Park      22550
+## 3     Sat  28     3    FALSE       Princes Park      19967
+## 4     Sat  28     3    FALSE      Victoria Park      17129
+## 5     Sat  28     3    FALSE                MCG      18012
+## 6     Sat  28     3    FALSE Gold Coast Stadium      15867</code></pre>
 <div id="confidence-intervals" class="section level2">
 <h2><span class="header-section-number">20.1</span> Confidence intervals</h2>
 <p>As usual there are many ways to compute the confidence interval of the mean in R. One relatively simple one is with the <code>ciMean</code> function in the <code>lsr</code> package, which (conveniently) can take a data frame as input and computes confidence intervals for all the numeric variables:</p>
@@ -527,8 +558,8 @@ head(afl)                  # show the first few rows</code></pre>
 <p>Are finals games lower scoring than home and away games? This requires an <strong>independent samples t-test</strong>:</p>
 <pre class="r"><code>afl$total.score &lt;- afl$home.score + afl$away.score
 independentSamplesTTest(total.score ~ is.final, afl)</code></pre>
-<pre><code>## Warning in independentSamplesTTest(total.score ~ is.final, afl): group
-## variable is not a factor</code></pre>
+<pre><code>## Warning in independentSamplesTTest(total.score ~ is.final, afl):
+## group variable is not a factor</code></pre>
 <pre><code>## 
 ##    Welch&#39;s independent samples t-test 
 ## 
@@ -557,8 +588,9 @@ independentSamplesTTest(total.score ~ is.final, afl)</code></pre>
 <h2><span class="header-section-number">20.3</span> Categorical associations</h2>
 <p>Are all teams equally likely to play their home games on every weekday? For that we might consider using a <strong>chi-square test of categorical association</strong>, but as you can see from the output below, a little care is needed:</p>
 <pre class="r"><code>associationTest(~ home.team + weekday, afl)</code></pre>
-<pre><code>## Warning in associationTest(~home.team + weekday, afl): Expected frequencies
-## too small: chi-squared approximation may be incorrect</code></pre>
+<pre><code>## Warning in associationTest(~home.team + weekday, afl): Expected
+## frequencies too small: chi-squared approximation may be
+## incorrect</code></pre>
 <pre><code>## 
 ##      Chi-square test of categorical association
 ## 
@@ -728,39 +760,50 @@ afl.majors &lt;- afl[ afl$venue %in% names(majors), ]</code></pre>
 ## 
 ## data:  total.score and venue 
 ## 
-##                    AAMI Stadium Etihad Stadium Gabba   Gold Coast Stadium
-## Etihad Stadium     3.1e-13      -              -       -                 
-## Gabba              2.0e-05      1.00000        -       -                 
-## Gold Coast Stadium 0.20642      1.00000        1.00000 -                 
-## MCG                3.8e-11      1.00000        1.00000 1.00000           
-## Patersons Stadium  1.00000      5.0e-06        0.09684 1.00000           
-## Princes Park       2.7e-11      1.00000        1.00000 1.00000           
-## SCG                1.6e-07      1.00000        1.00000 1.00000           
-## Skilled Stadium    0.02836      0.34402        1.00000 1.00000           
-## Waverley Park      1.00000      1.1e-08        0.00317 1.00000           
-## Western Oval       0.75909      2.4e-12        1.4e-07 0.00096           
-##                    MCG     Patersons Stadium Princes Park SCG    
-## Etihad Stadium     -       -                 -            -      
-## Gabba              -       -                 -            -      
-## Gold Coast Stadium -       -                 -            -      
-## MCG                -       -                 -            -      
-## Patersons Stadium  0.00075 -                 -            -      
-## Princes Park       1.00000 2.6e-05           -            -      
-## SCG                1.00000 0.00573           1.00000      -      
-## Skilled Stadium    1.00000 1.00000           0.31433      1.00000
-## Waverley Park      2.0e-06 1.00000           1.3e-07      9.0e-05
-## Western Oval       2.7e-10 0.00371           9.9e-12      3.5e-09
-##                    Skilled Stadium Waverley Park
-## Etihad Stadium     -               -            
-## Gabba              -               -            
-## Gold Coast Stadium -               -            
-## MCG                -               -            
-## Patersons Stadium  -               -            
-## Princes Park       -               -            
-## SCG                -               -            
-## Skilled Stadium    -               -            
-## Waverley Park      0.74049         -            
-## Western Oval       9.2e-05         0.08420      
+##                    AAMI Stadium Etihad Stadium Gabba  
+## Etihad Stadium     3.1e-13      -              -      
+## Gabba              2.0e-05      1.00000        -      
+## Gold Coast Stadium 0.20642      1.00000        1.00000
+## MCG                3.8e-11      1.00000        1.00000
+## Patersons Stadium  1.00000      5.0e-06        0.09684
+## Princes Park       2.7e-11      1.00000        1.00000
+## SCG                1.6e-07      1.00000        1.00000
+## Skilled Stadium    0.02836      0.34402        1.00000
+## Waverley Park      1.00000      1.1e-08        0.00317
+## Western Oval       0.75909      2.4e-12        1.4e-07
+##                    Gold Coast Stadium MCG     Patersons Stadium
+## Etihad Stadium     -                  -       -                
+## Gabba              -                  -       -                
+## Gold Coast Stadium -                  -       -                
+## MCG                1.00000            -       -                
+## Patersons Stadium  1.00000            0.00075 -                
+## Princes Park       1.00000            1.00000 2.6e-05          
+## SCG                1.00000            1.00000 0.00573          
+## Skilled Stadium    1.00000            1.00000 1.00000          
+## Waverley Park      1.00000            2.0e-06 1.00000          
+## Western Oval       0.00096            2.7e-10 0.00371          
+##                    Princes Park SCG     Skilled Stadium
+## Etihad Stadium     -            -       -              
+## Gabba              -            -       -              
+## Gold Coast Stadium -            -       -              
+## MCG                -            -       -              
+## Patersons Stadium  -            -       -              
+## Princes Park       -            -       -              
+## SCG                1.00000      -       -              
+## Skilled Stadium    0.31433      1.00000 -              
+## Waverley Park      1.3e-07      9.0e-05 0.74049        
+## Western Oval       9.9e-12      3.5e-09 9.2e-05        
+##                    Waverley Park
+## Etihad Stadium     -            
+## Gabba              -            
+## Gold Coast Stadium -            
+## MCG                -            
+## Patersons Stadium  -            
+## Princes Park       -            
+## SCG                -            
+## Skilled Stadium    -            
+## Waverley Park      -            
+## Western Oval       0.08420      
 ## 
 ## P value adjustment method: bonferroni</code></pre>
 <p>My main complaint? I have no idea what this means because I didn’t really have any idea what I was looking for. I could certainly run through all these automatically-detected “significant” relationships to see what makes any sense, but I honestly don’t know what that would buy me. Basically I’m not sure why I’m calculating a <span class="math inline">\(p\)</span>-value (a tool designed to <em>test hypotheses</em>) in a situation where I really didn’t have <em>any</em> hypotheses ahead of time. To my mind this use of hypothesis testing has the effect of eroding the boundary between <em>confirmatory tests</em> (where the researcher has a theory ahead of time), and <em>exploratory analyses</em> (where we’re just looking for interesting patterns). I’m a big fan of doing both things as part of science, of course, I just think they need to be kept clearly separate :-)</p>
@@ -862,13 +905,56 @@ print(r^2)</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

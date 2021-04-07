@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>manipulating-data.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -28,32 +37,32 @@
 
 <!-- ###### start inserted header ##### -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115940772-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- add plausible.io -->
+<script async defer data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
 
-    gtag('config', 'UA-115940772-1');
-</script>
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <!-- add the twitter card and open graph tags -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@djnavarro">
-<meta property="og:url" content="http://compcogscisydney.org/psyr/">
+<meta property="og:url" content="https://psyr.org">
 <meta property="og:title" content="R for Psychological Science">
 <meta property="og:description" content="An introductory resource">
-<meta property="og:image" content="http://compcogscisydney.org/psyr/img/splash_turtle.png">
+<meta property="og:image" content="http://psyr.org/img/splash_turtle.png">
 
 <!-- ###### end inserted header ##### -->
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -66,38 +75,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -105,13 +87,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -122,44 +99,56 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -170,54 +159,85 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -231,6 +251,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -266,8 +292,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -277,14 +301,24 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -428,13 +462,10 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><ol start="16" style="list-style-type: decimal">
-<li>Manipulating data</li>
-</ol></h1>
 
 </div>
 
@@ -470,40 +501,41 @@ h3{
 <pre class="r"><code>frames &lt;- read_csv(&quot;./data/frames_ex2.csv&quot;)
 frames</code></pre>
 <pre><code>## # A tibble: 4,725 x 8
-##       id gender   age condition sample_size n_obs test_item response
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;       &lt;int&gt;     &lt;int&gt;    &lt;int&gt;
-##  1     1 male      36 category  small           2         1        8
-##  2     1 male      36 category  small           2         2        7
-##  3     1 male      36 category  small           2         3        6
-##  4     1 male      36 category  small           2         4        6
-##  5     1 male      36 category  small           2         5        5
-##  6     1 male      36 category  small           2         6        6
-##  7     1 male      36 category  small           2         7        3
-##  8     1 male      36 category  medium          6         1        9
-##  9     1 male      36 category  medium          6         2        7
-## 10     1 male      36 category  medium          6         3        5
-## # ... with 4,715 more rows</code></pre>
+##       id gender   age condition sample_size n_obs test_item
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+##  1     1 male      36 category  small           2         1
+##  2     1 male      36 category  small           2         2
+##  3     1 male      36 category  small           2         3
+##  4     1 male      36 category  small           2         4
+##  5     1 male      36 category  small           2         5
+##  6     1 male      36 category  small           2         6
+##  7     1 male      36 category  small           2         7
+##  8     1 male      36 category  medium          6         1
+##  9     1 male      36 category  medium          6         2
+## 10     1 male      36 category  medium          6         3
+## # … with 4,715 more rows, and 1 more variable: response &lt;dbl&gt;</code></pre>
 <p>In this file the data are stored in <em>long form</em>, in which there is one row for every trial in the experiment and thus the data from each participant are spread across several rows. I stored the data in that format because it was handy for drawing pictures, but as it happen this isn’t how the data set was stored when I extracted it from the <a href="https://osf.io/j4dxm/">OSF repository</a> in which I’d deposited it only a few months earlier! Here’s what it looked like when I found it:</p>
 <pre class="r"><code>wide_frames &lt;- read_csv(&quot;./data/frames_ex2_wide.csv&quot;)
 wide_frames</code></pre>
 <pre><code>## # A tibble: 225 x 25
-##       ID Gender   Age Sampling `SS2-R1` `SS2-R2` `SS2-R3` `SS2-R4` `SS2-R5`
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
-##  1     1 male      36 category        8        7        6        6        5
-##  2     2 male      46 category        7        5        5        5        5
-##  3     3 female    33 property        8        7        7        4        4
-##  4     4 female    71 property        6        7        6        6        3
-##  5     5 female    23 property        9        9        9        9        9
-##  6     6 female    31 category        7        7        7        8        8
-##  7     7 male      23 property        6        7        5        4        3
-##  8     8 female    31 property        4        4        2        4        4
-##  9     9 female    37 category        9        9        7        5        0
-## 10    10 female    46 category        8        6        4        4        4
-## # ... with 215 more rows, and 16 more variables: `SS2-R6` &lt;int&gt;,
-## #   `SS2-R7` &lt;int&gt;, `SS6-R1` &lt;int&gt;, `SS6-R2` &lt;int&gt;, `SS6-R3` &lt;int&gt;,
-## #   `SS6-R4` &lt;int&gt;, `SS6-R5` &lt;int&gt;, `SS6-R6` &lt;int&gt;, `SS6-R7` &lt;int&gt;,
-## #   `SS12-R1` &lt;int&gt;, `SS12-R2` &lt;int&gt;, `SS12-R3` &lt;int&gt;, `SS12-R4` &lt;int&gt;,
-## #   `SS12-R5` &lt;int&gt;, `SS12-R6` &lt;int&gt;, `SS12-R7` &lt;int&gt;</code></pre>
+##       ID Gender   Age Sampling `SS2-R1` `SS2-R2` `SS2-R3`
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1     1 male      36 category        8        7        6
+##  2     2 male      46 category        7        5        5
+##  3     3 female    33 property        8        7        7
+##  4     4 female    71 property        6        7        6
+##  5     5 female    23 property        9        9        9
+##  6     6 female    31 category        7        7        7
+##  7     7 male      23 property        6        7        5
+##  8     8 female    31 property        4        4        2
+##  9     9 female    37 category        9        9        7
+## 10    10 female    46 category        8        6        4
+## # … with 215 more rows, and 18 more variables: SS2-R4 &lt;dbl&gt;,
+## #   SS2-R5 &lt;dbl&gt;, SS2-R6 &lt;dbl&gt;, SS2-R7 &lt;dbl&gt;, SS6-R1 &lt;dbl&gt;,
+## #   SS6-R2 &lt;dbl&gt;, SS6-R3 &lt;dbl&gt;, SS6-R4 &lt;dbl&gt;, SS6-R5 &lt;dbl&gt;,
+## #   SS6-R6 &lt;dbl&gt;, SS6-R7 &lt;dbl&gt;, SS12-R1 &lt;dbl&gt;, SS12-R2 &lt;dbl&gt;,
+## #   SS12-R3 &lt;dbl&gt;, SS12-R4 &lt;dbl&gt;, SS12-R5 &lt;dbl&gt;, SS12-R6 &lt;dbl&gt;,
+## #   SS12-R7 &lt;dbl&gt;</code></pre>
 <p>In this file, the data are stored in <em>wide form</em>. The data frame contains only one row per person, and each judgment they make is stored as a separate variable. Wide and long form data are useful for a number of purposes. How do we switch between them, “reshaping” the data to the form we need?</p>
 <p>Once upon a time this used to be a difficult task, so much so that I wrote my own (not very good) functions that would solve this problem in a way that didn’t expose my students to some of the more frustrating aspects of data manipulation. Thankfully, this has changed. There is a little package distributed with the tidyverse called <strong>tidyr</strong> and it is remarkably effective at solving a range of reshaping problems in a (fairly) intuitive way.</p>
 </div>
@@ -517,7 +549,7 @@ wide_frames</code></pre>
 long_frames</code></pre>
 <pre><code>## # A tibble: 4,725 x 6
 ##       ID Gender   Age Sampling query  response
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;int&gt;
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;
 ##  1     1 male      36 category SS2-R1        8
 ##  2     2 male      46 category SS2-R1        7
 ##  3     3 female    33 property SS2-R1        8
@@ -528,31 +560,32 @@ long_frames</code></pre>
 ##  8     8 female    31 property SS2-R1        4
 ##  9     9 female    37 category SS2-R1        9
 ## 10    10 female    46 category SS2-R1        8
-## # ... with 4,715 more rows</code></pre>
+## # … with 4,715 more rows</code></pre>
 <p>To go back the other way, we could do this:</p>
 <pre class="r"><code>long_frames %&gt;% spread(key = &quot;query&quot;, value = &quot;response&quot;)</code></pre>
 <pre><code>## # A tibble: 225 x 25
-##       ID Gender   Age Sampling `SS12-R1` `SS12-R2` `SS12-R3` `SS12-R4`
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;        &lt;int&gt;     &lt;int&gt;     &lt;int&gt;     &lt;int&gt;
-##  1     1 male      36 category         8         7         6         6
-##  2     2 male      46 category         9         9         8         8
-##  3     3 female    33 property         8         9         9         2
-##  4     4 female    71 property         9         8         3         2
-##  5     5 female    23 property         9         9         9         9
-##  6     6 female    31 category         9         9         8         8
-##  7     7 male      23 property         8         7         6         2
-##  8     8 female    31 property         8         8         7         7
-##  9     9 female    37 category         9         8         1         0
-## 10    10 female    46 category         9         9         8         6
-## # ... with 215 more rows, and 17 more variables: `SS12-R5` &lt;int&gt;,
-## #   `SS12-R6` &lt;int&gt;, `SS12-R7` &lt;int&gt;, `SS2-R1` &lt;int&gt;, `SS2-R2` &lt;int&gt;,
-## #   `SS2-R3` &lt;int&gt;, `SS2-R4` &lt;int&gt;, `SS2-R5` &lt;int&gt;, `SS2-R6` &lt;int&gt;,
-## #   `SS2-R7` &lt;int&gt;, `SS6-R1` &lt;int&gt;, `SS6-R2` &lt;int&gt;, `SS6-R3` &lt;int&gt;,
-## #   `SS6-R4` &lt;int&gt;, `SS6-R5` &lt;int&gt;, `SS6-R6` &lt;int&gt;, `SS6-R7` &lt;int&gt;</code></pre>
+##       ID Gender   Age Sampling `SS12-R1` `SS12-R2` `SS12-R3`
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1     1 male      36 category         8         7         6
+##  2     2 male      46 category         9         9         8
+##  3     3 female    33 property         8         9         9
+##  4     4 female    71 property         9         8         3
+##  5     5 female    23 property         9         9         9
+##  6     6 female    31 category         9         9         8
+##  7     7 male      23 property         8         7         6
+##  8     8 female    31 property         8         8         7
+##  9     9 female    37 category         9         8         1
+## 10    10 female    46 category         9         9         8
+## # … with 215 more rows, and 18 more variables: SS12-R4 &lt;dbl&gt;,
+## #   SS12-R5 &lt;dbl&gt;, SS12-R6 &lt;dbl&gt;, SS12-R7 &lt;dbl&gt;, SS2-R1 &lt;dbl&gt;,
+## #   SS2-R2 &lt;dbl&gt;, SS2-R3 &lt;dbl&gt;, SS2-R4 &lt;dbl&gt;, SS2-R5 &lt;dbl&gt;,
+## #   SS2-R6 &lt;dbl&gt;, SS2-R7 &lt;dbl&gt;, SS6-R1 &lt;dbl&gt;, SS6-R2 &lt;dbl&gt;,
+## #   SS6-R3 &lt;dbl&gt;, SS6-R4 &lt;dbl&gt;, SS6-R5 &lt;dbl&gt;, SS6-R6 &lt;dbl&gt;,
+## #   SS6-R7 &lt;dbl&gt;</code></pre>
 </div>
 <div id="splitting-a-variable" class="section level2">
 <h2><span class="header-section-number">16.3</span> Splitting a variable</h2>
-<p>The <code>long_frames</code> data frame we created is close to what we need, but the <code>query</code> variable isn’t quite right. A value of <code>&quot;SS2-R1&quot;</code> corresponds to a trial on which the sample size was 2 and the test item was 1. This should properly be two variables, one specifying the <code>sample_size</code> and the other specifying the value of the <code>test_item</code>.</p>
+<p>The <code>long_frames</code> data frame we created is close to what we need, but the <code>query</code> variable isn’t quite right. A value of <code>"SS2-R1"</code> corresponds to a trial on which the sample size was 2 and the test item was 1. This should properly be two variables, one specifying the <code>sample_size</code> and the other specifying the value of the <code>test_item</code>.</p>
 <pre class="r"><code>long_frames %&gt;% 
   separate(
     col = query, 
@@ -561,7 +594,7 @@ long_frames</code></pre>
   )</code></pre>
 <pre><code>## # A tibble: 4,725 x 7
 ##       ID Gender   Age Sampling sample_size test_item response
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;        &lt;int&gt;
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;        &lt;dbl&gt;
 ##  1     1 male      36 category SS2         1                8
 ##  2     2 male      46 category SS2         1                7
 ##  3     3 female    33 property SS2         1                8
@@ -572,7 +605,7 @@ long_frames</code></pre>
 ##  8     8 female    31 property SS2         1                4
 ##  9     9 female    37 category SS2         1                9
 ## 10    10 female    46 category SS2         1                8
-## # ... with 4,715 more rows</code></pre>
+## # … with 4,715 more rows</code></pre>
 <p>Getting closer. Note that there is a <code>unite()</code> function that reverses this operation, so if you ever need to collapse multiple columns into a single variable that would be the way to do it. It’s also worth noting that the two new variables aren’t quite in the format we want them to be. For instance, the <code>test_item</code> variable should be numeric rather than character, so lets <code>mutate</code> that and store the results:</p>
 <pre class="r"><code>long_frames &lt;- long_frames %&gt;% 
   separate(
@@ -584,7 +617,7 @@ long_frames</code></pre>
 long_frames</code></pre>
 <pre><code>## # A tibble: 4,725 x 7
 ##       ID Gender   Age Sampling sample_size test_item response
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt;    &lt;int&gt;
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt;    &lt;dbl&gt;
 ##  1     1 male      36 category SS2                 1        8
 ##  2     2 male      46 category SS2                 1        7
 ##  3     3 female    33 property SS2                 1        8
@@ -595,7 +628,7 @@ long_frames</code></pre>
 ##  8     8 female    31 property SS2                 1        4
 ##  9     9 female    37 category SS2                 1        9
 ## 10    10 female    46 category SS2                 1        8
-## # ... with 4,715 more rows</code></pre>
+## # … with 4,715 more rows</code></pre>
 </div>
 <div id="recoding-variables" class="section level2">
 <h2><span class="header-section-number">16.4</span> Recoding variables</h2>
@@ -612,7 +645,7 @@ long_frames</code></pre>
 long_frames</code></pre>
 <pre><code>## # A tibble: 4,725 x 7
 ##       ID Gender   Age Sampling sample_size test_item response
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt;    &lt;int&gt;
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt;    &lt;dbl&gt;
 ##  1     1 male      36 category small               1        8
 ##  2     2 male      46 category small               1        7
 ##  3     3 female    33 property small               1        8
@@ -623,7 +656,7 @@ long_frames</code></pre>
 ##  8     8 female    31 property small               1        4
 ##  9     9 female    37 category small               1        9
 ## 10    10 female    46 category small               1        8
-## # ... with 4,715 more rows</code></pre>
+## # … with 4,715 more rows</code></pre>
 </div>
 <div id="using-case_when" class="section level3">
 <h3><span class="header-section-number">16.4.2</span> Using <code>case_when()</code></h3>
@@ -636,19 +669,19 @@ long_frames</code></pre>
   ))
 long_frames</code></pre>
 <pre><code>## # A tibble: 4,725 x 8
-##       ID Gender   Age Sampling sample_size test_item response n_obs
-##    &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt;    &lt;int&gt; &lt;dbl&gt;
-##  1     1 male      36 category small               1        8     2
-##  2     2 male      46 category small               1        7     2
-##  3     3 female    33 property small               1        8     2
-##  4     4 female    71 property small               1        6     2
-##  5     5 female    23 property small               1        9     2
-##  6     6 female    31 category small               1        7     2
-##  7     7 male      23 property small               1        6     2
-##  8     8 female    31 property small               1        4     2
-##  9     9 female    37 category small               1        9     2
-## 10    10 female    46 category small               1        8     2
-## # ... with 4,715 more rows</code></pre>
+##       ID Gender   Age Sampling sample_size test_item response
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt;    &lt;dbl&gt;
+##  1     1 male      36 category small               1        8
+##  2     2 male      46 category small               1        7
+##  3     3 female    33 property small               1        8
+##  4     4 female    71 property small               1        6
+##  5     5 female    23 property small               1        9
+##  6     6 female    31 category small               1        7
+##  7     7 male      23 property small               1        6
+##  8     8 female    31 property small               1        4
+##  9     9 female    37 category small               1        9
+## 10    10 female    46 category small               1        8
+## # … with 4,715 more rows, and 1 more variable: n_obs &lt;dbl&gt;</code></pre>
 <p>Now we have a data frame that is almost identical to the one we imported in the previous section. Apart from some cosmetic changes to variable names and order, the job is complete!</p>
 </div>
 </div>
@@ -678,28 +711,33 @@ ymd(&quot;2010 December 15&quot;)</code></pre>
 <p>To give you a sense of how annoying working with dates can be, the following is a real example. I asked my partner – who in real life is a statistics consultant among other things – to send me a data set she’d been sent with poorly formatted date information. This is what she sent me:</p>
 <pre class="r"><code>oddball &lt;- readLines(&quot;./data/oddballdate2.csv&quot;)
 oddball</code></pre>
-<pre><code>##  [1] &quot;4/4/16 9:00&quot;   &quot;4/4/16 14:13&quot;  &quot;6/4/16 5:55&quot;   &quot;6/4/16 11:27&quot; 
-##  [5] &quot;8/4/16 15:04&quot;  &quot;12/4/16 12:29&quot; &quot;14/4/16 12:14&quot; &quot;14/4/16 19:16&quot;
-##  [9] &quot;18/4/16 16:18&quot; &quot;20/4/16 11:10&quot; &quot;28/4/16 16:10&quot; &quot;28/4/16&quot;      
-## [13] &quot;1/5/16 17:11&quot;  &quot;2/5/16 14:53&quot;  &quot;3/5/16 10:32&quot;  &quot;3/5/16 12:46&quot; 
-## [17] &quot;3/5/16 13:08&quot;  &quot;3/5/16 15:51&quot;  &quot;4/5/16 11:04&quot;  &quot;4/5/16 11:13&quot; 
-## [21] &quot;4/5/16 11:16&quot;  &quot;4/5/16 12:54&quot;  &quot;4/5/16 14:40&quot;  &quot;4/5/16 20:16&quot; 
-## [25] &quot;6/5/16 15:13&quot;  &quot;10/5/16 11:17&quot; &quot;11/5/16 12:41&quot; &quot;12/5/16&quot;      
-## [29] &quot;12/5/16&quot;       &quot;5/13/16&quot;       &quot;16/5/16 10:11&quot; &quot;16/5/16 22:47&quot;
-## [33] &quot;17/5/16 15:20&quot; &quot;18/5/16&quot;       &quot;18/5/16 10:32&quot; &quot;19/5/16 2:27&quot; 
+<pre><code>##  [1] &quot;4/4/16 9:00&quot;   &quot;4/4/16 14:13&quot;  &quot;6/4/16 5:55&quot;  
+##  [4] &quot;6/4/16 11:27&quot;  &quot;8/4/16 15:04&quot;  &quot;12/4/16 12:29&quot;
+##  [7] &quot;14/4/16 12:14&quot; &quot;14/4/16 19:16&quot; &quot;18/4/16 16:18&quot;
+## [10] &quot;20/4/16 11:10&quot; &quot;28/4/16 16:10&quot; &quot;28/4/16&quot;      
+## [13] &quot;1/5/16 17:11&quot;  &quot;2/5/16 14:53&quot;  &quot;3/5/16 10:32&quot; 
+## [16] &quot;3/5/16 12:46&quot;  &quot;3/5/16 13:08&quot;  &quot;3/5/16 15:51&quot; 
+## [19] &quot;4/5/16 11:04&quot;  &quot;4/5/16 11:13&quot;  &quot;4/5/16 11:16&quot; 
+## [22] &quot;4/5/16 12:54&quot;  &quot;4/5/16 14:40&quot;  &quot;4/5/16 20:16&quot; 
+## [25] &quot;6/5/16 15:13&quot;  &quot;10/5/16 11:17&quot; &quot;11/5/16 12:41&quot;
+## [28] &quot;12/5/16&quot;       &quot;12/5/16&quot;       &quot;5/13/16&quot;      
+## [31] &quot;16/5/16 10:11&quot; &quot;16/5/16 22:47&quot; &quot;17/5/16 15:20&quot;
+## [34] &quot;18/5/16&quot;       &quot;18/5/16 10:32&quot; &quot;19/5/16 2:27&quot; 
 ## [37] &quot;19/5/16 10:59&quot; &quot;19/5/16&quot;</code></pre>
 <p>To keep this example minimal, I’ve used <code>readLines()</code> to import the data as a single character vector. As you can see this pretty inconsistent, and my partner’s face when I turned to her in horror can only be described with emoji: 😈</p>
 <p>A brief look at this suggests that <em>most</em> of the data have a time stamp as well as date information, which suggests that the <code>dmy_hm</code> function should be able to parse them. Others are date only, suggesting that <code>dmy</code> should work. If I try these individually this is what happens:</p>
 <pre class="r"><code>dmy(oddball)</code></pre>
 <pre><code>## Warning: 33 failed to parse.</code></pre>
-<pre><code>##  [1] NA           NA           NA           NA           NA          
-##  [6] NA           NA           NA           NA           NA          
-## [11] NA           &quot;2016-04-28&quot; NA           NA           NA          
-## [16] NA           NA           NA           NA           NA          
-## [21] NA           NA           NA           NA           NA          
-## [26] NA           NA           &quot;2016-05-12&quot; &quot;2016-05-12&quot; NA          
-## [31] NA           NA           NA           &quot;2016-05-18&quot; NA          
-## [36] NA           NA           &quot;2016-05-19&quot;</code></pre>
+<pre><code>##  [1] NA           NA           NA           NA          
+##  [5] NA           NA           NA           NA          
+##  [9] NA           NA           NA           &quot;2016-04-28&quot;
+## [13] NA           NA           NA           NA          
+## [17] NA           NA           NA           NA          
+## [21] NA           NA           NA           NA          
+## [25] NA           NA           NA           &quot;2016-05-12&quot;
+## [29] &quot;2016-05-12&quot; NA           NA           NA          
+## [33] NA           &quot;2016-05-18&quot; NA           NA          
+## [37] NA           &quot;2016-05-19&quot;</code></pre>
 <pre class="r"><code>dmy_hm(oddball)</code></pre>
 <pre><code>## Warning: 6 failed to parse.</code></pre>
 <pre><code>##  [1] &quot;2016-04-04 09:00:00 UTC&quot; &quot;2016-04-04 14:13:00 UTC&quot;
@@ -729,14 +767,16 @@ clean_dates &lt;- case_when(
   TRUE ~ d1
   )
 clean_dates</code></pre>
-<pre><code>##  [1] &quot;2016-04-04&quot; &quot;2016-04-04&quot; &quot;2016-04-06&quot; &quot;2016-04-06&quot; &quot;2016-04-08&quot;
-##  [6] &quot;2016-04-12&quot; &quot;2016-04-14&quot; &quot;2016-04-14&quot; &quot;2016-04-18&quot; &quot;2016-04-20&quot;
-## [11] &quot;2016-04-28&quot; &quot;2016-04-28&quot; &quot;2016-05-01&quot; &quot;2016-05-02&quot; &quot;2016-05-03&quot;
-## [16] &quot;2016-05-03&quot; &quot;2016-05-03&quot; &quot;2016-05-03&quot; &quot;2016-05-04&quot; &quot;2016-05-04&quot;
-## [21] &quot;2016-05-04&quot; &quot;2016-05-04&quot; &quot;2016-05-04&quot; &quot;2016-05-04&quot; &quot;2016-05-06&quot;
-## [26] &quot;2016-05-10&quot; &quot;2016-05-11&quot; &quot;2016-05-12&quot; &quot;2016-05-12&quot; NA          
-## [31] &quot;2016-05-16&quot; &quot;2016-05-16&quot; &quot;2016-05-17&quot; &quot;2016-05-18&quot; &quot;2016-05-18&quot;
-## [36] &quot;2016-05-19&quot; &quot;2016-05-19&quot; &quot;2016-05-19&quot;</code></pre>
+<pre><code>##  [1] &quot;2016-04-04&quot; &quot;2016-04-04&quot; &quot;2016-04-06&quot; &quot;2016-04-06&quot;
+##  [5] &quot;2016-04-08&quot; &quot;2016-04-12&quot; &quot;2016-04-14&quot; &quot;2016-04-14&quot;
+##  [9] &quot;2016-04-18&quot; &quot;2016-04-20&quot; &quot;2016-04-28&quot; &quot;2016-04-28&quot;
+## [13] &quot;2016-05-01&quot; &quot;2016-05-02&quot; &quot;2016-05-03&quot; &quot;2016-05-03&quot;
+## [17] &quot;2016-05-03&quot; &quot;2016-05-03&quot; &quot;2016-05-04&quot; &quot;2016-05-04&quot;
+## [21] &quot;2016-05-04&quot; &quot;2016-05-04&quot; &quot;2016-05-04&quot; &quot;2016-05-04&quot;
+## [25] &quot;2016-05-06&quot; &quot;2016-05-10&quot; &quot;2016-05-11&quot; &quot;2016-05-12&quot;
+## [29] &quot;2016-05-12&quot; NA           &quot;2016-05-16&quot; &quot;2016-05-16&quot;
+## [33] &quot;2016-05-17&quot; &quot;2016-05-18&quot; &quot;2016-05-18&quot; &quot;2016-05-19&quot;
+## [37] &quot;2016-05-19&quot; &quot;2016-05-19&quot;</code></pre>
 <p>Well that <em>almost</em> worked. What’s the one <code>NA</code> value?</p>
 <pre class="r"><code>oddball[is.na(clean_dates)]</code></pre>
 <pre><code>## [1] &quot;5/13/16&quot;</code></pre>
@@ -756,14 +796,14 @@ nightgarden_bottom &lt;- read_csv(&quot;./data/nightgarden_bottom.csv&quot;)</co
 <pre class="r"><code>nightgarden_middle</code></pre>
 <pre><code>## # A tibble: 2 x 3
 ##    line speaker     utterance
-##   &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;    
+##   &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;    
 ## 1     6 tombliboo   oo       
 ## 2     7 makka-pakka pip</code></pre>
 <p>We can use <code>dplyr::bind_rows()</code> to concatenate these data frames vertically:</p>
 <pre class="r"><code>bind_rows(nightgarden_top, nightgarden_middle, nightgarden_bottom)</code></pre>
 <pre><code>## # A tibble: 10 x 3
 ##     line speaker     utterance
-##    &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;    
+##    &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;    
 ##  1     1 upsy-daisy  pip      
 ##  2     2 upsy-daisy  pip      
 ##  3     3 upsy-daisy  onk      
@@ -854,13 +894,56 @@ responses</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

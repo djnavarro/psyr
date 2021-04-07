@@ -188,7 +188,7 @@ This isn't something you need to worry about when starting out. Just be aware th
 
 ## Exercises
 
-One package I'll occasionally use for a few simple tasks is the **lsr** package that I wrote to accompany [Learning Statistics with R](https://compcogscisydney.org/learning-statistics-with-r/) 
+One package I'll occasionally use for a few simple tasks is the **lsr** package that I wrote to accompany [Learning Statistics with R](https://learningstatisticswithr.com) 
 
 - Install the **lsr** package
 - Load the **lsr** package

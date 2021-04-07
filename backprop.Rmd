@@ -217,10 +217,5 @@ Your browser does not support the video tag
 <br>
 
 
-## Resources
-
-- The Rumelhart et al (1986) paper cached for teaching purposes [here](http://compcogscisydney.org/mm/2018/Rumelhart1986.pdf)
-- A very good, but somewhat technical [summary](http://neuralnetworksanddeeplearning.com/chap2.html) of backpropagation by Michael Nielsen
-- Really nice [resources](http://neuroplausible.com/connectionism) in Python by Olivia Guest.
 
 
