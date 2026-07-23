@@ -9,28 +9,16 @@ author: "Danielle Navarro"
 
 Hi there!
 
-I've set this up as an introductory resource for psychology students taking my *Programming with R* class at UNSW. There are two goals with this resource. The first is to provide an introduction to R programming that doesn't assume any previous experience. The second is to provide a brief sketch of some of things that R can be useful for in psychology. Data analysis inevitably forms a large part of this, but I hope to cover a broader range of topics.
+I set this up as an introductory resource for psychology students taking my now-defunct *Programming with R* class at UNSW. There are two goals with this resource. The first is to provide an introduction to R programming that doesn't assume any previous experience. The second is to provide a brief sketch of some of things that R can be useful for in psychology. Data analysis inevitably forms a large part of this, but I hope to cover a broader range of topics.
 
 The content borrows from my introductory statistics lecture notes ([Learning Statistics with R](https://learningstatisticswithr.com/)), but they're not equivalent, and over time the two are likely to part ways. I wrote *Learning Statistics with R* to accompany an introductory statistics class and the intended audience for that book is a psychology student taking their first research methods class. This resource is a little different -- it's aimed at someone who has taken at least one research methods class and would like to learn how to use the R programming language in their own work.
 
-It is of course a work in progress, but I hope it is useful! Please don't hesitate to contact me if you spot an error or find something confusing.
+I hope it is useful!
 
 -- Danielle
 
 <img src="./img/splash_turtle2.png" width=250px>
 
-
-<br>
-<center>
----- &nbsp;&nbsp;
-<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
-<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
-<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
-&nbsp;&nbsp; ----
-</center>
-<br>
-<br>
 
 
 ### 1: Core toolkit
@@ -47,18 +35,6 @@ It is of course a work in progress, but I hope it is useful! Please don't hesita
 - [Programming](./programming.html)
 - [File system](./file-system.html)
 
-
-<br>
-<center>
----- &nbsp;&nbsp;
-<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
-<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
-<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
-&nbsp;&nbsp; ----
-</center>
-<br>
-<br>
 
 
 ### 2: Working with data
