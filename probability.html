@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>19. Probability distributions – R for Psychological Science</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-20e075685c401baa7d54b844a6fe9e63.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- ###### start inserted header ##### -->
+
+<!-- add plausible.io -->
+<script async="" defer="" data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
+
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="https://psyr.djnavarro.net">
+<meta property="og:title" content="19. Probability distributions – R for Psychological Science">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://psyr.djnavarro.net/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="mystyle.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">R for Psychological Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-core" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Core</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-core">    
+        <li>
+    <a class="dropdown-item" href="./getting-started.html">
+ <span class="dropdown-text">Getting started</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./variables.html">
+ <span class="dropdown-text">Variables</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./scripts.html">
+ <span class="dropdown-text">Scripts</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./packages.html">
+ <span class="dropdown-text">Packages</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./workspaces.html">
+ <span class="dropdown-text">Workspaces</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./vectors.html">
+ <span class="dropdown-text">Vectors</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./loops.html">
+ <span class="dropdown-text">Loops</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./branches.html">
+ <span class="dropdown-text">Branches</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./functions.html">
+ <span class="dropdown-text">Functions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./programming.html">
+ <span class="dropdown-text">Programming</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./file-system.html">
+ <span class="dropdown-text">File system</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
+        <li>
+    <a class="dropdown-item" href="./prelude-to-data.html">
+ <span class="dropdown-text">Prelude</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./data-types.html">
+ <span class="dropdown-text">Data types</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./describing-data.html">
+ <span class="dropdown-text">Describing data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./visualising-data.html">
+ <span class="dropdown-text">Visualising data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./manipulating-data.html">
+ <span class="dropdown-text">Manipulating data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./working-with-text.html">
+ <span class="dropdown-text">Text data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./import-export.html">
+ <span class="dropdown-text">Import/export</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-stats" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Stats</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-stats">    
+        <li>
+    <a class="dropdown-item" href="./probability.html">
+ <span class="dropdown-text">Probability distributions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./introductory-statistics.html">
+ <span class="dropdown-text">Introductory statistics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./intermediate-statistics.html">
+ <span class="dropdown-text">Intermediate statistics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./advanced-statistics.html">
+ <span class="dropdown-text">Advanced statistics</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">More</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-more">    
+        <li>
+    <a class="dropdown-item" href="./experiments.html">
+ <span class="dropdown-text">Experiments</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./shiny.html">
+ <span class="dropdown-text">Shiny apps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./web-scraping.html">
+ <span class="dropdown-text">Web scraping</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./xx-miscellaneous.html">
+ <span class="dropdown-text">Miscellaneous</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./backprop.html">
+ <span class="dropdown-text">Backpropagation networks</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://compcogscisydney.org"> 
+<span class="menu-text">compcogscisydney.org</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#two-views-of-probability" id="toc-two-views-of-probability" class="nav-link active" data-scroll-target="#two-views-of-probability"><span class="header-section-number">1</span> Two views of probability</a></li>
+  <li><a href="#sampling-from-a-set" id="toc-sampling-from-a-set" class="nav-link" data-scroll-target="#sampling-from-a-set"><span class="header-section-number">2</span> Sampling from a set</a></li>
+  <li><a href="#binomial-distribution" id="toc-binomial-distribution" class="nav-link" data-scroll-target="#binomial-distribution"><span class="header-section-number">3</span> Binomial distribution</a></li>
+  <li><a href="#normal-distribution" id="toc-normal-distribution" class="nav-link" data-scroll-target="#normal-distribution"><span class="header-section-number">4</span> Normal distribution</a>
+  <ul class="collapse">
+  <li><a href="#random-sampling" id="toc-random-sampling" class="nav-link" data-scroll-target="#random-sampling"><span class="header-section-number">4.1</span> Random sampling</a></li>
+  <li><a href="#probability-density" id="toc-probability-density" class="nav-link" data-scroll-target="#probability-density"><span class="header-section-number">4.2</span> Probability density</a></li>
+  <li><a href="#cumulative-probability" id="toc-cumulative-probability" class="nav-link" data-scroll-target="#cumulative-probability"><span class="header-section-number">4.3</span> Cumulative probability</a></li>
+  <li><a href="#quantiles" id="toc-quantiles" class="nav-link" data-scroll-target="#quantiles"><span class="header-section-number">4.4</span> Quantiles</a></li>
+  </ul></li>
+  <li><a href="#other-distributions" id="toc-other-distributions" class="nav-link" data-scroll-target="#other-distributions"><span class="header-section-number">5</span> Other distributions</a>
+  <ul class="collapse">
+  <li><a href="#poisson-distribution" id="toc-poisson-distribution" class="nav-link" data-scroll-target="#poisson-distribution"><span class="header-section-number">5.1</span> Poisson distribution</a></li>
+  <li><a href="#log-normal-distribution" id="toc-log-normal-distribution" class="nav-link" data-scroll-target="#log-normal-distribution"><span class="header-section-number">5.2</span> Log-normal distribution</a></li>
+  <li><a href="#response-time-distribution" id="toc-response-time-distribution" class="nav-link" data-scroll-target="#response-time-distribution"><span class="header-section-number">5.3</span> Response time distribution</a></li>
+  <li><a href="#uniform-distribution" id="toc-uniform-distribution" class="nav-link" data-scroll-target="#uniform-distribution"><span class="header-section-number">5.4</span> Uniform distribution</a></li>
+  <li><a href="#beta-distribution" id="toc-beta-distribution" class="nav-link" data-scroll-target="#beta-distribution"><span class="header-section-number">5.5</span> Beta distribution</a></li>
+  <li><a href="#t-distribution" id="toc-t-distribution" class="nav-link" data-scroll-target="#t-distribution"><span class="header-section-number">5.6</span> t distribution</a></li>
+  <li><a href="#chi-square-distribution" id="toc-chi-square-distribution" class="nav-link" data-scroll-target="#chi-square-distribution"><span class="header-section-number">5.7</span> Chi-square distribution</a></li>
+  <li><a href="#f-distribution" id="toc-f-distribution" class="nav-link" data-scroll-target="#f-distribution"><span class="header-section-number">5.8</span> F distribution</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">19. Probability distributions</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>R is often described as a <em>statistical programming environment</em>, because - while it does get used for an incredible variety of purposes - it began its life as a tool for helping statisticians analyse data. As such, it has an unrivalled collection of statistical packages built into it, and I’ll talk a little about some of them later. However, before starting to talk about statistics, it’s very useful to talk about <em>probability distributions</em> and how they are usually implemented in R.</p>
+<p>An useful place to start is by considering the difference between probability and statistics. Probability theory concerns “the doctrine of chances”. It’s a branch of mathematics that tells you how often different kinds of events will happen, <em>given</em> some assumptions about the world. Some examples:</p>
+<ul>
+<li>What are the chances of a fair coin coming up heads 10 times in a row?</li>
+<li>If I roll two six sided dice, how likely is it that I’ll roll two sixes?</li>
+<li>How likely is it that five cards drawn from a perfectly shuffled deck will all be hearts?</li>
+<li>What are the chances that I’ll win the lottery?</li>
+</ul>
+<p>The critical point is that probabilistic questions start with a known <strong>model</strong> of the world, and we use that model to do some calculations.</p>
+<p>What about statistics? Statistical questions work the other way around. In statistics, we do not know the truth about the world. All we have is the data, and it is from the data that we want to learn the truth about the world. Statistical questions tend to look more like these:</p>
+<ul>
+<li>If I flip a coin 10 times and gets 10 heads, is someone playing a trick on me?</li>
+<li>If five cards off the top of the deck are all hearts, how likely is it that the deck was shuffled?</li>
+<li>If the lottery commissioner’s spouse wins the lottery, how likely is it that the lottery was rigged?</li>
+</ul>
+<p>This time around, <em>the only thing we have are data</em>. What I know is that I saw my friend flip the coin 10 times and it came up heads every time. And what I want to <strong>infer</strong> is whether or not I should conclude that what I just saw was actually a fair coin being flipped 10 times in a row, or whether I should suspect that my friend is playing a trick on me. To help me solve this problem I might construct two probabilistic models, one assuming this is a fair coin and the other assuming that the data are a trick, and do some comparison of the two. Viewed this way, the statistical inference problem is to figure out which of these probability models is right. Clearly, the statistical question isn’t the same as the probability question, but they’re connected to one another.</p>
+<section id="two-views-of-probability" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="two-views-of-probability"><span class="header-section-number">1</span> Two views of probability</h2>
+<p>Let’s start with a simple question that doesn’t have a simple answer: what is “probability”? It might seem surprising, but while statisticians and mathematicians (mostly) agree on what the rules of probability are, there’s much less of a consensus on what the word really means. In the statistic literature there are (at least) two qualitatively different ideas about how to define the term:</p>
+<ul>
+<li>The <strong>frequentist view</strong> defines probability as <em>long-run frequency</em>. Suppose we were to try flipping a fair coin, over and over again, and divide the number of heads <span class="math inline">\(n_h\)</span> by the total number of coin flips <span class="math inline">\(n\)</span>, yielding <span class="math inline">\(p_h = n_h/n\)</span> as the observed proportion. The frequentists argue that the only way to meaningfully define the idea of probability is in terms of what happens to this empirically observed proportion a the sample size becomes arbitrarily large (i.e., <span class="math inline">\(n \rightarrow \infty\)</span>). In the long run, the proportion of heads will eventually converge to 50%. There are some subtle technicalities that the mathematicians care about, but qualitatively speaking, that’s how the frequentists define probability. Probability is a “thing in the world”</li>
+<li>The <strong>Bayesian view</strong> is often called the subjectivist view. It used to be a minority view among statisticians, but it’s been steadily gaining traction for the last several decades - it’s common enough that it’s no longer an unusual approach to statistics. The most common way of thinking about subjective probability is to define the probability of an event as the <em>degree of belief</em> that a rational agent assigns to that truth of that event. From that perspective, probabilities don’t exist in the world, but rather in the thoughts and assumptions of people and other intelligent beings. In order for this approach to work, we need some way of operationalising “degree of belief”. One way that you can do this is to formalise it in terms of “rational gambling”, though there are many other ways. Suppose that I believe that there’s a 60% probability of rain tomorrow. If someone offers me a bet: if it rains tomorrow, then I win $5, but if it doesn’t rain then I lose $5. Clearly, from my perspective, this is a pretty good bet. On the other hand, if I think that the probability of rain is only 40%, then it’s a bad bet to take. Thus, we can operationalise the notion of a “subjective probability” in terms of what bets I’m willing to accept. Probability, from this perspective, is a “thing in the head”.</li>
+</ul>
+<p>My personal view is much closer to the Bayesian perspective, but I’m also a pragmatist and I use both Bayesian and frequentist methods in my work. In any case, regardless of which version you prefer, Bayesians and frequentists agree on the core mechanics of probability theory, so the tools for working with probabilities in R are the same regardless of which school of thought you prefer!</p>
+</section>
+<section id="sampling-from-a-set" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="sampling-from-a-set"><span class="header-section-number">2</span> Sampling from a set</h2>
+<p>The <code>sample()</code> function is an extremely useful tool. Suppose I have a set of 10 stimuli that I want to present to people in a random order. For simplicity I’ll label the items using <code>letters</code>:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>stimuli <span class="ot">&lt;-</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>stimuli</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j"</code></pre>
+</div>
+</div>
+<p>To sample them in a random order, all I need to do is this</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>shuffled_stimuli <span class="ot">&lt;-</span> <span class="fu">sample</span>(stimuli)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>shuffled_stimuli</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "c" "a" "j" "b" "f" "i" "g" "h" "d" "e"</code></pre>
+</div>
+</div>
+<p>Or to do the same thing with piped code…</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>shuffled_stimuli <span class="ot">&lt;-</span> stimuli <span class="sc">%&gt;%</span> <span class="fu">sample</span>()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>shuffled_stimuli</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "e" "f" "i" "h" "b" "j" "a" "g" "c" "d"</code></pre>
+</div>
+</div>
+<p>Notice that the output the second time around <em>isn’t</em> the same a the output the first time. The <code>sample()</code> function uses a pseudo-random number generator to order the items differently every time.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  stimuli <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>()</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "c" "b" "g" "h" "d" "f" "e" "a" "i" "j"
+ [1] "i" "j" "e" "a" "g" "d" "c" "f" "h" "b"
+ [1] "j" "f" "h" "b" "i" "e" "c" "d" "a" "g"
+ [1] "i" "h" "j" "d" "e" "a" "g" "f" "b" "c"
+ [1] "j" "h" "e" "a" "g" "d" "i" "c" "b" "f"</code></pre>
+</div>
+</div>
+<p>As you can see if you feed in a vector of inputs, the default behaviour is to shuffle all the items. However, the <code>sample()</code> function is flexible. For example, “shuffling all the items” is a special case of “sampling without replacement”. Imagine taking all the stimuli (<em>letters</em>), and then placing them into a jar. To shuffle them into a random order all you need to do is shake the jar (<em>randomise</em>) pull them out of the jar (<em>sample</em>) one at a time until the jar is empty (<em>no replacement</em>).</p>
+<p>The jars metaphor is nice because we can extend it. Suppose we only want to pull 6 of the 10 stimuli out of the jar:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>stimuli <span class="sc">%&gt;%</span> <span class="fu">sample</span>(<span class="at">size =</span> <span class="dv">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "j" "c" "d" "a" "i" "e"</code></pre>
+</div>
+</div>
+<p>Again, there are no repeats (it is impossible to pull the same item from the jar twice), but we stopped before pulling everything out. Here’s a loop showing you how the randomisation gives different answers every time, but it always follows the constraints of stopping at 6 draws and never draws the same item twice:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  stimuli <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample</span>(<span class="at">size =</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>()</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "j" "f" "e" "h" "d" "a"
+[1] "b" "f" "c" "d" "a" "h"
+[1] "g" "c" "a" "d" "i" "h"
+[1] "g" "j" "f" "c" "d" "e"
+[1] "a" "e" "b" "d" "c" "j"</code></pre>
+</div>
+</div>
+<p>Another way to extend the jars metaphor is to sample <em>with replacement</em>. In this version of the sampling scheme, every time we pull a letter out of the jar we write it down, but then put it back in the jar so that it becomes possible to sample it again.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  stimuli <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample</span>(<span class="at">size =</span> <span class="dv">15</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>()</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "d" "a" "e" "b" "a" "e" "a" "c" "j" "c" "j" "d" "e" "c" "a"
+ [1] "j" "d" "b" "j" "j" "e" "c" "d" "h" "f" "f" "i" "e" "b" "g"
+ [1] "e" "d" "h" "d" "j" "a" "f" "a" "d" "i" "e" "a" "e" "e" "e"
+ [1] "f" "c" "f" "c" "a" "g" "b" "a" "i" "d" "g" "b" "j" "j" "b"
+ [1] "e" "e" "d" "d" "g" "h" "i" "g" "j" "b" "e" "c" "g" "j" "b"</code></pre>
+</div>
+</div>
+<p>Notice that this time you can produce sequences of stimuli that are longer than the original set (because you’re putting them back in the jar). In this case even though I only had 10 items, each output has 15 samples from that set: there are of course repeats!</p>
+<p>A final way we can extend the metaphor is to imagine that some of the letters are written on larger pieces of paper than others: so when you reach into the hat you’re more likely to pull out the larger ones.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>weights <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span> <span class="co"># weight the later letters more!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You can use this when sampling with replacement and without. Here’s what it looks like when sampling without replacement:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  stimuli <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">prob =</span> weights) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "c" "i" "j" "h" "d" "f" "e" "a" "g" "b"
+ [1] "h" "b" "c" "j" "d" "e" "i" "g" "f" "a"
+ [1] "g" "b" "j" "i" "e" "h" "f" "d" "c" "a"
+ [1] "j" "i" "e" "d" "f" "g" "h" "b" "c" "a"
+ [1] "i" "d" "c" "a" "j" "g" "f" "h" "e" "b"</code></pre>
+</div>
+</div>
+<p>So in this output every line shuffles the 10 items, but there’s a definite bias in how the items are ordered! We’re much more likely to start with the later letters than with the early ones!</p>
+<p>We can also do this when sampling with replacement:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  stimuli <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> weights) <span class="sc">%&gt;%</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>()</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "h" "f" "g" "g" "g" "e" "h" "i" "i" "h"
+ [1] "d" "g" "i" "c" "d" "j" "f" "i" "i" "d"
+ [1] "i" "d" "j" "g" "b" "h" "f" "e" "i" "j"
+ [1] "i" "g" "g" "j" "f" "i" "j" "e" "d" "i"
+ [1] "e" "j" "c" "j" "i" "j" "j" "f" "e" "g"</code></pre>
+</div>
+</div>
+<p>In this output, you can see that we’re very unlikely to sample the letter “a”.</p>
+</section>
+<section id="binomial-distribution" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="binomial-distribution"><span class="header-section-number">3</span> Binomial distribution</h2>
+<p>The <code>sample()</code> function gives you a good feel for how you can take a set of entities (stimuli, participants, outcomes, etc) and do probabilistic operations with them. When doing statistics we sometimes like to abstract away from the simple sampling mechanism and start talking in terms of <em>probability distributions</em>. To see how the abstraction works let’s introduce one of the simplest examples, the <strong>binomial distribution</strong>. Imagine we have a six sided die, in which four sides are coloured <code>"blue"</code> and two sides are coloured <code>"red"</code>. Let’s roll the die 20 times and see what we get:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>die <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"blue"</span>,<span class="st">"blue"</span>,<span class="st">"blue"</span>,<span class="st">"blue"</span>,<span class="st">"red"</span>,<span class="st">"red"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rolls <span class="ot">&lt;-</span> <span class="fu">sample</span>(die, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>rolls</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "red"  "blue" "blue" "blue" "blue" "blue" "red"  "red"  "blue" "red" 
+[11] "red"  "blue" "blue" "blue" "red"  "red"  "red"  "blue" "red"  "red" </code></pre>
+</div>
+</div>
+<p>We can count the number of times the result was <code>"blue"</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>n_blue <span class="ot">&lt;-</span> <span class="fu">sum</span>(rolls <span class="sc">==</span> <span class="st">"blue"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>n_blue</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+</div>
+<p>Of course, there’s nothing stopping us from repeating this exercise several times:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>){</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  rolls <span class="ot">&lt;-</span> die <span class="sc">%&gt;%</span> <span class="fu">sample</span>(<span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  n_blue <span class="ot">&lt;-</span> <span class="fu">sum</span>(rolls <span class="sc">==</span> <span class="st">"blue"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(n_blue)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 13
+[1] 13
+[1] 13
+[1] 11
+[1] 14</code></pre>
+</div>
+</div>
+<p>In fact, let’s go all out on this. Let’s replicate this tiny experiment 100,000 times because that’s easy to do with R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>n_replications <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>n_blue <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> n_replications)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_replications){</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  rolls <span class="ot">&lt;-</span> die <span class="sc">%&gt;%</span> <span class="fu">sample</span>(<span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  n_blue[r] <span class="ot">&lt;-</span> <span class="fu">sum</span>(rolls <span class="sc">==</span> <span class="st">"blue"</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>n_blue <span class="ot">&lt;-</span> <span class="fu">factor</span>(n_blue, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>frequencies <span class="ot">&lt;-</span> <span class="fu">table</span>(n_blue)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>frequencies</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>n_blue
+    0     1     2     3     4     5     6     7     8     9    10    11    12 
+    0     0     0     0     5    12    70   262   923  2439  5482  9888 14570 
+   13    14    15    16    17    18    19    20 
+18153 18116 14749  9252  4299  1433   323    24 </code></pre>
+</div>
+</div>
+<p>With this particular <code>die</code> the probability of observing a <code>"blue"</code> on any one roll is two-thirds (4 out of 6 sides) and not surprisingly the outcomes of this “roll the die 20 times” experiment tend to be <em>distributed</em> mostly between 12 and 15. I hate looking at tables of numbers, so let’s draw a picture:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(frequencies, <span class="at">n =</span> <span class="st">"count"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_blue =</span> <span class="fu">as.numeric</span>(n_blue)) <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>n_blue, <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> .<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="probability_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This picture is essentially a visualisation of the <strong>binomial distribution</strong> with success probability <code>prob = 2/3</code>, so it’s worth taking a moment to be explicit about what we’ve done. Every one of our experiments produces an <em>outcome</em> (number of blues) that can be described as <em>one</em> random draw from the binomial distribution. So the 100000 replications of the experiment can be viewed as a set of 100000 numbers sampled from the binomial. R contains a function <code>rbinom()</code> that we can use to do this directly:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>n_blue <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">100000</span>, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">prob =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If we process this set of numbers using the same code, we get an almost identical figure. In fact, because I’m going to reuse this code, let’s write a function:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>plot_samples <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">size =</span> <span class="dv">20</span>) {</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">factor</span>(x, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span>size)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  frequencies <span class="ot">&lt;-</span> <span class="fu">table</span>(x)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  proportion <span class="ot">&lt;-</span> frequencies <span class="sc">/</span> <span class="fu">sum</span>(frequencies)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  pic <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(proportion, <span class="at">n =</span> <span class="st">"proportion"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(x)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y =</span> proportion)) <span class="sc">+</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="at">width =</span> .<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"outcome value"</span>) <span class="sc">+</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="fu">sum</span>(frequencies)) <span class="sc">+</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylim</span>(<span class="dv">0</span>,.<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(pic)</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now call it:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>pic <span class="ot">&lt;-</span> <span class="fu">plot_samples</span>(n_blue)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pic)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="probability_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Of course, the only reason it looks this nice and smooth is that we replicated the experiment 100000 times. Let’s modify the code so the we start out with a relatively small number of replications and watch it smooth out as it gets larger:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(rep <span class="cf">in</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">50</span>, <span class="at">to =</span> <span class="dv">10000</span>, <span class="at">by =</span> <span class="dv">50</span>)){</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  n_blue <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> rep, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">prob =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  pic <span class="ot">&lt;-</span> <span class="fu">plot_samples</span>(n_blue)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(pic)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<video width="450" style="display:block; margin: 0 auto;" controls="">
+<source src="./img/binomial_samples.webm" type="video/webm">
+<source src="./img/binomial_samples.mp4" type="video/mp4">
+<p>Your browser does not support the video tag.  <br></p>
+<p>If you were typing this at the console, this loop would produce a sequence of plots, but what I’ve done (using some clever features of R Markdown) is wrap it up as an animation. Later on I’ll talk about how to make animations.</p>
+<p>A natural question to ask is about the true probility of obtaining each outcome. One way to do it (approximately) would be to generate very large number of samples and then calculate the proportion of times that we end up with (say) 12 out of 20 rolls being blue. However, there’s an easier way. It turns out there is a formula for this:</p>
+<p><span class="math display">\[
+P(k | \theta, n) = \frac{n!}{k!(n-k)!} \theta^k (1-\theta)^{n-k}
+\]</span> where <span class="math inline">\(n! = n \times (n-1) \times (n-2) \times \ldots \times 2 \times 1\)</span> refers to <em>n factorial</em>. For some people it can be pretty jarring to see things written mathematically when you’re used to thinking verbally or in terms of R code, so let’s translate that to a function:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>binomial_prob <span class="ot">&lt;-</span> <span class="cf">function</span>(k, n, theta) {</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  first_bit <span class="ot">&lt;-</span> <span class="fu">factorial</span>(n) <span class="sc">/</span> (<span class="fu">factorial</span>(k) <span class="sc">*</span> <span class="fu">factorial</span>(n <span class="sc">-</span> k))</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  second_bit <span class="ot">&lt;-</span> (theta <span class="sc">^</span> k) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> theta)<span class="sc">^</span>(n <span class="sc">-</span> k)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(first_bit <span class="sc">*</span> second_bit)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Of course, R already has a function that does this called <code>dbinom()</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>outcome_value <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">20</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>true_prob <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(<span class="at">x =</span> outcome_value, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">prob =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>true_prob</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 2.867972e-10 1.147189e-08 2.179659e-07 2.615590e-06 2.223252e-05
+ [6] 1.422881e-04 7.114406e-04 2.845762e-03 9.248728e-03 2.466327e-02
+[11] 5.425920e-02 9.865310e-02 1.479796e-01 1.821288e-01 1.821288e-01
+[16] 1.457030e-01 9.106440e-02 4.285383e-02 1.428461e-02 3.007287e-03
+[21] 3.007287e-04</code></pre>
+</div>
+</div>
+<p>But just to confirm that our function actually does the same thing as the version R provides:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">binomial_prob</span>(<span class="at">k =</span> <span class="dv">13</span>, <span class="at">n =</span> <span class="dv">20</span>, <span class="at">theta =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1821288</code></pre>
+</div>
+</div>
+<p>Or, since we like pictures so much…</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(outcome_value, true_prob) <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> outcome_value, <span class="at">y =</span> true_prob)) <span class="sc">+</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> .<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="probability_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Cool.</p>
+<p>The animation below shows how the binomial distribution changes as we shift the value of <code>prob</code>:</p>
+<video width="450" style="display:block; margin: 0 auto;" controls="">
+<source src="./img/binomial.webm" type="video/webm">
+<source src="./img/binomial.mp4" type="video/mp4">
+<p>Your browser does not support the video tag.  <br></p>
+<p>Here’s another one that shows what happens as we change the <code>size</code> of the experiment.</p>
+<video width="450" style="display:block; margin: 0 auto;" controls="">
+<source src="./img/binomial_size.webm" type="video/webm">
+<source src="./img/binomial_size.mp4" type="video/mp4">
+<p>Your browser does not support the video tag.  <br></p>
+<p>You can see the central limit theorem in action here! As the <code>size</code> gets larger, the shape of the binomial distribution gets progressively closer to normal. Speaking of which…</p>
+</video></video></video></section>
+<section id="normal-distribution" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="normal-distribution"><span class="header-section-number">4</span> Normal distribution</h2>
+<p>The normal distribution is the perhaps the most widely used distribution in statistics, so I should talk about it in some detail. It’s also a good moment to talk about how the tools for working with probability distributions in R are structured. As a rule, any distribution that you want to work with in R will be associated with four separate functions. If I want to work with a normal distribution, for instance, there are four different functions - <code>rnorm</code>, <code>dnorm</code>, <code>pnorm</code> and <code>qnorm</code>. If I want to work with a uniform distribution, the functions are named <code>runif</code>, <code>dunif</code>, <code>punif</code> and <code>qunif</code>. For a binomial distribution, they are <code>rbinom</code>, <code>dbinom</code>, <code>pbinom</code> and <code>qbinom</code>. The four versions are:</p>
+<ul>
+<li>The <strong>r form</strong> is a random number generator: you can use it to sample <code>n</code> random outcomes from the distribution.</li>
+<li>The <strong>d form</strong> computes the probability (or probability density) with which you would observe a particular number <code>x</code> if it is generated from this distribution.</li>
+<li>The <strong>p form</strong> is the cumulative distribution function. You specify a particular value <code>q</code>, and it tells you the probability of obtaining an outcome smaller than or equal to <code>q</code>.</li>
+<li>The <strong>q form</strong> calculates the quantiles of the distribution. You specify a probability value <code>p</code>, and gives you the corresponding percentile. That is, the value of the variable for which there’s a probability <code>p</code> of obtaining an outcome lower than <code>q</code>.</li>
+</ul>
+<section id="random-sampling" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="random-sampling"><span class="header-section-number">4.1</span> Random sampling</h3>
+<p>Let’s start with a classic example in the psychological context. By convention, measures of cognitive ability (IQ scores) are designed to have a mean of <span class="math inline">\(\mu = 100\)</span> and a standard deviation of <span class="math inline">\(\sigma = 15\)</span>. The <code>rnorm()</code> function allows us to generate normally distributed numbers:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>iq <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>iq</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 108.87958  95.65829  80.55209  79.24248  86.00134 105.83671  87.70563
+ [8] 115.91047  99.99946 105.71113</code></pre>
+</div>
+</div>
+<p>In a real IQ battery such as the <a href="https://en.wikipedia.org/wiki/Wechsler_Adult_Intelligence_Scale">WAIS</a> you would probably get results rounded to the nearest whole number, so it probably makes more sense to think of this as the data:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>iq <span class="ot">&lt;-</span> <span class="fu">round</span>(iq)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>iq</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 109  96  81  79  86 106  88 116 100 106</code></pre>
+</div>
+</div>
+<p>If we draw a quick histogram of this…</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(iq) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> iq)) <span class="sc">+</span> <span class="fu">geom_histogram</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="probability_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>… it’s pretty obvious that you can’t tell much about the distribution. So let’s increase the sample size to 1000:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>iq <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>) <span class="sc">%&gt;%</span> round</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(iq) <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> iq)) <span class="sc">+</span> <span class="fu">geom_histogram</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="probability_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>That looks a lot more like the shape we were expecting!</p>
+</section>
+<section id="probability-density" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="probability-density"><span class="header-section-number">4.2</span> Probability density</h3>
+<p>Much like the binomial distribution you can imagine that as the sample size gets larger, this shape will smooth out and it will eventually look like a perfect bell curve. As before there is a formula that describes the probability density:</p>
+<p><span class="math display">\[
+P(x | \mu, \sigma) = \frac{1}{\sqrt{2\pi} \sigma} \exp \left( -\frac{(x-\mu)^2}{2\sigma^2} \right)
+\]</span> Just like with the <code>dbinom</code> function, we could implement our own version of it if we really wanted. But why bother? R already does this and does it in a much more efficient way than you or I would. So let’s cut to the chase and use the <code>dnorm</code> function to do the work:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>iq_score <span class="ot">&lt;-</span> <span class="dv">40</span><span class="sc">:</span><span class="dv">160</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>density <span class="ot">&lt;-</span> iq_score <span class="sc">%&gt;%</span> <span class="fu">dnorm</span>(<span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>density <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(density <span class="sc">&lt;</span> <span class="fl">1e-4</span>, <span class="fl">1e-4</span>, density)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(iq_score, density) <span class="sc">%&gt;%</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>iq_score,<span class="at">y=</span>density)) <span class="sc">+</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>() <span class="sc">+</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="probability_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You’re probably already familiar with how the parameters of the normal distribution work, but even so it’s nice to look at some pretty animations. In the first one, we can see what happens when we shift the mean (i.e.&nbsp;<span class="math inline">\(\mu\)</span>) of the distribution:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="probability_files/figure-html/normal_mean-.gif" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<video width="450" style="display:block; margin: 0 auto;" controls="">
+<source src="./img/normal_mean.webm" type="video/webm">
+<source src="./img/normal_mean.mp4" type="video/mp4">
+<p>Your browser does not support the video tag. <br></p>
+<p>Not too surprising. It’s maybe a little more informative to look at what happens when we change the standard deviation <span class="math inline">\(\sigma\)</span>:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="probability_files/figure-html/normal_std-.gif" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<video width="450" style="display:block; margin: 0 auto;" controls="">
+<source src="./img/normal_std.webm" type="video/webm">
+<source src="./img/normal_std.mp4" type="video/mp4">
+<p>Your browser does not support the video tag.  <br></p>
+</video></video></section>
+<section id="cumulative-probability" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="cumulative-probability"><span class="header-section-number">4.3</span> Cumulative probability</h3>
+<p>The third tool for working with normal distributions is the <code>pnorm()</code> function, which calculates the <em>cumulative distribution function</em> (CDF) for the normal distribution. The CDF describes the probablity that the value <span class="math inline">\(x\)</span> sampled from the normal distribution will be smaller than a particular quantile <span class="math inline">\(q\)</span>. That’s a little abstract, but suppose our question was to ask the probability that someone has an IQ of 110 or below. We could compute that like this:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="at">q =</span> <span class="dv">110</span>, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7475075</code></pre>
+</div>
+</div>
+<p>In other words, if an IQ test has been properly calibrated you’d expect about 75% of people to score 110 or below. As with our other examples we can draw the complete CDF for the distribution like this:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>iq_score <span class="ot">&lt;-</span> <span class="dv">40</span><span class="sc">:</span><span class="dv">160</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>cumulative_probability <span class="ot">&lt;-</span> iq_score <span class="sc">%&gt;%</span> <span class="fu">pnorm</span>(<span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(iq_score, cumulative_probability) <span class="sc">%&gt;%</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> iq_score, <span class="at">y =</span> cumulative_probability)) <span class="sc">+</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="probability_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Just because we can, here’s an animation:</p>
+<!-- NOTE:
+ffmpeg -i normal_cdf.webm normal_cdf.gif -hide_banner
+ffmpeg -i normal_cdf.webm normal_cdf.mp4 -hide_banner
+-->
+<video width="450" style="display:block; margin: 0 auto;" controls="">
+<source src="./img/normal_cdf.webm" type="video/webm">
+<source src="./img/normal_cdf.mp4" type="video/mp4">
+<p>Your browser does not support the video tag  <br></p>
+<p>Hopefully you get the idea!</p>
+</video></section>
+<section id="quantiles" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="quantiles"><span class="header-section-number">4.4</span> Quantiles</h3>
+<p>The quantile function is just the inverse of the cumulative distribution (i.e., x and y axes are swapped):</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>cumulative_probability <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> .<span class="dv">01</span>, <span class="at">to =</span> .<span class="dv">99</span>, <span class="at">by =</span> .<span class="dv">01</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>quantile <span class="ot">&lt;-</span> cumulative_probability <span class="sc">%&gt;%</span> <span class="fu">qnorm</span>(<span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(quantile, cumulative_probability) <span class="sc">%&gt;%</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> cumulative_probability, <span class="at">y =</span> quantile)) <span class="sc">+</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="probability_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The quantile function can be especially useful for working out critical values. So for example, to work out the value of a standard normal that corresponds to the 2.5% lower tail:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="at">p =</span> .<span class="dv">025</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -1.959964</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="other-distributions" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="other-distributions"><span class="header-section-number">5</span> Other distributions</h2>
+<p>Not yet written!</p>
+<section id="poisson-distribution" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="poisson-distribution"><span class="header-section-number">5.1</span> Poisson distribution</h3>
+</section>
+<section id="log-normal-distribution" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="log-normal-distribution"><span class="header-section-number">5.2</span> Log-normal distribution</h3>
+</section>
+<section id="response-time-distribution" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="response-time-distribution"><span class="header-section-number">5.3</span> Response time distribution</h3>
+</section>
+<section id="uniform-distribution" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="uniform-distribution"><span class="header-section-number">5.4</span> Uniform distribution</h3>
+</section>
+<section id="beta-distribution" class="level3" data-number="5.5">
+<h3 data-number="5.5" class="anchored" data-anchor-id="beta-distribution"><span class="header-section-number">5.5</span> Beta distribution</h3>
+</section>
+<section id="t-distribution" class="level3" data-number="5.6">
+<h3 data-number="5.6" class="anchored" data-anchor-id="t-distribution"><span class="header-section-number">5.6</span> t distribution</h3>
+</section>
+<section id="chi-square-distribution" class="level3" data-number="5.7">
+<h3 data-number="5.7" class="anchored" data-anchor-id="chi-square-distribution"><span class="header-section-number">5.7</span> Chi-square distribution</h3>
+</section>
+<section id="f-distribution" class="level3" data-number="5.8">
+<h3 data-number="5.8" class="anchored" data-anchor-id="f-distribution"><span class="header-section-number">5.8</span> F distribution</h3>
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>The <code>letters</code> vector is a built in vector in R that contains the 26 lower case letters of the English alphabet in canonical order. There is also a <code>LETTERS</code> vector that has the upper case letters.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/psyr\.djnavarro\.net");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

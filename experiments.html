@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>23. Behavioural experiments – R for Psychological Science</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-20e075685c401baa7d54b844a6fe9e63.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- ###### start inserted header ##### -->
+
+<!-- add plausible.io -->
+<script async="" defer="" data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
+
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="https://psyr.djnavarro.net">
+<meta property="og:title" content="23. Behavioural experiments – R for Psychological Science">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://psyr.djnavarro.net/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+
+<link rel="stylesheet" href="mystyle.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">R for Psychological Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-core" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Core</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-core">    
+        <li>
+    <a class="dropdown-item" href="./getting-started.html">
+ <span class="dropdown-text">Getting started</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./variables.html">
+ <span class="dropdown-text">Variables</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./scripts.html">
+ <span class="dropdown-text">Scripts</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./packages.html">
+ <span class="dropdown-text">Packages</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./workspaces.html">
+ <span class="dropdown-text">Workspaces</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./vectors.html">
+ <span class="dropdown-text">Vectors</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./loops.html">
+ <span class="dropdown-text">Loops</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./branches.html">
+ <span class="dropdown-text">Branches</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./functions.html">
+ <span class="dropdown-text">Functions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./programming.html">
+ <span class="dropdown-text">Programming</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./file-system.html">
+ <span class="dropdown-text">File system</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
+        <li>
+    <a class="dropdown-item" href="./prelude-to-data.html">
+ <span class="dropdown-text">Prelude</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./data-types.html">
+ <span class="dropdown-text">Data types</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./describing-data.html">
+ <span class="dropdown-text">Describing data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./visualising-data.html">
+ <span class="dropdown-text">Visualising data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./manipulating-data.html">
+ <span class="dropdown-text">Manipulating data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./working-with-text.html">
+ <span class="dropdown-text">Text data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./import-export.html">
+ <span class="dropdown-text">Import/export</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-stats" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Stats</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-stats">    
+        <li>
+    <a class="dropdown-item" href="./probability.html">
+ <span class="dropdown-text">Probability distributions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./introductory-statistics.html">
+ <span class="dropdown-text">Introductory statistics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./intermediate-statistics.html">
+ <span class="dropdown-text">Intermediate statistics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./advanced-statistics.html">
+ <span class="dropdown-text">Advanced statistics</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">More</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-more">    
+        <li>
+    <a class="dropdown-item" href="./experiments.html">
+ <span class="dropdown-text">Experiments</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./shiny.html">
+ <span class="dropdown-text">Shiny apps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./web-scraping.html">
+ <span class="dropdown-text">Web scraping</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./xx-miscellaneous.html">
+ <span class="dropdown-text">Miscellaneous</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./backprop.html">
+ <span class="dropdown-text">Backpropagation networks</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://compcogscisydney.org"> 
+<span class="menu-text">compcogscisydney.org</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#text-based-tasks" id="toc-text-based-tasks" class="nav-link active" data-scroll-target="#text-based-tasks"><span class="header-section-number">1</span> Text based tasks</a>
+  <ul class="collapse">
+  <li><a href="#a-second-example" id="toc-a-second-example" class="nav-link" data-scroll-target="#a-second-example"><span class="header-section-number">1.1</span> A second example</a></li>
+  <li><a href="#a-third-example" id="toc-a-third-example" class="nav-link" data-scroll-target="#a-third-example"><span class="header-section-number">1.2</span> A third example</a></li>
+  </ul></li>
+  <li><a href="#graphical-tasks" id="toc-graphical-tasks" class="nav-link" data-scroll-target="#graphical-tasks"><span class="header-section-number">2</span> Graphical tasks</a></li>
+  <li><a href="#shiny-apps" id="toc-shiny-apps" class="nav-link" data-scroll-target="#shiny-apps"><span class="header-section-number">3</span> Shiny apps?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">23. Behavioural experiments</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In my experience, most people in psychology start using R because they need it to solve problems with data analysis. Either they need to organise a data set, visualise it cleanly, or apply a statistical tool to the data that isn’t available via any other mechanism. Those are the areas in which R has traditionally held an advantage over other programming languages or other statistical software, and in my opinion that’s still the area where it’s strongest.</p>
+<p>That being said, R is a proper programming language and you can use it for all sorts of other things. For example, one question I’m often asked is whether R can be used to run behavioural experiments. Of course the answer to that question is “yes, absolutely”, but I think it’s worth thinking about when this is a good idea. There are a few examples I can think of where I’d strongly argue that R isn’t the right tool for the job:</p>
+<ul>
+<li>If all you need is a simple survey without a complicated design, tools like SurveyMonkey and Qualtrics are much easier to use and they’re not generally all that expensive. I’ve never really found a use case for R in this context</li>
+<li>If you need high precision timing and very low level control over stimulus presentation (i.e., down to the level of specifying exactly what happens at each screen refresh), I’d be wary about using R. Everything I’ve read about how event handling in R works suggests that it’s just not as good as Python for that task.</li>
+<li>More generally if you already know how to implement the experiment using a tool like jsPsych - which is free, open source and has a community of users in psychology alread - why switch? If your system isn’t broken don’t try to fix it.</li>
+</ul>
+<p>So what does that leave? When should you consider using R to implement a behavioural experiment? I can think of a few possibilities.</p>
+<ul>
+<li>If you have a text based task that doesn’t require very high precision timing, but has a more complicated interactive structure than is possible with a questionnaire, R can deliver a perfectly workable task without a lot of effort</li>
+<li>If your task is graphics-based and you’re okay with running it on your own machine (i.e.&nbsp;not online) you can repurpose the R graphics system for this.</li>
+<li>If your experiment needs to take the form of a complicated web application and you aren’t already a skilled web programmer, you can build “Shiny” apps through R that work really well</li>
+</ul>
+<p>In the long run I suspect most people will want to find other solutions to the problem besides R, but at the same time I think it’s really important to recognise that you can’t learn all the things at once. Just mastering one programming language is hard enough 😀 so it’s worth the effort to try to get as much mileage out of that as possible!</p>
+<p>With that in mind, I’ll talk about all three of those use cases in these notes. The “Shiny” approach is complex enough that I’ve broken it off into its own <a href="./shiny.html">section</a>, but I’ll talk about the other two approaches in this section.</p>
+<section id="text-based-tasks" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="text-based-tasks"><span class="header-section-number">1</span> Text based tasks</h2>
+<p>To start with, lets consider a very simple task. Imagine that we wanted to investigate how people play “<a href="https://en.wikipedia.org/wiki/Hangman_(game)">hangman</a>. On the off chance you’re unfamiliar with the game, it’s a straightforward two player game. One player thinks of a word and the other person has to work it out by making a series of guesses as to what letters it contains. If the guesser works it out before making a predetermined number of errors then they win. To investigate this, we will need to implement this game in R, with the computer choosing the word and the human guessing. It’s a text based task, so we should be able to do the whole thing in the console. Some problems we’ll need to solve:</p>
+<ul>
+<li>How do we present the current state of the game?</li>
+<li>How do we get input from the participant?</li>
+<li>How do we “refresh” the state of game after every event?</li>
+<li>How do we record the data?</li>
+</ul>
+<p>Let’s start by writing a function called <code>show_hangman()</code> that will take three inputs, the <code>guesses</code> the person has made made so far, the <code>word</code> that the person needs to guess, and the total number of <code>errors</code> they’re allowed to make before losing.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>show_hangman <span class="ot">&lt;-</span> <span class="cf">function</span>(guesses, word, errors) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(stringr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  reg <span class="ot">&lt;-</span> <span class="cf">function</span>(x){ <span class="fu">paste0</span>(<span class="st">"["</span>,x,<span class="st">"]"</span>) }</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># what letters are they missing</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  missing <span class="ot">&lt;-</span> letters <span class="sc">%&gt;%</span> <span class="fu">str_flatten</span>() <span class="sc">%&gt;%</span> <span class="fu">str_remove_all</span>(<span class="fu">reg</span>(guesses))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># what has the participant revealed</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  stimulus <span class="ot">&lt;-</span> word <span class="sc">%&gt;%</span> <span class="fu">str_replace_all</span>(<span class="fu">reg</span>(missing),<span class="st">"."</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># how many errors?</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  n_guess <span class="ot">&lt;-</span> guesses <span class="sc">%&gt;%</span> <span class="fu">str_length</span>()</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  n_hit <span class="ot">&lt;-</span> guesses <span class="sc">%&gt;%</span> <span class="fu">str_count</span>(<span class="fu">reg</span>(word))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  n_err <span class="ot">&lt;-</span> n_guess <span class="sc">-</span> n_hit</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># print the results:</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"what you know:</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(stimulus,<span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"your guesses:  "</span>, guesses, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"errors so far: "</span>, n_err, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"chances left:  "</span>, errors<span class="sc">-</span>n_err, <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Here’s what that looks like:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">show_hangman</span>(<span class="at">guesses =</span> <span class="st">"aest"</span>, <span class="at">word =</span> <span class="st">"computational"</span>, <span class="at">errors =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+what you know:
+
+.....tat...a. 
+
+your guesses:   aest 
+errors so far:  2 
+chances left:   3 </code></pre>
+</div>
+</div>
+<p>That’s a good beginning! Next, we’ll need a function that can ask the participant to make a guess, and store the response. The <code>readline()</code> function is good for this:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>prompt_user <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  guess <span class="ot">&lt;-</span> <span class="fu">readline</span>(<span class="st">"what letter would you like to guess next? "</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(guess)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Ideally, during our experiment what we would do is clear the screen every time a person makes a guess and then update the display. To do this, we’ll need a function to clear any text from the console. This is handled differently depending on what system you’re using. I’ll assume here that you’re working within RStudio, in which case the trick here is to send the “<a href="https://en.wikipedia.org/wiki/Page_break">form feed</a>” character to the console<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>clear_screen <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\f</span><span class="st">"</span>) <span class="co"># form feed character</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This seems to be most of what we would need. However, we will probably also need a function that checks to see whether the game is over. Most of what we needed to do this is contained in the <code>show_hangman()</code> function above, but here it is is stripped down:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>game_state <span class="ot">&lt;-</span> <span class="cf">function</span>(guesses, word, errors) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(stringr)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  reg <span class="ot">&lt;-</span> <span class="cf">function</span>(x){ <span class="fu">paste0</span>(<span class="st">"["</span>,x,<span class="st">"]"</span>) }</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  n_missing <span class="ot">&lt;-</span> word <span class="sc">%&gt;%</span> <span class="fu">str_remove_all</span>(<span class="fu">reg</span>(guesses)) <span class="sc">%&gt;%</span> <span class="fu">str_length</span>()</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(n_missing <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">"win"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># how many errors?</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  n_guess <span class="ot">&lt;-</span> guesses <span class="sc">%&gt;%</span> <span class="fu">str_length</span>()</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  n_hit <span class="ot">&lt;-</span> guesses <span class="sc">%&gt;%</span> <span class="fu">str_count</span>(<span class="fu">reg</span>(word))</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  n_err <span class="ot">&lt;-</span> n_guess <span class="sc">-</span> n_hit</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(n_err <span class="sc">&gt;=</span> errors) {</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">"lose"</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="st">"continuing"</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now we can organise this into a function that plays a game of hangman!</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>hangman <span class="ot">&lt;-</span> <span class="cf">function</span>(word, errors) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  guesses <span class="ot">&lt;-</span> <span class="st">""</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  state <span class="ot">&lt;-</span> <span class="st">"continuing"</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>(state <span class="sc">==</span> <span class="st">"continuing"</span>) {</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">clear_screen</span>()</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">show_hangman</span>(guesses, word, errors)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    g <span class="ot">&lt;-</span> <span class="fu">prompt_user</span>()</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    guesses <span class="ot">&lt;-</span> guesses <span class="sc">%&gt;%</span> <span class="fu">str_c</span>(g)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    state <span class="ot">&lt;-</span> <span class="fu">game_state</span>(guesses, word, errors)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">word =</span> word, <span class="at">guesses =</span> guesses, <span class="at">errors =</span> errors, <span class="at">outcome =</span> state)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clear_screen</span>()</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_hangman</span>(guesses, word, errors)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dat)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>From there, all you need to do is put them all into a single script and you’re ready to go. The <a href="./scripts/hangman1.R">hangman1.R</a> script provides an example that plays one game of hangman, and <a href="./scripts/hangman2.R">hangman2.R</a> plays a series of three games and then stores the results in a data frame <code>d</code>. The video below illustrates this in action:</p>
+<video width="600" controls="">
+<source src="./img/hangman.webm" type="video/webm">
+<p>Your browser does not support the video tag. </p>
+<p>Obviously, if this were a real experiment there are a number of additional things you’d need to do:</p>
+<ul>
+<li>Add a stage for obtaining informed constent and demographics</li>
+<li>Provide instructions to participants and debriefing information</li>
+<li>Add randomisation of stimuli</li>
+<li>Make the code robust to upper and lower case</li>
+<li>Make the code require a single letter at a time</li>
+<li>Etc</li>
+</ul>
+<p>However, with any luck this minimal skeleton gives you enough to see how you might go about adding these additional properties to the code.</p>
+<section id="a-second-example" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="a-second-example"><span class="header-section-number">1.1</span> A second example</h3>
+<p>As the hangman example illustrates, R allows you to create text based tasks and use them as the basis for experiments in a way that might be difficult to do with simpler tools like Qualtrics or SurveyMonkey. The key feature of R (or any programming language for that matter) that allows this flexibility is the ability to write complicated forms of <em>interactivity</em> into your experiment. For the hangman task, the experiment is able to rely on text processing tools to update the state of the game after every guess, and to adapt appropriately no matter what the participant does.</p>
+<p>To give you a sense of how much further you can take this idea, imagine we were interested in studying how people solve strategic planning problems. An engaging way to do this is to implement a decision making problem in the form of a video game. Normally, this would require some fancy graphics to work, but thanks to the joy of emoji, you can go a suprisingly long way just using text.</p>
+<p>The video below shows me playing a simple video game. Imagine you are a rabbit trying to get to a carrot, but there are a bunch of “fire devils” that you need to avoid. We can use the w/a/s/d keys to navigate or q to quit the game. The fire devils are stupid and move randomly; when they bump into each other they merge together. When the game starts there are too many fire devils for it to be safe to try to cross to the carrot, so it might be wise to wait for some of them to burn out before venturing across to the carrot:</p>
+<video width="600" controls="">
+<source src="./img/rabbit.webm" type="video/webm">
+<p>Your browser does not support the video tag. </p>
+<p>In this video, R is running at the Mac OS terminal rather than inside RStudio. I’m doing this because there is a package called <strong>keypress</strong> that only works through the terminal. In the hangman example, for a participant to make a response they need to type the letter and then press enter. For hangman that’s fine, but for the rabbit game it seems weird. So instead of using <code>readline</code> to get the user response I’m relying on the <code>keypress</code> function. If you’re interested, the code for <a href="./scripts/rabbit.R">rabbit.R</a> is available!</p>
+</video></section>
+<section id="a-third-example" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="a-third-example"><span class="header-section-number">1.2</span> A third example</h3>
+<p>Just because I can… the <a href="./scripts/guessing.R">guessing.R</a> provides an example of different kind of task, one in which the participant has to pick a number and the computer tries to guess it.</p>
+</section>
+</video></section>
+<section id="graphical-tasks" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="graphical-tasks"><span class="header-section-number">2</span> Graphical tasks</h2>
+<p>The rabbit example gives you a sense of how far you can go using nothing other than text, but in many situations you’ll probably need something a little more sophisticated. The natural intuition that you might have is that we can use the R graphics system as the foundation for a psychological experiment: on every trial you’d use use a graphics tool (e.g.&nbsp;<code>ggplot</code>) to draw the stimulus on screen, and then the participant could respond using the keyboard or the mouse.</p>
+<p>That intuition is correct, but we’ll need to modify our approach a little bit. Earlier on when we discussed <a href="./visualising-data.html">data visualisation</a> I didn’t really talk much about the capabilities of different <em>graphics devices</em> because it didn’t matter much. In this context it starts to matter whether we draw the plot in the RStudio plot pane or somewhere else, because there are different graphics devices associated with each one, and only some of them are responsive to user input. Clearly, in order to design a behavioural experiment we will need to use a device that supports interactivity, and that means the RStudio graphics device is no good to us: it’s designed for the user to draw plots, not for interaction. A simple way to get around this if you’re on a Unix based system (e.g.&nbsp;Mac, Linux) is to use the <code>X11()</code> graphics device,<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> as this does support user interaction. To give you a sense for what you can realistically achieve, the <a href="./scripts/orientation.R">orientation.R</a> script contains an example of an experiment that displays triangles that might be pointing upwards or downwards, and the task is to guess whether there are more upwards pointing arrows (press the “6” key) or downwards ones (press “b”):</p>
+<video width="600" controls="">
+<source src="./img/orientation.webm" type="video/webm">
+<p>Your browser does not support the video tag. </p>
+<p>There’s a longer video of me running myself through 60 trials of this task <a href="./img/orientation_full.webm">here</a>, and the data set generated from it is <a href="./data/orientation.csv">here</a>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>So how does the code work? I won’t show the full code here, only the part that matters. At the beginning of the task I create an <code>X11</code> graphics device:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">X11</span>(<span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">8</span>, </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">xpos =</span> <span class="dv">100</span>, <span class="at">ypos =</span> <span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This opens up an 8 inch by 8 inch window, slightly offset from the top left of my screen. Besides specifying the location of the window, the main thing this is doing is switching R away from the RStudio plot pane, so that any plots I draw will now be sent to the new window. At the end of the task I close this graphics device by including the line:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The experiment itself is implemented as a loop over trials. At the start of each trial I generate the random array of points and plot them to the window, and then use the <a href="https://www.rdocumentation.org/packages/grDevices/versions/3.5.1/topics/getGraphicsEvent">getGraphicsEvent</a> function to tell the system to wait for the user to press a key. Here’s the relevant part of the code, slightly edited for clarity</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>user_response <span class="ot">&lt;-</span> <span class="fu">getGraphicsEvent</span>(<span class="at">onKeybd =</span> response)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>What this does is tell the system to wait until there is a <em>keyboard</em> event, at which point R will send the <code>key</code> that the user pressed to the <code>response()</code> function. Within the script, I define the <code>response()</code> function to be this:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="cf">function</span>(key) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(key <span class="sc">==</span> <span class="st">"6"</span>) <span class="fu">return</span>(<span class="st">"up"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(key <span class="sc">==</span> <span class="st">"b"</span>) <span class="fu">return</span>(<span class="st">"down"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="cn">NA</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If I press the “6” key this function will return <code>"up"</code>, if I press “b” it will return <code>"down"</code>, and if I press anything else it will return <code>NA</code>. Regardless of what I press, the result of this will be stored as the <code>user_response</code> variable (though in the actual script you’ll see I write it to an entry in a tibble), and the program will continue running.</p>
+<p>There are a few other niceties in there. For instance, there is a line of code that uses <code>Sys.sleep()</code> to tell the system to pause for 1 second between trials. There’s also a line that uses <code>sample()</code> to randomise the order of trials. But I’ll let you take a look for yourself. The main thing for the current purposes is to note that it’s the <code>X11()</code> function that allows you to create the graphics device you need, and the <code>getGraphicsEvent()</code> function allows you to tell the system to wait for user response (it also allows you to grab mouse events).</p>
+<p>Oh, and how did I do at the task? Here’s a quick and dirty picture:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"./data/orientation.csv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(n_up) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">p_up =</span> <span class="fu">mean</span>(response <span class="sc">==</span> <span class="st">"up"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> n_up, <span class="at">y =</span> p_up)) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>() <span class="sc">+</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Number of Upward Triangles"</span>) <span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Choice Proportion"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="experiments_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+</video></section>
+<section id="shiny-apps" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="shiny-apps"><span class="header-section-number">3</span> Shiny apps?</h2>
+<p>The third and most sophisticated approach is to build a web application using Shiny. This has a number of advantages. Firstly, you can run a Shiny app locally on your machine or deploy it to the internet - so you can collect online data easily. Secondly, it has a lot more flexibility in terms of what you can do with it. However, the advantages do come at a cost. There’s a certain amount of effort involved in learning how to build a Shiny app, and some additional work to adapt the framework to behavioural experiments. It’s a big enough topic that I’m not going to try to force it into a subsection here. Instead, there’s a whole section devoted to <a href="./shiny.html">shiny</a>!</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Form feed dates back to the early days of computing and doesn’t serve much of a purpose anymore, but it’s still recognised. As a consequence many software packages have co-opted it and used it for other purposes. Since the original definition was something like “clear the current page from the printer”, it makes some sense to use it to mean “clear the current console log from the screen”<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I’m not entirely sure what the fix would be if you’re on Windows. Also note that newer Macs don’t ship with X11 by default, so you have to install <a href="https://www.xquartz.org/">XQuartz</a>. Sigh.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>I should mention that although you the viewer can see the numbers scrolling past in these videos - so that you can see what decisions I was making - they were all far enough outside my focus of attention that I couldn’t see them while doing the task. I’m actually shocked I performed as well I did. It totally <em>felt</em> like I was guessing pretty randomly!<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/psyr\.djnavarro\.net");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

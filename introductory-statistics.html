@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>20. Introductory statistics – R for Psychological Science</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-20e075685c401baa7d54b844a6fe9e63.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- ###### start inserted header ##### -->
+
+<!-- add plausible.io -->
+<script async="" defer="" data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
+
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="https://psyr.djnavarro.net">
+<meta property="og:title" content="20. Introductory statistics – R for Psychological Science">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://psyr.djnavarro.net/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="mystyle.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">R for Psychological Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-core" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Core</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-core">    
+        <li>
+    <a class="dropdown-item" href="./getting-started.html">
+ <span class="dropdown-text">Getting started</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./variables.html">
+ <span class="dropdown-text">Variables</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./scripts.html">
+ <span class="dropdown-text">Scripts</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./packages.html">
+ <span class="dropdown-text">Packages</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./workspaces.html">
+ <span class="dropdown-text">Workspaces</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./vectors.html">
+ <span class="dropdown-text">Vectors</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./loops.html">
+ <span class="dropdown-text">Loops</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./branches.html">
+ <span class="dropdown-text">Branches</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./functions.html">
+ <span class="dropdown-text">Functions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./programming.html">
+ <span class="dropdown-text">Programming</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./file-system.html">
+ <span class="dropdown-text">File system</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
+        <li>
+    <a class="dropdown-item" href="./prelude-to-data.html">
+ <span class="dropdown-text">Prelude</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./data-types.html">
+ <span class="dropdown-text">Data types</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./describing-data.html">
+ <span class="dropdown-text">Describing data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./visualising-data.html">
+ <span class="dropdown-text">Visualising data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./manipulating-data.html">
+ <span class="dropdown-text">Manipulating data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./working-with-text.html">
+ <span class="dropdown-text">Text data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./import-export.html">
+ <span class="dropdown-text">Import/export</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-stats" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Stats</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-stats">    
+        <li>
+    <a class="dropdown-item" href="./probability.html">
+ <span class="dropdown-text">Probability distributions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./introductory-statistics.html">
+ <span class="dropdown-text">Introductory statistics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./intermediate-statistics.html">
+ <span class="dropdown-text">Intermediate statistics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./advanced-statistics.html">
+ <span class="dropdown-text">Advanced statistics</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">More</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-more">    
+        <li>
+    <a class="dropdown-item" href="./experiments.html">
+ <span class="dropdown-text">Experiments</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./shiny.html">
+ <span class="dropdown-text">Shiny apps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./web-scraping.html">
+ <span class="dropdown-text">Web scraping</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./xx-miscellaneous.html">
+ <span class="dropdown-text">Miscellaneous</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./backprop.html">
+ <span class="dropdown-text">Backpropagation networks</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://compcogscisydney.org"> 
+<span class="menu-text">compcogscisydney.org</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link active" data-scroll-target="#confidence-intervals"><span class="header-section-number">1</span> Confidence intervals</a></li>
+  <li><a href="#comparing-two-means" id="toc-comparing-two-means" class="nav-link" data-scroll-target="#comparing-two-means"><span class="header-section-number">2</span> Comparing two means</a></li>
+  <li><a href="#categorical-associations" id="toc-categorical-associations" class="nav-link" data-scroll-target="#categorical-associations"><span class="header-section-number">3</span> Categorical associations</a></li>
+  <li><a href="#comparing-several-means" id="toc-comparing-several-means" class="nav-link" data-scroll-target="#comparing-several-means"><span class="header-section-number">4</span> Comparing several means</a>
+  <ul class="collapse">
+  <li><a href="#post-hoc-tests" id="toc-post-hoc-tests" class="nav-link" data-scroll-target="#post-hoc-tests"><span class="header-section-number">4.1</span> Post hoc tests</a></li>
+  </ul></li>
+  <li><a href="#assessing-relationships" id="toc-assessing-relationships" class="nav-link" data-scroll-target="#assessing-relationships"><span class="header-section-number">5</span> Assessing relationships</a>
+  <ul class="collapse">
+  <li><a href="#hierarchical-regression" id="toc-hierarchical-regression" class="nav-link" data-scroll-target="#hierarchical-regression"><span class="header-section-number">5.1</span> Hierarchical regression</a></li>
+  <li><a href="#testing-a-correlation" id="toc-testing-a-correlation" class="nav-link" data-scroll-target="#testing-a-correlation"><span class="header-section-number">5.2</span> Testing a correlation</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">20. Introductory statistics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<blockquote class="blockquote">
+<p>Thou shalt not answer questionnaires <br> Or quizzes upon World Affairs, <br> &nbsp;&nbsp;&nbsp;&nbsp;Nor with compliance<br> Take any test. Thou shalt not sit<br> With statisticians nor commit<br> &nbsp;&nbsp;&nbsp;&nbsp;A social science<br> <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- W.H. Auden, <a href="http://harvardmagazine.com/2007/11/a-poets-warning.html">Under Which Lyre: A Reactionary Tract for the Times</a>, 1946</p>
+</blockquote>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"./data/afl24.Rdata"</span>) <span class="co"># load data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(afl)                  <span class="co"># show the first few rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         home.team away.team home.score away.score year round weekday day month
+1  North Melbourne  Brisbane        104        137 1987     1     Fri  27     3
+2 Western Bulldogs  Essendon         62        121 1987     1     Sat  28     3
+3          Carlton  Hawthorn        104        149 1987     1     Sat  28     3
+4      Collingwood    Sydney         74        165 1987     1     Sat  28     3
+5        Melbourne   Fitzroy        128         89 1987     1     Sat  28     3
+6         St Kilda   Geelong        101        102 1987     1     Sat  28     3
+  is.final              venue attendance
+1    FALSE                MCG      14096
+2    FALSE      Waverley Park      22550
+3    FALSE       Princes Park      19967
+4    FALSE      Victoria Park      17129
+5    FALSE                MCG      18012
+6    FALSE Gold Coast Stadium      15867</code></pre>
+</div>
+</div>
+<section id="confidence-intervals" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="confidence-intervals"><span class="header-section-number">1</span> Confidence intervals</h2>
+<p>As usual there are many ways to compute the confidence interval of the mean in R. One relatively simple one is with the <code>ciMean</code> function in the <code>lsr</code> package, which (conveniently) can take a data frame as input and computes confidence intervals for all the numeric variables:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ciMean</span>(afl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   2.5%       97.5%
+home.team*           NA          NA
+away.team*           NA          NA
+home.score   100.621214   102.39555
+away.score    90.250700    91.98720
+year        1998.566873  1998.97782
+round         11.999916    12.40185
+weekday*             NA          NA
+day           15.594242    16.13388
+month          6.006252     6.10548
+is.final*            NA          NA
+venue*               NA          NA
+attendance 31597.324710 32593.12361</code></pre>
+</div>
+</div>
+<p>By default it returns a 95% confidence interval, but you can adjust the <code>conf</code> argument if you want something different. For instance, here’s an 80% confidence interval</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ciMean</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> afl, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf =</span> .<span class="dv">8</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    10%          90%
+home.team*           NA           NA
+away.team*           NA           NA
+home.score   100.928367   102.088392
+away.score    90.551304    91.686592
+year        1998.638012  1998.906681
+round         12.069495    12.332274
+weekday*             NA           NA
+day           15.687658    16.040461
+month          6.023429     6.088303
+is.final*            NA           NA
+venue*               NA           NA
+attendance 31769.706887 32420.741437</code></pre>
+</div>
+</div>
+<p>You can also give it a single variable as input if you like:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ciMean</span>( afl<span class="sc">$</span>home.score )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         2.5%    97.5%
+[1,] 100.6212 102.3955</code></pre>
+</div>
+</div>
+</section>
+<section id="comparing-two-means" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="comparing-two-means"><span class="header-section-number">2</span> Comparing two means</h2>
+<p>Does the home team tend to outscore the away team? This requires a <strong>paired samples t-test</strong>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairedSamplesTTest</span>(<span class="sc">~</span> home.score <span class="sc">+</span> away.score, afl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   Paired samples t-test 
+
+Variables:  home.score , away.score 
+
+Descriptive statistics: 
+            home.score away.score difference
+   mean        101.508     91.119     10.389
+   std dev.     29.660     29.027     44.335
+
+Hypotheses: 
+   null:        population means equal for both measurements
+   alternative: different population means for each measurement
+
+Test results: 
+   t-statistic:  15.359 
+   degrees of freedom:  4295 
+   p-value:  &lt;.001 
+
+Other information: 
+   two-sided 95% confidence interval:  [9.063, 11.716] 
+   estimated effect size (Cohen's d):  0.234 </code></pre>
+</div>
+</div>
+<p>Are finals games lower scoring than home and away games? This requires an <strong>independent samples t-test</strong>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>afl<span class="sc">$</span>total.score <span class="ot">&lt;-</span> afl<span class="sc">$</span>home.score <span class="sc">+</span> afl<span class="sc">$</span>away.score</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">independentSamplesTTest</span>(total.score <span class="sc">~</span> is.final, afl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in independentSamplesTTest(total.score ~ is.final, afl): group variable
+is not a factor</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   Welch's independent samples t-test 
+
+Outcome variable:   total.score 
+Grouping variable:  is.final 
+
+Descriptive statistics: 
+              FALSE    TRUE
+   mean     193.064 183.680
+   std dev.  38.602  34.235
+
+Hypotheses: 
+   null:        population means equal for both groups
+   alternative: different population means in each group
+
+Test results: 
+   t-statistic:  3.762 
+   degrees of freedom:  224.433 
+   p-value:  &lt;.001 
+
+Other information: 
+   two-sided 95% confidence interval:  [4.468, 14.3] 
+   estimated effect size (Cohen's d):  0.257 </code></pre>
+</div>
+</div>
+</section>
+<section id="categorical-associations" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="categorical-associations"><span class="header-section-number">3</span> Categorical associations</h2>
+<p>Are all teams equally likely to play their home games on every weekday? For that we might consider using a <strong>chi-square test of categorical association</strong>, but as you can see from the output below, a little care is needed:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">associationTest</span>(<span class="sc">~</span> home.team <span class="sc">+</span> weekday, afl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     Chi-square test of categorical association
+
+Variables:   home.team, weekday 
+
+Hypotheses: 
+   null:        variables are independent of one another
+   alternative: some contingency exists between variables
+
+Observed contingency table:
+                  weekday
+home.team          Mon Tue Wed Thu Fri Sat Sun
+  Adelaide           1   0   0   0  26  94 114
+  Brisbane           2   0   0   5  12 132 131
+  Carlton            4   1   1   3  16 179  62
+  Collingwood       12   3   0   3  46 167  55
+  Essendon           6   0   3   4  52 158  66
+  Fitzroy            4   0   0   0   2  84  10
+  Fremantle          1   1   0   0  19  66  92
+  Geelong            7   0   0   1  13 185  79
+  Hawthorn          11   0   0   0  16 189  63
+  Melbourne         22   0   1   0  28 140  87
+  North Melbourne    6   0   0   3  84 123  69
+  Port Adelaide      1   0   0   1  15  78  69
+  Richmond           8   1   1   3  48 138  68
+  St Kilda           7   0   0   1  29 174  68
+  Sydney             0   0   0   0  31  85 161
+  West Coast         1   0   0   1  51  93 138
+  Western Bulldogs   5   0   0   0  26 141  89
+
+Expected contingency table under the null hypothesis:
+                  weekday
+home.team           Mon   Tue   Wed   Thu  Fri   Sat  Sun
+  Adelaide         5.36 0.328 0.328 1.368 28.1 121.8 77.7
+  Brisbane         6.43 0.394 0.394 1.641 33.7 146.1 93.3
+  Carlton          6.07 0.372 0.372 1.548 31.8 137.8 88.0
+  Collingwood      6.52 0.399 0.399 1.664 34.2 148.2 94.6
+  Essendon         6.59 0.404 0.404 1.682 34.6 149.7 95.6
+  Fitzroy          2.28 0.140 0.140 0.582 12.0  51.8 33.1
+  Fremantle        4.08 0.250 0.250 1.042 21.4  92.8 59.2
+  Geelong          6.50 0.398 0.398 1.659 34.1 147.7 94.3
+  Hawthorn         6.36 0.390 0.390 1.624 33.4 144.6 92.3
+  Melbourne        6.34 0.388 0.388 1.618 33.3 144.0 92.0
+  North Melbourne  6.50 0.398 0.398 1.659 34.1 147.7 94.3
+  Port Adelaide    3.74 0.229 0.229 0.954 19.6  85.0 54.2
+  Richmond         6.09 0.373 0.373 1.554 31.9 138.3 88.3
+  St Kilda         6.36 0.390 0.390 1.624 33.4 144.6 92.3
+  Sydney           6.32 0.387 0.387 1.612 33.1 143.5 91.6
+  West Coast       6.48 0.397 0.397 1.653 34.0 147.2 93.9
+  Western Bulldogs 5.95 0.365 0.365 1.519 31.2 135.2 86.3
+
+Test results: 
+   X-squared statistic:  640.853 
+   degrees of freedom:  96 
+   p-value:  &lt;.001 
+
+Other information: 
+   estimated effect size (Cramer's v):  0.158 
+   warning: expected frequencies too small, results may be inaccurate</code></pre>
+</div>
+</div>
+<p>The reason for the warning, of course, is that with so few games played on weekdays, many of the expected cell counts are very small, and that violates one of the assumptions of the chi-square test. So let’s create a new variable that collapses these:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>afl<span class="sc">$</span>weekday_small <span class="ot">&lt;-</span> <span class="fu">as.character</span>(afl<span class="sc">$</span>weekday)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>weekgames <span class="ot">&lt;-</span> afl<span class="sc">$</span>weekday_small <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Mon"</span>,<span class="st">"Tue"</span>,<span class="st">"Wed"</span>,<span class="st">"Thu"</span>,<span class="st">"Fri"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>afl<span class="sc">$</span>weekday_small[weekgames] <span class="ot">&lt;-</span> <span class="st">"M-F"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>afl<span class="sc">$</span>weekday_small <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(afl<span class="sc">$</span>weekday_small)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now we just have three levels of this factor, corresponding to Saturday games, Sunday games, and weekday games. So if we run the test of association with this version of the variable we no longer get the warning message:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">associationTest</span>(<span class="sc">~</span> home.team <span class="sc">+</span> weekday_small, afl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     Chi-square test of categorical association
+
+Variables:   home.team, weekday_small 
+
+Hypotheses: 
+   null:        variables are independent of one another
+   alternative: some contingency exists between variables
+
+Observed contingency table:
+                  weekday_small
+home.team          M-F Sat Sun
+  Adelaide          27  94 114
+  Brisbane          19 132 131
+  Carlton           25 179  62
+  Collingwood       64 167  55
+  Essendon          65 158  66
+  Fitzroy            6  84  10
+  Fremantle         21  66  92
+  Geelong           21 185  79
+  Hawthorn          27 189  63
+  Melbourne         51 140  87
+  North Melbourne   93 123  69
+  Port Adelaide     17  78  69
+  Richmond          61 138  68
+  St Kilda          37 174  68
+  Sydney            31  85 161
+  West Coast        53  93 138
+  Western Bulldogs  31 141  89
+
+Expected contingency table under the null hypothesis:
+                  weekday_small
+home.team           M-F   Sat  Sun
+  Adelaide         35.5 121.8 77.7
+  Brisbane         42.6 146.1 93.3
+  Carlton          40.2 137.8 88.0
+  Collingwood      43.2 148.2 94.6
+  Essendon         43.7 149.7 95.6
+  Fitzroy          15.1  51.8 33.1
+  Fremantle        27.0  92.8 59.2
+  Geelong          43.1 147.7 94.3
+  Hawthorn         42.1 144.6 92.3
+  Melbourne        42.0 144.0 92.0
+  North Melbourne  43.1 147.7 94.3
+  Port Adelaide    24.8  85.0 54.2
+  Richmond         40.3 138.3 88.3
+  St Kilda         42.1 144.6 92.3
+  Sydney           41.8 143.5 91.6
+  West Coast       42.9 147.2 93.9
+  Western Bulldogs 39.4 135.2 86.3
+
+Test results: 
+   X-squared statistic:  480.877 
+   degrees of freedom:  32 
+   p-value:  &lt;.001 
+
+Other information: 
+   estimated effect size (Cramer's v):  0.237 </code></pre>
+</div>
+</div>
+</section>
+<section id="comparing-several-means" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="comparing-several-means"><span class="header-section-number">4</span> Comparing several means</h2>
+<p>Is there such a thing as a “high scoring ground”? Let’s take a look at the average number of points per game at each different ground, only considering grounds that had at least 100 games played during the the time period:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>venue.use <span class="ot">&lt;-</span> <span class="fu">table</span>(afl<span class="sc">$</span>venue)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>majors <span class="ot">&lt;-</span> venue.use[venue.use <span class="sc">&gt;=</span> <span class="dv">100</span>]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># restrict the data to these games</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>afl.majors <span class="ot">&lt;-</span> afl[ afl<span class="sc">$</span>venue <span class="sc">%in%</span> <span class="fu">names</span>(majors), ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Visually it does look like there might something here:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>                venue total.score
+11       Western Oval    170.8839
+1        AAMI Stadium    180.8619
+10      Waverley Park    183.9355
+6   Patersons Stadium    187.0838
+9     Skilled Stadium    192.2059
+4  Gold Coast Stadium    192.6486
+5                 MCG    196.8094
+3               Gabba    197.0955
+8                 SCG    198.9414
+2      Etihad Stadium    200.7656
+7        Princes Park    201.5918</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="introductory-statistics_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A first pass analysis for this would be ANOVA. The underlying statistical model in ANOVA and multiple regression is essentially the same, and the work is done by the <code>lm</code> function in R. However, it’s generally considered sensible to use the <code>aov</code> function in the first instance, because that does a few nice things that come in handy with later analyses.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">aov</span>(total.score <span class="sc">~</span> venue, afl.majors)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>To analyse it as an ANOVA, the <code>Anova</code> function in the <code>car</code> package is very nice:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Anova</span>(mod)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Anova Table (Type II tests)
+
+Response: total.score
+           Sum Sq   Df F value    Pr(&gt;F)    
+venue      237330   10  16.616 &lt; 2.2e-16 ***
+Residuals 5681696 3978                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>It seems to be a real thing, but we’ll come back to that in a moment because we might have some worries about confounding variables.</p>
+<section id="post-hoc-tests" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="post-hoc-tests"><span class="header-section-number">4.1</span> Post hoc tests</h3>
+<p>I am not a fan of post hoc tests, even with corrections for Type I error inflation. To see why they drive me nuts, let’s run the output of the ANOVA through the <code>posthocPairwiseT</code> function. By default it uses the Holm correction, but lets just use the simpler and very conservatice Bonferroni correction:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">posthocPairwiseT</span>(mod, <span class="at">p.adjust.method =</span> <span class="st">"bonferroni"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pairwise comparisons using t tests with pooled SD 
+
+data:  total.score and venue 
+
+                   AAMI Stadium Etihad Stadium Gabba   Gold Coast Stadium
+Etihad Stadium     3.1e-13      -              -       -                 
+Gabba              2.0e-05      1.00000        -       -                 
+Gold Coast Stadium 0.20642      1.00000        1.00000 -                 
+MCG                3.8e-11      1.00000        1.00000 1.00000           
+Patersons Stadium  1.00000      5.0e-06        0.09684 1.00000           
+Princes Park       2.7e-11      1.00000        1.00000 1.00000           
+SCG                1.6e-07      1.00000        1.00000 1.00000           
+Skilled Stadium    0.02836      0.34402        1.00000 1.00000           
+Waverley Park      1.00000      1.1e-08        0.00317 1.00000           
+Western Oval       0.75909      2.4e-12        1.4e-07 0.00096           
+                   MCG     Patersons Stadium Princes Park SCG    
+Etihad Stadium     -       -                 -            -      
+Gabba              -       -                 -            -      
+Gold Coast Stadium -       -                 -            -      
+MCG                -       -                 -            -      
+Patersons Stadium  0.00075 -                 -            -      
+Princes Park       1.00000 2.6e-05           -            -      
+SCG                1.00000 0.00573           1.00000      -      
+Skilled Stadium    1.00000 1.00000           0.31433      1.00000
+Waverley Park      2.0e-06 1.00000           1.3e-07      9.0e-05
+Western Oval       2.7e-10 0.00371           9.9e-12      3.5e-09
+                   Skilled Stadium Waverley Park
+Etihad Stadium     -               -            
+Gabba              -               -            
+Gold Coast Stadium -               -            
+MCG                -               -            
+Patersons Stadium  -               -            
+Princes Park       -               -            
+SCG                -               -            
+Skilled Stadium    -               -            
+Waverley Park      0.74049         -            
+Western Oval       9.2e-05         0.08420      
+
+P value adjustment method: bonferroni </code></pre>
+</div>
+</div>
+<p>My main complaint? I have no idea what this means because I didn’t really have any idea what I was looking for. I could certainly run through all these automatically-detected “significant” relationships to see what makes any sense, but I honestly don’t know what that would buy me. Basically I’m not sure why I’m calculating a <span class="math inline">\(p\)</span>-value (a tool designed to <em>test hypotheses</em>) in a situation where I really didn’t have <em>any</em> hypotheses ahead of time. To my mind this use of hypothesis testing has the effect of eroding the boundary between <em>confirmatory tests</em> (where the researcher has a theory ahead of time), and <em>exploratory analyses</em> (where we’re just looking for interesting patterns). I’m a big fan of doing both things as part of science, of course, I just think they need to be kept clearly separate :-)</p>
+<p>But that’s a topic for another time.</p>
+</section>
+</section>
+<section id="assessing-relationships" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="assessing-relationships"><span class="header-section-number">5</span> Assessing relationships</h2>
+<p>One thing that people commented on a lot during this time period was the fact that the games became lower scoring over time. Is that a real effect, or was it just random noise?</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(total.score <span class="sc">~</span> year, afl)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = total.score ~ year, data = afl)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-148.84  -24.20   -0.09   24.71  139.02 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 1668.10138  169.27250   9.855   &lt;2e-16 ***
+year          -0.73819    0.08469  -8.717   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 38.13 on 4294 degrees of freedom
+Multiple R-squared:  0.01739,   Adjusted R-squared:  0.01716 
+F-statistic: 75.98 on 1 and 4294 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>yearly.score <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  total.score <span class="sc">~</span> year, </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> afl, </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">FUN =</span> mean</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> yearly.score<span class="sc">$</span>year,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> yearly.score<span class="sc">$</span>total.score,</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"p"</span>,</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Year"</span>,</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Average Points per Game"</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">coef =</span> mod<span class="sc">$</span>coef)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="introductory-statistics_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>That’s pretty clearly a real effect, but it does open up a new line of worries about the last analysis…</p>
+<section id="hierarchical-regression" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="hierarchical-regression"><span class="header-section-number">5.1</span> Hierarchical regression</h3>
+<p>Suppose we’re a little paranoid. Maybe the effect of <code>venue</code> is spurious: some grounds came into use at different years, and we know there’s an effect of <code>year</code> on the <code>total.score</code>. Similarly, folk wisdom has it that finals games are lower scoring, and those games are disproportionately likely to be played at the MCG. Maybe there’s an effect of the size of the crowd? Some stadiums are bigger than others? Maybe there’s an effect of weekday, and some venues do indeed get used on different days. Maybe it’s an effect of the teams playing, since different teams tend to play at different grounds (especially when considering the home team!) To address this let’s dump all those variables into a regression model, and then see if adding <code>venue</code> leads to an improvement in fit over and above those. In other words, we’ll do a <strong>hierarchical regression</strong>. Here it is in R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(total.score <span class="sc">~</span> year <span class="sc">+</span> home.team <span class="sc">+</span> away.team <span class="sc">+</span> is.final <span class="sc">+</span> weekday <span class="sc">+</span> attendance, afl.majors)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(total.score <span class="sc">~</span> year <span class="sc">+</span> home.team <span class="sc">+</span> away.team <span class="sc">+</span> is.final <span class="sc">+</span> weekday <span class="sc">+</span> attendance <span class="sc">+</span> venue, afl.majors)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod2, mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: total.score ~ year + home.team + away.team + is.final + weekday + 
+    attendance + venue
+Model 2: total.score ~ year + home.team + away.team + is.final + weekday + 
+    attendance
+  Res.Df     RSS  Df Sum of Sq      F    Pr(&gt;F)    
+1   3937 5266076                                   
+2   3947 5519332 -10   -253256 18.934 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Overall it does rather look like there are genuine differences between venues. Though of course there could be many other things we didn’t control for!</p>
+</section>
+<section id="testing-a-correlation" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="testing-a-correlation"><span class="header-section-number">5.2</span> Testing a correlation</h3>
+<p>As an aside, it’s often noted that a Pearson correlation is essentially equivalent to a linear regression model with a single predictor. So we should be able to replicate the <code>total.score ~ year</code> analysis as a correlation. We use the <code>cor.test</code> function to run a hypothesis test here:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> afl<span class="sc">$</span>total.score, </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> afl<span class="sc">$</span>year</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  afl$total.score and afl$year
+t = -8.7166, df = 4294, p-value &lt; 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.1611277 -0.1023575
+sample estimates:
+       cor 
+-0.1318585 </code></pre>
+</div>
+</div>
+<p>To see that these are giving the same answer, let’s take the raw correlation of <span class="math inline">\(r=-.13\)</span>, square it, and compare it to the (unadjusted) <span class="math inline">\(R^2\)</span> value of 0.01739 reported above:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.1318585</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(r<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01738666</code></pre>
+</div>
+</div>
+<p>Yes, those are the same!</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/psyr\.djnavarro\.net");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

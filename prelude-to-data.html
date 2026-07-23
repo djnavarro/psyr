@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>12. Prelude to data – R for Psychological Science</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-20e075685c401baa7d54b844a6fe9e63.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<!-- ###### start inserted header ##### -->
+
+<!-- add plausible.io -->
+<script async="" defer="" data-domain="psyr.djnavarro.net" src="https://plausible.io/js/plausible.js"></script>
+
+<!-- add fontawesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+<!-- add the twitter card and open graph tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@djnavarro">
+<meta property="og:url" content="https://psyr.djnavarro.net">
+<meta property="og:title" content="12. Prelude to data – R for Psychological Science">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://psyr.djnavarro.net/img/splash_turtle.png">
+
+<!-- ###### end inserted header ##### -->
+
+
+<link rel="stylesheet" href="mystyle.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">R for Psychological Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-core" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Core</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-core">    
+        <li>
+    <a class="dropdown-item" href="./getting-started.html">
+ <span class="dropdown-text">Getting started</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./variables.html">
+ <span class="dropdown-text">Variables</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./scripts.html">
+ <span class="dropdown-text">Scripts</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./packages.html">
+ <span class="dropdown-text">Packages</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./workspaces.html">
+ <span class="dropdown-text">Workspaces</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./vectors.html">
+ <span class="dropdown-text">Vectors</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./loops.html">
+ <span class="dropdown-text">Loops</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./branches.html">
+ <span class="dropdown-text">Branches</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./functions.html">
+ <span class="dropdown-text">Functions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./programming.html">
+ <span class="dropdown-text">Programming</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./file-system.html">
+ <span class="dropdown-text">File system</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
+        <li>
+    <a class="dropdown-item" href="./prelude-to-data.html">
+ <span class="dropdown-text">Prelude</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./data-types.html">
+ <span class="dropdown-text">Data types</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./describing-data.html">
+ <span class="dropdown-text">Describing data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./visualising-data.html">
+ <span class="dropdown-text">Visualising data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./manipulating-data.html">
+ <span class="dropdown-text">Manipulating data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./working-with-text.html">
+ <span class="dropdown-text">Text data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./import-export.html">
+ <span class="dropdown-text">Import/export</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-stats" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Stats</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-stats">    
+        <li>
+    <a class="dropdown-item" href="./probability.html">
+ <span class="dropdown-text">Probability distributions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./introductory-statistics.html">
+ <span class="dropdown-text">Introductory statistics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./intermediate-statistics.html">
+ <span class="dropdown-text">Intermediate statistics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./advanced-statistics.html">
+ <span class="dropdown-text">Advanced statistics</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">More</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-more">    
+        <li>
+    <a class="dropdown-item" href="./experiments.html">
+ <span class="dropdown-text">Experiments</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./shiny.html">
+ <span class="dropdown-text">Shiny apps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./web-scraping.html">
+ <span class="dropdown-text">Web scraping</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./xx-miscellaneous.html">
+ <span class="dropdown-text">Miscellaneous</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./backprop.html">
+ <span class="dropdown-text">Backpropagation networks</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://compcogscisydney.org"> 
+<span class="menu-text">compcogscisydney.org</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#attendance-at-the-football" id="toc-attendance-at-the-football" class="nav-link active" data-scroll-target="#attendance-at-the-football"><span class="header-section-number">1</span> Attendance at the football</a></li>
+  <li><a href="#the-tidyverse" id="toc-the-tidyverse" class="nav-link" data-scroll-target="#the-tidyverse"><span class="header-section-number">2</span> The tidyverse</a></li>
+  <li><a href="#importing-a-csv-file" id="toc-importing-a-csv-file" class="nav-link" data-scroll-target="#importing-a-csv-file"><span class="header-section-number">3</span> Importing a CSV file</a></li>
+  <li><a href="#the-pipe" id="toc-the-pipe" class="nav-link" data-scroll-target="#the-pipe"><span class="header-section-number">4</span> The pipe, <code>%&gt;%</code></a>
+  <ul class="collapse">
+  <li><a href="#the-pipe-metaphor" id="toc-the-pipe-metaphor" class="nav-link" data-scroll-target="#the-pipe-metaphor"><span class="header-section-number">4.1</span> The pipe metaphor</a></li>
+  <li><a href="#an-introduction-to-the-pipe" id="toc-an-introduction-to-the-pipe" class="nav-link" data-scroll-target="#an-introduction-to-the-pipe"><span class="header-section-number">4.2</span> An introduction to the pipe</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">12. Prelude to data</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>When teaching statistics and data analysis, there is a school of thought that argues that the student should be introduced to actual data as quickly as possible. In one sense I’ve broken that rule rather substantially. The entirety the <em>core toolkit</em> section went by without any real data, much less any data analysis. In my defence, data analysis was never the intended goal of that section. My hope with that section was to teach enough programming concepts that you’d be able to implement a psychological model in R, as we did with the <a href="./programming.html">Rescorla-Wagner model</a> previously.</p>
+<p>In this section I’m going to shift the focus to data analysis. I won’t talk much about statistical inference about data (that will come in a later section) though. Instead we’ll cover topics like tidying data, summarising data and visualising data. As the focus is now explicitly on data, I’ll now work with real data.</p>
+<section id="attendance-at-the-football" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="attendance-at-the-football"><span class="header-section-number">1</span> Attendance at the football</h2>
+<p>The data I’ll look at first is one that I put together as part of the <em>Learning Statistics with R</em> book. It consists of information about every game of Australian Rules Football (AFL) played between 1987 and 2010. The data are available in the <a href="./data/afl.csv">afl.csv</a> file. Let’s load the data set and take a look at it:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>afl <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/afl.csv"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>afl</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,296 × 12
+   home_team     away_team home_score away_score  year round weekday   day month
+   &lt;chr&gt;         &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1 North Melbou… Brisbane         104        137  1987     1 Fri        27     3
+ 2 Western Bull… Essendon          62        121  1987     1 Sat        28     3
+ 3 Carlton       Hawthorn         104        149  1987     1 Sat        28     3
+ 4 Collingwood   Sydney            74        165  1987     1 Sat        28     3
+ 5 Melbourne     Fitzroy          128         89  1987     1 Sat        28     3
+ 6 St Kilda      Geelong          101        102  1987     1 Sat        28     3
+ 7 West Coast    Richmond         133        119  1987     1 Sun        29     3
+ 8 North Melbou… Melbourne         92         59  1987     2 Fri         3     4
+ 9 Geelong       Brisbane         131        150  1987     2 Sat         4     4
+10 Collingwood   Carlton          107        114  1987     2 Sat         4     4
+# ℹ 4,286 more rows
+# ℹ 3 more variables: game_type &lt;chr&gt;, venue &lt;chr&gt;, attendance &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>For the moment let’s not worry too much about what this code is doing or what the output means. The gist of the output is pretty clear. We have information about 4296 football vgames. For each game we have recorded 12 variables: the names of the home and away team, the number of points scored by each team, information about when the game was played, the venue where it was played, the official attendance statistics, and whether it was a regular home-and-away game or part of the finals series.</p>
+<p>That’s nice, but currently our data takes the form of a table with 4296 rows and 12 columns, and I have no idea what any of it <em>means</em>. How do I extract meaningful information out of this data set? Let’s say my goal is to investigate how the average attendance at AFL games has changed over the years, and I’d like to look at regular season games separate from finals. To do so, I first summarise the AFL data in terms of the relevant variables:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>attendance <span class="ot">&lt;-</span> afl <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, game_type) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">attendance =</span> <span class="fu">mean</span>(attendance)) </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>attendance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 48 × 3
+# Groups:   year [24]
+    year game_type attendance
+   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
+ 1  1987 finals        71510.
+ 2  1987 regular       19120.
+ 3  1988 finals        72700.
+ 4  1988 regular       20082.
+ 5  1989 finals        72783.
+ 6  1989 regular       20423.
+ 7  1990 finals        67970 
+ 8  1990 regular       23296.
+ 9  1991 finals        54530.
+10  1991 regular       23013.
+# ℹ 38 more rows</code></pre>
+</div>
+</div>
+<p>Again, while you probably won’t be completely sure how this code works, the gist of it is pretty clear. I’m taking the raw AFL data, grouping the games by the year and whether they were finals games, and calculting the mean attendance. This <em>summary</em> of the data is a huge improvement over the raw data itself, but it’s still just a long list of numbers. Like most people, I don’t enjoy looking at numbers - I like pictures.</p>
+<p>As before we can take this <code>attendance</code> data and turn it into something nicer. The command to do ths is a little more involved but again the gist of it should be clear:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pic <span class="ot">&lt;-</span> attendance <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> attendance)) <span class="sc">+</span>  <span class="co"># year on x-axis, attendance on y-axis</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>game_type) <span class="sc">+</span>                 <span class="co"># separate "facets" for each game_type</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span>                           <span class="co"># add the data as "points"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()                            <span class="co"># overlay a smooth regression line</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pic) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="prelude-to-data_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Yay! We now have something that has <em>meaning</em> to a human reader. Attendance at home and away games (right panel) rose smoothly from 1987 to 2010. For finals games (left panel) the attendance is higher throughout but the trend is different. Average attendance declined somewhat until about 2004 and then rose thereafter. Noting that, a data analyst would be prompted to investigate further.</p>
+<p>This brief example highlights several key topics when working with data - we have to import data, summarise data, and visualise it in a fashion that makes intuitive sense to people. My goal in this section is to introduce R tools that we can use to do this. Before diving into the details, I’ll comment on a few things going on in this code.</p>
+</section>
+<section id="the-tidyverse" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="the-tidyverse"><span class="header-section-number">2</span> The tidyverse</h2>
+<p>The first line of code in the AFL example is <code>library(tidyverse)</code>. Per the description on the <a href="https://www.tidyverse.org/">tidyverse</a> website,</p>
+<blockquote class="blockquote">
+<p>The tidyverse is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures.</p>
+</blockquote>
+<p>When I wrote <em>Learning Statistics with R</em> to accompany my first statistics class the tidyverse didn’t play much of a part, because most of it didn’t exist. Over the last several years the tidyverse has had a huge influence on how data analysis in R is typically conducted, so in these notes I’ll often use on tools from the tidyverse. From now on, when reading the code presented in these notes you should presume that there’s a hidden <code>library(tidyverse)</code> command at the start of every page… because there is! 😀</p>
+<p>If you are interested in learning more about the tidyverse and the role it plays in the R data science community, an excellent place to start is with Hadley Wickham and Garrett Grolemund’s book <a href="http://r4ds.had.co.nz/">R for Data Science</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The tidyverse emphasises an approach to data exploration illustrated below:</p>
+<p><img src="./img/prelude_explore.png" width="600px"></p>
+<p>(You’ll see exactly this image used in a lot of tidyverse related documents)</p>
+<p>A typical approach to data analysis involves importing data from an external source, tidying the data and cleaning up any problems with the data set, transforming it in a fashion that extracts the relevant information, visualising the key insights, and so on. Even in the brief analysis I presented above you can see some of this process play out. The tidyverse packages are designed around the goal of making it easy for users to manipulate, summarise and visualise data. Because those are the main goals of this section of the notes I’m going to rely heavily on packages that are in or based on <strong>tidyverse</strong>.</p>
+</section>
+<section id="importing-a-csv-file" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="importing-a-csv-file"><span class="header-section-number">3</span> Importing a CSV file</h2>
+<p>After loading the tidyverse, the next thing I did in my analysis was import the data into R. The raw data itself is stored as a <em>comma separated value</em> (CSV) file, a plain text file in which each row represents a single game, with values separated by commas. Here is what the raw data file looks like in a text editor:</p>
+<p><img src="./img/csv_afl.png" width="800px"></p>
+<p>To import this data into a nice format that R can work with, I used the <code>read_csv</code> function. The <code>read_csv</code> function comes from the <strong>readr</strong> package that is automatically loaded as part of the tidyverse (there is a very similar <code>read.csv</code> function that is comes with “base” R, but I’ve come to prefer the tidyverse version). Here’s the line of code again:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>afl <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/afl.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>What this does is import the data from the text file shown in the screen shot, assign it to a variable called <code>afl</code>. The format of the <code>afl</code> variable looks rather like a table. More precisely, it is an example of an R data format called as a <strong>tibble</strong>. Later we’ll talk more about tibbles, and the closely related <strong>data frame</strong>. For now, let’s just be happy that we imported the data and that it looks about right.</p>
+<p>One thing I will mention is that RStudio provides a nice point-and-click method for importing CSV data. Go to the environment pane, select the “import data set” and then choose “from text (readr)”:</p>
+<p><img src="./img/csv_import1.png" width="300px"></p>
+<p>After selecting the file you want to import, RStudio will present you with an import data window that looks like this:</p>
+<p><img src="./img/csv_import2.png" width="800px"></p>
+<p>This should look fairly familiar to anyone who has imported data from other software such as Excel or SPSS. I won’t use that method in these notes because it’s easier to type <code>read_csv</code> but it’s worth noting that the option is there.</p>
+</section>
+<section id="the-pipe" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="the-pipe"><span class="header-section-number">4</span> The pipe, <code>%&gt;%</code></h2>
+<p>There’s another thing I want to comment on: some new operators have appeared in this example! Many of the operations are familiar from the last section, such as the equality operator <code>==</code> and the assignment operator <code>&lt;-</code>. However there are two entirely new operators, <code>~</code> and <code>%&gt;%</code>, and one familiar operator <code>+</code> being used in a novel way:</p>
+<ul>
+<li><p>The <strong>tilde</strong> operator <code>~</code> is used to define <strong>formulas</strong> in R, which provide a way of describing the relationships between variables. They appear most often in statistical modelling. For instance if I want to build a regression model to describe the relationship between <code>anxiety</code> and demographic variables such as <code>gender</code> and <code>age</code>, I would express the model conceptually using the formula <code>anxiety ~ gender + age</code>. Formulas tend to mean different things in different concepts, but for now it’s enough to note that they’re an abstract way to describe <em>relationships</em></p></li>
+<li><p>The <strong>addition</strong> operator <code>+</code> is being used in an unusual way. When I construct a plot by writing <code>ggplot() + geom_point() +</code> etc I’m not literally doing arithmetic, but I’m doing something conceptually similar… adding <em>layers</em> to a plot. Under the hood, the <strong>ggplot2</strong> package (part of the tidyverse) has its own special definition of <code>+</code> that applies to the plots that it draws. Again, I’ll talk more about it later: for now let’s just notice that R does allow packages to do clever things like this 😀</p></li>
+</ul>
+<p>Okay, but what’s the story with <code>%&gt;%</code>???</p>
+<section id="the-pipe-metaphor" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="the-pipe-metaphor"><span class="header-section-number">4.1</span> The pipe metaphor</h3>
+<p>The <code>%&gt;%</code> operator is called a <strong>pipe</strong>, and is discussed in some detail in the <a href="http://r4ds.had.co.nz/pipes.html">R for Data Science</a> book. Unlike the operators we’ve discussed so far (<code>==</code>, <code>&amp;</code>, etc) the pipe <code>%&gt;%</code> isn’t part of base R. It was introduced as part of the <strong>magrittr</strong> package, and has become widely adopted. You’ll see it appear in many different contexts. Although <strong>magrittr</strong> isn’t loaded as part of the tidyverse, the tidyverse does exported <code>%&gt;%</code>, and because you should assume from now on that I have the tidyverse loaded, I’ll have access to the pipe for the rest of these notes.</p>
+<p>So what is it, and how does it work?</p>
+<p>Let’s start by looking at how I used the pipe in the brief analysis above. Here’s the command I used to transform the raw <code>afl</code> data into the smaller summary data <code>attendance</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>attendance <span class="ot">&lt;-</span> afl <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, game_type) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">attendance =</span> <span class="fu">mean</span>(attendance)) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The question is, how does this code work, and what do those <code>%&gt;%</code> symbols mean? To see what’s happening here, let’s strip this code back to its essential features:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> input <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If we reorganise this so that it all fits in a single line you get a good sense of what’s happening here. We take some <code>input</code> object that then gets passed to <code>group_by()</code> function, the output of <code>group_by()</code> gets passed to <code>summarise()</code>, and the final result gets assigned to <code>output</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> input <span class="sc">%&gt;%</span> <span class="fu">group_by</span>() <span class="sc">%&gt;%</span> <span class="fu">summarise</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For many people – myself included – this way of thinking about data analysis is appealing. At a conceptual level, data analysis is often a series of transformations that you apply to a data set, so I often have this intuition that what I’m doing is constructing a conveyor belt… data goes in this side, and meaning comes out on that side! This intuition forms the basis of the”pipe” metaphor, and it becomes obvious if we switch from using the leftward assign <code>&lt;-</code> operator to the right assign <code>-&gt;</code>. We take data as an <code>input</code>, pipe it through a series of functions, and out pops something meaningful as our <code>output</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>input <span class="sc">%&gt;%</span> <span class="fu">group_by</span>() <span class="sc">%&gt;%</span> <span class="fu">summarise</span>() <span class="ot">-&gt;</span> output</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="an-introduction-to-the-pipe" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="an-introduction-to-the-pipe"><span class="header-section-number">4.2</span> An introduction to the pipe</h3>
+<p>Suppose I have collected data from 10 participants in an experiment, and have recorded their response times to some stimulus, expressed in milliseconds:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>response_time <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">420</span>, <span class="dv">619</span>, <span class="dv">550</span>, <span class="dv">521</span>, <span class="dv">1003</span>, <span class="dv">486</span>, <span class="dv">512</span>, <span class="dv">560</span>, <span class="dv">495</span>, <span class="dv">610</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A histogram of these data (plotted using the <code>hist</code> function) is shown below:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="prelude-to-data_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="456"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As is grossly typical of response times, the data have a positive skew and so I might want to work with log-transformed scores. So what I would want to do is log-transform the response time data (using <code>log</code>), then calculate the mean (using <code>mean</code>). Next I would exponentiate the results (using <code>exp</code>) in order to convert the result back to a number in milliseconds. Then I might decide to <code>round</code> it to two decimal places, and <code>print</code> the results to screen. At each step, I’ll need to compute an intermediate result, which I’ll imaginatively call <code>a</code>, <code>b</code>, <code>c</code> and <code>d</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">log</span>(response_time)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">mean</span>(a)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">exp</span>(b)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">round</span>(c, <span class="at">digits =</span> <span class="dv">2</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 562.01</code></pre>
+</div>
+</div>
+<p>Here’s the same thing<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> written as piped code:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>response_time <span class="sc">%&gt;%</span> log <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  mean <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  exp <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  print</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 562.01</code></pre>
+</div>
+</div>
+<p>It’s immediately clear that the pipe is serving the same role that all those intermediate variables <code>a</code>, <code>b</code>, <code>c</code> and <code>d</code> were serving in the original version. We can make this a little more explicit like this:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>response_time <span class="sc">%&gt;%</span> <span class="fu">log</span>(.) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(.) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>(.) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(., <span class="at">digits =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(.)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 562.01</code></pre>
+</div>
+</div>
+<p>In this version, <code>.</code> shows where the results of the previous command are being passed to the next. If you don’t specify explicitly, then by default <code>%&gt;%</code> will pass the results of one function as the <em>first</em> argument to the next function. Most of the time I won’t bother using <code>.</code> because I think code looks nicer with as little clutter as possible, but it is occasionally useful.</p>
+<p>In any case, I think that’s enough on pipes for now!</p>
+<!--
+
+## Matching cases with `%in%`
+
+Let’s start with a simple example. When my children were little I naturally spent a lot of time watching TV shows like *In the Night Garden*. In the `nightgarden.Rdata` file, I’ve transcribed a short section of the dialogue from the show. The file contains two vectors, `speaker` and `utterance`, and when we take a look at the data,
+
+::: {.cell layout-align="center"}
+
+```{.r .cell-code}
+load("./data/nightgarden.Rdata")
+print(speaker)
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+ [1] "upsy-daisy"  "upsy-daisy"  "upsy-daisy"  "upsy-daisy"  "tombliboo"  
+ [6] "tombliboo"   "makka-pakka" "makka-pakka" "makka-pakka" "makka-pakka"
+```
+
+
+:::
+
+```{.r .cell-code}
+print(utterance)
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+ [1] "pip" "pip" "onk" "onk" "ee"  "oo"  "pip" "pip" "onk" "onk"
+```
+
+
+:::
+:::
+
+
+
+A second useful trick for extracting a subset of a vector is to use the `%in%` operator. It’s actually very similar to the `==` operator, except that you can supply a collection of acceptable values. For instance, suppose I wanted to find those cases when the `utterance` is either `“pip”` or `“oo”`. We can do that like this:
+
+
+::: {.cell layout-align="center"}
+
+```{.r .cell-code}
+utterance %in% c("pip","oo")
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+ [1]  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE
+```
+
+
+:::
+:::
+
+
+This in turn allows us to find the `speaker` for all such cases, 
+
+
+::: {.cell layout-align="center"}
+
+```{.r .cell-code}
+speaker[ utterance %in% c("pip","oo") ]
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+[1] "upsy-daisy"  "upsy-daisy"  "tombliboo"   "makka-pakka" "makka-pakka"
+```
+
+
+:::
+:::
+
+
+-->
+<!--
+
+## Generic functions
+
+There’s one other important thing that I omitted when I discussed functions earlier on, and that’s the concept of a **generic function**. The two most notable examples that you’ll see in the next few chapters are `summary` and `plot`, although you’ve already seen an example of one working behind the scenes, and that’s the `print` function. The thing that makes generics different from the other functions is that their behaviour changes, often quite dramatically, depending on the `class` of the input you give it. The easiest way to explain the concept is with an example. With that in mind, lets take a closer look at what the `print` function actually does. I’ll do this by creating a formula, and printing it out in a few different ways. First, let’s stick with what we know:
+
+
+::: {.cell layout-align="center"}
+
+```{.r .cell-code}
+my.formula <- blah ~ blah.blah  # create a variable of class "formula"
+print( my.formula )             # print it the normal way
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+blah ~ blah.blah
+```
+
+
+:::
+:::
+
+
+So far, there’s nothing very surprising here. But there’s actually a lot going on behind the scenes here. When I type `print(my.formula)`, what actually happens is the `print` function checks the class of the `my.formula` variable. When the function discovers that the variable it’s been given is a formula, it goes looking for a function called `print.formula`, and then delegates the whole business of printing out the variable to the `print.formula` function.^[For readers with a programming background: R has three separate systems for object oriented programming. The earliest system was S3, and it was very informal: generic functions as described here are part of the S3 system. Later on S4 was introduced as a more formal way of doing things. I confess I never learned S4 because it looked tedious. More recently R introduced Reference Classes, which look kind of neat and I should probably learn about them. Discussed [here](http://adv-r.had.co.nz/R5.html) if you're interested.] For what it’s worth, the name for a “dedicated” function like `print.formula` that exists only to be a special case of a generic function like `print` is a **method**, and the name for the process in which the generic function passes off all the hard work onto a method is called **method dispatch**. You won’t need to understand the details at all for this book, but you do need to know the gist of it; if only because a lot of the functions we’ll use are actually generics.
+
+Just to give you a sense of this, let's do something silly and try to bypass the normal workings of the `print` function:
+
+
+::: {.cell layout-align="center"}
+
+```{.r .cell-code}
+print.default( my.formula ) # do something silly by using the wrong method
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+blah ~ blah.blah
+attr(,"class")
+[1] "formula"
+attr(,".Environment")
+<environment: R_GlobalEnv>
+```
+
+
+:::
+:::
+
+
+Hm. You can kind of see that it is trying to print out the same formula, but there’s a bunch of ugly low-level details that have also turned up on screen. This is because the `print.default` method doesn’t know anything about formulas, and doesn’t know that it’s supposed to be hiding the obnoxious internal gibberish that R produces sometimes. 
+
+At this stage, this is about as much as we need to know about generic functions and their methods. In fact, you can get through the entire book without learning any more about them than this, so it’s probably a good idea to end this discussion here.
+
+-->
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>As I type this, I realise that I’ve unconsciously been influenced by the title. I honestly hadn’t intended <em>R for Psychological Science</em> to serve as an oblique reference to <em>R for Data Science</em>, it just felt like the natural name for the book I wanted to write.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Well, I suppose the piped version would be more akin to <code>print(round(exp(mean(log(response_time)))),digits=2)</code> but let’s not get bogged down with technicalities<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/psyr\.djnavarro\.net");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
