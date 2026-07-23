@@ -25,6 +25,12 @@ jobs:
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # Cache the installed R library, keyed on OS/R version/package
+          # list, so repeat runs skip reinstalling/recompiling ~30
+          # packages (several of which build from source). Bump
+          # cache-version to force a fresh cache if it ever gets stale.
+          cache: true
+          cache-version: 1
           packages: |
             any::tidyverse
             any::rmarkdown
