@@ -1,0 +1,141 @@
+---
+title: "Miscellaneous topics"
+---
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+rm(list=objects()) # start with a clean workspace
+source("R/_common.R")
+library(tidyverse,quietly = TRUE)
+```
+
+
+>The garden of life never seems to confine itself to the plots philosophers have laid out for its convenience. Maybe a few more tractors would do the trick.<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;– Roger Zelazny, *Home is the Hangman*, 1975
+ 
+It's a big world out there, and there are a lot of people doing really interesting thing with R (and other tools too of course). You can get a sense of what the possibilities are by looking online (e.g., awesome-r.com has a list of very neat packages). This chapter briefly discusses a few possibilities, most of which I chose on a whim!
+
+
+## Animated plots
+
+- You need [ffmpeg](http://ffmpeg.org/) installed first (this can be tedious)
+- The `animate` package does the work in R: an animation is just a sequence of plots that can be written to a variety of different animation formats 
+- Example:
+
+```{r,fig.show="animate", interval=0.1, aniopts="controls", fig.width=5, fig.height=5,cache=TRUE,echo=FALSE,eval=FALSE}
+# [DO NOT RUN - cached link below]
+
+n <- 100           # number of points
+col <- rainbow(n)  # all the colours of the rainbow
+s <- .02           # how much noise in the diffusion
+ntime <- 200       # how many time points
+
+# drift
+phi <- seq(0,pi,length.out = n) # angle of the drift
+nu <- .015                      # rate of the drift
+dx <- nu * cos(phi)  # x-component of drift
+dy <- nu * sin(phi)  # y-component of drift
+
+# start
+x <- y <- rep.int(0,n)    # all points at the origin
+moving <- rep.int(TRUE,n) # all points moving
+
+# storage
+points <- list()
+points[[1]] <- list(x=x,y=y)
+
+# iterate over time
+for(i in 2:ntime){
+  nm <- sum(moving) # how many points are moving 
+  
+  x[moving] <- x[moving] + dx[moving] + rnorm(nm)*s # move x co-ord
+  y[moving] <- y[moving] + dy[moving] + rnorm(nm)*s # move y co-ord
+  
+  l <- x^2 + y^2            # have we hit boundary
+  moving[l >= 1] <- FALSE   # freeze points when we do
+  
+  points[[i]] <- list(x=x,y=y) # storage
+}
+
+op <- par(no.readonly = TRUE) # plot set up
+par(mar=c(1,1,1,1))           # plot margins
+th <- seq(0,2*pi,.01)         # points for outer circle
+
+for(i in seq(ntime,1,-1)) { # go backwards in time to be pretty!
+  
+  # initialise plot
+  plot.new()
+  plot.window(
+    xlim=c(-1.1,1.1),
+    ylim=c(-1.1,1.1)
+  )
+  
+  # read the current locations
+  x <- points[[i]]$x
+  y <- points[[i]]$y
+  
+  # draw plot
+  lines(cos(th), sin(th), lty=3)                 # outer circle
+  lines(x, y, col=col, pch=19, type="p", cex=3)  # dots
+}
+par(op) # reset plot parameters
+```
+<video width="480"  controls>
+<source src="misc_dotsanimate/figure-html/unnamed-chunk-11.webm" />
+</video>
+
+## OpenGL and WebGL
+
+The `rgl` package provides a method for constructing interactive 3D plots, using the OpenGL graphics engine. Conveniently it also allows you make use of the WebGL engine, which means that you can insert your fancy 3D graphics into a web page. On a Mac, you'll need to make sure you have [XQuartz](https://www.xquartz.org/) installed and running on your machine. Here's a simple example, shamelessly lifted straight from the `rgl` documentation... 
+
+```{r}
+library(rgl)
+with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  type="s", col=as.numeric(Species)))
+rglwidget(elementId = "plot3drgl")
+```
+
+If you click and drag on the image you can rotate it as much as you like. Better yet, because OpenGL and WebGL are genuine 3D graphics engines, you can manipulate the scene and control things like lighting, material and so on. I confess this isn't an area I know at all well, but I suspect it would be handy for some research projects. 
+
+Another example, slightly adapted from the package documentation:
+
+```{r}
+data(volcano, envir = parent.frame()) # load the volcano data set
+
+zval <- 5 * volcano        # increase the height
+xval <- 15 * (1:nrow(zval))   # spacing (S to N)
+yval <- 15 * (1:ncol(zval))   # spacing (E to W)
+
+zlim <- range(yval)
+zlen <- zlim[2] - zlim[1] + 1
+colorlut <- terrain.colors(zlen)   # height color lookup table
+col <- colorlut[ zval - zlim[1] + 1 ] # assign colors to heights for each point
+
+# create a new rgl device, but don't display it
+open3d(useNULL = TRUE)
+
+# draw the surface
+surface3d(
+  x = xval,
+  y = yval,
+  z = zval,
+  color = col,
+  ambient = "grey10",
+  shininess = 75,
+  back = "lines"
+)
+
+# write scene to widget
+s <- scene3d()
+rglwidget(s)
+```
+
+
+
+## Running R in the cloud
+
+- Service like [Google cloud platform](https://cloud.google.com/sdk/) allow you to spin up vitual machines that you can access over the web, and they can run things like RStudio server.
+- You can use the `googleComputeEngineR` package to set something like that up
+- Example:
+
+<img src="./img_misc/gcloudrstudio.png" width=800>
+

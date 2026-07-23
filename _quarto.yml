@@ -1,0 +1,86 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "R for Psychological Science"
+  site-url: https://psyr.djnavarro.net
+  navbar:
+    title: "R for Psychological Science"
+    left:
+      - text: Core
+        menu:
+          - text: Getting started
+            href: getting-started.qmd
+          - text: Variables
+            href: variables.qmd
+          - text: Scripts
+            href: scripts.qmd
+          - text: Packages
+            href: packages.qmd
+          - text: Workspaces
+            href: workspaces.qmd
+          - text: Vectors
+            href: vectors.qmd
+          - text: Loops
+            href: loops.qmd
+          - text: Branches
+            href: branches.qmd
+          - text: Functions
+            href: functions.qmd
+          - text: Programming
+            href: programming.qmd
+          - text: File system
+            href: file-system.qmd
+      - text: Data
+        menu:
+          - text: Prelude
+            href: prelude-to-data.qmd
+          - text: Data types
+            href: data-types.qmd
+          - text: Describing data
+            href: describing-data.qmd
+          - text: Visualising data
+            href: visualising-data.qmd
+          - text: Manipulating data
+            href: manipulating-data.qmd
+          - text: Text data
+            href: working-with-text.qmd
+          - text: Import/export
+            href: import-export.qmd
+      - text: Stats
+        menu:
+          - text: Probability distributions
+            href: probability.qmd
+          - text: Introductory statistics
+            href: introductory-statistics.qmd
+          - text: Intermediate statistics
+            href: intermediate-statistics.qmd
+          - text: Advanced statistics
+            href: advanced-statistics.qmd
+      - text: More
+        menu:
+          - text: Experiments
+            href: experiments.qmd
+          - text: Shiny apps
+            href: shiny.qmd
+          - text: Web scraping
+            href: web-scraping.qmd
+          - text: Miscellaneous
+            href: xx-miscellaneous.qmd
+          - text: Backpropagation networks
+            href: backprop.qmd
+    right:
+      - text: compcogscisydney.org
+        href: https://compcogscisydney.org
+
+format:
+  html:
+    theme: cosmo
+    css: mystyle.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    include-in-header: analytics.html
+    code-copy: true
+    code-overflow: wrap

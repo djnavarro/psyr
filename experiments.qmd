@@ -1,0 +1,248 @@
+---
+title: "23. Behavioural experiments"
+format:
+  html:
+    number-offset: [23]
+---
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+rm(list=objects()) # start with a clean workspace
+source("R/_common.R")
+library(tidyverse,quietly = TRUE)
+```
+
+In my experience, most people in psychology start using R because they need it to solve problems with data analysis. Either they need to organise a data set, visualise it cleanly, or apply a statistical tool to the data that isn't available via any other mechanism. Those are the areas in which R has traditionally held an advantage over other programming languages or other statistical software, and in my opinion that's still the area where it's strongest.
+
+That being said, R is a proper programming language and you can use it for all sorts of other things. For example, one question I'm often asked is whether R can be used to run behavioural experiments. Of course the answer to that question is "yes, absolutely", but I think it's worth thinking about when this is a good idea. There are a few examples I can think of where I'd strongly argue that R isn't the right tool for the job:
+
+- If all you need is a simple survey without a complicated design, tools like SurveyMonkey and Qualtrics are much easier to use and they're not generally all that expensive. I've never really found a use case for R in this context
+- If you need high precision timing and very low level control over stimulus presentation (i.e., down to the level of specifying exactly what happens at each screen refresh), I'd be wary about using R. Everything I've read about how event handling in R works suggests that it's just not as good as Python for that task. 
+- More generally if you already know how to implement the experiment using a tool like jsPsych - which is free, open source and has a community of users in psychology alread - why switch? If your system isn't broken don't try to fix it.
+
+So what does that leave? When should you consider using R to implement a behavioural experiment? I can think of a few possibilities.
+
+- If you have a text based task that doesn't require very high precision timing, but has a more complicated interactive structure than is possible with a questionnaire, R can deliver a perfectly workable task without a lot of effort
+- If your task is graphics-based and you're okay with running it on your own machine (i.e. not online) you can repurpose the R graphics system for this. 
+- If your experiment needs to take the form of a complicated web application and you aren't already a skilled web programmer, you can build "Shiny" apps through R that work really well
+
+In the long run I suspect most people will want to find other solutions to the problem besides R, but at the same time I think it's really important to recognise that you can't learn all the things at once. Just mastering one programming language is hard enough `r emo::ji("grinning")` so it's worth the effort to try to get as much mileage out of that as possible!
+
+With that in mind, I'll talk about all three of those use cases in these notes. The "Shiny" approach is complex enough that I've broken it off into its own [section](./shiny.html), but I'll talk about the other two approaches in this section.
+
+
+## Text based tasks
+
+To start with, lets consider a very simple task. Imagine that we wanted to investigate how people play "[hangman](https://en.wikipedia.org/wiki/Hangman_(game)). On the off chance you're unfamiliar with the game, it's a straightforward two player game. One player thinks of a word and the other person has to work it out by making a series of guesses as to what letters it contains. If the guesser works it out before making a predetermined number of errors then they win. To investigate this, we will need to implement this game in R, with the computer choosing the word and the human guessing. It's a text based task, so we should be able to do the whole thing in the console. Some problems we'll need to solve:
+
+- How do we present the current state of the game?
+- How do we get input from the participant?
+- How do we "refresh" the state of game after every event?
+- How do we record the data?
+
+Let's start by writing a function called `show_hangman()` that will take three inputs, the `guesses` the person has made made so far, the `word` that the person needs to guess, and the total number of `errors` they're allowed to make before losing. 
+
+```{r}
+show_hangman <- function(guesses, word, errors) {
+  
+  library(stringr)
+  reg <- function(x){ paste0("[",x,"]") }
+  
+  # what letters are they missing
+  missing <- letters %>% str_flatten() %>% str_remove_all(reg(guesses))
+
+  # what has the participant revealed
+  stimulus <- word %>% str_replace_all(reg(missing),".")
+  
+  # how many errors?
+  n_guess <- guesses %>% str_length()
+  n_hit <- guesses %>% str_count(reg(word))
+  n_err <- n_guess - n_hit
+  
+  # print the results:
+  cat("\n\n")
+  cat("what you know:\n\n")
+  cat(stimulus,"\n\n")
+  cat("your guesses:  ", guesses, "\n")
+  cat("errors so far: ", n_err, "\n")
+  cat("chances left:  ", errors-n_err, "\n\n")
+  
+}
+```
+
+Here's what that looks like:
+
+```{r}
+show_hangman(guesses = "aest", word = "computational", errors = 5)
+```
+
+That's a good beginning! Next, we'll need a function that can ask the participant to make a guess, and store the response. The `readline()` function is good for this:
+
+```{r}
+prompt_user <- function(){
+  guess <- readline("what letter would you like to guess next? ")
+  return(guess)
+}
+```
+
+Ideally, during our experiment what we would do is clear the screen every time a person makes a guess and then update the display. To do this, we'll need a function to clear any text from the console. This is handled differently depending on what system you're using. I'll assume here that you're working within RStudio, in which case the trick here is to send the "[form feed](https://en.wikipedia.org/wiki/Page_break)" character to the console^[Form feed dates back to the early days of computing and doesn't serve much of a purpose anymore, but it's still recognised. As a consequence many software packages have co-opted it and used it for other purposes. Since the original definition was something like "clear the current page from the printer", it makes some sense to use it to mean "clear the current console log from the screen"]
+
+```{r}
+clear_screen <- function(){
+  cat("\f") # form feed character
+}
+```
+
+This seems to be most of what we would need. However, we will probably also need a function that checks to see whether the game is over. Most of what we needed to do this is contained in the `show_hangman()` function above, but here it is is stripped down:
+
+```{r}
+game_state <- function(guesses, word, errors) {
+  
+  library(stringr)
+  reg <- function(x){ paste0("[",x,"]") }
+  
+  n_missing <- word %>% str_remove_all(reg(guesses)) %>% str_length()
+  if(n_missing == 0) {
+    return("win")
+  }
+  
+  # how many errors?
+  n_guess <- guesses %>% str_length()
+  n_hit <- guesses %>% str_count(reg(word))
+  n_err <- n_guess - n_hit
+  if(n_err >= errors) {
+    return("lose")
+  }
+  
+  return("continuing")
+}
+```
+
+Now we can organise this into a function that plays a game of hangman!
+
+```{r}
+hangman <- function(word, errors) {
+  
+  guesses <- ""
+  state <- "continuing"
+  while(state == "continuing") {
+    
+    clear_screen()
+    show_hangman(guesses, word, errors)
+    g <- prompt_user()
+    
+    guesses <- guesses %>% str_c(g)
+    state <- game_state(guesses, word, errors)
+  }
+  
+  dat <- c(word = word, guesses = guesses, errors = errors, outcome = state)
+  
+  clear_screen()
+  show_hangman(guesses, word, errors)
+  
+  return(dat)
+}
+```
+
+From there, all you need to do is put them all into a single script and you're ready to go. The [hangman1.R](./scripts/hangman1.R) script provides an example that plays one game of hangman, and [hangman2.R](./scripts/hangman2.R) plays a series of three games and then stores the results in a data frame `d`. The video below illustrates this in action:
+
+<video width="600" controls>
+  <source src="./img/hangman.webm" type="video/webm">
+Your browser does not support the video tag.
+</video>
+
+
+Obviously, if this were a real experiment there are a number of additional things you'd need to do:
+
+- Add a stage for obtaining informed constent and demographics
+- Provide instructions to participants and debriefing information
+- Add randomisation of stimuli
+- Make the code robust to upper and lower case
+- Make the code require a single letter at a time
+- Etc
+
+However, with any luck this minimal skeleton gives you enough to see how you might go about adding these additional properties to the code. 
+
+
+### A second example
+
+As the hangman example illustrates, R allows you to create text based tasks and use them as the basis for experiments in a way that might be difficult to do with simpler tools like Qualtrics or SurveyMonkey. The key feature of R (or any programming language for that matter) that allows this flexibility is the ability to write complicated forms of *interactivity* into your experiment. For the hangman task, the experiment is able to rely on text processing tools to update the state of the game after every guess, and to adapt appropriately no matter what the participant does.
+
+To give you a sense of how much further you can take this idea, imagine we were interested in studying how people solve strategic planning problems. An engaging way to do this is to implement a decision making problem in the form of a video game. Normally, this would require some fancy graphics to work, but thanks to the joy of emoji, you can go a suprisingly long way just using text. 
+
+The video below shows me playing a simple video game. Imagine you are a rabbit trying to get to a carrot, but there are a bunch of “fire devils” that you need to avoid. We can use the w/a/s/d keys to navigate or q to quit the game. The fire devils are stupid and move randomly; when they bump into each other they merge together. When the game starts there are too many fire devils for it to be safe to try to cross to the carrot, so it might be wise to wait for some of them to burn out before venturing across to the carrot:
+
+<video width="600" controls>
+  <source src="./img/rabbit.webm" type="video/webm">
+Your browser does not support the video tag.
+</video>
+
+In this video, R is running at the Mac OS terminal rather than inside RStudio. I'm doing this because there is a package called **keypress** that only works through the terminal. In the hangman example, for a participant to make a response they need to type the letter and then press enter. For hangman that's fine, but for the rabbit game it seems weird. So instead of using `readline` to get the user response I'm relying on the `keypress` function. If you're interested, the code for [rabbit.R](./scripts/rabbit.R) is available!
+
+### A third example
+
+Just because I can... the [guessing.R](./scripts/guessing.R) provides an example of different kind of task, one in which the participant has to pick a number and the computer tries to guess it. 
+
+## Graphical tasks
+
+The rabbit example gives you a sense of how far you can go using nothing other than text, but in many situations you'll probably need something a little more sophisticated. The natural intuition that you might have is that we can use the R graphics system as the foundation for a psychological experiment: on every trial you'd use use a graphics tool (e.g. `ggplot`) to draw the stimulus on screen, and then the participant could respond using the keyboard or the mouse.
+
+That intuition is correct, but we'll need to modify our approach a little bit. Earlier on when we discussed [data visualisation](./visualising-data.html) I didn't really talk much about the capabilities of different *graphics devices* because it didn't matter much. In this context it starts to matter whether we draw the plot in the RStudio plot pane or somewhere else, because there are different graphics devices associated with each one, and only some of them are responsive to user input. Clearly, in order to design a behavioural experiment we will need to use a device that supports interactivity, and that means the RStudio graphics device is no good to us: it's designed for the user to draw plots, not for interaction. A simple way to get around this if you're on a Unix based system (e.g. Mac, Linux) is to use the `X11()` graphics device,^[I'm not entirely sure what the fix would be if you're on Windows. Also note that newer Macs don't ship with X11 by default, so you have to install [XQuartz](https://www.xquartz.org/). Sigh.] as this does support user interaction. To give you a sense for what you can realistically achieve, the [orientation.R](./scripts/orientation.R) script contains an example of an experiment that displays triangles that might be pointing upwards or downwards, and the task is to guess whether there are more upwards pointing arrows (press the "6" key) or downwards ones (press "b"):
+
+<video width="600" controls>
+  <source src="./img/orientation.webm" type="video/webm">
+Your browser does not support the video tag.
+</video>
+
+There's a longer video of me running myself through 60 trials of this task [here](./img/orientation_full.webm), and the data set generated from it is [here](./data/orientation.csv).^[I should mention that although you the viewer can see the numbers scrolling past in these videos - so that you can see what decisions I was making - they were all far enough outside my focus of attention that I couldn't see them while doing the task. I'm actually shocked I performed as well I did. It totally *felt* like I was guessing pretty randomly!] 
+
+So how does the code work? I won't show the full code here, only the part that matters. At the beginning of the task I create an `X11` graphics device:
+
+```{r,eval=FALSE}
+X11(width = 8, height = 8, 
+    xpos = 100, ypos = 30)
+```
+
+This opens up an 8 inch by 8 inch window, slightly offset from the top left of my screen. Besides specifying the location of the window, the main thing this is doing is switching R away from the RStudio plot pane, so that any plots I draw will now be sent to the new window. At the end of the task I close this graphics device by including the line:
+
+```{r,eval=FALSE}
+dev.off()
+```
+
+The experiment itself is implemented as a loop over trials. At the start of each trial I generate the random array of points and plot them to the window, and then use the [getGraphicsEvent](https://www.rdocumentation.org/packages/grDevices/versions/3.5.1/topics/getGraphicsEvent) function to tell the system to wait for the user to press a key. Here's the relevant part of the code, slightly edited for clarity
+
+```{r,eval=FALSE}
+user_response <- getGraphicsEvent(onKeybd = response)
+```
+
+What this does is tell the system to wait until there is a *keyboard* event, at which point R will send the `key` that the user pressed to the `response()` function. Within the script, I define the `response()` function to be this:
+
+```{r,eval=FALSE}
+response <- function(key) {
+  if(key == "6") return("up")
+  if(key == "b") return("down")
+  return(NA)
+}
+```
+
+If I press the "6" key this function will return `"up"`, if I press "b" it will return `"down"`, and if I press anything else it will return `NA`. Regardless of what I press, the result of this will be stored as the `user_response` variable (though in the actual script you'll see I write it to an entry in a tibble), and the program will continue running.
+
+There are a few other niceties in there. For instance, there is a line of code that uses `Sys.sleep()` to tell the system to pause for 1 second between trials. There's also a line that uses `sample()` to randomise the order of trials. But I'll let you take a look for yourself. The main thing for the current purposes is to note that it's the `X11()` function that allows you to create the graphics device you need, and the `getGraphicsEvent()` function allows you to tell the system to wait for user response (it also allows you to grab mouse events). 
+
+Oh, and how did I do at the task? Here's a quick and dirty picture:
+
+```{r,message=FALSE}
+read_csv("./data/orientation.csv") %>% 
+  group_by(n_up) %>%
+  summarise(p_up = mean(response == "up")) %>%
+  ggplot(aes(x = n_up, y = p_up)) +
+  geom_point() +
+  geom_smooth() + 
+  xlab("Number of Upward Triangles") +
+  ylab("Choice Proportion")
+```
+
+
+## Shiny apps?
+
+The third and most sophisticated approach is to build a web application using Shiny. This has a number of advantages. Firstly, you can run a Shiny app locally on your machine or deploy it to the internet - so you can collect online data easily. Secondly, it has a lot more flexibility in terms of what you can do with it. However, the advantages do come at a cost. There's a certain amount of effort involved in learning how to build a Shiny app, and some additional work to adapt the framework to behavioural experiments. It's a big enough topic that I'm not going to try to force it into a subsection here. Instead, there's a whole section devoted to [shiny](./shiny.html)!
+

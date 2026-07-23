@@ -4,3 +4,9 @@ _notes
 .RData
 ~$images.pptx
 .Rproj.user
+/.quarto/
+/_site/
+/_freeze/
+*_cache/
+*_files/
+*.knit.md
