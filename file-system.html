@@ -77,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-20e075685c401baa7d54b844a6fe9e63.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-20bab2b58192ebcdf7b86101a1c208b2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -341,17 +341,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Once upon a time everyone who used computers could safely be assumed to understand how the file system worked, because it was impossible to successfully use a computer if you didn’t! However, modern operating systems are much more user friendly, and as a consequence of this they go to great lengths to hide the file system from users. So these days it’s not at all uncommon for people to have used computers most of their life and not be familiar with the way that computers organise files. If you already know this stuff, skip straight to the next section. Otherwise, read on. I’ll try to give a brief introduction that will be useful for those of you who have never been forced to learn how to navigate around a computer using a DOS or Unix shell.</p>
 <p>In this section I describe the basic idea behind file locations and file paths. Regardless of whether you’re using Window, Mac OS or Linux, every file on the computer is assigned a (fairly) human readable address, and every address has the same basic structure: it describes a <em>path</em> that starts from a root location, through as series of <em>folders</em> (or if you’re an old-school computer user, <em>directories</em>), and finally ends up at the file.</p>
 <p>On a Windows computer the root is the physical drive (well, partition technically) on which the file is stored, and for most home computers the name of the hard drive that stores all your files is <code>C:</code> and therefore most file names on Windows begin with <code>C:</code>. After that comes the folders, and on Windows the folder names are separated by a <code>\</code> symbol. So, the complete path to the <em>Learning Statistics with R</em> book on my Windows computer might be something like this:</p>
-<pre><code>C:\Users\dan\Rbook\LSR.pdf</code></pre>
-<p>and what that means is that the book is called <code>LSR.pdf</code>, and it’s in a folder called <code>Rbook</code> which itself is in a folder called <code>dan</code> which itself is … well, you get the idea. On Linux, Unix and Mac OS systems, the addresses look a little different, but they’re more or less identical in spirit. Instead of using the backslash, folders are separated using a forward slash, and unlike Windows, they don’t treat the physical drive as being the root of the file system. So, the path to the LSR book on my Mac might be something like this:</p>
-<pre><code>/Users/dan/Rbook/LSR.pdf</code></pre>
+<pre><code>C:\Users\danielle\Rbook\LSR.pdf</code></pre>
+<p>and what that means is that the book is called <code>LSR.pdf</code>, and it’s in a folder called <code>Rbook</code> which itself is in a folder called <code>danielle</code> which itself is … well, you get the idea. On Linux, Unix and Mac OS systems, the addresses look a little different, but they’re more or less identical in spirit. Instead of using the backslash, folders are separated using a forward slash, and unlike Windows, they don’t treat the physical drive as being the root of the file system. So, the path to the LSR book on my Mac might be something like this:</p>
+<pre><code>/Users/danielle/Rbook/LSR.pdf</code></pre>
 <p>So that’s what we mean by the “path” to a file.</p>
 </section>
 <section id="working-directory" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="working-directory"><span class="header-section-number">2</span> Working directory</h2>
-<p>The next concept to grasp is the idea of a working directory and how to change it. For those of you who have used command line interfaces previously, this should be obvious already. But if not, here’s what I mean. The working directory is just “whatever folder I’m currently looking at”. Suppose that I’m currently looking for files in Explorer (if you’re using Windows) or using Finder (on a Mac). The folder I currently have open is my user directory (i.e., <code>C:\Users\dan</code> or <code>/Users/dan</code>). That’s my current working directory.</p>
-<p>The fact that we can imagine that the program is “in” a particular directory means that we can talk about moving from our current location to a new one. What that means is that we might want to specify a new location in relation to our current location. To do so, we need to introduce two new conventions. Regardless of what operating system you’re using, we use <code>.</code> to refer to the current working directory, and <code>..</code> to refer to the directory above it (the parent directory). This allows us to specify a path to a new location in relation to our current location, as the following examples illustrate. Let’s assume that I’m using my Windows computer, and my working directory is <code>C:\Users\dan\Rbook</code>). The table below shows several addresses in relation to my current one:</p>
-<p>The fact that we can imagine that the program is “in” a particular directory means that we can talk about moving <em>from</em> our current location <em>to</em> a new one. What that means is that we might want to specify a new location in relation to our current location. To do so, we need to introduce two new conventions. Regardless of what operating system you’re using, we use <code>.</code> to refer to the current working directory, and <code>..</code> to refer to the directory above it. This allows us to specify a path to a new location in relation to our current location, as the following examples illustrate. Let’s assume that I’m using my Windows computer, and my working directory is <code>C:\Users\dan\Rbook</code>). The table below shows several addresses in relation to my current one:</p>
+<p>The next concept to grasp is the idea of a working directory and how to change it. For those of you who have used command line interfaces previously, this should be obvious already. But if not, here’s what I mean. The working directory is just “whatever folder I’m currently looking at”. Suppose that I’m currently looking for files in Explorer (if you’re using Windows) or using Finder (on a Mac). The folder I currently have open is my user directory (i.e., <code>C:\Users\danielle</code> or <code>/Users/danielle</code>). That’s my current working directory.</p>
+<p>The fact that we can imagine that the program is “in” a particular directory means that we can talk about moving from our current location to a new one. What that means is that we might want to specify a new location in relation to our current location. To do so, we need to introduce two new conventions. Regardless of what operating system you’re using, we use <code>.</code> to refer to the current working directory, and <code>..</code> to refer to the directory above it (the parent directory). This allows us to specify a path to a new location in relation to our current location, as the following examples illustrate. Let’s assume that I’m using my Windows computer, and my working directory is <code>C:\Users\danielle\Rbook</code>). The table below shows several addresses in relation to my current one:</p>
+<p>The fact that we can imagine that the program is “in” a particular directory means that we can talk about moving <em>from</em> our current location <em>to</em> a new one. What that means is that we might want to specify a new location in relation to our current location. To do so, we need to introduce two new conventions. Regardless of what operating system you’re using, we use <code>.</code> to refer to the current working directory, and <code>..</code> to refer to the directory above it. This allows us to specify a path to a new location in relation to our current location, as the following examples illustrate. Let’s assume that I’m using my Windows computer, and my working directory is <code>C:\Users\danielle\Rbook</code>). The table below shows several addresses in relation to my current one:</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 46%">
+<col style="width: 53%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>absolute path</th>
@@ -361,14 +365,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>(i.e., from root)</td>
-<td>(i.e.&nbsp;from <code>C:\Users\dan\Rbook</code>)</td>
+<td>(i.e.&nbsp;from <code>C:\Users\danielle\Rbook</code>)</td>
 </tr>
 <tr class="even">
 <td></td>
 <td></td>
 </tr>
 <tr class="odd">
-<td><code>C:\Users\dan</code></td>
+<td><code>C:\Users\danielle</code></td>
 <td><code>..</code></td>
 </tr>
 <tr class="even">
@@ -376,11 +380,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>..\..</code></td>
 </tr>
 <tr class="odd">
-<td><code>C:\Users\dan\Rbook\source</code></td>
+<td><code>C:\Users\danielle\Rbook\source</code></td>
 <td><code>.\source</code></td>
 </tr>
 <tr class="even">
-<td><code>C:\Users\dan\nerdstuff</code></td>
+<td><code>C:\Users\danielle\nerdstuff</code></td>
 <td><code>..\nerdstuff</code></td>
 </tr>
 </tbody>
@@ -388,7 +392,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="home-directory" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="home-directory"><span class="header-section-number">3</span> Home directory</h2>
-<p>There’s one last thing I want to call attention to: the <code>~</code> directory. I normally wouldn’t bother, but R makes reference to this concept sometimes. It’s quite common on computers that have multiple users to define <code>~</code> to be the user’s home directory. On my Mac, for instance, the home directory <code>~</code> for the “dan” user is <code>\Users\dan\</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> And so, not surprisingly, it is possible to define other directories in terms of their relationship to the home directory. For example, an alternative way to describe the location of the <code>LSR.pdf</code> file on my Mac would be</p>
+<p>There’s one last thing I want to call attention to: the <code>~</code> directory. I normally wouldn’t bother, but R makes reference to this concept sometimes. It’s quite common on computers that have multiple users to define <code>~</code> to be the user’s home directory. On my Mac, for instance, the home directory <code>~</code> for the “danielle” user is <code>\Users\danielle\</code>. And so, not surprisingly, it is possible to define other directories in terms of their relationship to the home directory. For example, an alternative way to describe the location of the <code>LSR.pdf</code> file on my Mac would be</p>
 <pre><code>~\Rbook\LSR.pdf</code></pre>
 <p>That’s about all you really need to know about file paths. And since this section already feels too long, it’s time to look at how to navigate the file system in R.</p>
 </section>
@@ -399,10 +403,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>## [1] "/Users/dan"</code></pre>
-<p>We can change the working directory quite easily using <code>setwd</code>. The <code>setwd</code> function has only the one argument, <code>dir</code>, is a character string specifying a path to a directory, or a path relative to the working directory. Since I’m currently located at <code>/Users/dan</code>, the following two are equivalent:</p>
+<pre><code>## [1] "/Users/danielle"</code></pre>
+<p>We can change the working directory quite easily using <code>setwd</code>. The <code>setwd</code> function has only the one argument, <code>dir</code>, is a character string specifying a path to a directory, or a path relative to the working directory. Since I’m currently located at <code>/Users/danielle</code>, the following two are equivalent:</p>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"/Users/dan/Rbook/data"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"/Users/danielle/Rbook/data"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"./Rbook/data"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now that we’re here, we can type <code>list.files()</code> to get a list of all the files in that directory. Since this is the directory in which I store all of the data files that I used when writing the LSR book, here’s what we get as the result:</p>
@@ -418,16 +422,14 @@ BLAH BLAH BLAH </code></pre>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">path.expand</span>(<span class="st">"~"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>## [1] "/Users/dan"</code></pre>
-<p>You can change the user directory if you want, but we’re not going to make use of it very much so there’s no reason to. The only reason I’m even bothering to mention it at all is that when you use RStudio to open a file, you’ll see output on screen that defines the path to the file relative to the <code>~</code> directory. You can see this in the image below, where you can see an example of me working at the console on my Mac, and the (barely visible) grey text shows that my current working directory is <code>~/Rbook/data/</code></p>
-<p><img src="./img/filesystem_home.png" width="300px"></p>
-<p>I’d prefer you not to be confused when you see this, but other than that there’s not much to see here!</p>
+<pre><code>## [1] "/Users/danielle"</code></pre>
+<p>You can change the user directory if you want, but we’re not going to make use of it very much so there’s no reason to. The only reason I’m even bothering to mention it at all is that when you use RStudio to open a file, you’ll see output on screen that defines the path to the file relative to the <code>~</code> directory.</p>
 </section>
 <section id="navigating-with-rstudio" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="navigating-with-rstudio"><span class="header-section-number">5</span> Navigating with RStudio</h2>
 <p>Although I think it’s important to understand how all R commands work, in many situations there’s an easier way. For our purposes, the easiest way to navigate the file system is to make use of RStudio’s built in tools. The “files” panel is actually a pretty workable file browser. Not only can you just point and click on the names to move around the file system, you can also use it to set the working directory, and even load files. Here’s what it looks like:</p>
 <p><img src="./img/filesystem_filepane.png" width="400"></p>
-<p>At the top of the file panel you see some text that says <code>Home &gt; Rbook &gt; data</code>. What that means is that it’s displaying the files that are stored in the <code>~/Rbook/data</code> directory (which for me would be <code>/Users/dan/Rbook/data</code>). It does <em>not</em> mean that this is the R working directory. If you want to change the R working directory, using the file panel, you need to click on the button that reads “More”. This will bring up a little menu, and one of the options will be “Set as Working Directory”. If you select that option, then R really will change the working directory. You can tell that it has done so because this command appears in the console:</p>
+<p>At the top of the file panel you see some text that says <code>Home &gt; Rbook &gt; data</code>. What that means is that it’s displaying the files that are stored in the <code>~/Rbook/data</code> directory (which for me would be <code>/Users/danielle/Rbook/data</code>). It does <em>not</em> mean that this is the R working directory. If you want to change the R working directory, using the file panel, you need to click on the button that reads “More”. This will bring up a little menu, and one of the options will be “Set as Working Directory”. If you select that option, then R really will change the working directory. You can tell that it has done so because this command appears in the console:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"~/Rbook/data"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -440,11 +442,11 @@ BLAH BLAH BLAH </code></pre>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>[1] "C:/Users/dan/</code></pre>
+<pre><code>[1] "C:/Users/danielle/</code></pre>
 <p>This seems about right, but you might be wondering why R is displaying a Windows path using the wrong type of slash. The answer is slightly complicated, and has to do with the fact that R treats the <code>\</code> character as “special” (I’ll talk about this later when introducing text manipulation). If you’re deeply wedded to the idea of specifying a path using the Windows style slashes, then you need to type <code>\\</code> whenever you mean <code>\</code>. In other words, if you want to specify the working directory on a Windows computer, you need to use one of the following commands:</p>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>( <span class="st">"C:/Users/dan"</span> )</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>( <span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">dan"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>( <span class="st">"C:/Users/danielle"</span> )</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>( <span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">danielle"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Annoying.</p>
 </section>
@@ -452,9 +454,9 @@ BLAH BLAH BLAH </code></pre>
 <h2 data-number="7" class="anchored" data-anchor-id="robust-paths"><span class="header-section-number">7</span> Robust paths?</h2>
 <p>Okay, you might be asking, what if I’m writing code and I don’t know what machine it will be running on? How do I specify a path that doesn’t require <em>me</em> to know ahead of time what the operating system on that machine uses? I’m so glad you asked. There’s a function called <code>file.path</code> that lets you do exactly that:</p>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.path</span>(<span class="st">"Users"</span>,<span class="st">"dan"</span>,<span class="st">"Rbook"</span>,<span class="st">"LSR.pdf"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.path</span>(<span class="st">"Users"</span>,<span class="st">"danielle"</span>,<span class="st">"Rbook"</span>,<span class="st">"LSR.pdf"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Users/dan/Rbook/LSR.pdf"</code></pre>
+<pre><code>[1] "Users/danielle/Rbook/LSR.pdf"</code></pre>
 </div>
 </div>
 <p>The <code>file.path</code> function works out how to construct the path it needs by inspecting the <code>.Platform</code> variable (try typing that at the console if you want to see what information it stores) that the local R system uses to keep track of information about the operating system. If you use <code>file.path</code> to specify locations, then you don’t have to worry about particulars of the operating system because R will do that for you.</p>
@@ -463,13 +465,7 @@ BLAH BLAH BLAH </code></pre>
 
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>You might notice that my computer is the only person still allowed to <a href="https://en.wiktionary.org/wiki/deadname">deadname</a> me 😀 – the user home directory seems to be tangled with so many things on a computer that I’m afraid to rename this. Not that it bothers me - I think “Dan” is a perfectly sensible nickname for “Danielle” and I’m pretty sure my computer isn’t trying to be mean to me! Well, not about this anyway.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

@@ -77,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-20e075685c401baa7d54b844a6fe9e63.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-20bab2b58192ebcdf7b86101a1c208b2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -431,11 +431,11 @@ dbl (8): sepal_length, sepal_width, petal_length, petal_width, context, spec...
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>weight</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             species_setosa species_versicolor species_virginica
-sepal_length    0.007115763       -0.013138726      -0.014029493
-sepal_width     0.003708503        0.006229507      -0.004172725
-petal_length    0.007048893       -0.006170615       0.001595065
-petal_width    -0.012555541       -0.002550126      -0.004479032
-context        -0.010777540       -0.012620664      -0.019879547</code></pre>
+sepal_length   -0.003004361       0.0136855734     -0.0131921360
+sepal_width     0.001113485       0.0057841446     -0.0006700126
+petal_length    0.008218846       0.0040246764      0.0003240318
+petal_width     0.015802076      -0.0017997155      0.0112759690
+context        -0.006307120      -0.0006719714      0.0012181975</code></pre>
 </div>
 </div>
 <p>Here’s the network we want to code:</p>
@@ -459,7 +459,7 @@ context        -0.010777540       -0.012620664      -0.019879547</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>output_1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(input <span class="sc">*</span> weight[,<span class="dv">1</span>]) <span class="sc">%&gt;%</span> <span class="fu">logit</span>() </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>output_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.5114605</code></pre>
+<pre><code>[1] 0.4992337</code></pre>
 </div>
 </div>
 <p>More generally though we can loop over the three species:</p>
@@ -478,7 +478,7 @@ context        -0.010777540       -0.012620664      -0.019879547</code></pre>
 <span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>output</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    species_setosa species_versicolor  species_virginica 
-         0.5114605          0.4832628          0.4738496 </code></pre>
+         0.4992337          0.5236432          0.4835814 </code></pre>
 </div>
 </div>
 <p>As you can see, initially the model has no knowledge at all! It’s predicting a value of about 0.5 for every category!</p>
@@ -491,7 +491,7 @@ context        -0.010777540       -0.012620664      -0.019879547</code></pre>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>prediction_error</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    species_setosa species_versicolor  species_virginica 
-         0.4885395         -0.4832628         -0.4738496 </code></pre>
+         0.5007663         -0.5236432         -0.4835814 </code></pre>
 </div>
 </div>
 <p>Here is the code implementing the learning rule. What we’re doing is looping over every weight in the network, and then adjusting the strength proportional to the prediction error:</p>
@@ -524,7 +524,7 @@ context        -0.010777540       -0.012620664      -0.019879547</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>output</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    species_setosa species_versicolor  species_virginica 
-         0.5114605          0.4832628          0.4738496 </code></pre>
+         0.4992337          0.5236432          0.4835814 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>target</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -534,7 +534,7 @@ context        -0.010777540       -0.012620664      -0.019879547</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>prediction_error</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    species_setosa species_versicolor  species_virginica 
-         0.4885395         -0.4832628         -0.4738496 </code></pre>
+         0.5007663         -0.5236432         -0.4835814 </code></pre>
 </div>
 </div>
 <p>Now let’s look at how the weights changed:</p>
@@ -542,11 +542,11 @@ context        -0.010777540       -0.012620664      -0.019879547</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>weight <span class="sc">-</span> old_weight</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             species_setosa species_versicolor species_virginica
-sepal_length    0.062256064       -0.061546966      -0.060250561
-sepal_width     0.042724750       -0.042238114      -0.041348424
-petal_length    0.017089900       -0.016895245      -0.016539370
-petal_width     0.002441414       -0.002413606      -0.002362767
-context         0.012207071       -0.012068032      -0.011813836</code></pre>
+sepal_length    0.063847558       -0.066615227       -0.06159015
+sepal_width     0.043816952       -0.045716333       -0.04226775
+petal_length    0.017526781       -0.018286533       -0.01690710
+petal_width     0.002503826       -0.002612362       -0.00241530
+context         0.012519129       -0.013061809       -0.01207650</code></pre>
 </div>
 </div>
 <p>Not surprisingly everything to setosa has gone up and the others down. But notice the scale!</p>
