@@ -29,6 +29,32 @@ jobs:
             any::tidyverse
             any::rmarkdown
             any::knitr
+            any::devtools
+            any::usethis
+            any::janitor
+            any::BayesFactor
+            any::cowplot
+            any::broom
+            any::gapminder
+            any::gganimate
+            any::gifski
+            any::haven
+            any::leaflet
+            any::lsr
+            any::car
+            any::psych
+            any::skimr
+            any::HistData
+            any::shiny
+            any::shinyjs
+            any::rgl
+            any::mvtnorm
+            any::magrittr
+            any::janeaustenr
+            any::here
+            any::rvest
+            djnavarro/TurtleGraphics
+            hadley/emo
 
       - name: Render and publish
         uses: quarto-dev/quarto-actions/publish@v2
