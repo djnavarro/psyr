@@ -11,7 +11,6 @@ source("R/_common.R")
 library(tidyverse,quietly = TRUE)
 library(shiny, quietly = TRUE)
 library(shinyjs, quietly = TRUE)
-library(rdrop2, quietly = TRUE)
 ```
 
 > Shiny. <br>
@@ -24,12 +23,11 @@ In this chapter we'll introduce the idea of a Shiny web application. Shiny apps 
 - Cloud hosting with [shinyapps.io](https://www.shinyapps.io)
 - The [ShinyPsych](https://ndphillips.github.io/ShinyPsych.html) package (early in development)
 
-In addition to the `shiny` package itself, the applications we'll talk about rely to some degree on the `shinyjs` package and the `rdrop2` package:
+In addition to the `shiny` package itself, the applications we'll talk about rely to some degree on the `shinyjs` package:
 
 - The [shinyjs](https://deanattali.com/shinyjs/) package
-- The [rdrop2](https://github.com/karthik/rdrop2) package
 
-Make sure all three packages are installed, using the `install.packages` function.
+Make sure both packages are installed, using the `install.packages` function.
 
 ## Creating a web application 
 
@@ -577,7 +575,7 @@ endTrial <- function(input, study) {
 responses <- data.frame() # initialise the data set
 ```
 
-At this point we're almost completely done. The experiment runs, it records the data, the only thing it doesn't do is *save* the data anywhere. So that's our final job, and in order to avoid messiness, we'll set the application up in such a way that the data get written to your Dropbox account. To do that, we'll add a few minor change to the application...
+At this point we're almost completely done. The experiment runs, it records the data, the only thing it doesn't do is *save* the data anywhere. So that's our final job, and in order to avoid messiness, we'll set the application up in such a way that the data get written to a CSV file on the server. To do that, we'll add a few minor change to the application...
 
 ### The (almost) complete app
 
@@ -595,7 +593,6 @@ With the exception of `saveData.R` the application is finished. Here's what the 
 # load packages
 library(shiny)   # the shiny package
 library(shinyjs) # shinyjs is handy
-library(rdrop2)  # needed to save data to dropbox
 
 # structure of the application
 source("study.R")      # information specific to the study 
@@ -607,7 +604,7 @@ source("makeServer.R") # construct the server function
 shinyApp(ui, server)
 ```
 
-Notice that I've added two lines since last time, one to load the `rdrop2` package that we'll use to save data, and another to source the `saveData.R` script that will handle the saving of data.
+Notice that I've added a line since last time, to source the `saveData.R` script that will handle the saving of data.
 
 The final version of the `study.R` function looks like this:
 
@@ -665,11 +662,11 @@ getTrialData <- function(input, stimulus) {
 
 # ---- information needed for saving data ----
  
-saveMethod <- "dropbox"
-saveDir <- "Teaching/2018_interns/shiny_data"
+saveMethod <- "local"
+saveDir <- "shiny_data"
 ```
 
-Notice the last two lines are new. The `saveMethod` variable indicates that we'll upload any generated data file to Dropbox, and the `saveDir` variable specifies the subfolder in my Dropbox account to which files will be uploaded.
+Notice the last two lines are new. The `saveMethod` variable indicates how we'll save any generated data file, and the `saveDir` variable specifies the directory (relative to the app) to which files will be written.
 
 Here's the final version of `makeUI.R` which hasn't changed since last time:
 
@@ -766,24 +763,16 @@ saveData <- function(method="none") {
 
 
 
-### The `rdrop2` package
-
-We'll want to save data on our Shiny app. The simplest way to do that is to link your Dropbox account (assuming you have one) to the Shiny app, which you can do easily with the help of the `rdrop2` package. After installing the package, you'll need to authorise the package to make changes to your Dropbox account. This is surprisingly easy:
-
-```{r, eval=FALSE}
-library(rdrop2)
-drop_auth()
-```
-
-This will then take you to the Dropbox website where you can authorise the package. Having done so, all we'll need to do is modify our Shiny app so that it saves data to your Dropbox. I'll show that in the next section.
-
 ### Saving the data
 
-Here's the final code for the `saveData.R` script. The key thing to note is that it has two different ways to save data, a `saveDropboxData` function that will upload the data to your Dropbox account, and a `saveLocalData` that will write the data to a location on the server (that would be your laptop if running locally, but could be somewhere else if you're doing a cloud based deployment). Regardless of which version you use, the file is a CSV file that saves the value of the `responses` data frame, and the file name is always of the form `data-YYYY-MM-DD-HH-MM-SS.csv`, where  `YYYY-MM-DD-HH-MM-SS` is a time stamp specifying the year, month, day, hour, minute and second that the server created the file. As long as you don't have two people completing the task at the same second (usually reasonable, but not always, so you might want to modify this if you're doing a large online study), the file will be unique. 
+Here's the final code for the `saveData.R` script. It has a `saveLocalData` function that writes the data to a location on the server (that would be your laptop if running locally, but could be somewhere else if you're doing a cloud based deployment). The file is a CSV file that saves the value of the `responses` data frame, and the file name is always of the form `data-YYYY-MM-DD-HH-MM-SS.csv`, where  `YYYY-MM-DD-HH-MM-SS` is a time stamp specifying the year, month, day, hour, minute and second that the server created the file. As long as you don't have two people completing the task at the same second (usually reasonable, but not always, so you might want to modify this if you're doing a large online study), the file will be unique.
+
+::: {.callout-note}
+An earlier version of this page also showed a `saveDropboxData` function that uploaded the file to Dropbox using the [rdrop2](https://github.com/karthik/rdrop2) package. That package has since been archived on CRAN, so this section now covers local saving only. If you need to save data to cloud storage, look at currently maintained alternatives such as [googlesheets4](https://googlesheets4.tidyverse.org/) or a hosting platform's own persistent storage.
+:::
 
 ```{r}
 saveData <- function(method="none") {
-  if(method == "dropbox") saveDropboxData(saveDir) 
   if(method == "local") saveLocalData(saveDir) 
 }
 
@@ -791,13 +780,6 @@ saveLocalData <- function(outputDir){
   fileName <- makeFileName()                 # file name
   filePath <- file.path(outputDir, fileName) # path to file
   writeData(filePath)                        # write file
-}
-
-saveDropboxData <- function(outputDir) {
-  fileName <- makeFileName()                 # file name
-  filePath <- file.path(tempdir(), fileName) # temporary directory
-  writeData(filePath)                        # write to temp directory
-  drop_upload(filePath, path = outputDir)    # upload to dropbox
 }
 
 makeFileName <- function() {
@@ -903,8 +885,8 @@ getTrialData <- function(input, stimulus) {
 
 # ---- information needed for saving data ----
  
-saveDir <- "Teaching/2018_interns/shiny2_data"   # save it to this directory
-saveMethod <- "dropbox"
+saveDir <- "shiny2_data"   # save it to this directory
+saveMethod <- "local"
 ```
 
 It produces an experiment that looks like this:
