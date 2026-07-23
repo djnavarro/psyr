@@ -73,8 +73,8 @@ website:
           - text: Backpropagation networks
             href: backprop.qmd
     right:
-      - text: compcogscisydney.org
-        href: https://compcogscisydney.org
+      - text: djnavarro.net
+        href: https://djnavarro.net
 
 format:
   html:

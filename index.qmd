@@ -1,8 +1,7 @@
 ---
 title: "R for Psychological Science"
+author: "Danielle Navarro"
 ---
-
-<div class="jumbotron"><h1 class="title toc-ignore display-3" align="center">R for Psychological Science</h1><p class="lead" align="center">by Danielle Navarro <a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a></p></div>
 
 ::: {.panel-tabset}
 
@@ -75,38 +74,12 @@ Everything from here onwards is *very much* a work in progress!
 - [Import and export](./import-export.html) <span style="color:#cccccc">(stub)</span>
 
 
-<br>
-<center>
----- &nbsp;&nbsp;
-<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
-<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
-<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
-&nbsp;&nbsp; ----
-</center>
-<br>
-<br>
-
-
 ### 3: Statistics
 
 - [Probability distributions](./probability.html) <span style="color:#cccccc">(draft)</span>
 - [Introductory statistics](./introductory-statistics.html) <span style="color:#cccccc">(draft)</span><!-- add Bayes factor -->
 - [Intermediate statistics](./intermediate-statistics.html) <span style="color:#cccccc">(stub)</span>
 - [Advanced statistics](./advanced-statistics.html) <span style="color:#cccccc">(stub)</span>
-
-
-<br>
-<center>
----- &nbsp;&nbsp;
-<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
-<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
-<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
-&nbsp;&nbsp; ----
-</center>
-<br>
-<br>
 
 
 ### 4: More topics
@@ -120,19 +93,6 @@ Everything from here onwards is *very much* a work in progress!
 - [Backpropagation networks](./backprop.html) <span style="color:#cccccc">(draft)</span> 
 - <span style="color:#cccccc">More computational modelling (to be added)</span> <!-- Rescorla-Wagner, GCM -->
 - <span style="color:#cccccc">Writing an R package (to be added)</span> <!-- very simple guide -->
-
-
-<br>
-<center>
----- &nbsp;&nbsp;
-<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
-<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
-<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
-&nbsp;&nbsp; ----
-</center>
-<br>
-<br>
 
 
 ### Links
@@ -213,17 +173,5 @@ The [frames data](./data/frames_ex2.csv) contains data from Experiment 2 of Haye
 - Week 2 notebook is posted [here](./archive/misc/lesson2.nb.html) with output version [here](./archive/misc/lesson2.html) 
 
 -->
-
-<br>
-<center>
----- &nbsp;&nbsp;
-<a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a> &nbsp;
-<a href="https://djnavarro.net"><i class="fas fa-home"></i></a> &nbsp;
-<a href="https://github.com/djnavarro"><i class="fab fa-github"></i></a> &nbsp;
-<a href="mailto:d.navarro@unsw.edu.au"><i class="fas fa-paper-plane"></i></a>
-&nbsp;&nbsp; ----
-</center>
-<br>
-<br>
 
 :::
