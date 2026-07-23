@@ -155,7 +155,7 @@ summary(mod)
 
 ```{r}
 yearly.score <- aggregate(
-  formula = total.score ~ year, 
+  total.score ~ year, 
   data = afl, 
   FUN = mean
 )
