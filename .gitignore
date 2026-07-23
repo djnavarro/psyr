@@ -7,3 +7,6 @@ _notes
 /.quarto/
 /_site/
 /_freeze/
+*_cache/
+*_files/
+*.knit.md
