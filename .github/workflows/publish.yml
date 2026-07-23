@@ -3,6 +3,9 @@ on:
   push:
     branches: [main]
 
+# Trigger note: nothing functional changed here; this comment exists solely
+# to produce a push that re-runs the workflow so we can confirm the apt
+# package cache added in the previous commit actually hits on a fresh run.
 name: Render and publish
 
 jobs:
