@@ -1,0 +1,15 @@
+---
+title: "22. Advanced statistics"
+format:
+  html:
+    number-offset: [22]
+---
+
+```{r,echo=FALSE, message = FALSE, warning = FALSE}
+rm(list=objects()) # start with a clean workspace
+source("R/_common.R")
+library(tidyverse,quietly = TRUE)
+library(car)
+```
+
+This page is a stub.

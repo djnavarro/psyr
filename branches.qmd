@@ -1,23 +1,13 @@
 ---
 title: "8. Conditional branching"
-output:
-  html_document:
-    includes:
-      in_header: header.html    
-    toc: true
-    toc_float: true
-    theme: flatly
-    highlight: textmate
-    css: mystyle.css
-    number_sections: true
-    pandoc_args: [
-      "--number-offset", 8
-    ]
+format:
+  html:
+    number-offset: [8]
 ---
 
 ```{r,echo=FALSE}
 rm(list=objects()) # start with a clean workspace
-source("knitr_tweaks.R")
+source("R/_common.R")
 ```
 
 

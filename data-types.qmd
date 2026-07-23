@@ -1,23 +1,13 @@
 ---
 title: "13. Data types in R"
-output:
-  html_document:
-    includes:
-      in_header: header.html    
-    toc: true
-    toc_float: true
-    theme: flatly
-    highlight: textmate
-    css: mystyle.css
-    number_sections: true
-    pandoc_args: [
-      "--number-offset", 13
-    ]
+format:
+  html:
+    number-offset: [13]
 ---
 
 ```{r,echo=FALSE,message = FALSE, warning = FALSE}
 rm(list=objects()) # start with a clean workspace
-source("knitr_tweaks.R")
+source("R/_common.R")
 library(lsr,quietly = TRUE)
 library(tidyverse,quietly = TRUE)
 ```

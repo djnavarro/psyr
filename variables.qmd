@@ -1,23 +1,13 @@
 ---
 title: "2. Variables"
-output:
-  html_document:
-    includes:
-      in_header: header.html    
-    toc: true
-    toc_float: true
-    theme: flatly
-    highlight: textmate
-    css: mystyle.css
-    number_sections: true
-    pandoc_args: [
-      "--number-offset", 2
-    ]
+format:
+  html:
+    number-offset: [2]
 ---
 
 ```{r,echo=FALSE}
 rm(list=objects()) # start with a clean workspace
-source("knitr_tweaks.R")
+source("R/_common.R")
 ```
 
 One of the most important things to be able to do in R (or any programming language, for that matter) is to store information in **variables**. At a conceptual level you can think of a variable as label for a certain piece of information, or even several different pieces of information. When doing statistical analysis in R your data are stored as variables in R, but we also create variables to do other things. Before we delve into all the messy details of data sets and statistical analysis, let’s look at the very basics for how we create variables and work with them.

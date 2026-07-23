@@ -1,20 +1,10 @@
 ---
-title: '<div class="jumbotron"><h1 class="title toc-ignore display-3" align="center">R for Psychological Science</h1><p class="lead" align="center">by Danielle Navarro <a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a></p></div>'
-output:
-  html_document:
-    includes:
-      in_header: header.html
-    theme: flatly
-    highlight: textmate
-    css: mystyle.css
+title: "R for Psychological Science"
 ---
 
-```{r,echo=FALSE}
-rm(list=objects()) # start with a clean workspace
-source("knitr_tweaks.R")
-```
+<div class="jumbotron"><h1 class="title toc-ignore display-3" align="center">R for Psychological Science</h1><p class="lead" align="center">by Danielle Navarro <a href="https://twitter.com/djnavarro"><i class="fab fa-twitter"></i></a></p></div>
 
-## {.tabset}
+::: {.panel-tabset}
 
 ### Welcome!
 
@@ -147,10 +137,10 @@ Everything from here onwards is *very much* a work in progress!
 
 ### Links
 
-- Week 1 slides: [pptx](./misc/overview.pptx), [pdf](./misc/overview.pdf)
-- Week 2 workbook: [here](./lesson2.html)
+- Week 1 slides: [pptx](./archive/misc/overview.pptx), [pdf](./archive/misc/overview.pdf)
+- Week 2 workbook: [here](./archive/lesson2.Rmd)
 - Week 3 slides: [here](https://slides.com/djnavarro/psyc-3361-workshop-3/)
-- Data sets are [here](./misc/data.zip)
+- Data sets are [here](./archive/misc/data.zip)
 - Github repository is [here](https://github.com/djnavarro/psyr)
 - A nice [resource](http://environmentalcomputing.net/) put together by the UNSW folks in BEES.
 
@@ -218,9 +208,9 @@ The [frames data](./data/frames_ex2.csv) contains data from Experiment 2 of Haye
 - Archiving code with github, osf (& codeocean)
 - Source code for this site: https://github.com/djnavarro/psyr
 
-- Exercises: programming with turtles ([part1](./misc/turtle1.html), [part2](./misc/turtle2.html))
-- Week 1 slides are posted [here](./misc/overview.pdf)
-- Week 2 notebook is posted [here](./misc/lesson2.nb.html) with output version [here](./misc/lesson2.html) 
+- Exercises: programming with turtles ([part1](./archive/misc/turtle1.html), [part2](./archive/misc/turtle2.html))
+- Week 1 slides are posted [here](./archive/misc/overview.pdf)
+- Week 2 notebook is posted [here](./archive/misc/lesson2.nb.html) with output version [here](./archive/misc/lesson2.html) 
 
 -->
 
@@ -236,5 +226,4 @@ The [frames data](./data/frames_ex2.csv) contains data from Experiment 2 of Haye
 <br>
 <br>
 
-
-
+:::

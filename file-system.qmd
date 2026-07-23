@@ -1,23 +1,13 @@
 ---
 title: "11. The file system"
-output:
-  html_document:
-    includes:
-      in_header: header.html    
-    toc: true
-    toc_float: true
-    theme: flatly
-    highlight: textmate
-    css: mystyle.css
-    number_sections: true
-    pandoc_args: [
-      "--number-offset", 11
-    ]
+format:
+  html:
+    number-offset: [11]
 ---
 
 ```{r,echo=FALSE}
 rm(list=objects()) # start with a clean workspace
-source("knitr_tweaks.R")
+source("R/_common.R")
 ```
 
 I confess I've never found a nice home for this chapter. Understanding how to interact with the file system on your computer is something that no-one finds interesting. It's not complicated, or profound, but it is fiddly and annoying. Since we've finished talking about the introduction to programming, and we're about to start the next section on working with data, I might as well put it here. 
