@@ -22,6 +22,23 @@ jobs:
         with:
           use-public-rspm: true
 
+      - name: Cache and install system libraries
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          # System requirements pak would otherwise apt-get install itself
+          # (mostly for sf/terra/units/rgl). Pre-installing from a cache
+          # here means pak's own system-requirements check finds them
+          # already satisfied and skips its (uncached) apt-get install.
+          packages: >-
+            cmake make libuv1-dev libicu-dev libx11-dev
+            libcurl4-openssl-dev libssl-dev zlib1g-dev libfreetype6-dev
+            libjpeg-dev libpng-dev libtiff-dev libwebp-dev
+            libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev
+            libgit2-dev pari-gp libabsl-dev libgdal-dev gdal-bin
+            libgeos-dev libproj-dev libsqlite3-dev libudunits2-dev
+            libglu1-mesa-dev libgl1-mesa-dev texlive
+          version: 1.0
+
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
