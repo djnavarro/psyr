@@ -312,8 +312,8 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://compcogscisydney.org"> 
-<span class="menu-text">compcogscisydney.org</span></a>
+    <a class="nav-link" href="https://djnavarro.net"> 
+<span class="menu-text">djnavarro.net</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -417,7 +417,7 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>shuffled_stimuli <span class="ot">&lt;-</span> <span class="fu">sample</span>(stimuli)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>shuffled_stimuli</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "i" "j" "g" "e" "c" "d" "a" "b" "h" "f"</code></pre>
+<pre><code> [1] "d" "j" "e" "c" "f" "a" "g" "i" "b" "h"</code></pre>
 </div>
 </div>
 <p>Or to do the same thing with piped code…</p>
@@ -425,7 +425,7 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>shuffled_stimuli <span class="ot">&lt;-</span> stimuli <span class="sc">%&gt;%</span> <span class="fu">sample</span>()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>shuffled_stimuli</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "d" "e" "j" "b" "g" "i" "c" "h" "a" "f"</code></pre>
+<pre><code> [1] "c" "d" "a" "e" "j" "b" "g" "f" "i" "h"</code></pre>
 </div>
 </div>
 <p>Notice that the output the second time around <em>isn’t</em> the same a the output the first time. The <code>sample()</code> function uses a pseudo-random number generator to order the items differently every time.</p>
@@ -436,11 +436,11 @@ window.Quarto = {
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>()</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "c" "f" "b" "a" "g" "h" "d" "j" "e" "i"
- [1] "c" "h" "b" "a" "g" "j" "f" "i" "e" "d"
- [1] "d" "i" "b" "g" "c" "a" "h" "j" "f" "e"
- [1] "i" "g" "j" "h" "c" "a" "b" "e" "f" "d"
- [1] "a" "f" "c" "h" "i" "e" "j" "g" "d" "b"</code></pre>
+<pre><code> [1] "d" "a" "c" "i" "g" "h" "b" "f" "e" "j"
+ [1] "g" "f" "b" "e" "d" "j" "h" "a" "i" "c"
+ [1] "d" "i" "j" "f" "c" "b" "e" "a" "h" "g"
+ [1] "j" "g" "h" "i" "f" "d" "e" "a" "b" "c"
+ [1] "a" "c" "j" "b" "d" "e" "g" "i" "h" "f"</code></pre>
 </div>
 </div>
 <p>As you can see if you feed in a vector of inputs, the default behaviour is to shuffle all the items. However, the <code>sample()</code> function is flexible. For example, “shuffling all the items” is a special case of “sampling without replacement”. Imagine taking all the stimuli (<em>letters</em>), and then placing them into a jar. To shuffle them into a random order all you need to do is shake the jar (<em>randomise</em>) pull them out of the jar (<em>sample</em>) one at a time until the jar is empty (<em>no replacement</em>).</p>
@@ -448,7 +448,7 @@ window.Quarto = {
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>stimuli <span class="sc">%&gt;%</span> <span class="fu">sample</span>(<span class="at">size =</span> <span class="dv">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "i" "h" "e" "j" "g" "d"</code></pre>
+<pre><code>[1] "d" "a" "f" "e" "c" "b"</code></pre>
 </div>
 </div>
 <p>Again, there are no repeats (it is impossible to pull the same item from the jar twice), but we stopped before pulling everything out. Here’s a loop showing you how the randomisation gives different answers every time, but it always follows the constraints of stopping at 6 draws and never draws the same item twice:</p>
@@ -459,11 +459,11 @@ window.Quarto = {
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>()</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "g" "b" "j" "a" "i" "d"
-[1] "c" "d" "i" "b" "g" "e"
-[1] "a" "j" "e" "h" "b" "d"
-[1] "j" "f" "c" "e" "h" "b"
-[1] "d" "h" "i" "f" "b" "j"</code></pre>
+<pre><code>[1] "i" "a" "b" "d" "j" "h"
+[1] "f" "a" "d" "e" "b" "g"
+[1] "b" "d" "f" "e" "a" "h"
+[1] "d" "g" "e" "h" "j" "b"
+[1] "c" "f" "h" "b" "d" "j"</code></pre>
 </div>
 </div>
 <p>Another way to extend the jars metaphor is to sample <em>with replacement</em>. In this version of the sampling scheme, every time we pull a letter out of the jar we write it down, but then put it back in the jar so that it becomes possible to sample it again.</p>
@@ -474,11 +474,11 @@ window.Quarto = {
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>()</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "i" "i" "d" "a" "f" "j" "h" "g" "j" "b" "a" "b" "a" "a" "h"
- [1] "g" "g" "b" "a" "g" "j" "d" "f" "h" "i" "b" "j" "b" "g" "d"
- [1] "e" "j" "a" "d" "h" "f" "j" "b" "d" "c" "b" "g" "g" "b" "a"
- [1] "b" "f" "g" "a" "e" "h" "g" "d" "f" "e" "h" "e" "j" "j" "i"
- [1] "d" "c" "f" "f" "h" "d" "f" "b" "i" "f" "b" "b" "b" "d" "h"</code></pre>
+<pre><code> [1] "e" "a" "e" "f" "j" "c" "j" "h" "b" "e" "i" "d" "e" "d" "i"
+ [1] "e" "i" "f" "e" "i" "j" "j" "c" "g" "b" "i" "a" "b" "f" "f"
+ [1] "d" "j" "f" "g" "a" "j" "g" "e" "c" "a" "h" "h" "c" "d" "j"
+ [1] "c" "c" "b" "i" "c" "b" "f" "c" "g" "d" "b" "c" "d" "a" "j"
+ [1] "g" "g" "c" "f" "e" "d" "e" "c" "c" "i" "c" "a" "g" "j" "c"</code></pre>
 </div>
 </div>
 <p>Notice that this time you can produce sequences of stimuli that are longer than the original set (because you’re putting them back in the jar). In this case even though I only had 10 items, each output has 15 samples from that set: there are of course repeats!</p>
@@ -494,11 +494,11 @@ window.Quarto = {
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>()</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "j" "i" "a" "g" "h" "c" "d" "f" "b" "e"
- [1] "f" "e" "c" "g" "j" "d" "h" "i" "b" "a"
- [1] "i" "c" "e" "d" "g" "b" "h" "j" "a" "f"
- [1] "i" "g" "h" "j" "e" "d" "f" "c" "b" "a"
- [1] "c" "i" "f" "j" "b" "h" "d" "g" "e" "a"</code></pre>
+<pre><code> [1] "i" "j" "g" "d" "c" "e" "h" "f" "a" "b"
+ [1] "i" "f" "h" "j" "g" "d" "e" "b" "c" "a"
+ [1] "g" "f" "h" "j" "b" "i" "d" "c" "e" "a"
+ [1] "h" "g" "i" "j" "d" "f" "a" "b" "e" "c"
+ [1] "h" "j" "d" "i" "f" "c" "e" "a" "g" "b"</code></pre>
 </div>
 </div>
 <p>So in this output every line shuffles the 10 items, but there’s a definite bias in how the items are ordered! We’re much more likely to start with the later letters than with the early ones!</p>
@@ -510,11 +510,11 @@ window.Quarto = {
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>()</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "f" "c" "j" "j" "h" "e" "g" "j" "i" "c"
- [1] "f" "h" "g" "g" "j" "i" "g" "i" "j" "j"
- [1] "g" "f" "j" "c" "h" "c" "i" "h" "i" "b"
- [1] "h" "d" "h" "f" "f" "e" "h" "d" "i" "a"
- [1] "f" "h" "g" "d" "j" "d" "d" "i" "h" "j"</code></pre>
+<pre><code> [1] "d" "c" "h" "g" "g" "i" "b" "j" "g" "d"
+ [1] "i" "i" "h" "f" "j" "f" "g" "g" "h" "h"
+ [1] "d" "h" "j" "e" "j" "j" "j" "i" "j" "j"
+ [1] "d" "h" "i" "i" "g" "j" "j" "g" "e" "j"
+ [1] "g" "g" "e" "e" "i" "j" "g" "e" "e" "e"</code></pre>
 </div>
 </div>
 <p>In this output, you can see that we’re very unlikely to sample the letter “a”.</p>
@@ -527,8 +527,8 @@ window.Quarto = {
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rolls <span class="ot">&lt;-</span> <span class="fu">sample</span>(die, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>rolls</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "red"  "red"  "red"  "blue" "blue" "red"  "blue" "blue" "blue" "blue"
-[11] "red"  "red"  "blue" "blue" "blue" "blue" "red"  "blue" "red"  "blue"</code></pre>
+<pre><code> [1] "red"  "blue" "blue" "blue" "blue" "blue" "red"  "blue" "blue" "blue"
+[11] "red"  "blue" "red"  "red"  "blue" "red"  "red"  "blue" "blue" "blue"</code></pre>
 </div>
 </div>
 <p>We can count the number of times the result was <code>"blue"</code>:</p>
@@ -536,7 +536,7 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>n_blue <span class="ot">&lt;-</span> <span class="fu">sum</span>(rolls <span class="sc">==</span> <span class="st">"blue"</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>n_blue</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 12</code></pre>
+<pre><code>[1] 13</code></pre>
 </div>
 </div>
 <p>Of course, there’s nothing stopping us from repeating this exercise several times:</p>
@@ -547,11 +547,11 @@ window.Quarto = {
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(n_blue)</span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 19
-[1] 11
+<pre><code>[1] 12
+[1] 13
 [1] 14
-[1] 11
-[1] 15</code></pre>
+[1] 13
+[1] 16</code></pre>
 </div>
 </div>
 <p>In fact, let’s go all out on this. Let’s replicate this tiny experiment 100,000 times because that’s easy to do with R:</p>
@@ -568,9 +568,9 @@ window.Quarto = {
 <div class="cell-output cell-output-stdout">
 <pre><code>n_blue
     0     1     2     3     4     5     6     7     8     9    10    11    12 
-    0     0     1     0     2    12    66   268   930  2454  5498  9874 14878 
+    0     0     0     1     2     6    66   290   925  2441  5339  9985 14633 
    13    14    15    16    17    18    19    20 
-18316 18212 14504  8960  4252  1433   315    25 </code></pre>
+18287 18177 14617  9139  4246  1500   308    38 </code></pre>
 </div>
 </div>
 <p>With this particular <code>die</code> the probability of observing a <code>"blue"</code> on any one roll is two-thirds (4 out of 6 sides) and not surprisingly the outcomes of this “roll the die 20 times” experiment tend to be <em>distributed</em> mostly between 12 and 15. I hate looking at tables of numbers, so let’s draw a picture:</p>
@@ -708,8 +708,8 @@ P(k | \theta, n) = \frac{n!}{k!(n-k)!} \theta^k (1-\theta)^{n-k}
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>iq <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>iq</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1]  86.01811  81.74457  93.75170  96.62309  86.59609  78.08134  95.19160
- [8]  87.37819  85.95784 109.85532</code></pre>
+<pre><code> [1] 120.00707  91.72325  84.85786  89.32178  98.02555  98.82718  78.68371
+ [8] 109.07676  94.15952 130.55541</code></pre>
 </div>
 </div>
 <p>In a real IQ battery such as the <a href="https://en.wikipedia.org/wiki/Wechsler_Adult_Intelligence_Scale">WAIS</a> you would probably get results rounded to the nearest whole number, so it probably makes more sense to think of this as the data:</p>
@@ -717,7 +717,7 @@ P(k | \theta, n) = \frac{n!}{k!(n-k)!} \theta^k (1-\theta)^{n-k}
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>iq <span class="ot">&lt;-</span> <span class="fu">round</span>(iq)</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>iq</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1]  86  82  94  97  87  78  95  87  86 110</code></pre>
+<pre><code> [1] 120  92  85  89  98  99  79 109  94 131</code></pre>
 </div>
 </div>
 <p>If we draw a quick histogram of this…</p>

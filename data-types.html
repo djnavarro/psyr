@@ -312,8 +312,8 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://compcogscisydney.org"> 
-<span class="menu-text">compcogscisydney.org</span></a>
+    <a class="nav-link" href="https://djnavarro.net"> 
+<span class="menu-text">djnavarro.net</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -913,7 +913,7 @@ arr[8]
 </section>
 <section id="array-names" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="array-names"><span class="header-section-number">4.2</span> Array names</h3>
-<p>As with other data structures, arrays can have names for specific elements. In fact, we can assign names to each of the <em>dimensions</em> too. For instance, suppose we have another array – that we affectionately call <code>cubie</code> 📤 – it is also a three dimensional array, but that has the shape that it does because it represents a (3 genders) <span class="math inline">\(\times\)</span> (4 seasons) <span class="math inline">\(\times\)</span> (2 times) structure. We could specify the dimension names for <code>cubie</code> like this:</p>
+<p>As with other data structures, arrays can have names for specific elements. In fact, we can assign names to each of the <em>dimensions</em> too. For instance, suppose we have another array – that we affectionately call <code>cubie</code> 🍱 – it is also a three dimensional array, but that has the shape that it does because it represents a (3 genders) <span class="math inline">\(\times\)</span> (4 seasons) <span class="math inline">\(\times\)</span> (2 times) structure. We could specify the dimension names for <code>cubie</code> like this:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>cubie <span class="ot">&lt;-</span> <span class="fu">array</span>(</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">24</span>, </span>
@@ -1140,7 +1140,7 @@ class(x)
 <pre><code>[1] "character"</code></pre>
 </div>
 </div>
-<p>Obviously, if I want to do mathematical calculations using <code>x</code> in its current state R wil get very sad 😿. It thinks <code>x</code> is text and it won’t allow me to do mathematics with text! To coerce <code>x</code> from “character” to “numeric”, we use the <code>as.numeric</code> function:</p>
+<p>Obviously, if I want to do mathematical calculations using <code>x</code> in its current state R wil get very sad 😭. It thinks <code>x</code> is text and it won’t allow me to do mathematics with text! To coerce <code>x</code> from “character” to “numeric”, we use the <code>as.numeric</code> function:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(x)  <span class="co"># coerce the variable</span></span>
 <span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(x)            <span class="co"># what class is it?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
